@@ -1,0 +1,5 @@
+---
+- name:  Setup undercloud and baremetal vms and networks in libvirt
+  hosts: localhost
+  roles:
+    - libvirt/setup

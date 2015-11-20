@@ -1,0 +1,26 @@
+- name: get a list of MACs to use
+  generate_macs:
+    nodes: "{{ vms.overcloud.nodes }}"
+    bridges: "{{ networks.bridges }}"
+  register: node_mac_map
+
+- name: create baremetal vm storage
+  shell: >
+         virsh vol-create-as '{{ vms.volume_pool }}' '{{ item.name }}'.qcow2 '{{ item.disk_size }}'G --format qcow2 >&2;
+         touch '{{ vms.volume_path }}''{{ item.name }}'.qcow2;
+         chattr +C '{{ vms.volume_path }}''{{ item.name }}'.qcow2 || true;
+  with_items: "{{ vms.overcloud.nodes }}"
+  become: true
+
+- name: define baremetal vms
+  virt:
+    name: "{{ item.name }}"
+    command: define
+    xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
+  with_items: "{{ vms.overcloud.nodes }}"
+  become: true
+
+- name: write instackenv script
+  template:
+    src: instackenv.json.j2
+    dest: "{{ working_dir }}/instackenv.json"

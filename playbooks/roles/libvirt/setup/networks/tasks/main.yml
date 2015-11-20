@@ -1,0 +1,36 @@
+- name: Create external network
+  virt_net:
+    command: define
+    name: "{{ networks.external.name }}"
+    xml: '{{ lookup("template", "external.xml.j2") }}'
+  become: true
+
+- name: Start external network
+  virt_net:
+    name: "{{ networks.external.name }}"
+    autostart: 'yes'
+    state: active
+  become: true
+
+- name: Create the OVS bridges
+  openvswitch_bridge:
+    bridge: "{{ item.name }}"
+    state: present
+  with_items: "{{ networks.bridges }}"
+  become: true
+
+- name: Create the bridge networks
+  virt_net:
+    command: define
+    name: "{{ item.name }}"
+    xml: '{{ lookup("template", "bridge.xml.j2") }}'
+  with_items: "{{ networks.bridges }}"
+  become: true
+
+- name:  Start the bridge networks
+  virt_net:
+    name: "{{ item.name }}"
+    autostart: 'yes'
+    state: active
+  with_items: "{{ networks.bridges }}"
+  become: true

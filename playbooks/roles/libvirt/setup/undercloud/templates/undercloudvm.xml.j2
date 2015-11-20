@@ -1,0 +1,49 @@
+<domain type='{{ vms.engine }}'>
+  <name>{{ item.name }}</name>
+  <memory unit='MiB'>{{ item.memory }}</memory>
+  <vcpu>{{ item.cpus }}</vcpu>
+  <os>
+    <type arch='{{ vms.undercloud.arch }}'>hvm</type>
+    <boot dev='{{ vms.undercloud.bootdev }}'/>
+    <bootmenu enable='no'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <controller type='sata'/>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='{{ vms.volume_path }}/{{ item.name }}.qcow2'/>
+      <target dev='sda' bus='{{ vms.diskbus }}'/>
+    </disk>
+    <interface type='network'>
+      <source network='{{ networks.external.name }}' bridge='{{ networks.external.bridge }}'/>
+      <model type='virtio'/>
+    </interface>
+  {% for bridge in networks.bridges %}
+    <interface type='network'>
+      <mac address='{{ undercloud_mac_map.get(item.name).get(bridge.name) }}'/>
+      <source network='{{ bridge.name }}'/>
+      <model type='virtio'/>
+    </interface>
+  {% endfor %}
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+  </devices>
+</domain>

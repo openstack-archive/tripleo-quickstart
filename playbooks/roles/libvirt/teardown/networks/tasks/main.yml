@@ -1,0 +1,20 @@
+---
+- name: Delete external network
+  virt_net:
+    name: "{{ networks.external.name }}"
+    state: absent
+  become: true
+
+- name: Delete the OVS bridges
+  openvswitch_bridge:
+    bridge: "{{ item.name }}"
+    state: absent
+  with_items: "{{ networks.bridges }}"
+  become: true
+
+- name: Delete the bridge networks
+  virt_net:
+    name: "{{ item.name }}"
+    state: absent
+  with_items: "{{ networks.bridges }}"
+  become: true

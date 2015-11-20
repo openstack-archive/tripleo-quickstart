@@ -1,0 +1,5 @@
+---
+- name: Remove all traces of libvirt setup
+  hosts: localhost
+  roles:
+    - libvirt/teardown

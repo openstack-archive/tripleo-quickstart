@@ -1,0 +1,65 @@
+working_dir: /home/trown/.quickstart
+url: https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/undercloud.qcow2
+pub_key: /home/trown/.ssh/id_rsa.pub
+virt_power_key: /home/trown/.ssh/id_rsa_virt_power
+virt_power_user: root
+seed_ip: 192.0.2.1
+nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
+networks:
+  bridges:
+    - name: brbm1
+    - name: brbm2
+    - name: brbm3
+    - name: brbm4
+    - name: brbm5
+  external:
+    name: external
+    port_start: 65435
+    port_end: 65535
+    bridge: extbr
+    ip: 192.168.23.1
+    netmask: 255.255.255.0
+    dhcp_start: 192.168.23.2
+    dhcp_end: 192.168.23.200
+vms:
+  engine: 'kvm'
+  undercloud:
+    nodes:
+      - name: quickcloud
+        disk_size: '30'
+        memory: '4096'
+        cpus: '1'
+    arch: 'x86_64'
+    bootdev: 'hd'
+  overcloud:
+    arch: 'x86_64'
+    bootdev: 'network'
+    nodes:
+      - name: control_0
+        disk_size: '30'
+        memory: '4096'
+        cpus: '1'
+        profile: control
+      - name: control_1
+        disk_size: '30'
+        memory: '4096'
+        cpus: '1'
+        profile: control
+      - name: control_2
+        disk_size: '30'
+        memory: '4096'
+        cpus: '1'
+        profile: control
+      - name: compute_0
+        disk_size: '30'
+        memory: '4096'
+        cpus: '1'
+        profile: compute
+      - name: ceph_0
+        disk_size: '30'
+        memory: '4096'
+        cpus: '1'
+        profile: ceph
+  volume_path: /var/lib/libvirt/images/
+  volume_pool: default
+  diskbus: 'sata'

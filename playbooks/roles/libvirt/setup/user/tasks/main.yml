@@ -1,0 +1,20 @@
+- name: create user
+  user:
+    name: "{{ virt_power_user }}"
+    groups: "libvirtd"
+    generate_ssh_key: yes
+    ssh_key_file: "{{ virt_power_key }}"
+  become: yes
+
+- name: give user passwordless sudo priveledges
+  script: "scripts/passwordless_sudo.sh {{ virt_power_user }}"
+  become: yes
+
+- name: set fact for instackenv.json friendly virt_power_key
+  script: scripts/instackify_ssh_key.sh {{ virt_power_key }}
+  register: virt_power_private_key_txt
+
+- name: create working directory if it does not exist
+  file:
+    path: '{{ working_dir }}'
+    state: directory

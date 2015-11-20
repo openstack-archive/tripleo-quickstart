@@ -1,0 +1,42 @@
+- name: install libguestfs-tools
+  yum: name=libguestfs-tools state=present
+  become: true
+
+- name: get MACs for the undercloud
+  generate_macs:
+    nodes: "{{ vms.undercloud.nodes }}"
+    bridges: "{{ networks.bridges }}"
+  register: undercloud_mac_map
+
+- name: get undercloud appliance
+  get_url:
+    url: '{{ url }}'
+    dest: '{{ working_dir }}'
+    timeout: 360
+
+- name: copy instackenv.json to appliance
+  shell: >
+         virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json -a {{ working_dir }}/undercloud.qcow2
+
+- name: inject ssh key to appliance
+  shell: >
+         virt-customize --mkdir /root/.ssh/ -a {{ working_dir }}/undercloud.qcow2;
+         cp {{ pub_key }} {{ working_dir }}/authorized_keys;
+         chmod 600 {{ working_dir }}/authorized_keys;
+         virt-customize --upload {{ working_dir }}/authorized_keys:/root/.ssh/authorized_keys -a {{ working_dir }}/undercloud.qcow2;
+         virt-customize --run-command 'sudo chown root:root /root/.ssh/authorized_keys' -a {{ working_dir }}/undercloud.qcow2;
+
+- name: Install undercloud vm storage
+  shell: >
+         virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 {{ item.disk_size }}G --format qcow2;
+         virsh vol-upload {{ item.name }}.qcow2 {{ working_dir }}/undercloud.qcow2 --pool {{ vms.volume_pool }}
+  with_items: "{{ vms.undercloud.nodes }}"
+  become: true
+
+- name: define undercloud vm
+  virt:
+    name: "{{ item.name }}"
+    command: define
+    xml: "{{ lookup('template', 'undercloudvm.xml.j2') }}"
+  with_items: "{{ vms.undercloud.nodes }}"
+  become: true
