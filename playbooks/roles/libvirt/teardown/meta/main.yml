@@ -1,4 +1,6 @@
 ---
 dependencies:
-  - { role: teardown/networks}
-  - { role: teardown/nodes}
+  - { role: libvirt }
+  - { role: teardown/networks, ansible_user: root }
+  - { role: teardown/nodes, ansible_user: root }
+  - { role: teardown/user, ansible_user: root }

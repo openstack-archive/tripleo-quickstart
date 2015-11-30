@@ -20,6 +20,11 @@
   with_items: "{{ vms.overcloud.nodes }}"
   become: true
 
+- name: create working_dir
+  file:
+    name: "{{ working_dir }}"
+    state: directory
+
 - name: write instackenv script
   template:
     src: instackenv.json.j2

@@ -1,20 +1,34 @@
-- name: create user
+- name: create virt_power_key
   user:
     name: "{{ virt_power_user }}"
     groups: "libvirtd"
     generate_ssh_key: yes
     ssh_key_file: "{{ virt_power_key }}"
-  become: yes
 
-- name: give user passwordless sudo priveledges
-  script: "scripts/passwordless_sudo.sh {{ virt_power_user }}"
-  become: yes
+- name: read virt_power_key.pub
+  shell: "cat {{ virt_power_key }}.pub"
+  register: virt_power_pub_key
+
+- name: add virt_power_key to authorized_keys
+  authorized_key:
+    user: "{{ virt_power_user }}"
+    key: "{{ virt_power_pub_key.stdout }}"
+
+- name: create non-root user
+  user:
+    name: "{{ non_root_user }}"
+    groups: "libvirtd"
+    generate_ssh_key: yes
+    ssh_key_file: "/home/{{ non_root_user }}/.ssh/id_rsa"
+
+- name: give non-root user passwordless sudo priveledges
+  script: "scripts/passwordless_sudo.sh {{ non_root_user }}"
+
+- name: install ansible pub key for non-root user
+  authorized_key:
+    user: "{{ non_root_user }}"
+    key: "{{ lookup('file', '{{ pub_key }}') }}"
 
 - name: set fact for instackenv.json friendly virt_power_key
-  script: scripts/instackify_ssh_key.sh {{ virt_power_key }}
+  script: "scripts/instackify_ssh_key.sh {{ virt_power_key }}"
   register: virt_power_private_key_txt
-
-- name: create working directory if it does not exist
-  file:
-    path: '{{ working_dir }}'
-    state: directory

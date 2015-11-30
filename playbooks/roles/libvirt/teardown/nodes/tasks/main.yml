@@ -5,10 +5,25 @@
   ignore_errors: true
   become: true
 
+- name: delete undercloud vm storage
+  shell: >
+         virsh vol-delete --pool '{{ vms.volume_pool }}' '{{ item.name }}'.qcow2
+  with_items: "{{ vms.undercloud.nodes }}"
+  ignore_errors: true
+  become: true
+
 - name: undefine baremetal vms
   virt:
     name: "{{ item.name }}"
     command: undefine
+  with_items: "{{ vms.overcloud.nodes }}"
+  ignore_errors: true
+  become: true
+
+- name: destroy baremetal vms
+  virt:
+    name: "{{ item.name }}"
+    command: destroy
   with_items: "{{ vms.overcloud.nodes }}"
   ignore_errors: true
   become: true
@@ -18,4 +33,13 @@
     name: "{{ item.name }}"
     command: undefine
   with_items: "{{ vms.undercloud.nodes }}"
+  ignore_errors: true
+  become: true
+
+- name: destroy undercloud vm
+  virt:
+    name: "{{ item.name }}"
+    command: destroy
+  with_items: "{{ vms.undercloud.nodes }}"
+  ignore_errors: true
   become: true

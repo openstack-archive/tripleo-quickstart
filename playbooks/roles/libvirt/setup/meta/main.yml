@@ -1,6 +1,7 @@
 ---
 dependencies:
-  - { role: setup/user }
+  - { role: libvirt }
+  - { role: setup/user, ansible_user: root }
   - { role: setup/networks }
   - { role: setup/overcloud_nodes }
   - { role: setup/undercloud }

@@ -1,5 +1,12 @@
 ---
-- name: Remove all traces of libvirt setup
+- name: Add virthost to inventory
   hosts: localhost
+  gather_facts: no
+  roles:
+    - provision/manual
+
+- name:  Teardown previous libvirt setup
+  hosts: virthost
+  gather_facts: no
   roles:
     - libvirt/teardown

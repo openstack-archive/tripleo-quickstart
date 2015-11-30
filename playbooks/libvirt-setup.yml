@@ -1,5 +1,12 @@
 ---
-- name:  Setup undercloud and baremetal vms and networks in libvirt
+- name: Add virthost to inventory
   hosts: localhost
+  gather_facts: no
+  roles:
+    - provision/manual
+
+- name:  Setup undercloud and baremetal vms and networks in libvirt
+  hosts: virthost
+  gather_facts: no
   roles:
     - libvirt/setup

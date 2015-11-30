@@ -1,0 +1,20 @@
+Host undercloud-root
+    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -i {{ hostvars[groups['virthost'][0]].ansible_private_key_file }} stack@{{ hostvars[groups['virthost'][0]].ansible_host }} -W {{ undercloud_ip }}:22
+    IdentityFile {{ hostvars[groups['virthost'][0]].local_working_dir }}/id_rsa_virt_host
+    User root
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
+Host undercloud
+    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -i {{ hostvars[groups['virthost'][0]].ansible_private_key_file }} stack@{{ hostvars[groups['virthost'][0]].ansible_host }} -W {{ undercloud_ip }}:22
+    IdentityFile {{ hostvars[groups['virthost'][0]].local_working_dir }}/id_rsa_virt_host
+    User stack
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
+Host undercloud-from-virthost
+    Hostname {{ undercloud_ip }}
+    IdentityFile ~/.ssh/id_rsa
+    IdentitiesOnly yes
+    User root
+    StrictHostKeyChecking no

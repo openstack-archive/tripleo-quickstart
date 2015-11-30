@@ -1,0 +1,22 @@
+- name: Create working_dir
+  file:
+    path: "{{ working_dir }}"
+    state: directory
+
+- name: Add the virthost to the inventory
+  add_host:
+    name: "virthost"
+    groups: "virthost"
+    ansible_fqdn: "{{ virthost }}"
+    ansible_user: "{{ non_root_user }}"
+    ansible_private_key_file: "{{ priv_key }}"
+    ansible_host: "{{ virthost }}"
+    local_working_dir: "{{ working_dir }}"
+
+- template:
+    dest: "{{ working_dir }}/hosts-new"
+    src: inventory.j2
+- file:
+    dest: "{{ working_dir }}/hosts"
+    state: link
+    src: "{{ working_dir }}/hosts-new"
