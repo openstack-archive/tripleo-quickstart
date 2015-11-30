@@ -1,0 +1,4 @@
+pbr>=1.6
+# This doesn't really work due to:
+# https://bugs.launchpad.net/pbr/+bug/1373623
+git+https://github.com/ansible/ansible.git@v2.0.0-0.6.rc1#egg=ansible
