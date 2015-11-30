@@ -1,4 +1,5 @@
-# tripleo-quickstart
+tripleo-quickstart
+==================
 
 One of the barriers to entry for trying out TripleO and its
 derivatives has been the relative difficulty in getting an
@@ -11,35 +12,35 @@ with CentOS 7 installed, and able to be ssh'd to without password from
 the machine running ansible.
 
 The defaults are meant to "just work", so assuming you
-have ansible 2.0 installed it is as easy as:
+have Ansible 2.0 installed it is as easy as::
 
-```bash
     export TEST_MACHINE='my_test_machine.example.com'
     ansible-playbook playbooks/quickstart.yml
-```
 
 The playbook will output a debug message at the end with instructions
 to access the deployed undercloud.
 
-If you need to install ansible 2.0, this is what I used in testing:
-
-```bash
-    git clone https://github.com/ansible/ansible.git
-    cd ansible
-    git checkout v2.0.0-0.6.rc1
-    git submodule update --init --recursive
-    virtualenv .venv --system-site-packages
-    source .venv/bin/activate
-```
-
-## Documentation
+Documentation
+=============
 
 More in-depth documentation is a work in progress. Patches welcome!
 
-### Author
+To install ``tripleo-quickstart``::
+
+    pip install git+https://github.com/trown/tripleo-quickstart.git@master#egg=tripleo-quickstart
+    # tripleo-quickstart requires Ansible 2.0
+    pip install git+https://github.com/ansible/ansible.git@v2.0.0-0.6.rc1#egg=ansible
+
+Playbooks will be located in either ``/usr/local/share/tripleo-quickstart`` or
+in ``$VIRTUAL_ENV/usr/local/share/tripleo-quickstart`` if you have installed in
+a virtual environment.
+
+Author
+======
 John Trowbridge
 
-### Copyright
+Copyright
+=========
 Copyright 2015 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
