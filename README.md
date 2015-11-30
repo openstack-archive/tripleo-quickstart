@@ -1,5 +1,4 @@
-tripleo-quickstart
-==================
+# tripleo-quickstart
 
 One of the barriers to entry for trying out TripleO and its
 derivatives has been the relative difficulty in getting an
@@ -13,36 +12,34 @@ the machine running ansible.
 
 The defaults are meant to "just work", so assuming you
 have ansible 2.0 installed it is as easy as:
-.. code-block:: bash
 
+```bash
     export TEST_MACHINE='my_test_machine.example.com'
     ansible-playbook playbooks/quickstart.yml
+```
 
 The playbook will output a debug message at the end with instructions
 to access the deployed undercloud.
 
 If you need to install ansible 2.0, this is what I used in testing:
-.. code-block:: bash
 
+```bash
     git clone https://github.com/ansible/ansible.git
     cd ansible
     git checkout v2.0.0-0.6.rc1
     git submodule update --init --recursive
     virtualenv .venv --system-site-packages
     source .venv/bin/activate
+```
 
+## Documentation
 
-
-Documentation
--------------
 More in-depth documentation is a work in progress. Patches welcome!
 
-Author
-======
+### Author
 John Trowbridge
 
-Copyright
-=========
+### Copyright
 Copyright 2015 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
