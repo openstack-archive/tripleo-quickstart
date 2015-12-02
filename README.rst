@@ -11,11 +11,13 @@ You will need a host machine with at least 16G of RAM, preferably 32G,
 with CentOS 7 installed, and able to be ssh'd to without password from
 the machine running ansible.
 
-The defaults are meant to "just work", so assuming you
-have Ansible 2.0 installed it is as easy as::
+The defaults are meant to "just work", so it is as easy as
+downloading and running the quickstart.sh script.
+This script will install this repo along with ansible in a
+virtual environment and run the quickstart playbook::
 
-    export TEST_MACHINE='my_test_machine.example.com'
-    ansible-playbook playbooks/quickstart.yml
+    export VIRTHOST='my_test_machine.example.com'
+    bash <(curl -s https://raw.githubusercontent.com/trown/tripleo-quickstart/master/quickstart.sh)
 
 The playbook will output a debug message at the end with instructions
 to access the deployed undercloud.
@@ -25,7 +27,8 @@ Documentation
 
 More in-depth documentation is a work in progress. Patches welcome!
 
-To install ``tripleo-quickstart``::
+To install ``tripleo-quickstart`` yourself instead of via the
+quickstart.sh script::
 
     pip install git+https://github.com/trown/tripleo-quickstart.git@master#egg=tripleo-quickstart
     # tripleo-quickstart requires Ansible 2.0
