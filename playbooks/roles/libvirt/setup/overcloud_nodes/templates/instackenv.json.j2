@@ -12,7 +12,8 @@
       "disk": "{{ node.disk_size }}",
       "arch": "{{ vms.overcloud.arch }}",
       "pm_user": "{{ virt_power_user }}",
-      "pm_addr": "{{ networks.external.ip }}"
+      "pm_addr": "{{ networks.external.ip }}",
+      "capabilities": "{% if node.profile %}profile:{{ node.profile }},{% endif %}boot_option:local"
     }
     {% if not loop.last %}
     ,
