@@ -1,6 +1,8 @@
 ---
 - name:  Setup undercloud and baremetal vms and networks in libvirt
-  hosts: virthost
+  hosts:
+    - host0
+    - virthost
   gather_facts: no
   roles:
     - libvirt/setup
