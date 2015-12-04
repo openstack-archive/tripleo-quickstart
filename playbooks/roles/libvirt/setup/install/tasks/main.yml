@@ -1,0 +1,25 @@
+- name: ensure libvirt is installed
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - qemu-kvm
+    - libvirt
+    - libvirt-python
+
+- name: modprobe kvm_intel
+  modprobe:
+    name: kvm_intel
+    state: present
+
+- name: start libvirtd
+  service:
+    name: libvirtd
+    state: running
+
+- name: ensure correct permissions on /dev/kvm
+  file:
+    path: /dev/kvm
+    owner: root
+    group: kvm
+    mode: 0660
