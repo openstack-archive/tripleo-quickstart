@@ -1,3 +1,8 @@
+- name: create libvirtd group
+  group:
+    name: libvirtd
+    state: present
+
 - name: create virt_power_key
   user:
     name: "{{ virt_power_user }}"
@@ -16,6 +21,7 @@
 - name: create non-root user
   user:
     name: "{{ non_root_user }}"
+    groups: libvirtd
     generate_ssh_key: yes
     ssh_key_file: "/home/{{ non_root_user }}/.ssh/id_rsa"
 
