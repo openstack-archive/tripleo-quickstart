@@ -16,10 +16,11 @@
 
 - name: copy instackenv.json to appliance
   shell: >
-         virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json -a {{ working_dir }}/undercloud.qcow2
+         LIBGUESTFS_BACKEND=direct virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json -a {{ working_dir }}/undercloud.qcow2
 
 - name: inject ssh key to appliance
   shell: >
+         export LIBGUESTFS_BACKEND=direct;
          virt-customize --mkdir /root/.ssh/ -a {{ working_dir }}/undercloud.qcow2;
          cp /home/{{ non_root_user }}/.ssh/id_rsa.pub {{ working_dir }}/authorized_keys;
          chmod 600 {{ working_dir }}/authorized_keys;
