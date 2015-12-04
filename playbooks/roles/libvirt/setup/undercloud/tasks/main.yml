@@ -30,7 +30,7 @@
 - name: Install undercloud vm storage
   shell: >
          virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 {{ item.disk_size }}G --format qcow2;
-         virsh vol-upload {{ item.name }}.qcow2 {{ working_dir }}/undercloud.qcow2 --pool {{ vms.volume_pool }}
+         cp {{ working_dir }}/undercloud.qcow2 '{{ vms.volume_path }}''{{ item.name }}'.qcow2
   with_items: "{{ vms.undercloud.nodes }}"
   become: true
 
