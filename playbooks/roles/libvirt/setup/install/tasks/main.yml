@@ -35,4 +35,4 @@
     path: /dev/kvm
     owner: root
     group: kvm
-    mode: 0660
+    mode: 0666
