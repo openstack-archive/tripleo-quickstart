@@ -14,6 +14,12 @@
     - python-lxml
     - openvswitch
 
+- name: start openvswitch
+  service:
+    name: openvswitch
+    state: started
+    enabled: yes
+
 - name: modprobe kvm_intel
   modprobe:
     name: kvm_intel
