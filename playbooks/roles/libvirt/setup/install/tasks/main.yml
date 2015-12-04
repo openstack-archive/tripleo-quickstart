@@ -1,4 +1,4 @@
-- name: ensure libvirt is installed
+- name: ensure libvirt and other deps are installed
   yum:
     name: "{{ item }}"
     state: present
@@ -7,6 +7,7 @@
     - libvirt
     - libvirt-python
     - python-lxml
+    - openvswitch
 
 - name: modprobe kvm_intel
   modprobe:
