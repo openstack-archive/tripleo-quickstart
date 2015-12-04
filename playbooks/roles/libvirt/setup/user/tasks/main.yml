@@ -1,7 +1,6 @@
 - name: create virt_power_key
   user:
     name: "{{ virt_power_user }}"
-    groups: "libvirtd"
     generate_ssh_key: yes
     ssh_key_file: "{{ virt_power_key }}"
 
@@ -17,9 +16,14 @@
 - name: create non-root user
   user:
     name: "{{ non_root_user }}"
-    groups: "libvirtd"
     generate_ssh_key: yes
     ssh_key_file: "/home/{{ non_root_user }}/.ssh/id_rsa"
+
+- name: allow the non-root user to manage libvirt
+  template:
+    src: libvirt.pkla.j2
+    dest: "/etc/polkit-1/localauthority/50-local.d/50-{{ non_root_user }}-libvirt.pkla"
+    mode: 0644
 
 - name: give non-root user passwordless sudo priveledges
   script: "scripts/passwordless_sudo.sh {{ non_root_user }}"
