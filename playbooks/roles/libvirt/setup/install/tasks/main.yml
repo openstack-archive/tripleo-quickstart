@@ -6,6 +6,7 @@
     - qemu-kvm
     - libvirt
     - libvirt-python
+    - python-lxml
 
 - name: modprobe kvm_intel
   modprobe:
