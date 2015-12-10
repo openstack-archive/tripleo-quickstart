@@ -8,20 +8,11 @@
     bridges: "{{ networks.bridges }}"
   register: undercloud_mac_map
 
-- name: get expected md5 of undercloud appliance
-  shell: curl {{ url }}.md5 | awk '{ print $1 }'
-  register: undercloud_md5
-
 - name: get undercloud appliance
-  register: get_undercloud_result
-  until: get_undercloud_result.failed == false
-  retries: 3
-  delay: 10
   get_url:
     url: '{{ url }}'
     dest: '{{ working_dir }}'
-    timeout: 1200
-    checksum: 'md5:{{ undercloud_md5.stdout }}'
+    timeout: 360
 
 - name: copy instackenv.json to appliance
   shell: >
