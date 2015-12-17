@@ -17,10 +17,11 @@ This script will install this repo along with ansible in a
 virtual environment and run the quickstart playbook::
 
     export VIRTHOST='my_test_machine.example.com'
-    bash <(curl -s https://raw.githubusercontent.com/trown/tripleo-quickstart/master/quickstart.sh)
+    bash <(curl -s https://raw.githubusercontent.com/trown/tripleo-quickstart/master/quickstart.sh) [release]
 
 The playbook will output a debug message at the end with instructions
-to access the deployed undercloud.
+to access the deployed undercloud. If a release name is not given, ``liberty``
+is used.
 
 Documentation
 =============
@@ -37,6 +38,26 @@ quickstart.sh script::
 Playbooks will be located in either ``/usr/local/share/tripleo-quickstart`` or
 in ``$VIRTUAL_ENV/usr/local/share/tripleo-quickstart`` if you have installed in
 a virtual environment.
+
+Installing a specific undercloud image
+======================================
+
+Install ``tripleo-quickstart`` as above, then run
+
+    export VIRTHOST='my_test_machine.example.com'
+    export ANSIBLE_CONFIG=$VIRTUAL_ENV/usr/local/share/tripleo-quickstart/ansible.cfg
+    export ANSIBLE_INVENTORY=$VIRTUAL_ENV/hosts
+    ansible-playbook -vv [path to quickstart-liberty.yml] --extra-vars url=[url]
+
+on your workstation. ``url`` should be the URL of an undercloud machine image,
+visible to the virthost machine. For instance, if you have files
+undercloud.qcow2 and undercloud.qcow2.md5 in the virthost's /tmp directory, run
+the following from your workstation:
+
+    export VIRTHOST='my_test_machine.example.com'
+    export ANSIBLE_CONFIG=$VIRTUAL_ENV/usr/local/share/tripleo-quickstart/ansible.cfg
+    export ANSIBLE_INVENTORY=$VIRTUAL_ENV/hosts
+    ansible-playbook -vv $VIRTUAL_ENV/usr/local/share/tripleo-quickstart/playbooks/quickstart-liberty.yml --extra-vars url=file:///tmp/undercloud.qcow2
 
 Author
 ======
