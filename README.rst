@@ -23,6 +23,13 @@ The playbook will output a debug message at the end with instructions
 to access the deployed undercloud. If a release name is not given, ``liberty``
 is used.
 
+The install process is not run to completion so that it's easier to clean the
+image; to finish the installation, ssh into the undercloud VM and run::
+
+    openstack undercloud install
+
+as the ``stack`` user.
+
 Documentation
 =============
 
@@ -42,7 +49,7 @@ a virtual environment.
 Installing a specific undercloud image
 ======================================
 
-Install ``tripleo-quickstart`` as above, then run
+Install ``tripleo-quickstart`` as above, then run::
 
     export VIRTHOST='my_test_machine.example.com'
     export ANSIBLE_CONFIG=$VIRTUAL_ENV/usr/local/share/tripleo-quickstart/ansible.cfg
@@ -52,7 +59,7 @@ Install ``tripleo-quickstart`` as above, then run
 on your workstation. ``url`` should be the URL of an undercloud machine image,
 visible to the virthost machine. For instance, if you have files
 undercloud.qcow2 and undercloud.qcow2.md5 in the virthost's /tmp directory, run
-the following from your workstation:
+the following from your workstation::
 
     export VIRTHOST='my_test_machine.example.com'
     export ANSIBLE_CONFIG=$VIRTUAL_ENV/usr/local/share/tripleo-quickstart/ansible.cfg
