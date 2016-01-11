@@ -1,0 +1,24 @@
+- name: install rsync
+  yum:
+    name: rsync
+    state: present
+  become: true
+
+- name: create local dir to store images
+  local_action: "command mkdir -p {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}"
+
+- name: create delorean_hash files
+  local_action: "command echo {{ delorean_hash }} {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}/delorean_hash"
+
+- name: fetch files to local workspace
+  synchronize:
+    src: "{{ working_dir }}/{{ item }}"
+    dest: "{{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}/{{ item }}"
+    mode: pull
+  with_items: "{{ artifacts }}"
+
+- name: publish to artifacts.centos
+  local_action: "command rsync -av {{ lookup('env', 'WORKSPACE') }}/images rdo@artifacts.ci.centos.org::rdo/"
+
+- name: remove the images from the workspace
+  local_action: "command rm -rf {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}"

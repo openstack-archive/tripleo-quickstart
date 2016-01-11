@@ -1,0 +1,13 @@
+- name: "get base image for {{ overcloud_working_image_dest }}"
+  get_url:
+    url: '{{ overcloud_image_url }}'
+    dest: '{{ overcloud_working_image_dest }}'
+    force: '{{ overcloud_overwrite_existing }}'
+
+- name: "Create virt-customize run script ({{ overcloud_run_script }})"
+  template:
+    src: "{{ overcloud_run_script }}"
+    dest: "{{ working_dir }}"
+
+- name: Run the virt-customize run script
+  shell: "{{ overcloud_virt_customize_command }}"

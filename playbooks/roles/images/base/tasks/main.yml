@@ -1,0 +1,13 @@
+- name: "get base image for {{ base_working_image_dest }}"
+  get_url:
+    url: '{{ base_image_url }}'
+    dest: '{{ base_working_image_dest }}'
+    force: '{{ base_overwrite_existing }}'
+
+- name: "Create virt-customize run script ({{ base_run_script }})"
+  template:
+    src: "{{ base_run_script }}"
+    dest: "{{ working_dir }}"
+
+- name: Run the virt-customize run script
+  shell: "{{ base_virt_customize_command }}"

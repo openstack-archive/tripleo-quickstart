@@ -1,0 +1,12 @@
+#!/bin/bash
+# Minimal base script for virt-customize --run
+
+set -eux
+
+{% include repo_type %}
+
+yum update -y
+
+## workarounds
+
+yum install -y {% for package in package_overrides %} {{ package }} {% endfor %}

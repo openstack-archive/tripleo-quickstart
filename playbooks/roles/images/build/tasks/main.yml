@@ -1,0 +1,8 @@
+- name: Create image build script
+  template:
+    src: "{{ build_script }}"
+    dest: "{{ working_dir }}"
+    mode: 0744
+
+- name: Run the image build script
+  shell: "{{ working_dir }}/{{ build_script }}"

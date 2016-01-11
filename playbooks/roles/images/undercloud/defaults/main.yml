@@ -1,0 +1,8 @@
+working_dir: /home/stack
+ansible_user: stack
+undercloud_image_url: "file:///{{ working_dir }}/overcloud-base.qcow2"
+undercloud_working_image: undercloud-base.qcow2
+undercloud_working_image_dest: "{{ working_dir }}/{{ undercloud_working_image }}"
+undercloud_overwrite_existing: no
+undercloud_run_script: undercloud-run
+undercloud_virt_customize_command: "virt-customize -m 16042 --smp 4 -a {{ undercloud_working_image_dest }} --run {{ working_dir }}/{{ undercloud_run_script }}"

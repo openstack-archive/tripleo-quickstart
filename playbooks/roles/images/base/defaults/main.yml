@@ -1,0 +1,15 @@
+working_dir: /home/stack
+ansible_user: stack
+
+base_image_url: http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+base_working_image: minimal-base.qcow2
+base_working_image_dest: "{{ working_dir }}/{{ base_working_image }}"
+base_overwrite_existing: no
+base_run_script: base-run
+base_virt_customize_command: "virt-customize -m 16042 --smp 4 -a {{ base_working_image_dest }} --run {{ working_dir }}/{{ base_run_script }}"
+
+repo_type: repos/centos7-liberty-cbs
+delorean_hash: current-passed-ci
+
+package_overrides:
+  - python

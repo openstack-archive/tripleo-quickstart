@@ -1,0 +1,29 @@
+#!/bin/bash
+# Undercloud script for virt-customize --run
+
+set -eux
+
+xfs_growfs -d /dev/sda1
+
+yum remove -y cloud-init
+
+yum remove -y mariadb-galera-server
+yum install -y mariadb-server
+
+useradd stack
+echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
+chmod 0440 /etc/sudoers.d/stack
+
+mkdir /home/stack/.ssh
+chown stack:stack /home/stack/.ssh
+
+echo "127.0.0.1  localhost undercloud" > /etc/hosts
+echo "HOSTNAME=undercloud" >> /etc/sysconfig/network
+echo "undercloud" > /etc/hostname
+
+cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf
+chown stack:stack /home/stack/*
+
+## workarounds
+
+sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config

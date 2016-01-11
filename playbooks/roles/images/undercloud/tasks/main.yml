@@ -1,0 +1,44 @@
+- name: "get base image for {{ undercloud_working_image_dest }}"
+  get_url:
+    url: '{{ undercloud_image_url }}'
+    dest: '{{ undercloud_working_image_dest }}'
+    force: '{{ undercloud_overwrite_existing }}'
+
+- name: Check if volume_pool exists
+  virt_pool:
+    command: status
+    name: default
+  register: volume_pool_status
+  ignore_errors: true
+  become: true
+
+- name: Create volume_pool if it does not exists
+  virt_pool:
+    command: define
+    name: default
+    xml: '{{ lookup("template", "volume_pool.xml.j2") }}'
+  when: volume_pool_status.failed is defined
+  become: true
+
+- name: Create volume_pool if it does not exists
+  virt_pool:
+    command: create
+    name: default
+  when: volume_pool_status.failed is defined
+  become: true
+
+- name: expand undercloud.qcow2 filesystem
+  shell: >
+         export LIBGUESTFS_BACKEND=direct;
+         virsh vol-create-as default undercloud.qcow2 30G --format qcow2;
+         virt-resize --expand /dev/sda1 {{ undercloud_working_image_dest }} /var/lib/libvirt/images/undercloud.qcow2;
+         cp -f /var/lib/libvirt/images/undercloud.qcow2 {{ undercloud_working_image_dest }}
+  become: true
+
+- name: "Create virt-customize run script ({{ undercloud_run_script }})"
+  template:
+    src: "{{ undercloud_run_script }}"
+    dest: "{{ working_dir }}"
+
+- name: Run the virt-customize run script
+  shell: "{{ undercloud_virt_customize_command }}"

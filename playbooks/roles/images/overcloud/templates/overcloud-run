@@ -1,0 +1,6 @@
+#!/bin/bash
+# Overcloud script for virt-customize --run
+
+set -eux
+
+yum install -y {% for package in overcloud_packages %} {{ package }} {% endfor %}

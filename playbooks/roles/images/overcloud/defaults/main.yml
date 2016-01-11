@@ -1,0 +1,104 @@
+working_dir: /home/stack
+ansible_user: stack
+
+overcloud_image_url: "file:///{{ working_dir }}/minimal-base.qcow2"
+overcloud_working_image: overcloud-base.qcow2
+overcloud_working_image_dest: "{{ working_dir }}/{{ overcloud_working_image }}"
+overcloud_overwrite_existing: no
+overcloud_run_script: overcloud-run
+overcloud_virt_customize_command: "virt-customize -m 16042 --smp 4 -a {{ overcloud_working_image_dest }} --run {{ working_dir }}/{{ overcloud_run_script }}"
+overcloud_packages:
+    - python-tripleoclient
+    - openstack-ironic-conductor
+    - openvswitch
+    - puppet
+    - git
+    - iptables-services
+    - iscsi-initiator-utils
+    - openstack-puppet-modules
+    - pystache
+    - mariadb-devel
+    - syslinux
+    - tftp-server
+    - xinetd
+    - python-libguestfs
+    - openstack-nova-api
+    - openstack-nova-cert
+    - openstack-nova-compute
+    - openstack-nova-conductor
+    - openstack-swift-account
+    - openstack-swift-object
+    - openstack-swift-proxy
+    - openstack-ceilometer-api
+    - openstack-neutron-ml2
+    - openstack-ceilometer-alarm
+    - openstack-ironic-inspector
+    - openstack-ironic-api
+    - python-openvswitch
+    - openstack-glance
+    - python-troveclient
+    - openstack-neutron
+    - openstack-neutron-openvswitch
+    - openstack-nova-scheduler
+    - openstack-keystone
+    - openstack-heat-api-cfn
+    - openstack-heat-api
+    - openstack-ceilometer-central
+    - openstack-ceilometer-polling
+    - openstack-ceilometer-collector
+    - openstack-heat-api-cloudwatch
+    - openstack-heat-engine
+    - openstack-ceilometer-notification
+    - memcached
+    - keepalived
+    - mariadb
+    - mariadb-galera-server
+    - rabbitmq-server
+    - python-pbr
+    - gcc-c++
+    - httpd
+    - libxslt-devel
+    - automake
+    - os-apply-config
+    - openstack-selinux
+    - os-net-config
+    - ipxe-bootimgs
+    - traceroute
+    - kernel-devel
+    - os-cloud-config
+    - os-collect-config
+    - tcpdump
+    - os-refresh-config
+    - libwsman1
+    - openwsman-python
+    - tftp
+    - wget
+    - fence-agents-all
+    - haproxy
+    - libvirt
+    - mongodb
+    - mongodb-server
+    - ntp
+    - openstack-ceilometer-compute
+    - openstack-cinder
+    - openstack-dashboard
+    - openstack-manila
+    - openstack-manila-share
+    - openstack-neutron-lbaas
+    - openstack-neutron-metering-agent
+    - openstack-nova-console
+    - openstack-nova-novncproxy
+    - pacemaker
+    - pacemaker-remote
+    - pcs
+    - redis
+    - targetcli
+    - boost-filesystem
+    - boost-program-options
+    - corosync
+    - python-zaqarclient
+    - vim
+    - screen
+    - libguestfs-tools
+    - openstack-tempest
+    - docker-registry

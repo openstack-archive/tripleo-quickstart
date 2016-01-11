@@ -1,0 +1,5 @@
+curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/{{ delorean_hash }}/delorean.repo
+
+curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7/delorean-deps.repo
+
+yum install -y yum-plugin-priorities

@@ -1,0 +1,11 @@
+#!/bin/bash
+# Sets up the image building environment
+
+set -eux
+
+# This keeps us from getting the buggy rdo-release repo element
+export RHOS=1
+
+{% for image in images %}
+DIB_LOCAL_IMAGE={{ image.base }} openstack overcloud image build --type {{ image.type }}
+{% endfor %}

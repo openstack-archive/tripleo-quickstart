@@ -1,0 +1,9 @@
+build_script: build-images
+working_dir: /home/stack
+images:
+  - base: minimal-base.qcow2
+    type: agent-ramdisk
+  - base: minimal-base.qcow2
+    type: deploy-ramdisk
+  - base: overcloud-base.qcow2
+    type: overcloud-full
