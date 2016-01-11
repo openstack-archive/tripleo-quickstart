@@ -1,0 +1,49 @@
+- name:  Setup undercloud and baremetal vms and networks in libvirt
+  hosts: host0
+  gather_facts: no
+  vars:
+    url: "http://artifacts.ci.centos.org/artifacts/rdo/images/liberty/cbs/testing/undercloud.qcow2"
+    local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
+    vms:
+      engine: 'kvm'
+      undercloud:
+        nodes:
+          - name: undercloud
+            disk_size: '50'
+            memory: '16384'
+            cpus: '4'
+        arch: 'x86_64'
+        bootdev: 'hd'
+      overcloud:
+        arch: 'x86_64'
+        bootdev: 'network'
+        nodes:
+          - name: control_0
+            disk_size: '50'
+            memory: '8192'
+            cpus: '2'
+            profile: control
+          - name: compute_0
+            disk_size: '50'
+            memory: '8192'
+            cpus: '2'
+            profile: compute
+      volume_path: /var/lib/libvirt/images/
+      volume_pool: default
+      diskbus: 'sata'
+  roles:
+    - libvirt/setup
+
+- name: Rebuild inventory
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - rebuild-inventory
+
+- name:  Install undercloud and deploy overcloud
+  hosts: undercloud
+  gather_facts: no
+  vars:
+    local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
+  roles:
+    - overcloud

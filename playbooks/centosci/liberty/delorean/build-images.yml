@@ -1,0 +1,32 @@
+---
+- name: Create base images
+  hosts: host0
+  gather_facts: no
+  vars:
+    repo_type: "repos/centos7-liberty-delorean"
+    delorean_hash: "current-passed-ci"
+  roles:
+    - images/env-setup
+    - images/base
+    - images/overcloud
+    - images/undercloud
+
+- name: Build overcloud images from base images
+  hosts: host0
+  gather_facts: no
+  roles:
+    - images/build
+
+- name: Package Images
+  hosts: host0
+  gather_facts: no
+  roles:
+    - images/package
+
+- name: Publish Images
+  hosts: host0
+  gather_facts: no
+  vars:
+    repo_type: "delorean/testing"
+  roles:
+    - images/publish
