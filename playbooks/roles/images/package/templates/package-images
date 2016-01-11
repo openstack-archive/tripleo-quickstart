@@ -18,16 +18,13 @@ md5sum {{ image_type }}.tar > {{ image_type }}.tar.md5
 {% endfor %}
 
 ## Compress intermediate images and undercloud image
-## These are not working so replace with copy for now
-#virt-sparsify --compress {{ working_dir }}/{{ undercloud_base }} undercloud.qcow2
-#rm -f {{ working_dir }}/{{ undercloud_base }}
-cp {{ working_dir }}/{{ undercloud_base }} undercloud.qcow2
-#virt-sparsify --compress minimal-base.qcow2 minimal-base-compressed.qcow2
-#rm -f minimal-base.qcow2
-#virt-sparsify --compress overcloud-base.qcow2 overcloud-base-compressed.qcow2
-#rm -f overcloud-base.qcow2
+export LIBGUESTFS_BACKEND=direct
+virt-sparsify --compress {{ working_dir }}/{{ undercloud_base }} undercloud.qcow2
+virt-sparsify --compress minimal-base.qcow2 minimal-base-compressed.qcow2
+virt-sparsify --compress overcloud-base.qcow2 overcloud-base-compressed.qcow2
+
 
 ## Create md5 for all images
 md5sum undercloud.qcow2 > undercloud.qcow2.md5
-md5sum minimal-base.qcow2 > minimal-base.qcow2.md5
-md5sum overcloud-base.qcow2 > overcloud-base.qcow2.md5
+md5sum minimal-base-compressed.qcow2 > minimal-base-compressed.qcow2.md5
+md5sum overcloud-base-compressed.qcow2 > overcloud-base-compressed.qcow2.md5
