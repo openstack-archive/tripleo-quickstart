@@ -1,0 +1,15 @@
+#!/bin/bash
+# Simple overcloud deploy script
+
+set -eux
+
+source stackrc
+
+while true; do
+    count=$(openstack hypervisor stats show -c count -f value)
+    if [ $count -gt 0 ]; then
+        break
+    fi
+done
+
+openstack overcloud deploy --templates {{ deploy_args }}

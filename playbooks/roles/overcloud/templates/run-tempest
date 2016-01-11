@@ -1,0 +1,1 @@
+tools/run-tests.sh --skip-file {{ working_dir }}/skipfile .*smoke

@@ -1,0 +1,28 @@
+#!/bin/bash
+# Prepare the undercloud for deploy
+
+set -eux
+
+openstack undercloud install
+
+openstack undercloud install
+
+source stackrc
+openstack overcloud image upload --old-deploy-image
+openstack baremetal import --json instackenv.json
+openstack baremetal configure boot
+
+{% if introspect %}
+  openstack baremetal introspection bulk start
+{% endif %}
+
+{% if create_flavors %}
+  openstack flavor create --id auto --ram 4096 --disk 40 --vcpus 1 baremetal
+  openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
+
+{% for flavor in custom_flavors %}
+  openstack flavor create --id auto --ram 4096 --disk 40 --vcpus 1 {{ flavor }}
+  openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="{{ flavor }}" {{ flavor }}
+{% endfor %}
+
+{% endif %}

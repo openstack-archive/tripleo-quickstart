@@ -1,0 +1,10 @@
+#!/bin/bash
+# Validate the overcloud deployment
+
+set -eux
+
+{% if tempest %}
+  {% include 'configure-tempest' %}
+
+  {% include 'run-tempest' %}
+{% endif %}

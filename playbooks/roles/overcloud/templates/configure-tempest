@@ -1,0 +1,30 @@
+set -eux
+
+sudo yum install -y openstack-tempest
+sudo yum remove -y python-manila
+
+source {{ working_dir }}/overcloudrc
+
+neutron net-create nova --router:external=True \
+    --provider:network_type flat \
+    --provider:physical_network datacentre
+
+public_net_id=$(neutron net-show nova -f value -c id)
+
+neutron subnet-create --name ext-subnet --allocation-pool start={{ floating_ip_start }},end={{ floating_ip_end }} --disable-dhcp --gateway {{ external_network_gateway }} nova {{ floating_ip_cidr }}
+
+# This should probably be done on deploy
+openstack role create heat_stack_owner
+openstack role add --project admin --user admin heat_stack_owner
+
+mkdir {{ working_dir }}/tempest
+cd {{ working_dir }}/tempest
+
+/usr/share/openstack-tempest-liberty/tools/configure-tempest-directory
+
+tools/config_tempest.py --out etc/tempest.conf --network-id $public_net_id --deployer-input ~/tempest-deployer-input.conf --debug --create \
+identity.uri $OS_AUTH_URL \
+identity.admin_password $OS_PASSWORD \
+network.tenant_network_cidr 192.168.0.0/24 \
+object-storage.operator_role swiftoperator \
+orchestration.stack_owner_role heat_stack_owner

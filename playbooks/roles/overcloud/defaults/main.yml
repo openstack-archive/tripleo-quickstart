@@ -1,0 +1,32 @@
+install_script: undercloud-install
+install_log: "{{ working_dir }}/undercloud_install.log"
+deploy_script: overcloud-deploy
+deploy_log: "{{ working_dir }}/overcloud_deploy.log"
+validate_script: overcloud-validate
+validate_log: "{{ working_dir }}/overcloud_validate.log"
+
+local_working_dir: ~/.quickstart
+working_dir: /home/stack
+
+ansible_ssh_extra_args: "-F {{ local_working_dir }}/ssh.config.ansible"
+
+floating_ip_cidr: "192.0.2.0/24"
+floating_ip_start: 192.0.2.100
+floating_ip_end: 192.0.2.120
+external_network_gateway: 192.0.2.1
+
+introspect: true
+tempest: true
+
+create_flavors: true
+custom_flavors:
+  - control
+  - compute
+  - ceph
+
+control_args: "--control-flavor control"
+compute_args: "--compute-flavor compute"
+ceph_args: ""
+extra_environments: ""
+libvirt_args: "--libvirt-type qemu"
+deploy_args: "{{ libvirt_args }} {{ control_args }} {{ compute_args }} {{ ceph_args }} {{ extra_environments }}"

@@ -5,6 +5,12 @@
   roles:
     - provision/manual
 
+- name: Rebuild inventory
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - rebuild-inventory
+
 - name:  Teardown previous libvirt setup
   hosts: virthost
   gather_facts: no
