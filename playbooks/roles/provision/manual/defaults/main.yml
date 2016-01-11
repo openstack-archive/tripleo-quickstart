@@ -1,4 +1,4 @@
 working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
-non_root_user: quick
+non_root_user: stack
 virthost: "{{ lookup('env', 'VIRTHOST') }}"
 priv_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"

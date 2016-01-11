@@ -3,20 +3,17 @@
     path: "{{ working_dir }}"
     state: directory
 
+- name: Create empty ssh config file
+  file:
+    path: "{{ working_dir }}/ssh.config.ansible"
+    state: touch
+
 - name: Add the virthost to the inventory
   add_host:
-    name: "virthost"
+    name: "host0"
     groups: "virthost"
     ansible_fqdn: "{{ virthost }}"
-    ansible_user: "{{ non_root_user }}"
-    ansible_private_key_file: "{{ priv_key }}"
-    ansible_host: "{{ virthost }}"
+    ansible_ssh_user: "{{ non_root_user }}"
+    ansible_ssh_private_key_file: "{{ priv_key }}"
+    ansible_ssh_host: "{{ virthost }}"
     local_working_dir: "{{ working_dir }}"
-
-- template:
-    dest: "{{ working_dir }}/hosts-new"
-    src: inventory.j2
-- file:
-    dest: "{{ working_dir }}/hosts"
-    state: link
-    src: "{{ working_dir }}/hosts-new"

@@ -1,0 +1,5 @@
+- debug: var=groups
+
+- template:
+    dest: "{{ working_dir }}/hosts"
+    src: inventory.j2
