@@ -35,4 +35,6 @@
     path: /dev/kvm
     owner: root
     group: kvm
-    mode: 0666
+    mode: 0664
+
+#setfacl -m g::rw /dev/kvm

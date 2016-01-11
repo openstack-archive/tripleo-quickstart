@@ -1,4 +1,4 @@
-non_root_user: quick
+non_root_user: stack
 working_dir: "/home/{{ non_root_user }}/.quickstart"
 url: https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/undercloud.qcow2
 pub_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
@@ -18,7 +18,7 @@ networks:
     ip: 192.168.23.1
     netmask: 255.255.255.0
     dhcp_start: 192.168.23.2
-    dhcp_end: 192.168.23.200
+    dhcp_end: 192.168.23.50
 vms:
   engine: 'kvm'
   undercloud:

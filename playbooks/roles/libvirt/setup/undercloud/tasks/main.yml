@@ -25,7 +25,9 @@
 
 - name: copy instackenv.json to appliance
   shell: >
-         LIBGUESTFS_BACKEND=direct virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json -a {{ working_dir }}/undercloud.qcow2
+         export LIBGUESTFS_BACKEND=direct;
+         virt-customize -a {{ working_dir }}/undercloud.qcow2 --run-command 'rm -f /home/stack/instackenv.json';
+         virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json -a {{ working_dir }}/undercloud.qcow2
 
 - name: inject ssh key to appliance
   shell: >
@@ -38,8 +40,9 @@
 
 - name: Install undercloud vm storage
   shell: >
+         export LIBGUESTFS_BACKEND=direct;
          virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 {{ item.disk_size }}G --format qcow2;
-         cp {{ working_dir }}/undercloud.qcow2 '{{ vms.volume_path }}''{{ item.name }}'.qcow2
+         virt-resize --expand /dev/sda1 {{ working_dir }}/undercloud.qcow2 '{{ vms.volume_path }}''{{ item.name }}'.qcow2;
   with_items: "{{ vms.undercloud.nodes }}"
   become: true
 
@@ -78,10 +81,11 @@
   add_host:
     name: "{{ item.name }}"
     groups: undercloud
-    ansible_host: "{{ item.name }}"
+    ansible_ssh_host: "{{ item.name }}"
     ansible_fqdn: "{{ item.name }}"
-    ansible_user: root
-    ansible_private_key_file: "{{ ansible_private_key_file }}"
+    ansible_ssh_user: stack
+    ansible_ssh_private_key_file: "{{ ansible_private_key_file }}"
+    ansible_ssh_args: "-F {{ local_working_dir }}/ssh.config.ansible"
   with_items: "{{ vms.undercloud.nodes }}"
 
 - name: setup ssh config
