@@ -5,8 +5,6 @@ set -eux
 
 openstack undercloud install
 
-openstack undercloud install
-
 source stackrc
 openstack overcloud image upload --old-deploy-image
 openstack baremetal import --json instackenv.json

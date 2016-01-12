@@ -10,6 +10,9 @@ yum remove -y cloud-init
 yum remove -y mariadb-galera-server
 yum install -y mariadb-server
 
+sudo yum install -y openstack-tempest
+sudo yum remove -y python-manila
+
 useradd stack
 echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
 chmod 0440 /etc/sudoers.d/stack

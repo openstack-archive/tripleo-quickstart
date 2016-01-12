@@ -1,8 +1,5 @@
 set -eux
 
-sudo yum install -y openstack-tempest
-sudo yum remove -y python-manila
-
 source {{ working_dir }}/overcloudrc
 
 neutron net-create nova --router:external=True \
