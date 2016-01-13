@@ -37,6 +37,8 @@
 - name: Rebuild inventory
   hosts: localhost
   gather_facts: no
+  vars:
+    working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
   roles:
     - rebuild-inventory
 
@@ -45,5 +47,6 @@
   gather_facts: no
   vars:
     local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
+    create_flavors: false
   roles:
     - overcloud
