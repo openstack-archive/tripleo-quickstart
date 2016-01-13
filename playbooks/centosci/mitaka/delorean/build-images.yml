@@ -27,6 +27,7 @@
   hosts: host0
   gather_facts: no
   vars:
+    release: "mitaka"
     repo_type: "delorean/testing"
   roles:
     - images/publish
