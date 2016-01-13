@@ -45,6 +45,6 @@
   gather_facts: no
   vars:
     local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
-    create_flavors: false
+    bash_deploy_ramdisk: false
   roles:
     - overcloud

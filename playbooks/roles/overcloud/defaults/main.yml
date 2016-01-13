@@ -18,7 +18,9 @@ external_network_gateway: 192.0.2.1
 introspect: true
 tempest: true
 
-create_flavors: true
+bash_deploy_ramdisk: true
+
+create_flavors: false
 custom_flavors:
   - control
   - compute

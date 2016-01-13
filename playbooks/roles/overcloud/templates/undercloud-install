@@ -6,7 +6,13 @@ set -eux
 openstack undercloud install
 
 source stackrc
-openstack overcloud image upload --old-deploy-image
+
+{% if bash_deploy_ramdisk %}
+  openstack overcloud image upload --old-deploy-image
+{% else %}
+  openstack overcloud image upload
+{% endif %}
+
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 
