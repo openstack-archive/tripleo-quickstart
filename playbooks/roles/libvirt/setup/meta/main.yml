@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - { role: libvirt }
   - { role: setup/install, ansible_user: root }
   - { role: setup/user, ansible_user: root }
   - { role: setup/networks, ansible_user: "{{ non_root_user }}" }

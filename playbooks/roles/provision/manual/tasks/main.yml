@@ -1,11 +1,11 @@
 - name: Create working_dir
   file:
-    path: "{{ working_dir }}"
+    path: "{{ local_working_dir }}"
     state: directory
 
 - name: Create empty ssh config file
   file:
-    path: "{{ working_dir }}/ssh.config.ansible"
+    path: "{{ local_working_dir }}/ssh.config.ansible"
     state: touch
 
 - name: Add the virthost to the inventory
@@ -16,4 +16,4 @@
     ansible_ssh_user: "{{ non_root_user }}"
     ansible_ssh_private_key_file: "{{ priv_key }}"
     ansible_ssh_host: "{{ virthost }}"
-    local_working_dir: "{{ working_dir }}"
+    local_working_dir: "{{ local_working_dir }}"

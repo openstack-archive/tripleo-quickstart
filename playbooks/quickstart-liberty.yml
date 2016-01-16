@@ -2,23 +2,24 @@
 - name: Add virthost to inventory
   hosts: localhost
   gather_facts: no
+  vars:
+    local_working_dir: .quickstart
   roles:
     - provision/manual
-
-- name: Rebuild inventory
-  hosts: localhost
-  gather_facts: no
-  roles:
     - rebuild-inventory
 
 - name:  Teardown previous libvirt setup
   hosts: virthost
   gather_facts: no
+  vars:
+    local_working_dir: .quickstart
   roles:
     - libvirt/teardown
 
 - name:  Setup undercloud and baremetal vms and networks in libvirt
   hosts: virthost
   gather_facts: no
+  vars:
+    local_working_dir: .quickstart
   roles:
     - libvirt/setup

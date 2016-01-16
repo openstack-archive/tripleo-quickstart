@@ -1,5 +1,5 @@
 - debug: var=groups
 
 - template:
-    dest: "{{ working_dir }}/hosts"
+    dest: "{{ local_working_dir }}/hosts"
     src: inventory.j2

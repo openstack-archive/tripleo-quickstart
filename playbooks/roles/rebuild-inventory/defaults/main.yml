@@ -1,1 +1,1 @@
-working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
+local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"

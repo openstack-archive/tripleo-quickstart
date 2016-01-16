@@ -38,7 +38,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
+    local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
   roles:
     - rebuild-inventory
 
