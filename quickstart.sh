@@ -5,7 +5,7 @@ set -ex
 virtualenv .quickstart --system-site-packages
 source .quickstart/bin/activate
 pushd .quickstart
-git clone https://github.com/trown/tripleo-quickstart.git
+git clone https://github.com/redhat-openstack/tripleo-quickstart.git
 pushd tripleo-quickstart
 python setup.py install
 popd
