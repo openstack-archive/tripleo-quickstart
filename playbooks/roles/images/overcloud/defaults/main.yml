@@ -8,97 +8,101 @@ overcloud_overwrite_existing: no
 overcloud_run_script: overcloud-run
 overcloud_virt_customize_command: "virt-customize -m 16042 --smp 4 -a {{ overcloud_working_image_dest }} --run {{ working_dir }}/{{ overcloud_run_script }}"
 overcloud_packages:
-    - python-tripleoclient
-    - openstack-ironic-conductor
-    - openvswitch
-    - puppet
+    - automake
+    - boost-filesystem
+    - boost-program-options
+    - corosync
+    - docker-registry
+    - fence-agents-all
+    - gcc-c++
     - git
+    - haproxy
+    - httpd
     - iptables-services
+    - ipxe-bootimgs
     - iscsi-initiator-utils
-    - openstack-puppet-modules
-    - pystache
+    - keepalived
+    - kernel-devel
+    - libguestfs-tools
+    - libvirt
+    - libwsman1
+    - libxslt-devel
+    - mariadb
     - mariadb-devel
-    - syslinux
-    - tftp-server
-    - xinetd
-    - python-libguestfs
+    - mariadb-galera-server
+    - memcached
+    - mongodb
+    - mongodb-server
+    - ntp
+    - openstack-ceilometer-alarm
+    - openstack-ceilometer-api
+    - openstack-ceilometer-central
+    - openstack-ceilometer-collector
+    - openstack-ceilometer-compute
+    - openstack-ceilometer-notification
+    - openstack-ceilometer-polling
+    - openstack-cinder
+    - openstack-dashboard
+    - openstack-glance
+    - openstack-heat-api
+    - openstack-heat-api-cfn
+    - openstack-heat-api-cloudwatch
+    - openstack-heat-engine
+    - openstack-ironic-api
+    - openstack-ironic-conductor
+    - openstack-ironic-inspector
+    - openstack-keystone
+    - openstack-manila
+    - openstack-manila-share
+    - openstack-neutron
+    - openstack-neutron-lbaas
+    - openstack-neutron-metering-agent
+    - openstack-neutron-ml2
+    - openstack-neutron-openvswitch
     - openstack-nova-api
     - openstack-nova-cert
     - openstack-nova-compute
     - openstack-nova-conductor
+    - openstack-nova-console
+    - openstack-nova-novncproxy
+    - openstack-nova-scheduler
+    - openstack-puppet-modules
+    - openstack-sahara
+    - openstack-selinux
     - openstack-swift-account
     - openstack-swift-object
     - openstack-swift-proxy
-    - openstack-ceilometer-api
-    - openstack-neutron-ml2
-    - openstack-ceilometer-alarm
-    - openstack-ironic-inspector
-    - openstack-ironic-api
-    - python-openvswitch
-    - openstack-glance
-    - python-troveclient
-    - openstack-neutron
-    - openstack-neutron-openvswitch
-    - openstack-nova-scheduler
-    - openstack-keystone
-    - openstack-heat-api-cfn
-    - openstack-heat-api
-    - openstack-ceilometer-central
-    - openstack-ceilometer-polling
-    - openstack-ceilometer-collector
-    - openstack-heat-api-cloudwatch
-    - openstack-heat-engine
-    - openstack-ceilometer-notification
-    - memcached
-    - keepalived
-    - mariadb
-    - mariadb-galera-server
-    - rabbitmq-server
-    - python-pbr
-    - gcc-c++
-    - httpd
-    - libxslt-devel
-    - automake
+    - openstack-tempest
+    - openvswitch
+    - openwsman-python
     - os-apply-config
-    - openstack-selinux
-    - os-net-config
-    - ipxe-bootimgs
-    - traceroute
-    - kernel-devel
     - os-cloud-config
     - os-collect-config
-    - tcpdump
     - os-refresh-config
-    - libwsman1
-    - openwsman-python
-    - tftp
-    - wget
-    - fence-agents-all
-    - haproxy
-    - libvirt
-    - mongodb
-    - mongodb-server
-    - ntp
-    - openstack-ceilometer-compute
-    - openstack-cinder
-    - openstack-dashboard
-    - openstack-manila
-    - openstack-manila-share
-    - openstack-neutron-lbaas
-    - openstack-neutron-metering-agent
-    - openstack-nova-console
-    - openstack-nova-novncproxy
+    - os-net-config
     - pacemaker
     - pacemaker-remote
     - pcs
-    - redis
-    - targetcli
-    - boost-filesystem
-    - boost-program-options
-    - corosync
+    - pystache
+    - python-gnocchiclient
+    - python-libguestfs
+    - python-openvswitch
+    - python-pip
+    - python-pbr
+    - python-tripleoclient
+    - python-troveclient
+    - python-virtualenv
     - python-zaqarclient
-    - vim
+    - puppet
+    - rabbitmq-server
+    - redis
     - screen
-    - libguestfs-tools
-    - openstack-tempest
-    - docker-registry
+    - syslinux
+    - targetcli
+    - tcpdump
+    - tftp
+    - tftp-server
+    - traceroute
+    - vim
+    - wget
+    - xinetd
