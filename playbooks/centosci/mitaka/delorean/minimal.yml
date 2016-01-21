@@ -48,5 +48,6 @@
   vars:
     local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
     bash_deploy_ramdisk: false
+    release: mitaka
   roles:
     - overcloud
