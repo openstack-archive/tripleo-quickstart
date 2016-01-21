@@ -3,6 +3,10 @@
 
 set -eux
 
+{% if pingtest %}
+  {% include 'tripleo-pingtest' %}
+{% endif %}
+
 {% if tempest %}
   {% include 'configure-tempest' %}
 

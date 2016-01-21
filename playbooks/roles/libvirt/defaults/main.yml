@@ -25,8 +25,8 @@ vms:
     nodes:
       - name: undercloud
         disk_size: '50'
-        memory: '4096'
-        cpus: '1'
+        memory: '12288'
+        cpus: '3'
     arch: 'x86_64'
     bootdev: 'hd'
   overcloud:
