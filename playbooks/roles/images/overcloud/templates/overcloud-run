@@ -4,3 +4,7 @@
 set -eux
 
 yum install -y {% for package in overcloud_packages %} {{ package }} {% endfor %}
+
+# WORKAROUNDS
+# https://bugzilla.redhat.com/show_bug.cgi?id=1300562
+curl -o /usr/share/openstack-puppet/modules/mysql/manifests/server/service.pp https://raw.githubusercontent.com/puppetlabs/puppetlabs-mysql/1cfddec3ff2baa12e5eb87606712f33a2b2b0473/manifests/server/service.pp
