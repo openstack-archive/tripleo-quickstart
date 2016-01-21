@@ -1,5 +1,4 @@
-- debug: var=groups
-
-- template:
+- name: rebuild-inventory
+  template:
     dest: "{{ local_working_dir }}/hosts"
     src: inventory.j2

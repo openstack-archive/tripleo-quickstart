@@ -85,7 +85,6 @@
     ansible_fqdn: "{{ item.name }}"
     ansible_ssh_user: stack
     ansible_ssh_private_key_file: "{{ ansible_private_key_file }}"
-    ansible_ssh_args: "-F {{ local_working_dir }}/ssh.config.ansible"
   with_items: "{{ vms.undercloud.nodes }}"
 
 - name: setup ssh config

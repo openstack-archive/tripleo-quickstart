@@ -8,8 +8,6 @@ validate_log: "{{ working_dir }}/overcloud_validate.log"
 local_working_dir: ~/.quickstart
 working_dir: /home/stack
 
-ansible_ssh_extra_args: "-F {{ local_working_dir }}/ssh.config.ansible"
-
 floating_ip_cidr: "192.0.2.0/24"
 floating_ip_start: 192.0.2.100
 floating_ip_end: 192.0.2.120
