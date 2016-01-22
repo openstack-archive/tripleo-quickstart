@@ -32,6 +32,7 @@
 
 - name: delete baremetal vm storage
   shell: >
+         virsh vol-dumpxml --pool '{{ vms.volume_pool }}' '{{ item.name }}'.qcow2 2>&1 > /dev/null;
          virsh vol-delete --pool '{{ vms.volume_pool }}' '{{ item.name }}'.qcow2
   with_items: "{{ vms.overcloud.nodes }}"
   ignore_errors: true
@@ -39,6 +40,7 @@
 
 - name: delete undercloud vm storage
   shell: >
+         virsh vol-dumpxml --pool '{{ vms.volume_pool }}' '{{ item.name }}'.qcow2 2>&1 > /dev/null;
          virsh vol-delete --pool '{{ vms.volume_pool }}' '{{ item.name }}'.qcow2
   with_items: "{{ vms.undercloud.nodes }}"
   ignore_errors: true
