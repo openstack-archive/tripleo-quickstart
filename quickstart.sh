@@ -17,3 +17,13 @@ echo "ssh_args = -F $HOME/.quickstart/ssh.config.ansible" >> $ANSIBLE_CONFIG
 
 RELEASE=${1:-mitaka}
 ansible-playbook -vv .quickstart/usr/local/share/tripleo-quickstart/playbooks/quickstart-$RELEASE.yml
+
+echo "##################################"
+echo "Virtual Environment Setup Complete"
+echo "##################################"
+echo ""
+echo "Access the undercloud by:"
+echo "ssh -F $HOME/.quickstart/ssh.config.ansible undercloud"
+echo ""
+echo "Then continue the undercloud install with:"
+echo "openstack undercloud install"

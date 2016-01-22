@@ -6,7 +6,7 @@ virt_power_key: /root/.ssh/id_rsa_virt_power
 virt_power_user: root
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
 ansible_private_key_file: "{{ ansible_ssh_private_key_file }}"
-local_working_dir: "./"
+local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 networks:
   bridges:
     - name: bridget

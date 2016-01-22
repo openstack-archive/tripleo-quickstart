@@ -110,6 +110,3 @@
 
 - name: chown authorized_keys for stack user
   shell: ssh -F {{ working_dir }}/ssh.config.ansible undercloud-from-virthost "chown stack:stack /home/stack/.ssh/authorized_keys"
-
-- name: show instructions on how to get to the undercloud
-  debug: msg="Use `ssh -F {{ local_working_dir }}/ssh.config.ansible undercloud` in order to access the undercloud"

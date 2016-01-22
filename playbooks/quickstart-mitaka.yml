@@ -2,25 +2,21 @@
 - name: Add virthost to inventory
   hosts: localhost
   gather_facts: no
-  vars:
-    local_working_dir: .quickstart
   roles:
     - provision/manual
     - rebuild-inventory
-
-- name:  Teardown previous libvirt setup
-  hosts: virthost
-  gather_facts: no
-  vars:
-    local_working_dir: .quickstart
-  roles:
-    - libvirt/teardown
 
 - name:  Setup undercloud and baremetal vms and networks in libvirt
   hosts: virthost
   gather_facts: no
   vars:
-    local_working_dir: .quickstart
     url: https://85a754900751c1b855cc-642d0cd4e92d44fc8da2dded8a75474a.ssl.cf5.rackcdn.com/mitaka/undercloud.qcow2
   roles:
+    - libvirt/teardown
     - libvirt/setup
+
+- name: Rebuild inventory
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - rebuild-inventory
