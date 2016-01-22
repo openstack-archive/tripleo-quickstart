@@ -20,7 +20,7 @@ virtual environment and run the quickstart playbook::
     bash <(curl -s https://raw.githubusercontent.com/trown/tripleo-quickstart/master/quickstart.sh) [release]
 
 The playbook will output a debug message at the end with instructions
-to access the deployed undercloud. If a release name is not given, ``liberty``
+to access the deployed undercloud. If a release name is not given, ``mitaka``
 is used.
 
 The install process is not run to completion so that it's easier to clean the
@@ -39,8 +39,6 @@ To install ``tripleo-quickstart`` yourself instead of via the
 quickstart.sh script::
 
     pip install git+https://github.com/trown/tripleo-quickstart.git@master#egg=tripleo-quickstart
-    # tripleo-quickstart requires Ansible 2.0
-    pip install git+https://github.com/ansible/ansible.git@v2.0.0-0.6.rc1#egg=ansible
 
 Playbooks will be located in either ``/usr/local/share/tripleo-quickstart`` or
 in ``$VIRTUAL_ENV/usr/local/share/tripleo-quickstart`` if you have installed in

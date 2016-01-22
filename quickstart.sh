@@ -13,7 +13,7 @@ popd
 export ANSIBLE_CONFIG=.quickstart/usr/local/share/tripleo-quickstart/ansible.cfg
 export ANSIBLE_INVENTORY=.quickstart/hosts
 
-echo "ssh_args = -F $PWD/.quickstart/ssh.config.ansible" >> $ANSIBLE_CONFIG
+echo "ssh_args = -F $HOME/.quickstart/ssh.config.ansible" >> $ANSIBLE_CONFIG
 
-RELEASE=${1:-liberty}
+RELEASE=${1:-mitaka}
 ansible-playbook -vv .quickstart/usr/local/share/tripleo-quickstart/playbooks/quickstart-$RELEASE.yml
