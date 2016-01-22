@@ -21,6 +21,6 @@
   gather_facts: no
   vars:
     local_working_dir: .quickstart
-    url: https://85a754900751c1b855cc-642d0cd4e92d44fc8da2dded8a75474a.ssl.cf5.rackcdn.com/mitaka_undercloud.qcow2
+    url: https://85a754900751c1b855cc-642d0cd4e92d44fc8da2dded8a75474a.ssl.cf5.rackcdn.com/mitaka/undercloud.qcow2
   roles:
     - libvirt/setup
