@@ -17,7 +17,7 @@ This script will install this repo along with ansible in a
 virtual environment and run the quickstart playbook::
 
     export VIRTHOST='my_test_machine.example.com'
-    bash <(curl -s https://raw.githubusercontent.com/trown/tripleo-quickstart/master/quickstart.sh) [release]
+    bash <(curl -s https://raw.githubusercontent.com/redhat-openstack/tripleo-quickstart/master/quickstart.sh) [release]
 
 The playbook will output a debug message at the end with instructions
 to access the deployed undercloud. If a release name is not given, ``mitaka``
@@ -38,7 +38,7 @@ More in-depth documentation is a work in progress. Patches welcome!
 To install ``tripleo-quickstart`` yourself instead of via the
 quickstart.sh script::
 
-    pip install git+https://github.com/trown/tripleo-quickstart.git@master#egg=tripleo-quickstart
+    pip install git+https://github.com/redhat-openstacktripleo-quickstart.git@master#egg=tripleo-quickstart
 
 Playbooks will be located in either ``/usr/local/share/tripleo-quickstart`` or
 in ``$VIRTUAL_ENV/usr/local/share/tripleo-quickstart`` if you have installed in
