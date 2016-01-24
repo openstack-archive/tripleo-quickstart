@@ -30,6 +30,6 @@ deploy_timeout: 60
 control_args: "--control-flavor control"
 compute_args: "--compute-flavor compute"
 ceph_args: ""
-extra_environments: ""
+extra_args: ""
 libvirt_args: "--libvirt-type qemu"
-deploy_args: "{{ libvirt_args }} --timeout {{ deploy_timeout }} {{ control_args }} {{ compute_args }} {{ ceph_args }} {{ extra_environments }}"
+deploy_args: "{{ libvirt_args }} --timeout {{ deploy_timeout }} {{ control_args }} {{ compute_args }} {{ ceph_args }} {{ extra_args }}"
