@@ -16,6 +16,7 @@ external_network_gateway: 192.0.2.1
 introspect: true
 tempest: true
 pingtest: false
+release: liberty
 
 bash_deploy_ramdisk: true
 

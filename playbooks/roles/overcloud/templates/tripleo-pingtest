@@ -1,7 +1,13 @@
 git clone https://github.com/openstack/tripleo-common.git
 
-# Need this review because tripleoci is using an old heatclient
 pushd tripleo-common
-git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/90/270890/1 && git checkout FETCH_HEAD
+
+# Need this review because tripleoci is using an older
+# heatclient than delorean current
+git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/90/270890/2 && git checkout FETCH_HEAD
+
+{% if release == 'mitaka' %}
+export OVERCLOUD_PINGTEST_OLD_HEATCLIENT=0
+{% endif %}
 
 ./scripts/tripleo.sh --overcloud-pingtest

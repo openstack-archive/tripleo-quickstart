@@ -25,5 +25,6 @@
     tempest: false
     pingtest: true
     bash_deploy_ramdisk: false
+    release: mitaka
   roles:
     - overcloud
