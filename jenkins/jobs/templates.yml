@@ -1,0 +1,246 @@
+- job-template:
+    name: 'tripleo-quickstart-promote-{release}-{build_system}-{topology}'
+    defaults: 'tripleo-quickstart-defaults'
+    description: |
+        <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
+        <br>
+        <p>This job validates images for the delorean promote jobs: <a href="https://github.com/redhat-openstack/tripleo-quickstart" target="_blank">tripleo-quickstart</a>.</p>
+        <p>It runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/centosci/{release}/{build_system}/{topology}.yml" target="_blank">centosci/{release}/{build_system}/{topology}.yml</a></p>
+        <br>
+        This job runs the following in a virtual environment:
+        <pre>
+        pip install -U ansible==1.9.2 > ansible_build; ansible --version
+
+        #Use khaleesi to get a centosci node
+        pushd khaleesi
+        cp ansible.cfg.example ansible.cfg
+        sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
+        sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
+        echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
+        touch ssh.config.ansible
+
+        # get config
+        curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
+        sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" provision_centos_settings.yml
+
+        # get node
+        set +e
+        anscmd="stdbuf -oL -eL ansible-playbook -vv"
+        $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
+        popd
+
+        # Install tripleo-quickstart
+        pip install -e tripleo-quickstart
+        pushd tripleo-quickstart
+        git log -n 5 --oneline
+        python setup.py install
+        popd
+
+        pushd khaleesi
+        # run test
+        ansible --version
+        cat ansible.cfg
+        $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{release}/{build_system}/{topology}.yml \
+        --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2"
+
+        result=$?
+        infra_result=0
+
+        $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
+        $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
+
+        if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
+            # if the job/test was ok, but collect_logs/cleanup failed,
+            # print out why the job is going to be marked as failed
+            result=$infra_result
+            cat collect_logs.txt
+            cat cleanup.txt
+        fi
+        exit $result
+        </pre>
+    scm:
+        - repo-tripleo-quickstart
+        - repo-khaleesi
+    builders:
+        - tripleo-quickstart-promote:
+            release: '{release}'
+            build_system: '{build_system}'
+            topology: '{topology}'
+    properties:
+        - ownership:
+            owner: trown@redhat.com
+
+- job-template:
+    name: 'tripleo-quickstart-promote-{release}-{build_system}-build-images'
+    defaults: 'tripleo-quickstart-defaults'
+    description: |
+        <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
+        <br>
+        <p>This job builds images for the delorean promote jobs: <a href="https://github.com/redhat-openstack/tripleo-quickstart" target="_blank">tripleo-quickstart</a>.</p>
+        <p>It runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/centosci/{release}/{build_system}/build-images.yml" target="_blank">centosci/{release}/{build_system}/build-images.yml</a></p>
+        <br>
+        This job runs the following in a virtual environment:
+        <pre>
+        pip install -U ansible==1.9.2 > ansible_build; ansible --version
+
+        #Use khaleesi to get a centosci node
+        pushd khaleesi
+        cp ansible.cfg.example ansible.cfg
+        sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
+        sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
+
+        # get config
+        curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
+        sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" provision_centos_settings.yml
+
+        # get node
+        set +e
+        anscmd="stdbuf -oL -eL ansible-playbook -vv"
+        $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
+        popd
+
+        # Install tripleo-quickstart
+        pip install -e tripleo-quickstart
+        pushd tripleo-quickstart
+        git log -n 5 --oneline
+        python setup.py install
+        popd
+
+        pushd khaleesi
+        # run test
+        ansible --version
+        cat ansible.cfg
+        $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{release}/{build_system}/build-images.yml \
+        --extra-vars delorean_hash=$delorean_current_hash
+
+        result=$?
+        infra_result=0
+
+        $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
+
+        if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
+            # if the job/test was ok, but collect_logs/cleanup failed,
+            # print out why the job is going to be marked as failed
+            cat cleanup.txt
+        fi
+        exit $result
+        </pre>
+    scm:
+        - repo-tripleo-quickstart
+        - repo-khaleesi
+    builders:
+        - tripleo-quickstart-build-images:
+            release: '{release}'
+            build_system: '{build_system}'
+    properties:
+        - ownership:
+            owner: trown@redhat.com
+
+- job-template:
+    name: 'tripleo-quickstart-gate-{release}-{build_system}-{topology}'
+    defaults: 'tripleo-quickstart-defaults'
+    description: |
+        <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
+        <br>
+        <p>This job gates against commits done to <a href="https://github.com/redhat-openstack/tripleo-quickstart" target="_blank">tripleo-quickstart</a>.</p>
+        <p>It runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/centosci/{release}/{build_system}/{topology}.yml" target="_blank">centosci/{release}/{build_system}/{topology}.yml</a></p>
+        <br>
+        This job runs the following in a virtual environment:
+        <pre>
+        pip install -U ansible==1.9.2 > ansible_build; ansible --version
+
+        #Use khaleesi to get a centosci node
+        pushd khaleesi
+        cp ansible.cfg.example ansible.cfg
+        sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
+        sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
+        echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
+        touch ssh.config.ansible
+
+        # get config
+        curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
+        sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" provision_centos_settings.yml
+
+        # get node
+        set +e
+        anscmd="stdbuf -oL -eL ansible-playbook -vv"
+        $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
+        popd
+
+        # tripleo-quickstart requires Ansible 2.0
+        pip uninstall -y ansible
+        pip install ansible
+
+        # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
+        pip install -e tripleo-quickstart
+        pushd tripleo-quickstart
+        git log -n 5 --oneline
+        python setup.py install
+        popd
+
+        pushd khaleesi
+        ansible --version
+        cat ansible.cfg
+        $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{release}/{build_system}/{topology}.yml \
+        --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2"
+
+        result=$?
+
+        infra_result=0
+
+        $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
+        $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
+
+        if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
+            # if the job/test was ok, but collect_logs/cleanup failed,
+            # print out why the collect_logs/cleanup failed
+            cat collect_logs.txt
+            cat cleanup.txt
+        fi
+        exit $result
+        </pre>
+
+    triggers:
+        - trigger-tripleo-quickstart-gate-promote
+    scm:
+        - repo-tripleo-quickstart-gerrit
+        - repo-khaleesi
+    builders:
+        - tripleo-quickstart-gate:
+            release: '{release}'
+            build_system: '{build_system}'
+            topology: '{topology}'
+    properties:
+        - ownership:
+            owner: trown@redhat.com
+    publishers:
+        - cleanup
+
+- job-template:
+    name: 'tripleo-quickstart-gate-tox-{test}'
+    defaults: 'tripleo-quickstart-defaults'
+    description: |
+        <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
+        <br>
+        <p>This job gates against commits done to <a href="https://github.com/redhat-openstack/tripleo-quickstart" target="_blank">tripleo-quickstart</a>.</p>
+        <p>It leverages tox for testing.</p>
+        <br>
+        This is what this job runs:
+        <pre>
+        # Run {test} from provided jenkins scm gerrit commit ref
+        pushd tripleo-quickstart
+        git log -n 5 --oneline
+        tox -e {test}
+        result=$?
+        exit $result
+        </pre>
+    triggers:
+        - trigger-tripleo-quickstart-gate-jjb
+    scm:
+        - repo-tripleo-quickstart-gerrit
+    builders:
+        - tripleo-quickstart-gate-tox:
+            test: '{test}'
+    properties:
+        - ownership:
+            owner: trown@redhat.com

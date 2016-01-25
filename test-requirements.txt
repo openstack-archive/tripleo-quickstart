@@ -1,3 +1,1 @@
-# ansible-lint is not yet compatible with 2.0
-ansible<2.0
-ansible-lint
+jenkins-job-builder

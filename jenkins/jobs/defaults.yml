@@ -1,0 +1,134 @@
+- defaults:
+    name: 'tripleo-quickstart-defaults'
+    description: |
+        Managed by Jenkins Job Builder. Do not edit via web.
+    concurrent: true
+    node: 'rdo'
+    logrotate:
+        daysToKeep: 5
+        artifactDaysToKeep: 5
+    publishers:
+        - email-cores
+        - cleanup
+    wrappers:
+        - ansicolor
+        - timestamps
+        - workspace-cleanup
+        - timeout:
+            type: absolute
+            timeout: 120
+            fail: true
+
+- trigger:
+    name: 'trigger-tripleo-quickstart-gate-promote'
+    triggers:
+        - gerrit:
+            server-name: 'rdo-ci-centos'
+            trigger-on:
+                - patchset-created-event
+                - draft-published-event
+                - comment-added-contains-event:
+                    comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck)'
+            projects:
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  branches:
+                      - branch-compare-type: 'PLAIN'
+                        branch-pattern: 'master'
+                  file-paths:
+                      - compare-type: 'REG_EXP'
+                        pattern: 'playbooks/(centosci|library|roles)/.*'
+            skip-vote:
+                successful: false
+                failed: false
+                unstable: false
+                notbuilt: false
+            failure-message: 'Test failed'
+            successful-message: 'Test ran successfully'
+            unstable-message: 'Test is unstable'
+            silent: false
+            silent-start: true
+
+- trigger:
+    name: 'trigger-tripleo-quickstart-gate-jjb'
+    triggers:
+        - gerrit:
+            server-name: 'rdo-ci-centos'
+            trigger-on:
+                - patchset-created-event
+                - draft-published-event
+                - comment-added-contains-event:
+                    comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck)'
+            projects:
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  branches:
+                      - branch-compare-type: 'PLAIN'
+                        branch-pattern: 'master'
+                  file-paths:
+                      - compare-type: 'REG_EXP'
+                        pattern: 'jenkins/jobs/.*'
+            skip-vote:
+                successful: false
+                failed: false
+                unstable: false
+                notbuilt: false
+            failure-message: 'Test failed'
+            successful-message: 'Test ran successfully'
+            unstable-message: 'Test is unstable'
+            silent: false
+            silent-start: true
+
+- scm:
+    name: 'repo-tripleo-quickstart-gerrit'
+    scm:
+        - git:
+            basedir: 'tripleo-quickstart'
+            url: 'ssh://rdo-ci-centos@review.gerrithub.io:29418/redhat-openstack/tripleo-quickstart.git'
+            branches:
+                - "$GERRIT_BRANCH"
+            credentials-id: 'aeb3af4f-6985-4c8f-8261-ec37cacad10b'
+            branches:
+                - '$GERRIT_BRANCH'
+            refspec: '$GERRIT_REFSPEC'
+            choosing-strategy: gerrit
+
+- scm:
+    name: 'repo-tripleo-quickstart'
+    scm:
+        - git:
+            basedir: 'tripleo-quickstart'
+            url: 'https://github.com/redhat-openstack/tripleo-quickstart.git'
+            branches:
+                - master
+
+- scm:
+    name: 'repo-khaleesi'
+    scm:
+        - git:
+            basedir: 'khaleesi'
+            url: 'https://github.com/redhat-openstack/khaleesi.git'
+            branches:
+                - master
+
+- publisher:
+    name: 'email-cores'
+    publishers:
+        - email:
+            recipients: 'trown@redhat.com'
+
+- publisher:
+    name: 'cleanup'
+    publishers:
+        - post-tasks:
+            - matches:
+                - log-text: Build was aborted
+                  operator: AND
+              escalate-status: false
+              script: |
+                source ~/ansible_venv/bin/activate
+                ansible --version
+                source $WORKSPACE/khaleesi-settings/jenkins/ansible_rdo_mang_settings.sh
+                cd $WORKSPACE/khaleesi
+                anscmd="stdbuf -oL -eL ansible-playbook -vv --extra-vars @ksgen_settings.yml"
+                $anscmd -i local_hosts playbooks/cleanup.yml

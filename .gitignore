@@ -58,3 +58,6 @@ target/
 
 # virtualenv
 .venv/
+
+# jenkins config
+jenkins/config.ini
