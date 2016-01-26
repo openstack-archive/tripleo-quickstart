@@ -20,14 +20,27 @@ export ANSIBLE_INVENTORY=$HOME/.quickstart/hosts
 echo "ssh_args = -F $HOME/.quickstart/ssh.config.ansible" >> $ANSIBLE_CONFIG
 
 RELEASE=${1:-mitaka}
-ansible-playbook -vv .quickstart/usr/local/share/tripleo-quickstart/playbooks/quickstart-$RELEASE.yml
+UNDERCLOUD_QCOW2_LOCATION=${UNDERCLOUD_QCOW2_LOCATION:-https://ci.centos.org/artifacts/rdo/images/$RELEASE/delorean/stable/undercloud.qcow2}
+
+ansible-playbook -vv $HOME/.quickstart/usr/local/share/tripleo-quickstart/playbooks/quickstart-$RELEASE.yml \
+--extra-vars url=$UNDERCLOUD_QCOW2_LOCATION
+
+set +x
 
 echo "##################################"
 echo "Virtual Environment Setup Complete"
 echo "##################################"
 echo ""
 echo "Access the undercloud by:"
+echo ""
 echo "ssh -F $HOME/.quickstart/ssh.config.ansible undercloud"
 echo ""
+echo ""
 echo "Then continue the undercloud install with:"
+echo ""
 echo "openstack undercloud install"
+echo "source stackrc"
+echo ""
+echo "##################################"
+echo "Virtual Environment Setup Complete"
+echo "##################################"

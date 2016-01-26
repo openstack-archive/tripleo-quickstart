@@ -8,27 +8,50 @@ environment up quickly.
 This set of ansible roles is meant to help.
 
 You will need a host machine with at least 16G of RAM, preferably 32G,
-with CentOS 7 installed, and able to be ssh'd to without password from
-the machine running ansible.
+with CentOS 7 installed, and able to be ssh'd to as root
+without password from the machine running ansible.
+
+A quick way to test that your host machine is ready to rock is::
+
+    export VIRTHOST='my_test_machine.example.com'
+    ssh root@$VIRTHOST -C 'virsh --version'
 
 The defaults are meant to "just work", so it is as easy as
 downloading and running the quickstart.sh script.
-This script will install this repo along with ansible in a
-virtual environment and run the quickstart playbook::
+
+Or rather it will be once we have a good place to host the
+images. The centosci artifacts server drops the http connection
+regularly, so we need to use wget for the built in retry with
+resume. From the machine that will be the virthost, create a
+directory for the undercloud image and wget it. Note, the
+image location should be world readable since a ``stack`` user
+is used for most steps.::
+
+    mkdir -p /usr/share/quickstart_images/mitaka/
+    cd /usr/share/quickstart_images/mitaka/
+    wget https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2.md5 \
+    https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2
+
+    # Check that the md5sum's match (The playbook will also
+    # check, but better to know now whether the image download
+    # was ok.)
+    md5sum -c undercloud.qcow2.md5
+
+Then use the quickstart.sh script to install this repo along
+with ansible in a virtual environment and run the quickstart
+playbook. Note, the quickstart playbook will delete the ``stack``
+user on the virthost and recreate it.::
 
     export VIRTHOST='my_test_machine.example.com'
+    export UNDERCLOUD_QCOW2_LOCATION=file:///usr/share/quickstart_images/mitaka/undercloud.qcow2
     bash <(curl -s https://raw.githubusercontent.com/redhat-openstack/tripleo-quickstart/master/quickstart.sh) [release]
 
-The playbook will output a debug message at the end with instructions
-to access the deployed undercloud. If a release name is not given, ``mitaka``
-is used.
-
-The install process is not run to completion so that it's easier to clean the
-image; to finish the installation, ssh into the undercloud VM and run::
-
-    openstack undercloud install
-
-as the ``stack`` user.
+This script will output instructions at the end to access the
+deployed undercloud. If a release name is not given, ``mitaka``
+is used. Note that to use a different release you will need to
+download a different undercloud image in the first step above.
+For example, for liberty:
+https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/undercloud.qcow2
 
 Documentation
 =============
@@ -43,26 +66,6 @@ quickstart.sh script::
 Playbooks will be located in either ``/usr/local/share/tripleo-quickstart`` or
 in ``$VIRTUAL_ENV/usr/local/share/tripleo-quickstart`` if you have installed in
 a virtual environment.
-
-Installing a specific undercloud image
-======================================
-
-Install ``tripleo-quickstart`` as above, then run::
-
-    export VIRTHOST='my_test_machine.example.com'
-    export ANSIBLE_CONFIG=$VIRTUAL_ENV/usr/local/share/tripleo-quickstart/ansible.cfg
-    export ANSIBLE_INVENTORY=$VIRTUAL_ENV/hosts
-    ansible-playbook -vv [path to quickstart-liberty.yml] --extra-vars url=[url]
-
-on your workstation. ``url`` should be the URL of an undercloud machine image,
-visible to the virthost machine. For instance, if you have files
-undercloud.qcow2 and undercloud.qcow2.md5 in the virthost's /tmp directory, run
-the following from your workstation::
-
-    export VIRTHOST='my_test_machine.example.com'
-    export ANSIBLE_CONFIG=$VIRTUAL_ENV/usr/local/share/tripleo-quickstart/ansible.cfg
-    export ANSIBLE_INVENTORY=$VIRTUAL_ENV/hosts
-    ansible-playbook -vv $VIRTUAL_ENV/usr/local/share/tripleo-quickstart/playbooks/quickstart-liberty.yml --extra-vars url=file:///tmp/undercloud.qcow2
 
 Author
 ======
