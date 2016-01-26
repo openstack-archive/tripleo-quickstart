@@ -37,7 +37,9 @@
                         branch-pattern: 'master'
                   file-paths:
                       - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/(centosci|library|roles)/.*'
+                        pattern: 'playbooks/(centosci|library)/.*'
+                      - compare-type: 'REG_EXP'
+                        pattern: 'playbooks/roles/(libvirt|overcloud|rebuild-inventory)/.*'
             skip-vote:
                 successful: false
                 failed: false
