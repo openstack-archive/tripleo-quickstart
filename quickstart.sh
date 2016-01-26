@@ -7,6 +7,10 @@ source $HOME/.quickstart/bin/activate
 pushd $HOME/.quickstart
 git clone https://github.com/redhat-openstack/tripleo-quickstart.git
 pushd tripleo-quickstart
+
+# This is needed explicitly in some cases.
+pip install -r requirements.txt
+
 python setup.py install
 popd
 popd
