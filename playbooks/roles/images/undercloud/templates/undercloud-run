@@ -34,5 +34,4 @@ sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 # https://bugzilla.redhat.com/show_bug.cgi?id=1301290
 # https://bugs.launchpad.net/tripleo/+bug/1537720
 # https://review.openstack.org/272149
-grep -v 'wsrep_notify_cmd' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller_pacemaker.pp > /tmp/overcloud_controller_pacemaker.pp
-mv /tmp/overcloud_controller_pacemaker.pp /usr/share/openstack-tripleo-heat-templatespuppet/manifests/overcloud_controller_pacemaker.pp
+sed --in-place '/wsrep_notify_cmd/d' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller_pacemaker.pp || true
