@@ -8,8 +8,5 @@ base_overwrite_existing: no
 base_run_script: base-run
 base_virt_customize_command: "virt-customize -m 16042 --smp 4 -a {{ base_working_image_dest }} --run {{ working_dir }}/{{ base_run_script }}"
 
-repo_type: repos/centos7-liberty-cbs
+repo_type: repos/centos7-mitaka-delorean
 delorean_hash: current-passed-ci
-
-package_overrides:
-  - python

@@ -7,10 +7,10 @@ artifacts:
   - deploy-ramdisk-ironic.tar.md5
   - overcloud-full.tar
   - overcloud-full.tar.md5
-  - minimal-base-compressed.qcow2
-  - minimal-base-compressed.qcow2.md5
-  - overcloud-base-compressed.qcow2
-  - overcloud-base-compressed.qcow2.md5
+  - minimal-base.qcow2
+  - minimal-base.qcow2.md5
+  - overcloud-base.qcow2
+  - overcloud-base.qcow2.md5
 working_dir: "/home/stack"
 release: liberty
 repo_type: "cbs/testing"

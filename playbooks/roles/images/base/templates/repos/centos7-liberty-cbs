@@ -1,7 +1,1 @@
 yum install -y http://www.rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm || true
-
-## Workarounds
-# Install python-proliantutils from testing repo until it is in prod
-yum-config-manager --enable openstack-liberty-testing
-yum install -y python-proliantutils
-yum-config-manager --disable openstack-liberty-testing
