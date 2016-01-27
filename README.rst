@@ -61,7 +61,7 @@ More in-depth documentation is a work in progress. Patches welcome!
 To install ``tripleo-quickstart`` yourself instead of via the
 quickstart.sh script::
 
-    pip install git+https://github.com/redhat-openstacktripleo-quickstart.git@master#egg=tripleo-quickstart
+    pip install git+https://github.com/redhat-openstack/tripleo-quickstart.git@master#egg=tripleo-quickstart
 
 Playbooks will be located in either ``/usr/local/share/tripleo-quickstart`` or
 in ``$VIRTUAL_ENV/usr/local/share/tripleo-quickstart`` if you have installed in
