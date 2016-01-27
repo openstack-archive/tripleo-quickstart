@@ -44,7 +44,16 @@
          virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 {{ item.disk_size }}G --format qcow2;
          virt-resize --expand /dev/sda1 {{ working_dir }}/undercloud.qcow2 '{{ vms.volume_path }}''{{ item.name }}'.qcow2;
   with_items: "{{ vms.undercloud.nodes }}"
+  async: 300
+  poll: 10
+  register: undercloud_copy
+  ignore_errors: true
   become: true
+
+- name: Output debug message if undercloud copy hangs
+  fail:
+    msg: "Undercloud copy took more than 5 minutes, it is likely that there is not enough space in {{ vms.volume_path }}"
+  when: undercloud_copy.failed is defined
 
 - name: define undercloud vm
   virt:
