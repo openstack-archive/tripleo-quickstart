@@ -14,7 +14,7 @@ without password from the machine running ansible.
 A quick way to test that your host machine is ready to rock is::
 
     export VIRTHOST='my_test_machine.example.com'
-    ssh root@$VIRTHOST -C 'virsh --version'
+    ssh root@$VIRTHOST -C 'uname -a'
 
 The defaults are meant to "just work", so it is as easy as
 downloading and running the quickstart.sh script.
