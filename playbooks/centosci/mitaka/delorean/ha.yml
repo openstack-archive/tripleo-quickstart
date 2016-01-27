@@ -11,6 +11,7 @@
   hosts: localhost
   gather_facts: no
   vars:
+    ansible_python_interpreter: "/usr/bin/python"
     local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
   roles:
     - rebuild-inventory

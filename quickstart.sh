@@ -2,7 +2,8 @@
 
 set -ex
 
-virtualenv $HOME/.quickstart --system-site-packages
+# TODO(trown) this stuff should get moved to a bootstrap function
+virtualenv $HOME/.quickstart
 source $HOME/.quickstart/bin/activate
 pushd $HOME/.quickstart
 git clone https://github.com/redhat-openstack/tripleo-quickstart.git
@@ -14,6 +15,7 @@ pip install -r requirements.txt
 python setup.py install
 popd
 popd
+
 export ANSIBLE_CONFIG=$HOME/.quickstart/usr/local/share/tripleo-quickstart/ansible.cfg
 export ANSIBLE_INVENTORY=$HOME/.quickstart/hosts
 
@@ -22,7 +24,7 @@ echo "ssh_args = -F $HOME/.quickstart/ssh.config.ansible" >> $ANSIBLE_CONFIG
 RELEASE=${1:-mitaka}
 UNDERCLOUD_QCOW2_LOCATION=${UNDERCLOUD_QCOW2_LOCATION:-https://ci.centos.org/artifacts/rdo/images/$RELEASE/delorean/stable/undercloud.qcow2}
 
-ansible-playbook -vv $HOME/.quickstart/usr/local/share/tripleo-quickstart/playbooks/quickstart-$RELEASE.yml \
+ansible-playbook -vv $HOME/.quickstart/usr/local/share/tripleo-quickstart/playbooks/quickstart.yml \
 --extra-vars url=$UNDERCLOUD_QCOW2_LOCATION
 
 set +x
