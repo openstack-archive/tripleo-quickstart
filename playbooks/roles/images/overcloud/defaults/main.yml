@@ -11,6 +11,7 @@ overcloud_packages:
     - automake
     - boost-filesystem
     - boost-program-options
+    - ceph
     - corosync
     - docker-registry
     - fence-agents-all
