@@ -2,12 +2,8 @@ git clone https://github.com/openstack/tripleo-common.git
 
 pushd tripleo-common
 
-# Need this review because tripleoci is using an older
-# heatclient than delorean current
-git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/90/270890/2 && git checkout FETCH_HEAD
-
-{% if release == 'mitaka' %}
-export OVERCLOUD_PINGTEST_OLD_HEATCLIENT=0
-{% endif %}
+# Need this review to be smart about what arguments to use to
+# get the IP of the VM we want to ping
+git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/63/274263/1 && git checkout FETCH_HEAD
 
 ./scripts/tripleo.sh --overcloud-pingtest

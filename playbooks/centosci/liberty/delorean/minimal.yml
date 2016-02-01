@@ -47,7 +47,7 @@
   hosts: undercloud
   gather_facts: no
   vars:
+    bash_deploy_ramdisk: true
     local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
-    create_flavors: false
   roles:
     - overcloud

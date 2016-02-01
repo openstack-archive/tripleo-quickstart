@@ -12,4 +12,32 @@ while true; do
     fi
 done
 
+{% if pingtest %}
+# Set most service workers to 1 to minimise memory usage on
+# the deployed overcloud when using the pingtest. We use this
+# test over tempest when we are memory constrained, ie the HA jobs.
+cat > /tmp/deploy_env.yaml << EOENV
+parameter_defaults:
+  # HeatWorkers doesn't modify num_engine_workers, so handle
+  # via heat::config
+  controllerExtraConfig:
+    heat::config::heat_config:
+      DEFAULT/num_engine_workers:
+        value: 1
+    heat::api_cloudwatch::enabled: false
+    heat::api_cfn::enabled: false
+  HeatWorkers: 1
+  CeilometerWorkers: 1
+  CinderWorkers: 1
+  GlanceWorkers: 1
+  KeystoneWorkers: 1
+  NeutronWorkers: 1
+  NovaWorkers: 1
+  SwiftWorkers: 1
+EOENV
+
+openstack overcloud deploy --templates {{ deploy_args }} -e /tmp/deploy_env.yaml
+
+{% else %}
 openstack overcloud deploy --templates {{ deploy_args }}
+{% endif %}
