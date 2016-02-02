@@ -69,6 +69,9 @@
     properties:
         - ownership:
             owner: trown@redhat.com
+    publishers:
+        - cleanup
+        - full-logs-link
 
 - job-template:
     name: 'tripleo-quickstart-promote-{release}-{build_system}-build-images'
@@ -135,6 +138,8 @@
     properties:
         - ownership:
             owner: trown@redhat.com
+    publishers:
+        - cleanup
 
 - job-template:
     name: 'tripleo-quickstart-gate-{release}-{build_system}-{topology}'
@@ -215,6 +220,7 @@
             owner: trown@redhat.com
     publishers:
         - cleanup
+        - full-logs-link
 
 - job-template:
     name: 'tripleo-quickstart-gate-tox-{test}'

@@ -134,3 +134,9 @@
                 cd $WORKSPACE/khaleesi
                 anscmd="stdbuf -oL -eL ansible-playbook -vv --extra-vars @ksgen_settings.yml"
                 $anscmd -i local_hosts playbooks/cleanup.yml
+
+- publisher:
+    name: 'full-logs-link'
+    publishers:
+        - archive:
+            artifacts: '**/full_logs.html'
