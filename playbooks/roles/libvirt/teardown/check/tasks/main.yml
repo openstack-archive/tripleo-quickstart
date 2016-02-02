@@ -1,6 +1,6 @@
 ---
 - name: check if libvirt is running
-  shell: rpm -qa libvirt && systemctl status libvirtd
+  shell: rpm -q libvirt openvswitch && systemctl status libvirtd
   changed_when: false
   failed_when: false
   register: libvirt_check
