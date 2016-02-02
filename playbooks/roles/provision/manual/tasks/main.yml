@@ -1,3 +1,8 @@
+- name: Check that virthost is set
+  fail:
+    msg: "You need to set VIRTHOST before running these playbooks."
+  when: virthost is not defined
+
 - name: Create working_dir
   file:
     path: "{{ local_working_dir }}"
