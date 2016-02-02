@@ -19,25 +19,7 @@ ready to rock is::
 The defaults are meant to "just work", so it is as easy as
 downloading and running the quickstart.sh script.
 
-Or rather it will be once we have a good place to host the
-images. The centosci artifacts server drops the http connection
-regularly, so we need to use wget for the built in retry with
-resume. From the machine that will be the virthost, create a
-directory for the undercloud image and wget it. Note, the
-image location should be world readable since a ``stack`` user
-is used for most steps.::
-
-    mkdir -p /usr/share/quickstart_images/mitaka/
-    cd /usr/share/quickstart_images/mitaka/
-    wget https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2.md5 \
-    https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2
-
-    # Check that the md5sum's match (The playbook will also
-    # check, but better to know now whether the image download
-    # was ok.)
-    md5sum -c undercloud.qcow2.md5
-
-Then use the quickstart.sh script to install this repo along
+The quickstart.sh script will install this repo along
 with ansible in a virtual environment and run the quickstart
 playbook. Note, the quickstart playbook will delete the ``stack``
 user on the virthost and recreate it.::
@@ -49,10 +31,9 @@ user on the virthost and recreate it.::
     bash quickstart.sh -u $UNDERCLOUD_QCOW2_LOCATION $VIRTHOST
 
 This script will output instructions at the end to access the
-deployed undercloud.  Note that to use a different release you will need to
-download a different undercloud image in the first step above.
-For example, for liberty:
-https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/undercloud.qcow2
+deployed undercloud. If a release name is not given, ``mitaka``
+is used.
+
 
 Documentation
 =============
