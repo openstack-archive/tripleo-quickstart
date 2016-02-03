@@ -4,6 +4,8 @@ pushd tripleo-common
 
 # Need this review to be smart about what arguments to use to
 # get the IP of the VM we want to ping
-git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/63/274263/1 && git checkout FETCH_HEAD
+git config user.name 'RDO CI'
+git config user.email '<>'
+git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/63/274263/1 && git cherry-pick FETCH_HEAD
 
 ./scripts/tripleo.sh --overcloud-pingtest
