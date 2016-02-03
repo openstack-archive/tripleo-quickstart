@@ -26,7 +26,7 @@ vms:
       - name: undercloud
         disk_size: '50'
         memory: '12288'
-        cpus: '3'
+        cpus: '2'
     arch: 'x86_64'
     bootdev: 'hd'
   overcloud:
