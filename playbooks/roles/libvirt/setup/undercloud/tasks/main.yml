@@ -41,6 +41,7 @@
 - name: Install undercloud vm storage
   shell: >
          export LIBGUESTFS_BACKEND=direct;
+         virsh pool-refresh {{ vms.volume_pool}};
          virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 {{ item.disk_size }}G --format qcow2;
          virt-resize --expand /dev/sda1 {{ working_dir }}/undercloud.qcow2 '{{ vms.volume_path }}''{{ item.name }}'.qcow2;
   with_items: "{{ vms.undercloud.nodes }}"
