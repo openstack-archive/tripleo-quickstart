@@ -1,3 +1,9 @@
+- name: Create undercloud configuration
+  template:
+    src: "{{ undercloud_config_file }}"
+    dest: "./undercloud.conf"
+    mode: 0600
+
 - name: Create undercloud install script
   template:
     src: "{{ install_script }}"
@@ -36,9 +42,12 @@
 
 - name: Install the undercloud
   shell: "{{ working_dir }}/{{ install_script }} > {{ install_log }} 2>&1"
+  when: step_install_undercloud
 
 - name: Deploy the overcloud
   shell: "{{ working_dir }}/{{ deploy_script }} > {{ deploy_log }} 2>&1"
+  when: step_deploy_overcloud
 
 - name: Validate the overcloud
   shell: "{{ working_dir }}/{{ validate_script }} > {{ validate_log }} 2>&1"
+  when: step_validate_overcloud

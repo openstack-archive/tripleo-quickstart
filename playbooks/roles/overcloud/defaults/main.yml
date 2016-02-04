@@ -1,3 +1,5 @@
+undercloud_config_file: undercloud.conf
+
 install_script: undercloud-install
 install_log: "{{ working_dir }}/undercloud_install.log"
 deploy_script: overcloud-deploy
@@ -32,3 +34,7 @@ ceph_args: ""
 extra_args: ""
 libvirt_args: "--libvirt-type qemu"
 deploy_args: "{{ libvirt_args }} --timeout {{ deploy_timeout }} {{ control_args }} {{ compute_args }} {{ ceph_args }} {{ extra_args }}"
+
+step_install_undercloud: true
+step_deploy_overcloud: true
+step_validate_overcloud: true
