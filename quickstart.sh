@@ -25,6 +25,10 @@ bootstrap () {
     )
 }
 
+activate_venv() {
+    . $OPT_WORKDIR/bin/activate
+}
+
 usage () {
     echo "$0: usage: $0 [options] virthost [release]"
     echo "$0: options:"
@@ -106,8 +110,10 @@ echo "Using directory $OPT_WORKDIR for a local working directory"
 
 set -ex
 
-if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -d "$OPT_WORKDIR" ]; then
+if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
     bootstrap
+else:
+    activate_venv
 fi
 
 # make sure we have an absolute path
@@ -121,7 +127,7 @@ if ! grep -q ssh_args $OPT_WORKDIR/ssh.config.ansible; then
     echo "ssh_args = -F $OPT_WORKDIR/ssh.config.ansible" >> $ANSIBLE_CONFIG
 fi
 
-$OPT_WORKDIR/bin/ansible-playbook -vv $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
+ansible-playbook -vv $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
     -e url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST
