@@ -8,36 +8,68 @@
     bridges: "{{ networks.bridges }}"
   register: undercloud_mac_map
 
-- name: Create script to get the undercloud appliance
-  template:
-    src: get-undercloud.sh.j2
-    dest: "{{ working_dir }}/get-undercloud.sh"
-    mode: 0744
+- name: get expected md5 of undercloud appliance
+  command: >
+    curl -sf "{{url}}.md5"
+  register: undercloud_md5
 
-- name: Get the undercloud appliance
-  shell: "{{ working_dir }}/get-undercloud.sh"
+- name: get undercloud appliance
+  register: get_undercloud_result
+  until: get_undercloud_result.msg.find('did not match') == -1
+  retries: 3
+  delay: 10
+  get_url:
+    url: '{{ url }}'
+    dest: '{{ working_dir }}'
+    timeout: 1200
+    checksum: 'md5:{{ undercloud_md5.stdout.split()[0] }}'
+  become: true
+  become_user: "{{non_root_user}}"
 
 - name: copy instackenv.json to appliance
-  shell: >
-         export LIBGUESTFS_BACKEND=direct;
-         virt-customize -a {{ working_dir }}/undercloud.qcow2 --run-command 'rm -f /home/stack/instackenv.json';
-         virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json -a {{ working_dir }}/undercloud.qcow2
+  shell: |
+    virt-customize -a {{ working_dir }}/undercloud.qcow2 \
+      --run-command 'rm -f /home/stack/instackenv.json'
+    virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json \
+      -a {{ working_dir }}/undercloud.qcow2
+  environment:
+    LIBGUESTFS_BACKEND: direct
+  become: true
+  become_user: "{{non_root_user}}"
 
 - name: inject ssh key to appliance
-  shell: >
-         export LIBGUESTFS_BACKEND=direct;
-         virt-customize --mkdir /root/.ssh/ -a {{ working_dir }}/undercloud.qcow2;
-         cp /home/{{ non_root_user }}/.ssh/id_rsa.pub {{ working_dir }}/authorized_keys;
-         chmod 600 {{ working_dir }}/authorized_keys;
-         virt-customize --upload {{ working_dir }}/authorized_keys:/root/.ssh/authorized_keys -a {{ working_dir }}/undercloud.qcow2;
-         virt-customize --run-command 'sudo chown root:root /root/.ssh/authorized_keys' -a {{ working_dir }}/undercloud.qcow2;
+  shell: |
+    virt-customize --mkdir {{item.homedir}}/.ssh/ \
+      -a {{ working_dir }}/undercloud.qcow2
+    cp /home/{{ non_root_user }}/.ssh/id_rsa.pub \
+      {{ working_dir }}/authorized_keys
+    chmod 600 {{ working_dir }}/authorized_keys
+    virt-customize --upload \
+      {{ working_dir }}/authorized_keys:{{item.homedir}}/.ssh/authorized_keys \
+      -a {{ working_dir }}/undercloud.qcow2
+    virt-customize --run-command 'sudo chown {{item.owner}}:{{item.group}} \
+      {{item.homedir}}/.ssh/authorized_keys' \
+      -a {{ working_dir }}/undercloud.qcow2
+  with_items:
+    - homedir: /root
+      owner: root
+      group: root
+    - homedir: /home/stack
+      owner: stack
+      group: stack
+  environment:
+    LIBGUESTFS_BACKEND: direct
+  become: true
+  become_user: "{{non_root_user}}"
 
 - name: Install undercloud vm storage
-  shell: >
-         export LIBGUESTFS_BACKEND=direct;
-         virsh pool-refresh {{ vms.volume_pool}};
-         virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 {{ item.disk_size }}G --format qcow2;
-         virt-resize --expand /dev/sda1 {{ working_dir }}/undercloud.qcow2 '{{ vms.volume_path }}''{{ item.name }}'.qcow2;
+  shell: |
+    export LIBGUESTFS_BACKEND=direct
+    virsh pool-refresh {{ vms.volume_pool}}
+    virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 \
+      {{ item.disk_size }}G --format qcow2
+    virt-resize --expand /dev/sda1 {{ working_dir }}/undercloud.qcow2 \
+      '{{ vms.volume_path }}''{{ item.name }}'.qcow2
   with_items: "{{ vms.undercloud.nodes }}"
   async: 300
   poll: 10
@@ -47,7 +79,9 @@
 
 - name: Output debug message if undercloud copy hangs
   fail:
-    msg: "Undercloud copy took more than 5 minutes, it is likely that there is not enough space in {{ vms.volume_path }}"
+    msg: >
+      Undercloud copy took more than 5 minutes, it is likely that there is not enough
+      space in {{ vms.volume_path }}
   when: undercloud_copy.failed is defined
 
 - name: define undercloud vm
@@ -56,12 +90,14 @@
     command: define
     xml: "{{ lookup('template', 'undercloudvm.xml.j2') }}"
   with_items: "{{ vms.undercloud.nodes }}"
+  become: true
 
 - name: start undercloud vm
   virt:
     name: "{{ item.name }}"
     command: start
   with_items: "{{ vms.undercloud.nodes }}"
+  become: true
 
 - name: get undercloud vm ip address
   script: "scripts/get-undercloud-ip.sh {{ vms.undercloud.nodes[0].name }}"
@@ -69,6 +105,7 @@
   until: undercloud_vm_ip_result.stdout != ''
   retries: 12
   delay: 10
+  become: true
 
 - name: set_fact for undercloud ip
   set_fact: "undercloud_ip={{ undercloud_vm_ip_result.stdout }}"
@@ -85,10 +122,11 @@
   add_host:
     name: "{{ item.name }}"
     groups: undercloud
-    ansible_ssh_host: "{{ item.name }}"
+    ansible_host: "{{ item.name }}"
     ansible_fqdn: "{{ item.name }}"
-    ansible_ssh_user: stack
-    ansible_ssh_private_key_file: "{{ ansible_private_key_file }}"
+    ansible_user: stack
+    ansible_private_key_file: "{{local_working_dir}}/id_rsa_virt_host"
+    ansible_ssh_extra_args: '-F "{{local_working_dir}}/ssh.config.ansible"'
   with_items: "{{ vms.undercloud.nodes }}"
 
 - name: setup ssh config
@@ -96,21 +134,27 @@
     src: ssh.config.j2
     dest: "{{ working_dir }}/ssh.config.ansible"
     mode: 0755
+  become: true
+  become_user: "{{non_root_user}}"
 
-- name: copy ssh_config back to the slave
+- name: copy ssh_config back to the local host
   fetch:
     src: "{{ working_dir }}/ssh.config.ansible"
     dest: "{{ local_working_dir }}/ssh.config.ansible"
     flat: yes
+  become: true
+  become_user: "{{non_root_user}}"
 
-- name: copy id_rsa key back to the slave
+- name: copy ssh private key back to the local host
   fetch:
     src: "/home/{{ non_root_user }}/.ssh/id_rsa"
     dest: "{{ local_working_dir }}/id_rsa_virt_host"
     flat: yes
+  become: true
+  become_user: "{{non_root_user}}"
 
-- name: copy undercloud root user authorized_keys to stack user
-  shell: ssh -F {{ working_dir }}/ssh.config.ansible undercloud-from-virthost "cp /root/.ssh/authorized_keys /home/stack/.ssh/"
-
-- name: chown authorized_keys for stack user
-  shell: ssh -F {{ working_dir }}/ssh.config.ansible undercloud-from-virthost "chown stack:stack /home/stack/.ssh/authorized_keys"
+- name: set permissions on private key file
+  delegate_to: localhost
+  file:
+    path: "{{ local_working_dir }}/id_rsa_virt_host"
+    mode: "0600"

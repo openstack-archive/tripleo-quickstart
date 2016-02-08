@@ -1,8 +1,8 @@
 ---
 dependencies:
-  - { role: libvirt }
-  - { role: setup/install, ansible_user: root }
-  - { role: setup/user, ansible_user: root }
-  - { role: setup/networks, ansible_user: "{{ non_root_user }}" }
-  - { role: setup/overcloud_nodes }
-  - { role: setup/undercloud }
+  - role: libvirt
+  - role: setup/install
+  - role: setup/user
+  - role: setup/networks
+  - role: setup/overcloud_nodes
+  - role: setup/undercloud

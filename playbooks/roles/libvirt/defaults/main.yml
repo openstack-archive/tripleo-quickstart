@@ -1,12 +1,18 @@
 non_root_user: stack
 working_dir: "/home/{{ non_root_user }}/.quickstart"
 url: https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/undercloud.qcow2
-pub_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
 virt_power_key: /root/.ssh/id_rsa_virt_power
 virt_power_user: root
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
-ansible_private_key_file: "{{ ansible_ssh_private_key_file }}"
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
+control_memory: 4096
+compute_memory: 4096
+ceph_memory: 4096
+undercloud_memory: 12288
+undercloud_disk: 50
+control_disk: 50
+compute_disk: 50
+ceph_disk: 50
 networks:
   bridges:
     - name: bridget
@@ -24,8 +30,8 @@ vms:
   undercloud:
     nodes:
       - name: undercloud
-        disk_size: '50'
-        memory: '12288'
+        disk_size: '{{undercloud_disk}}'
+        memory: '{{undercloud_memory}}'
         cpus: '2'
     arch: 'x86_64'
     bootdev: 'hd'
@@ -34,28 +40,28 @@ vms:
     bootdev: 'network'
     nodes:
       - name: control_0
-        disk_size: '50'
-        memory: '4096'
+        disk_size: '{{control_disk}}'
+        memory: '{{control_memory}}'
         cpus: '1'
         profile: control
       - name: control_1
-        disk_size: '50'
-        memory: '4096'
+        disk_size: '{{control_disk}}'
+        memory: '{{control_memory}}'
         cpus: '1'
         profile: control
       - name: control_2
-        disk_size: '50'
-        memory: '4096'
+        disk_size: '{{control_disk}}'
+        memory: '{{control_memory}}'
         cpus: '1'
         profile: control
       - name: compute_0
-        disk_size: '50'
-        memory: '4096'
+        disk_size: '{{compute_disk}}'
+        memory: '{{compute_memory}}'
         cpus: '1'
         profile: compute
       - name: ceph_0
-        disk_size: '50'
-        memory: '4096'
+        disk_size: '{{ceph_memory}}'
+        memory: '{{ceph_memory}}'
         cpus: '1'
         profile: ceph
   volume_path: /var/lib/libvirt/images/

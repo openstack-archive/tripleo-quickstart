@@ -2,21 +2,25 @@
   group:
     name: libvirtd
     state: present
+  become: true
 
 - name: create virt_power_key
   user:
     name: "{{ virt_power_user }}"
     generate_ssh_key: yes
     ssh_key_file: "{{ virt_power_key }}"
+  become: true
 
 - name: read virt_power_key.pub
-  shell: "cat {{ virt_power_key }}.pub"
+  command: "cat {{ virt_power_key }}.pub"
   register: virt_power_pub_key
+  become: true
 
-- name: add virt_power_key to authorized_keys
+- name: add virt_power_key to root authorized_keys
   authorized_key:
     user: "{{ virt_power_user }}"
     key: "{{ virt_power_pub_key.stdout }}"
+  become: true
 
 - name: create non-root user
   user:
@@ -24,21 +28,40 @@
     groups: libvirtd
     generate_ssh_key: yes
     ssh_key_file: "/home/{{ non_root_user }}/.ssh/id_rsa"
+  become: true
 
+- name: read non-root id_rsa.pub
+  command: "cat /home/{{non_root_user}}/.ssh/id_rsa.pub"
+  register: non_root_pub_key
+  become: true
+  become_user: "{{non_root_user}}"
+
+- name: add virt_power_key to root authorized_keys
+  authorized_key:
+    user: "{{ non_root_user }}"
+    key: "{{ non_root_pub_key.stdout }}"
+  become: true
+
+# LKS: note that you will need to explicitly connect to
+# qemu:///system
 - name: allow the non-root user to manage libvirt
   template:
     src: libvirt.pkla.j2
     dest: "/etc/polkit-1/localauthority/50-local.d/50-{{ non_root_user }}-libvirt.pkla"
     mode: 0644
+  become: true
 
 - name: give non-root user passwordless sudo priveledges
-  script: "scripts/passwordless_sudo.sh {{ non_root_user }}"
-
-- name: install ansible pub key for non-root user
-  authorized_key:
-    user: "{{ non_root_user }}"
-    key: "{{ lookup('file', '{{ pub_key }}') }}"
+  copy:
+    content: "{{non_root_user}} ALL=(root) NOPASSWD:ALL"
+    dest: /etc/sudoers.d/{{non_root_user}}
+    mode: 0440
+    owner: root
+    group: root
+  become: true
 
 - name: set fact for instackenv.json friendly virt_power_key
-  script: "scripts/instackify_ssh_key.sh {{ virt_power_key }}"
+  shell: |
+    sed 's,$,\\n,' < {{virt_power_key}} | tr -d '\n'
   register: virt_power_private_key_txt
+  become: true

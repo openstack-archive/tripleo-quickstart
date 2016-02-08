@@ -2,7 +2,14 @@
 {% if hostvars[host].get('ansible_connection', '') == 'local' %}
 {{ host }} ansible_connection=local
 {% else %}
-{{ host }} ansible_ssh_host={{ hostvars[host]['ansible_ssh_host'] }} ansible_ssh_user={{ hostvars[host]['ansible_ssh_user'] }} ansible_ssh_private_key_file={{ hostvars[host]['ansible_ssh_private_key_file'] }}
+{{ host }}{% if 'ansible_host' in hostvars[host]
+%} ansible_host={{ hostvars[host]['ansible_host'] }} {% endif %}
+{% if 'ansible_user' in hostvars[host]
+%}ansible_user={{ hostvars[host]['ansible_user'] }} {% endif %}
+{% if 'ansible_private_key_file' in hostvars[host]
+%}ansible_private_key_file={{ hostvars[host]['ansible_private_key_file'] }}
+{% endif %}
+
 {% endif %}
 {% endfor %}
 
@@ -15,3 +22,13 @@
 
 {% endif %}
 {% endfor %}
+
+{% if 'undercloud' in groups %}
+[undercloud:vars]
+ansible_ssh_extra_args='-F {{local_working_dir}}/ssh.config.ansible'
+{% endif %}
+
+{% if 'overcloud' in groups %}
+[overcloud:vars]
+ansible_ssh_extra_args='-F {{local_working_dir}}/ssh.config.ansible'
+{% endif %}
