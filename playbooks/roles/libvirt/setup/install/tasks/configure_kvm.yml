@@ -1,0 +1,35 @@
+- name: check if Intel processor
+  command: grep -q Intel /proc/cpuinfo
+  ignore_errors: true
+  register: is_intel
+
+- name: check if AMD processor
+  command: grep -q AMD /proc/cpuinfo
+  ignore_errors: true
+  register: is_amd
+
+- name: load kvm module [intel]
+  command: modprobe kvm_intel
+  when: is_intel|success
+  become: true
+
+- name: load kvm module [amd]
+  command: modprobe kvm_amd
+  when: is_amd|success
+  become: true
+
+- name: arrange for kvm module to load at boot [intel]
+  copy:
+    content: kvm_intel
+    dest: /etc/modules-load.d/ooo_kvm.conf
+  when: is_intel|success
+  become: true
+
+- name: arrange for kvm module to load at boot [amd]
+  copy:
+    content: kvm_amd
+    dest: /etc/modules-load.d/ooo_kvm.conf
+  when: is_amd|success
+  become: true
+
+
