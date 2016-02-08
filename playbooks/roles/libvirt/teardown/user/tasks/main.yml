@@ -6,14 +6,17 @@
   with_items:
     - "{{ virt_power_key }}"
     - "{{ virt_power_key }}.pub"
+  become: true
 
 - name: delete non-root user
   user:
     name: "{{ non_root_user }}"
     state: absent
     remove: yes
+  become: true
 
 - name: remove non-root user passwordless sudo priveledges
   file:
     name: "/etc/sudoers.d/{{ non_root_user }}"
     state: absent
+  become: true

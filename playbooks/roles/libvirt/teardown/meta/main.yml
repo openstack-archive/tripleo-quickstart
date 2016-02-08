@@ -1,9 +1,9 @@
 ---
 dependencies:
-  - { role: libvirt }
-  - { role: teardown/check, ansible_user: root }
-  - { role: teardown/networks, ansible_user: root,
-      when: "libvirt_check.rc == 0" }
-  - { role: teardown/nodes, ansible_user: root,
-      when: "libvirt_check.rc == 0" }
-  - { role: teardown/user, ansible_user: root }
+  - role: libvirt
+  - role: teardown/check
+  - role: teardown/networks
+    when: "libvirt_check.rc == 0"
+  - role: teardown/nodes
+    when: "libvirt_check.rc == 0"
+  - role: teardown/user
