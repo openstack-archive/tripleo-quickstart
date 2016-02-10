@@ -1,13 +1,15 @@
-# LKS: should this be parameterized? E.g., if we wanted something other than 
+# LKS: should this be parameterized? E.g., if we wanted something other than
 # liberty on the undercloud...
 - name: install release repo
   yum:
     name: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
     state: present
   become: true
+  # This repo is only installed to get openvswitch, which Fedora has already has it
+  when: ansible_os_family == 'RedHat' and ansible_distribution != 'Fedora'
 
 - name: ensure libvirt and other deps are installed
-  yum:
+  package:
     name: "{{ item }}"
     state: present
   with_items:
