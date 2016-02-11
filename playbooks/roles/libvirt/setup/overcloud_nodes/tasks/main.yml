@@ -1,6 +1,6 @@
 - name: get a list of MACs to use
   generate_macs:
-    nodes: "{{ vms.overcloud.nodes }}"
+    nodes: "{{ overcloud_nodes }}"
     bridges: "{{ networks.bridges }}"
   register: node_mac_map
 
@@ -16,22 +16,22 @@
     command: define
     name: "{{ vms.volume_pool }}"
     xml: '{{ lookup("template", "volume_pool.xml.j2") }}'
-  when: volume_pool_status.failed is defined
+  when: volume_pool_status|failed
 
 - name: Create volume_pool if it does not exists
   virt_pool:
     command: create
     name: "{{ vms.volume_pool }}"
-  when: volume_pool_status.failed is defined
+  when: volume_pool_status|failed
 
 # LKS: why for the 'touch' after 'virsh vol-create-as...'?
 - name: create baremetal vm storage
   shell: |
     virsh vol-create-as '{{ vms.volume_pool }}' \
-      '{{ item.name }}'.qcow2 '{{ item.disk_size }}'G --format qcow2
+      '{{ item.name }}'.qcow2 '{{ flavors[item.flavor].disk }}'G --format qcow2
     touch '{{ vms.volume_path }}''{{ item.name }}'.qcow2
     chattr +C '{{ vms.volume_path }}''{{ item.name }}'.qcow2 || true
-  with_items: "{{ vms.overcloud.nodes }}"
+  with_items: "{{ overcloud_nodes }}"
   become: true
 
 - name: define baremetal vms
@@ -39,7 +39,7 @@
     name: "{{ item.name }}"
     command: define
     xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
-  with_items: "{{ vms.overcloud.nodes }}"
+  with_items: "{{ overcloud_nodes }}"
   become: true
 
 - name: create working_dir

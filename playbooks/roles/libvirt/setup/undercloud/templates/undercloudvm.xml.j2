@@ -1,10 +1,10 @@
 <domain type='{{ vms.engine }}'>
   <name>{{ item.name }}</name>
-  <memory unit='MiB'>{{ item.memory }}</memory>
-  <vcpu>{{ item.cpus }}</vcpu>
+  <memory unit='MiB'>{{ flavors[item.flavor].memory }}</memory>
+  <vcpu>{{ flavors[item.flavor].vcpu }}</vcpu>
   <os>
-    <type arch='{{ vms.undercloud.arch }}'>hvm</type>
-    <boot dev='{{ vms.undercloud.bootdev }}'/>
+    <type arch='{{ vms.arch }}'>hvm</type>
+    <boot dev='{{ undercloud_bootdev }}'/>
     <bootmenu enable='no'/>
   </os>
   <features>

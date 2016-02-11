@@ -1,11 +1,11 @@
 <domain type='{{ vms.engine }}'>
   <name>{{ item.name }}</name>
-  <memory unit='MiB'>{{ item.memory }}</memory>
-  <vcpu>{{ item.cpus }}</vcpu>
+  <memory unit='MiB'>{{ flavors[item.flavor].memory }}</memory>
+  <vcpu>{{ flavors[item.flavor].vcpu }}</vcpu>
 {{baremetal_vm_xml|default('')}}
   <os>
-    <type arch='{{ vms.overcloud.arch }}'>hvm</type>
-    <boot dev='{{ vms.overcloud.bootdev }}'/>
+    <type arch='{{ vms.arch }}'>hvm</type>
+    <boot dev='{{ overcloud_bootdev }}'/>
     <bootmenu enable='no'/>
   </os>
   <features>

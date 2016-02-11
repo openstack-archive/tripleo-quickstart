@@ -22,12 +22,35 @@ pingtest: false
 bash_deploy_ramdisk: false
 
 deploy_timeout: 60
-control_args: "--control-flavor control"
-compute_args: "--compute-flavor compute"
-ceph_args: ""
 extra_args: ""
 libvirt_args: "--libvirt-type qemu"
-deploy_args: "{{ libvirt_args }} --timeout {{ deploy_timeout }} {{ control_args }} {{ compute_args }} {{ ceph_args }} {{ extra_args }}"
+
+# we generally assume that the argument to --control-flavor will
+# always be the `oooq_control` that we create from the flavors: key.
+# If the deployer needs to use a different name, she can configure a
+# `flavor_map` key that will map overcloud roles to specific flavor
+# names, like:
+#
+# flavor_map:
+#   control: my_special_control_flavor
+#
+# This is to avoid having to replace the flavor_args key wholesale for
+# a single change.
+#
+flavor_args: >-
+  --control-flavor {{flavor_map.control
+  if flavor_map is defined and 'control' in flavor_map else 'oooq_control'}}
+  --compute-flavor {{flavor_map.compute
+  if flavor_map is defined and 'compute' in flavor_map else 'oooq_compute'}}
+  --ceph-storage-flavor {{flavor_map.ceph
+  if flavor_map is defined and 'ceph' in flavor_map else 'oooq_ceph'}}
+
+timeout_args: "--timeout {{deploy_timeout}}"
+deploy_args: >-
+  {{ libvirt_args }}
+  {{ flavor_args }}
+  {{ timeout_args }}
+  {{ extra_args }}
 
 step_install_undercloud: true
 step_deploy_overcloud: true

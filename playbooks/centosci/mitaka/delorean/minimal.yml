@@ -4,33 +4,19 @@
   vars:
     url: "http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/testing/undercloud.qcow2"
     local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
-    vms:
-      engine: 'kvm'
-      undercloud:
-        nodes:
-          - name: undercloud
-            disk_size: '50'
-            memory: '16384'
-            cpus: '4'
-        arch: 'x86_64'
-        bootdev: 'hd'
-      overcloud:
-        arch: 'x86_64'
-        bootdev: 'network'
-        nodes:
-          - name: control_0
-            disk_size: '50'
-            memory: '8192'
-            cpus: '2'
-            profile: control
-          - name: compute_0
-            disk_size: '50'
-            memory: '8192'
-            cpus: '2'
-            profile: compute
-      volume_path: /var/lib/libvirt/images/
-      volume_pool: default
-      diskbus: 'sata'
+
+    default_disk: 50
+
+    undercloud_memory: 16384
+
+    control_memory: 8192
+    compute_memory: 8192
+
+    overcloud_nodes:
+      - name: control_0
+        flavor: control
+      - name: compute_0
+        flavor: compute
   roles:
     - libvirt/setup
 
@@ -48,5 +34,18 @@
   gather_facts: no
   vars:
     local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
+
+    default_disk: 50
+
+    undercloud_memory: 16384
+
+    control_memory: 8192
+    compute_memory: 8192
+
+    overcloud_nodes:
+      - name: control_0
+        flavor: control
+      - name: compute_0
+        flavor: compute
   roles:
     - overcloud

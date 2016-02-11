@@ -1,10 +1,12 @@
 - name: install libguestfs-tools
-  package: name=libguestfs-tools state=present
+  package:
+    name: libguestfs-tools
+    state: present
   become: true
 
 - name: get MACs for the undercloud
   generate_macs:
-    nodes: "{{ vms.undercloud.nodes }}"
+    nodes: "{{ undercloud_nodes }}"
     bridges: "{{ networks.bridges }}"
   register: undercloud_mac_map
 
@@ -50,6 +52,8 @@
     virt-customize --run-command 'sudo chown {{item.owner}}:{{item.group}} \
       {{item.homedir}}/.ssh/authorized_keys' \
       -a {{ working_dir }}/undercloud.qcow2
+  environment:
+    LIBGUESTFS_BACKEND: direct
   with_items:
     - homedir: /root
       owner: root
@@ -57,20 +61,19 @@
     - homedir: /home/stack
       owner: stack
       group: stack
-  environment:
-    LIBGUESTFS_BACKEND: direct
   become: true
   become_user: "{{non_root_user}}"
 
 - name: Install undercloud vm storage
   shell: |
-    export LIBGUESTFS_BACKEND=direct
     virsh pool-refresh {{ vms.volume_pool}}
     virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 \
-      {{ item.disk_size }}G --format qcow2
+      {{ flavors[item.name].disk }}G --format qcow2
     virt-resize --expand /dev/sda1 {{ working_dir }}/undercloud.qcow2 \
       '{{ vms.volume_path }}''{{ item.name }}'.qcow2
-  with_items: "{{ vms.undercloud.nodes }}"
+  environment:
+    LIBGUESTFS_BACKEND: direct
+  with_items: "{{ undercloud_nodes }}"
   async: 300
   poll: 10
   register: undercloud_copy
@@ -80,8 +83,8 @@
 - name: Output debug message if undercloud copy hangs
   fail:
     msg: >
-      Undercloud copy took more than 5 minutes, it is likely that there is not enough
-      space in {{ vms.volume_path }}
+      Undercloud copy took more than 5 minutes, it is likely that
+      there is not enough space in {{ vms.volume_path }}
   when: undercloud_copy.failed is defined
 
 - name: define undercloud vm
@@ -89,18 +92,18 @@
     name: "{{ item.name }}"
     command: define
     xml: "{{ lookup('template', 'undercloudvm.xml.j2') }}"
-  with_items: "{{ vms.undercloud.nodes }}"
+  with_items: "{{ undercloud_nodes }}"
   become: true
 
 - name: start undercloud vm
   virt:
     name: "{{ item.name }}"
     command: start
-  with_items: "{{ vms.undercloud.nodes }}"
+  with_items: "{{ undercloud_nodes }}"
   become: true
 
 - name: get undercloud vm ip address
-  script: "scripts/get-undercloud-ip.sh {{ vms.undercloud.nodes[0].name }}"
+  script: "scripts/get-undercloud-ip.sh {{ undercloud_nodes[0].name }}"
   register: undercloud_vm_ip_result
   until: undercloud_vm_ip_result.stdout != ''
   retries: 12
@@ -108,7 +111,8 @@
   become: true
 
 - name: set_fact for undercloud ip
-  set_fact: "undercloud_ip={{ undercloud_vm_ip_result.stdout }}"
+  set_fact:
+    undercloud_ip: "{{ undercloud_vm_ip_result.stdout }}"
 
 - name: wait until ssh is available on undercloud node
   wait_for:
@@ -127,7 +131,7 @@
     ansible_user: stack
     ansible_private_key_file: "{{local_working_dir}}/id_rsa_virt_host"
     ansible_ssh_extra_args: '-F "{{local_working_dir}}/ssh.config.ansible"'
-  with_items: "{{ vms.undercloud.nodes }}"
+  with_items: "{{ undercloud_nodes }}"
 
 - name: setup ssh config
   template:

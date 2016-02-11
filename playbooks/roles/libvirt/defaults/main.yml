@@ -5,14 +5,6 @@ virt_power_key: /root/.ssh/id_rsa_virt_power
 virt_power_user: root
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
-undercloud_disk: 50
-undercloud_memory: 12288
-control_disk: 50
-control_memory: 4096
-compute_disk: 50
-compute_memory: 4096
-ceph_disk: 50
-ceph_memory: 4096
 networks:
   bridges:
     - name: bridget
@@ -27,43 +19,12 @@ networks:
     dhcp_end: 192.168.23.50
 vms:
   engine: 'kvm'
-  undercloud:
-    nodes:
-      - name: undercloud
-        disk_size: '{{undercloud_disk}}'
-        memory: '{{undercloud_memory}}'
-        cpus: '2'
-    arch: 'x86_64'
-    bootdev: 'hd'
-  overcloud:
-    arch: 'x86_64'
-    bootdev: 'network'
-    nodes:
-      - name: control_0
-        disk_size: '{{control_disk}}'
-        memory: '{{control_memory}}'
-        cpus: '1'
-        profile: control
-      - name: control_1
-        disk_size: '{{control_disk}}'
-        memory: '{{control_memory}}'
-        cpus: '1'
-        profile: control
-      - name: control_2
-        disk_size: '{{control_disk}}'
-        memory: '{{control_memory}}'
-        cpus: '1'
-        profile: control
-      - name: compute_0
-        disk_size: '{{compute_disk}}'
-        memory: '{{compute_memory}}'
-        cpus: '1'
-        profile: compute
-      - name: ceph_0
-        disk_size: '{{ceph_disk}}'
-        memory: '{{ceph_memory}}'
-        cpus: '1'
-        profile: ceph
   volume_path: /var/lib/libvirt/images/
   volume_pool: default
   diskbus: 'sata'
+  arch: x86_64
+
+# LKS: I'm not convinced these need to be configurable, but they were
+# before I got here, so leaving that capability for now.
+overcloud_bootdev: network
+undercloud_bootdev: hd

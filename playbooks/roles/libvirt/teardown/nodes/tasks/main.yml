@@ -2,7 +2,7 @@
   virt:
     name: "{{ item.name }}"
     command: undefine
-  with_items: "{{ vms.overcloud.nodes }}"
+  with_items: "{{ overcloud_nodes }}"
   ignore_errors: true
   become: true
 
@@ -10,7 +10,7 @@
   virt:
     name: "{{ item.name }}"
     command: destroy
-  with_items: "{{ vms.overcloud.nodes }}"
+  with_items: "{{ overcloud_nodes }}"
   ignore_errors: true
   become: true
 
@@ -18,7 +18,7 @@
   virt:
     name: "{{ item.name }}"
     command: undefine
-  with_items: "{{ vms.undercloud.nodes }}"
+  with_items: "{{ undercloud_nodes }}"
   ignore_errors: true
   become: true
 
@@ -26,7 +26,7 @@
   virt:
     name: "{{ item.name }}"
     command: destroy
-  with_items: "{{ vms.undercloud.nodes }}"
+  with_items: "{{ undercloud_nodes }}"
   ignore_errors: true
   become: true
 
@@ -38,7 +38,7 @@
       '{{ item.name }}'.qcow2 2>&1 > /dev/null
     virsh vol-delete --pool '{{ vms.volume_pool }}' \
       '{{ item.name }}'.qcow2
-  with_items: "{{ vms.overcloud.nodes }}"
+  with_items: "{{ overcloud_nodes }}"
   ignore_errors: true
   become: true
 
@@ -48,6 +48,6 @@
       '{{ item.name }}'.qcow2 2>&1 > /dev/null
     virsh vol-delete --pool '{{ vms.volume_pool }}' \
       '{{ item.name }}'.qcow2
-  with_items: "{{ vms.undercloud.nodes }}"
+  with_items: "{{ undercloud_nodes }}"
   ignore_errors: true
   become: true

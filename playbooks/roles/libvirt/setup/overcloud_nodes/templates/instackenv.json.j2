@@ -1,26 +1,26 @@
 {
   "nodes": [
-  {% for node in vms.overcloud.nodes %}
+  {% for node in overcloud_nodes %}
     {
       "pm_password": "{{ virt_power_private_key_txt.stdout }}",
       "pm_type": "pxe_ssh",
       "mac": [
         "{{ node_mac_map.get(node.name).get(networks.bridges[0].name) }}"
       ],
-      "cpu": "{{ node.cpus }}",
-      "memory": "{{ node.memory }}",
-      "disk": "{{ node.disk_size }}",
-      "arch": "{{ vms.overcloud.arch }}",
+      "cpu": "{{ flavors[node.flavor].vcpu }}",
+      "memory": "{{ flavors[node.flavor].memory }}",
+      "disk": "{{ flavors[node.flavor].disk }}",
+      "arch": "{{ vms.arch }}",
       "pm_user": "{{ virt_power_user }}",
       "pm_addr": "{{ networks.external.ip }}",
-      "capabilities": "{% if node.profile %}profile:{{ node.profile }},{% endif %}boot_option:local"
+      "capabilities": "profile:oooq_{{ node.flavor }},boot_option:local"
     }
     {% if not loop.last %}
     ,
     {% endif %}
   {% endfor %}
   ],
-  "arch": "{{ vms.overcloud.arch }}",
+  "arch": "{{ vms.arch }}",
   "host-ip": "{{ networks.external.ip }}",
   "power_manager": "{{ nova_power_manager }}",
   "seed-ip": "",
