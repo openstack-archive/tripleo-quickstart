@@ -31,6 +31,7 @@
 
               # ansible2ify khaleesi hosts file
               sed -i 's/ansible_ssh/ansible/g' hosts
+              sed -i 's/ansible_user=stack/ansible_user=root/g' hosts
               popd
 
               # tripleo-quickstart requires Ansible 2.0
@@ -98,6 +99,7 @@
 
               # ansible2ify khaleesi hosts file
               sed -i 's/ansible_ssh/ansible/g' hosts
+              sed -i 's/ansible_user=stack/ansible_user=root/g' hosts
               popd
 
               # Install tripleo-quickstart
@@ -160,6 +162,7 @@
 
               # ansible2ify khaleesi hosts file
               sed -i 's/ansible_ssh/ansible/g' hosts
+              sed -i 's/ansible_user=stack/ansible_user=root/g' hosts
               popd
 
               # Install tripleo-quickstart
