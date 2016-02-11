@@ -1,3 +1,2 @@
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
-non_root_user: stack
 priv_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
