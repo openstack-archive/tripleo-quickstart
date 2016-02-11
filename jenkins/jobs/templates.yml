@@ -100,6 +100,9 @@
         set +e
         anscmd="stdbuf -oL -eL ansible-playbook -vv"
         $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
+
+        # ansible2ify khaleesi hosts file
+        sed -i 's/ansible_ssh/ansible/g' hosts
         popd
 
         # Install tripleo-quickstart
@@ -170,6 +173,9 @@
         set +e
         anscmd="stdbuf -oL -eL ansible-playbook -vv"
         $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
+
+        # ansible2ify khaleesi hosts file
+        sed -i 's/ansible_ssh/ansible/g' hosts
         popd
 
         # tripleo-quickstart requires Ansible 2.0

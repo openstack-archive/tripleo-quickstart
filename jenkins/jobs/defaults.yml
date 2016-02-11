@@ -2,7 +2,7 @@
     name: 'tripleo-quickstart-defaults'
     description: |
         Managed by Jenkins Job Builder. Do not edit via web.
-    concurrent: true
+    concurrent: false
     node: 'rdo'
     logrotate:
         daysToKeep: 5
