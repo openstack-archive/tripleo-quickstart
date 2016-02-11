@@ -17,16 +17,26 @@ openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 
 {% if introspect %}
-  openstack baremetal introspection bulk start
+openstack baremetal introspection bulk start
 {% endif %}
 
-{% if create_flavors %}
-  openstack flavor create --id auto --ram 4096 --disk 40 --vcpus 1 baremetal
-  openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
-
+{% if custom_flavors is defined %}
 {% for flavor in custom_flavors %}
-  openstack flavor create --id auto --ram 4096 --disk 40 --vcpus 1 {{ flavor }}
-  openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="{{ flavor }}" {{ flavor }}
-{% endfor %}
+#
+# Create flavor {{flavor.name}}
+#
 
+openstack flavor create --id auto \
+  --ram {{flavor.memory|default('4096')}} \
+  --disk {{flavor.disk|default('40')}} \
+  --vcpus {{flavor.vcpus|default('1')}} \
+  {{ flavor.name }}
+openstack flavor set \
+  --property "cpu_arch"="x86_64" \
+  --property "capabilities:boot_option"="local" \
+  --property "capabilities:profile"="{{ flavor.name }}" {{ flavor.name }}
+{% for propname,propval in (flavor.properties|default({})).items() %}
+openstack flavor set --property "{{propname}}={{propval}}" {{ flavor.name }}
+{% endfor %}
+{% endfor %}
 {% endif %}

@@ -21,12 +21,6 @@ pingtest: false
 
 bash_deploy_ramdisk: false
 
-create_flavors: false
-custom_flavors:
-  - control
-  - compute
-  - ceph
-
 deploy_timeout: 60
 control_args: "--control-flavor control"
 compute_args: "--compute-flavor compute"

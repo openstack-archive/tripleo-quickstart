@@ -28,11 +28,15 @@
   become: true
 
 - name: expand undercloud.qcow2 filesystem
-  shell: >
-         export LIBGUESTFS_BACKEND=direct;
-         virsh vol-create-as default undercloud.qcow2 40G --format qcow2;
-         virt-resize --expand /dev/sda1 {{ undercloud_working_image_dest }} /var/lib/libvirt/images/undercloud.qcow2;
-         cp -f /var/lib/libvirt/images/undercloud.qcow2 {{ undercloud_working_image_dest }}
+  shell: |
+    virsh vol-create-as default undercloud.qcow2 40G --format qcow2
+    virt-resize --expand /dev/sda1 \
+      {{ undercloud_working_image_dest }} \
+      /var/lib/libvirt/images/undercloud.qcow2
+    cp -f /var/lib/libvirt/images/undercloud.qcow2 \
+      {{ undercloud_working_image_dest }}
+  environment:
+    LIBGUESTFS_BACKEND: direct
   become: true
 
 - name: "Create virt-customize run script ({{ undercloud_run_script }})"
