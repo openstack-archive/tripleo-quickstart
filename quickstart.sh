@@ -112,7 +112,7 @@ set -ex
 
 if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
     bootstrap
-else:
+else
     activate_venv
 fi
 
