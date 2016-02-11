@@ -33,6 +33,7 @@ usage () {
     echo "$0: usage: $0 [options] virthost [release]"
     echo "$0: options:"
     echo "    --system-site-packages"
+    echo "    --ansible-debug"
     echo "    --bootstrap"
     echo "    --workdir-dir"
     echo "    --undercloud-image-url"
@@ -47,6 +48,10 @@ while [ "x$1" != "x" ]; do
 
         --bootstrap|-b)
             OPT_BOOTSTRAP=1
+            ;;
+
+        --ansible-debug|-v)
+            OPT_DEBUG_ANSIBLE=1
             ;;
 
         --working-dir|-w)
@@ -127,7 +132,13 @@ if ! grep -q ssh_args $OPT_WORKDIR/ssh.config.ansible; then
     echo "ssh_args = -F $OPT_WORKDIR/ssh.config.ansible" >> $ANSIBLE_CONFIG
 fi
 
-ansible-playbook -vv $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
+if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
+    VERBOSITY=vvvv
+else
+    VERBOSITY=vv
+fi
+
+ansible-playbook -$VERBOSITY $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
     -e url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST
