@@ -6,7 +6,7 @@ set -eux
 pushd {{ working_dir }}
 # WORKAROUND(trown) set correct permissions on /etc/sudoers.d/sahara-rootwrap
 # so that overcloud-full building does not fail
-virt-customize -m 16042 --smp 4 -a {{ working_dir }}/overcloud-base.qcow2 \
+sudo LIBGUESTFS_BACKEND=direct virt-customize -m 16042 --smp 4 -a {{ working_dir }}/overcloud-base.qcow2 \
 --run-command "chmod 0440 /etc/sudoers.d/sahara-rootwrap"
 
 # This keeps us from getting the buggy rdo-release repo element

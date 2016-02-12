@@ -2,7 +2,6 @@
   yum:
     name: rsync
     state: present
-  become: true
 
 - name: create local dir to store images
   local_action: "command mkdir -p {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}"
