@@ -6,3 +6,5 @@
 
 - name: Run the packaging script
   shell: "{{ working_dir }}/{{ packaging_script }}"
+  environment:
+    LIBGUESTFS_BACKEND: direct

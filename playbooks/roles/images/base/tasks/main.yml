@@ -11,3 +11,5 @@
 
 - name: Run the virt-customize run script
   shell: "{{ base_virt_customize_command }}"
+  environment:
+    LIBGUESTFS_BACKEND: direct

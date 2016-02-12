@@ -6,3 +6,5 @@
 
 - name: Run the image build script
   shell: "{{ working_dir }}/{{ build_script }}"
+  environment:
+    LIBGUESTFS_BACKEND: direct

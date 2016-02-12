@@ -18,7 +18,6 @@ md5sum {{ image_type }}.tar > {{ image_type }}.tar.md5
 {% endfor %}
 
 ## Compress undercloud image
-export LIBGUESTFS_BACKEND=direct
 virt-sparsify --compress {{ working_dir }}/{{ undercloud_base }} undercloud.qcow2
 
 
