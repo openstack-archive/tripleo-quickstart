@@ -1,5 +1,5 @@
 - name: install libguestfs-tools
-  yum: name=libguestfs-tools state=present
+  package: name=libguestfs-tools state=present
   become: true
 
 - name: get MACs for the undercloud
