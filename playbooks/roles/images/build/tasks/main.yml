@@ -1,10 +1,14 @@
+# python-tripleoclient/DIB misbehave when run as root, so run
+# as stack user instead.
 - name: Create image build script
   template:
     src: "{{ build_script }}"
     dest: "{{ working_dir }}"
     mode: 0744
+  become: true
+  become_user: stack
 
 - name: Run the image build script
   shell: "{{ working_dir }}/{{ build_script }}"
-  environment:
-    LIBGUESTFS_BACKEND: direct
+  become: true
+  become_user: stack
