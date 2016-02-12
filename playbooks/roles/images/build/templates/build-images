@@ -3,6 +3,7 @@
 
 set -eux
 
+pushd {{ working_dir }}
 # WORKAROUND(trown) set correct permissions on /etc/sudoers.d/sahara-rootwrap
 # so that overcloud-full building does not fail
 virt-customize -m 16042 --smp 4 -a {{ working_dir }}/overcloud-base.qcow2 \
@@ -12,5 +13,7 @@ virt-customize -m 16042 --smp 4 -a {{ working_dir }}/overcloud-base.qcow2 \
 export RHOS=1
 
 {% for image in images %}
-DIB_LOCAL_IMAGE={{ working_dir }}/{{ image.base }} openstack overcloud image build --type {{ image.type }}
+DIB_LOCAL_IMAGE={{ image.base }} openstack overcloud image build --type {{ image.type }}
 {% endfor %}
+
+popd
