@@ -5,14 +5,14 @@ virt_power_key: /root/.ssh/id_rsa_virt_power
 virt_power_user: root
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
-control_memory: 4096
-compute_memory: 4096
-ceph_memory: 4096
-undercloud_memory: 12288
 undercloud_disk: 50
+undercloud_memory: 12288
 control_disk: 50
+control_memory: 4096
 compute_disk: 50
+compute_memory: 4096
 ceph_disk: 50
+ceph_memory: 4096
 networks:
   bridges:
     - name: bridget
@@ -60,7 +60,7 @@ vms:
         cpus: '1'
         profile: compute
       - name: ceph_0
-        disk_size: '{{ceph_memory}}'
+        disk_size: '{{ceph_disk}}'
         memory: '{{ceph_memory}}'
         cpus: '1'
         profile: ceph
