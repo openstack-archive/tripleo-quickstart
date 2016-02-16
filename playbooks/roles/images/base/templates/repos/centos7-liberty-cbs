@@ -1,1 +1,0 @@
-yum install -y http://www.rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm || true

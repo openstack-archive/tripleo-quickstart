@@ -1,0 +1,14 @@
+---
+- name: Inject overcloud images into undercloud image
+  shell:
+    "virt-customize -m {{ virt_customize_ram }} --smp {{ virt_customize_cpu }} -a {{ working_dir }}/undercloud-base.qcow2 --upload {{ working_dir }}/{{ item }}:/home/stack"
+  environment:
+    LIBGUESTFS_BACKEND: direct
+  with_items: "{{ overcloud_images }}"
+
+- name: Compress undercloud image
+  shell: |
+    virt-sparsify --tmp {{ working_dir }} --check-tmpdir fail --compress {{ working_dir }}/undercloud-base.qcow2 {{ working_dir }}/undercloud.qcow2;
+    md5sum {{ working_dir }}/undercloud.qcow2 > {{ working_dir }}/undercloud.qcow2.md5
+  environment:
+    LIBGUESTFS_BACKEND: direct

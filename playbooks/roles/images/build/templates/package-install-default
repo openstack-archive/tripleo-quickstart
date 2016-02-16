@@ -1,5 +1,5 @@
 #!/bin/bash
-# Overcloud script for virt-customize --run
+# virt-customize script to install packages in the overcloud base image
 
 set -eux
 

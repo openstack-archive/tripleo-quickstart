@@ -1,14 +1,20 @@
-# python-tripleoclient/DIB misbehave when run as root, so run
-# as stack user instead.
-- name: Create image build script
-  template:
-    src: "{{ build_script }}"
-    dest: "{{ working_dir }}"
-    mode: 0744
-  become: true
-  become_user: stack
+- name: Create the working directory if it doesn't exist
+  file:
+    path: "{{ working_dir }}"
+    state: directory
+    mode: 0755
 
-- name: Run the image build script
-  shell: "{{ working_dir }}/{{ build_script }}"
-  become: true
-  become_user: stack
+# Get the base image and setup repos
+- include: repo_setup.yml
+
+# Install packages for overcloud base image
+- include: package_install.yml
+
+# Use overcloud base image to create undercloud base image
+- include: convert_undercloud.yml
+
+# Use DIB to build the overlcloud-full and IPA images
+- include: dib_build.yml
+
+# Inject overcloud-full and IPA images into the undercloud image
+- include: undercloud_inject.yml

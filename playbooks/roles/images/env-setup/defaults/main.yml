@@ -1,3 +1,0 @@
-env_setup_script: build-env-setup
-working_dir: /root
-ansible_user: root

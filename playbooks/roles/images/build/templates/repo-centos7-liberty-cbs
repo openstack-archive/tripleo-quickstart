@@ -1,8 +1,9 @@
-curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/{{ delorean_hash }}/delorean.repo
+#!/bin/bash
+# Repo script to install centos7 liberty cbs
 
-curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7/delorean-deps.repo
+set -eux
 
-yum install -y yum-plugin-priorities
+yum install -y http://www.rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm || true
 
 # We need EPEL for the ceph packages currently, so make EPEL
 # available only for those packages.
@@ -15,3 +16,5 @@ enabled=1
 gpgcheck=0
 includepkgs=ceph,leveldb,libcephfs1,python-cephfs
 EOF
+
+yum update -y

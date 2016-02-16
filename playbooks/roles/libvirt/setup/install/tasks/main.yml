@@ -17,6 +17,7 @@
     - libvirt
     - libvirt-python
     - python-lxml
+    - libguestfs-tools
     - openvswitch
   become: true
 

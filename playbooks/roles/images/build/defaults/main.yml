@@ -1,9 +1,47 @@
-build_script: build-images
-working_dir: /home/stack
-images:
-  - base: minimal-base.qcow2
-    type: agent-ramdisk
-  - base: minimal-base.qcow2
-    type: deploy-ramdisk
-  - base: overcloud-base.qcow2
-    type: overcloud-full
+---
+# global build vars
+working_dir: /tmp/oooq-images
+
+# repo_setup vars
+minimal_base_image_url: http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+minimal_overwrite_existing: no
+base_os: centos7
+release: mitaka
+build_system: delorean
+repo_script: "repo-{{ base_os }}-{{ release }}-{{ build_system }}"
+
+# package_install vars
+overcloud_base_image_url: "file:///{{ working_dir }}/minimal-base.qcow2"
+overcloud_overwrite_existing: no
+package_install_script: package-install-default
+overcloud_package_list: default_package_list.yml
+
+# convert_undercloud vars
+undercloud_base_image_url: "file:///{{ working_dir }}/overcloud-base.qcow2"
+undercloud_overwrite_existing: no
+undercloud_convert_script: undercloud-convert-default
+undercloud_disk_size: 40
+virt_customize_ram: 28000
+virt_customize_cpu: 4
+undercloud_remove_packages:
+  - cloud-init
+  - mariadb-galera-server
+  - python-manila
+undercloud_install_packages:
+  - mariadb-server
+  - openstack-tempest
+undercloud_selinux_permissive: true
+
+# dib_build vars
+remove_epel: true
+dib_workarounds: true
+dib_workaround_script: dib-workaround-default
+dib_elements_path: /usr/share/tripleo-image-elements:/usr/share/tripleo-puppet-elements:/usr/share/instack-undercloud/:/usr/share/openstack-heat-templates/software-config/elements/
+
+# undercloud_inject vars
+overcloud_images:
+  - ironic-python-agent.initramfs
+  - ironic-python-agent.kernel
+  - overcloud-full.initrd
+  - overcloud-full.qcow2
+  - overcloud-full.vmlinuz

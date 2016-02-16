@@ -1,6 +1,11 @@
-curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/{{ delorean_hash }}/delorean.repo
+#!/bin/bash
+# Repo script to setup centos7 mitaka delorean
 
-curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
+set -eux
+
+curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/{{ delorean_hash | default('current-passed-ci')}}/delorean.repo
+
+curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7/delorean-deps.repo
 
 yum install -y yum-plugin-priorities
 
@@ -15,3 +20,6 @@ enabled=1
 gpgcheck=0
 includepkgs=ceph,leveldb,libcephfs1,python-cephfs
 EOF
+
+yum update -y
+
