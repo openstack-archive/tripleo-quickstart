@@ -1,7 +1,9 @@
-- name: install libguestfs-tools
+- name: install packages
   package:
-    name: libguestfs-tools
+    name: "{{item}}"
     state: present
+  with_items:
+    - libguestfs-tools
   become: true
 
 - name: get MACs for the undercloud
@@ -10,21 +12,32 @@
     bridges: "{{ networks.bridges }}"
   register: undercloud_mac_map
 
-- name: get expected md5 of undercloud appliance
+- name: get undercloud appliance image
   command: >
-    curl -sf "{{url}}.md5"
-  register: undercloud_md5
+    curl -sf -C- -o "{{item.dest}}" "{{item.url}}"
+  args:
+    chdir: "{{ working_dir }}"
+  register: curl_result
 
-- name: get undercloud appliance
-  register: get_undercloud_result
-  until: get_undercloud_result.msg.find('did not match') == -1
-  retries: 3
-  delay: 10
-  get_url:
-    url: '{{ url }}'
-    dest: '{{ working_dir }}'
-    timeout: 1200
-    checksum: 'md5:{{ undercloud_md5.stdout.split()[0] }}'
+  # see https://curl.haxx.se/libcurl/c/libcurl-errors.html
+  # for a list of curl exit codes.  we're retrying on
+  # 18 (CURLE_PARTIAL_FILE) and 56 (CURLE_RECV_ERROR).
+  until: curl_result.rc not in [18, 56]
+  retries: 20
+  delay: 5
+  with_items:
+    - url: "{{url}}"
+      dest: undercloud.qcow2
+    - url: "{{url}}.md5"
+      dest: undercloud.qcow2.md5
+  become: true
+  become_user: "{{non_root_user}}"
+
+- name: verify undercloud appliance image
+  command: >
+    md5sum -c undercloud.qcow2.md5
+  args:
+    chdir: "{{ working_dir }}"
   become: true
   become_user: "{{non_root_user}}"
 

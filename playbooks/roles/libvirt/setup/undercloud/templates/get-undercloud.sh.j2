@@ -1,9 +1,0 @@
-set -ex
-
-sudo yum install -y wget --quiet
-# Use wget rather than get_url module for its
-# retry with resume feature
-pushd {{ working_dir }}
-wget --quiet {{ url }}.md5 {{ url }}
-md5sum -c undercloud.qcow2.md5
-popd
