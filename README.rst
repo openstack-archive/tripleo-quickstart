@@ -25,10 +25,9 @@ playbook. Note, the quickstart playbook will delete the ``stack``
 user on the virthost and recreate it.::
 
     export VIRTHOST='my_test_machine.example.com'
-    export UNDERCLOUD_QCOW2_LOCATION=file:///usr/share/quickstart_images/mitaka/undercloud.qcow2
 
     wget https://raw.githubusercontent.com/redhat-openstack/tripleo-quickstart/master/quickstart.sh
-    bash quickstart.sh -u $UNDERCLOUD_QCOW2_LOCATION $VIRTHOST
+    bash quickstart.sh $VIRTHOST
 
 This script will output instructions at the end to access the
 deployed undercloud. If a release name is not given, ``mitaka``
@@ -39,6 +38,31 @@ Documentation
 =============
 
 More in-depth documentation is a work in progress. Patches welcome!
+
+It is also possible to pre-download the undercloud.qcow2 image,
+and use it for multiple runs. From the machine that will be the
+virthost, create a directory for the undercloud image and wget
+it. Note, the image location should be world readable since
+a ``stack`` user is used for most steps.::
+
+    mkdir -p /usr/share/quickstart_images/mitaka/
+    cd /usr/share/quickstart_images/mitaka/
+    wget https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2.md5 \
+    https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2
+
+    # Check that the md5sum's match (The playbook will also
+    # check, but better to know now whether the image download
+    # was ok.)
+    md5sum -c undercloud.qcow2.md5
+
+Then use the quickstart.sh script with the -u option::
+
+    export VIRTHOST='my_test_machine.example.com'
+    export UNDERCLOUD_QCOW2_LOCATION=file:///usr/share/quickstart_images/mitaka/undercloud.qcow2
+
+    wget https://raw.githubusercontent.com/redhat-openstack/tripleo-quickstart/master/quickstart.sh
+    bash quickstart.sh -u $UNDERCLOUD_QCOW2_LOCATION $VIRTHOST
+
 
 To install ``tripleo-quickstart`` yourself instead of via the
 quickstart.sh script::
