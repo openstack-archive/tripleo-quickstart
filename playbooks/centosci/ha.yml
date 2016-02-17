@@ -1,9 +1,18 @@
+---
+- name: Add virthost to inventory
+  hosts: localhost
+  gather_facts: no
+  vars:
+    # This allows running ansible in a virtualenv,
+    # while using python from the base install
+    ansible_python_interpreter: "/usr/bin/python"
+  roles:
+    - provision/manual
+    - rebuild-inventory
+
 - name:  Setup undercloud and baremetal vms and networks in libvirt
   hosts: host0
   gather_facts: yes
-  vars:
-    url: "http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/testing/undercloud.qcow2"
-    local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
   roles:
     - libvirt/setup
 
@@ -11,8 +20,9 @@
   hosts: localhost
   gather_facts: no
   vars:
+    # This allows running ansible in a virtualenv,
+    # while using python from the base install
     ansible_python_interpreter: "/usr/bin/python"
-    local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
   roles:
     - rebuild-inventory
 
@@ -20,7 +30,6 @@
   hosts: undercloud
   gather_facts: no
   vars:
-    local_working_dir: "{{ lookup('env', 'WORKSPACE') }}/khaleesi"
     extra_args: "--control-scale 3 -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml --ntp-server pool.ntp.org"
     tempest: false
     introspect: false

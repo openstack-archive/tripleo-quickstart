@@ -1,0 +1,25 @@
+---
+- name: Add virthost to inventory
+  hosts: localhost
+  gather_facts: no
+  vars:
+    # This allows running ansible in a virtualenv,
+    # while using python from the base install
+    ansible_python_interpreter: "/usr/bin/python"
+  roles:
+    - provision/manual
+    - rebuild-inventory
+
+- name:  Setup the virthost to build images then build them
+  hosts: host0
+  gather_facts: yes
+  roles:
+    - libvirt
+    - libvirt/setup/install
+    - images/build
+
+- name: Publish Images
+  hosts: host0
+  gather_facts: no
+  roles:
+    - { role: "images/publish", when: "publish" }

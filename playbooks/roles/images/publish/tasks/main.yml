@@ -4,20 +4,20 @@
     state: present
 
 - name: create local dir to store images
-  local_action: "command mkdir -p {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}"
+  local_action: "command mkdir -p {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing"
 
 - name: create delorean_hash files
-  local_action: "command echo {{ delorean_hash }} {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}/delorean_hash"
+  local_action: "command echo {{ delorean_hash }} {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/delorean_hash"
 
 - name: fetch files to local workspace
   synchronize:
     src: "{{ working_dir }}/{{ item }}"
-    dest: "{{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}/{{ item }}"
+    dest: "{{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/{{ item }}"
     mode: pull
   with_items: "{{ artifacts }}"
 
 - name: publish to artifacts.centos
-  local_action: "command rsync --delete -av {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}/ rdo@artifacts.ci.centos.org::rdo/images/{{ release }}/{{ repo_type }}/"
+  local_action: "command rsync --delete -av {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/ rdo@artifacts.ci.centos.org::rdo/images/{{ release }}/{{ build_system }}/testing/"
 
 - name: remove the images from the workspace
-  local_action: "command rm -rf {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ repo_type }}"
+  local_action: "command rm -rf {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing"

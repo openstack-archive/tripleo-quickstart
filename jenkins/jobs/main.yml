@@ -1,15 +1,24 @@
 - project:
-    name: 'tripleo-quickstart-gate-promote-jobs'
+    name: 'tripleo-quickstart-gate-minimal-jobs'
     build_system:
         - 'delorean'
     release:
         - 'liberty'
         - 'mitaka'
-    topology:
-        - 'minimal'
-        - 'ha'
+    playbook: 'minimal'
     jobs:
-        - tripleo-quickstart-gate-{release}-{build_system}-{topology}
+        - tripleo-quickstart-gate-{release}-{build_system}-minimal
+
+- project:
+    name: 'tripleo-quickstart-gate-images-jobs'
+    build_system:
+        - 'delorean'
+    release:
+        - 'liberty'
+        - 'mitaka'
+    playbook: 'build-images-and-minimal'
+    jobs:
+        - tripleo-quickstart-gate-{release}-{build_system}-images
 
 - project:
     name: 'tripleo-quickstart-promote-jobs'
@@ -18,21 +27,12 @@
     release:
         - 'liberty'
         - 'mitaka'
-    topology:
+    playbook:
         - 'minimal'
         - 'ha'
+        - 'build-images'
     jobs:
-        - tripleo-quickstart-promote-{release}-{build_system}-{topology}
-
-- project:
-    name: 'tripleo-quickstart-promote-build-images-jobs'
-    build_system:
-        - 'delorean'
-    release:
-        - 'liberty'
-        - 'mitaka'
-    jobs:
-        - tripleo-quickstart-promote-{release}-{build_system}-build-images
+        - tripleo-quickstart-promote-{release}-{build_system}-{playbook}
 
 - project:
     name: 'tripleo-quickstart-gate-tox-jobs'

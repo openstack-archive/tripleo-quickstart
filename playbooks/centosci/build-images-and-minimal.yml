@@ -1,0 +1,3 @@
+---
+- include: build-images.yml
+- include: minimal.yml

@@ -20,7 +20,7 @@
             fail: true
 
 - trigger:
-    name: 'trigger-tripleo-quickstart-gate-promote'
+    name: 'trigger-tripleo-quickstart-gate-build-images'
     triggers:
         - gerrit:
             server-name: 'rdo-ci-centos'
@@ -37,9 +37,43 @@
                         branch-pattern: 'master'
                   file-paths:
                       - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/(centosci|library)/.*'
+                        pattern: 'playbooks/centosci/build-images.yml'
                       - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/roles/(libvirt|overcloud|rebuild-inventory)/.*'
+                        pattern: 'playbooks/roles/images/.*'
+            skip-vote:
+                successful: false
+                failed: false
+                unstable: false
+                notbuilt: false
+            failure-message: 'Test failed'
+            successful-message: 'Test ran successfully'
+            unstable-message: 'Test is unstable'
+            silent: false
+            silent-start: true
+
+- trigger:
+    name: 'trigger-tripleo-quickstart-gate-minimal'
+    triggers:
+        - gerrit:
+            server-name: 'rdo-ci-centos'
+            trigger-on:
+                - patchset-created-event
+                - draft-published-event
+                - comment-added-contains-event:
+                    comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck)'
+            projects:
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  branches:
+                      - branch-compare-type: 'PLAIN'
+                        branch-pattern: 'master'
+                  file-paths:
+                      - compare-type: 'REG_EXP'
+                        pattern: 'playbooks/library/.*'
+                      - compare-type: 'REG_EXP'
+                        pattern: 'playbooks/centosci/minimal.yml'
+                      - compare-type: 'REG_EXP'
+                        pattern: 'playbooks/roles/(libvirt|nodes|overcloud|provision|rebuild-inventory)/.*'
             skip-vote:
                 successful: false
                 failed: false

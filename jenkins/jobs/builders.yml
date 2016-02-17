@@ -1,5 +1,5 @@
 - builder:
-    name: 'tripleo-quickstart-gate'
+    name: 'tripleo-quickstart-promote-builder'
     builders:
         - shining-panda:
             build-environment: 'virtualenv'
@@ -28,11 +28,11 @@
               set +e
               anscmd="stdbuf -oL -eL ansible-playbook -vv"
               $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
-
-              # ansible2ify khaleesi hosts file
-              sed -i 's/ansible_ssh/ansible/g' hosts
-              sed -i 's/ansible_user=stack/ansible_user=root/g' hosts
+              # this hack allows us to use the in-tree manual provisioner so we control the hosts file
+              export VIRTHOST=$(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2)
               popd
+
+              echo $VIRTHOST
 
               # tripleo-quickstart requires Ansible 2.0
               pip uninstall -y ansible
@@ -48,8 +48,14 @@
               pushd khaleesi
               ansible --version
               cat ansible.cfg
-              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{release}/{build_system}/{topology}.yml \
-              --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2"
+              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
+              --extra-vars virthost=$VIRTHOST \
+              --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
+              --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2" \
+              --extra-vars delorean_hash=$delorean_current_hash \
+              --extra-vars release={release} \
+              --extra-vars build_system={build_system} \
+              --extra-vars publish=true
 
               result=$?
 
@@ -59,15 +65,15 @@
               $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
 
               if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
-                  # if the job/test was ok, but collect_logs/cleanup failed,
-                  # print out why the collect_logs/cleanup failed
-                  cat collect_logs.txt
-                  cat cleanup.txt
+                # if the job/test was ok, but collect_logs/cleanup failed,
+                # print out why the collect_logs/cleanup failed
+                cat collect_logs.txt
+                cat cleanup.txt
               fi
               exit $result
 
 - builder:
-    name: 'tripleo-quickstart-promote'
+    name: 'tripleo-quickstart-minimal-gate-builder'
     builders:
         - shining-panda:
             build-environment: 'virtualenv'
@@ -96,13 +102,17 @@
               set +e
               anscmd="stdbuf -oL -eL ansible-playbook -vv"
               $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
-
-              # ansible2ify khaleesi hosts file
-              sed -i 's/ansible_ssh/ansible/g' hosts
-              sed -i 's/ansible_user=stack/ansible_user=root/g' hosts
+              # this hack allows us to use the in-tree manual provisioner so we control the hosts file
+              export VIRTHOST=$(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2)
               popd
 
-              # Install tripleo-quickstart
+              echo $VIRTHOST
+
+              # tripleo-quickstart requires Ansible 2.0
+              pip uninstall -y ansible
+              pip install ansible
+
+              # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
               pip install -e tripleo-quickstart
               pushd tripleo-quickstart
               git log -n 5 --oneline
@@ -110,29 +120,30 @@
               popd
 
               pushd khaleesi
-              # run test
               ansible --version
               cat ansible.cfg
-              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{release}/{build_system}/{topology}.yml \
-              --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2"
+              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
+              --extra-vars virthost=$VIRTHOST \
+              --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
+              --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2"
 
               result=$?
+
               infra_result=0
 
               $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
               $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
 
               if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
-                  # if the job/test was ok, but collect_logs/cleanup failed,
-                  # print out why the job is going to be marked as failed
-                  result=$infra_result
-                  cat collect_logs.txt
-                  cat cleanup.txt
+                # if the job/test was ok, but collect_logs/cleanup failed,
+                # print out why the collect_logs/cleanup failed
+                cat collect_logs.txt
+                cat cleanup.txt
               fi
               exit $result
 
 - builder:
-    name: 'tripleo-quickstart-build-images'
+    name: 'tripleo-quickstart-images-gate-builder'
     builders:
         - shining-panda:
             build-environment: 'virtualenv'
@@ -150,6 +161,8 @@
               cp ansible.cfg.example ansible.cfg
               sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
               sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
+              echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
+              touch ssh.config.ansible
 
               # get config
               curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
@@ -159,13 +172,17 @@
               set +e
               anscmd="stdbuf -oL -eL ansible-playbook -vv"
               $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
-
-              # ansible2ify khaleesi hosts file
-              sed -i 's/ansible_ssh/ansible/g' hosts
-              sed -i 's/ansible_user=stack/ansible_user=root/g' hosts
+              # this hack allows us to use the in-tree manual provisioner so we control the hosts file
+              export VIRTHOST=$(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2)
               popd
 
-              # Install tripleo-quickstart
+              echo $VIRTHOST
+
+              # tripleo-quickstart requires Ansible 2.0
+              pip uninstall -y ansible
+              pip install ansible
+
+              # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
               pip install -e tripleo-quickstart
               pushd tripleo-quickstart
               git log -n 5 --oneline
@@ -173,26 +190,31 @@
               popd
 
               pushd khaleesi
-              # run test
               ansible --version
               cat ansible.cfg
-              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{release}/{build_system}/build-images.yml \
-              --extra-vars delorean_hash=$delorean_current_hash
+              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
+              --extra-vars virthost=$VIRTHOST \
+              --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
+              --extra-vars url="file:///tmp/oooq-images/undercloud.qcow2" \
+              --extra-vars release={release} \
+              --extra-vars build_system={build_system}
 
               result=$?
+
               infra_result=0
 
+              $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
               $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
 
               if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
-                  # if the job/test was ok, but collect_logs/cleanup failed,
-                  # print out why the job is going to be marked as failed
-                  cat cleanup.txt
+                # if the job/test was ok, but collect_logs/cleanup failed,
+                # print out why the collect_logs/cleanup failed
+                cat collect_logs.txt
+                cat cleanup.txt
               fi
               exit $result
-
 - builder:
-    name: 'tripleo-quickstart-gate-tox'
+    name: 'tripleo-quickstart-tox-builder'
     builders:
         - shining-panda:
             build-environment: 'virtualenv'

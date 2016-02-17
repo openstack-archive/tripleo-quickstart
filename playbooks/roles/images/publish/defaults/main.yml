@@ -3,14 +3,8 @@ artifacts:
   - undercloud.qcow2.md5
   - ironic-python-agent.tar
   - ironic-python-agent.tar.md5
-  - deploy-ramdisk-ironic.tar
-  - deploy-ramdisk-ironic.tar.md5
   - overcloud-full.tar
   - overcloud-full.tar.md5
-  - minimal-base.qcow2
-  - minimal-base.qcow2.md5
-  - overcloud-base.qcow2
-  - overcloud-base.qcow2.md5
-working_dir: "/home/stack"
-release: liberty
-repo_type: "cbs/testing"
+release: mitaka
+build_system: delorean
+publish: false

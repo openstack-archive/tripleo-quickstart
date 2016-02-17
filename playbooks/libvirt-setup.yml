@@ -9,6 +9,8 @@
   hosts: localhost
   gather_facts: no
   vars:
+    # This allows running ansible in a virtualenv,
+    # while using python from the base install
     ansible_python_interpreter: "/usr/bin/python"
   roles:
     - rebuild-inventory
