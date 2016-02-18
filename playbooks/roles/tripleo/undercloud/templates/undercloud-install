@@ -5,7 +5,7 @@ set -eux
 
 openstack undercloud install
 
-source stackrc
+source {{ working_dir }}/stackrc
 
 openstack overcloud image upload \
 	{% if bash_deploy_ramdisk %}--old-deploy-image{% endif %}
@@ -13,7 +13,7 @@ openstack overcloud image upload \
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 
-{% if introspect %}
+{% if step_introspect %}
 openstack baremetal introspection bulk start
 {% endif %}
 
@@ -22,7 +22,10 @@ openstack baremetal introspection bulk start
 # Create flavor oooq_{{name}}
 #
 
-# We subtract 1 from the total disk size here to resolve problems 
+# remove flavor before attempting to create
+openstack flavor delete oooq_{{ name }} > /dev/null 2>&1 || true
+
+# We subtract 1 from the total disk size here to resolve problems
 # encountered in CI in which the available disk space on the virtual
 # nodes was slightly less than what we requested.
 openstack flavor create --id auto \

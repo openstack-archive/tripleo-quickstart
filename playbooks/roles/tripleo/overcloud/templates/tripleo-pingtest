@@ -1,0 +1,18 @@
+#
+# test_ping
+#
+
+
+# clean up network if it exists from previous run
+source {{ working_dir }}/overcloudrc
+neutron net-delete nova > /dev/null 2>&1 || true
+
+# clean up test images
+glance image-list |
+  awk '/pingtest_image/ {print $2}' |
+  xargs --no-run-if-empty -n1 glance image-delete
+
+rm -rf tripleo-common
+git clone https://github.com/openstack/tripleo-common.git
+pushd tripleo-common
+./scripts/tripleo.sh --overcloud-pingtest

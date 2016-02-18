@@ -1,2 +1,0 @@
-source ~/stackrc
-heat resource-list -n5 overcloud | grep -v COMPLETE

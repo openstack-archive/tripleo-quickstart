@@ -1,5 +1,0 @@
-git clone https://github.com/openstack/tripleo-common.git
-
-pushd tripleo-common
-
-./scripts/tripleo.sh --overcloud-pingtest

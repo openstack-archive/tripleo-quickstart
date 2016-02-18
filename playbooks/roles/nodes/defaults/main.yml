@@ -8,6 +8,7 @@ default_vcpu: 1
 # and disk.
 undercloud_memory: 12288
 undercloud_disk: 50
+undercloud_vcpu: 4
 
 # The default deployment has flavors for compute, controllers, ceph
 # nodes, and undercloud nodes.  All flavors defined in the `flavors`
