@@ -26,9 +26,9 @@ openstack baremetal introspection bulk start
 # encountered in CI in which the available disk space on the virtual
 # nodes was slightly less than what we requested.
 openstack flavor create --id auto \
-  --ram {{flavor.memory|default('4096')}} \
-  --disk $(( {{flavor.disk|default('40')}} - 1)) \
-  --vcpus {{flavor.vcpus|default('1')}} \
+  --ram {{flavor.memory}} \
+  --disk $(( {{flavor.disk}} - 1)) \
+  --vcpus {{flavor.vcpu}} \
   oooq_{{ name }}
 openstack flavor set \
   --property "cpu_arch"="x86_64" \
