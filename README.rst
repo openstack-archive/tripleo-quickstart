@@ -73,6 +73,56 @@ Playbooks will be located in either ``/usr/local/share/tripleo-quickstart`` or
 in ``$VIRTUAL_ENV/usr/local/share/tripleo-quickstart`` if you have installed in
 a virtual environment.
 
+Contributing
+============
+
+Bug reports
+-----------
+
+If you encounter any problems with ``tripleo-quickstart`` or if you
+have feature suggestions, please feel free to open a bug report in 
+`our issue tracker`_.
+
+.. _our issue tracker: https://github.com/redhat-openstack/tripleo-quickstart/issues/
+
+Code
+----
+
+If you *fix* a problem or implement a new feature, you may submit your
+changes via Gerrit.  The ``tripleo-quickstart`` project uses a Gerrit
+workflow similar to the `OpenStack Gerrit workflow`_.  We're currently
+using review.gerrithub.io_, so you will need to establish an account
+there first.
+
+.. _review.gerrithub.io: https://review.gerrithub.io/
+
+Once your gerrithub account is ready,  install the `git-review`_ tool,
+then from within a clone of the `tripleo-quickstart` repository run::
+
+    git review -s
+
+After you have made your changes locally, commit them to a feature
+branch, and then submit them for review by running::
+
+    git review
+
+Your changes will be tested by our automated CI infrastructure, and
+will also be reviewed by other developers.  If you need to make
+changes (and you probably will; it's not uncommon for patches to go
+through several iterations before being accepted), make the changes on
+your feature branch, and instead of creating a new commit, *amend the
+existing commit*, making sure to retain the ``Change-Id`` line that
+was placed there by ``git-review``::
+
+    git ci --amend
+
+After committing your changes, resubmit the review::
+
+    git review
+
+.. _openstack gerrit workflow: http://docs.openstack.org/infra/manual/developers.html#development-workflow
+.. _git-review: http://docs.openstack.org/infra/manual/developers.html#installing-git-review
+
 Author
 ======
 John Trowbridge
