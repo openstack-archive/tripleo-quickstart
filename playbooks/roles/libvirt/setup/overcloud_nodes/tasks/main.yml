@@ -10,6 +10,7 @@
     name: "{{ vms.volume_pool }}"
   register: volume_pool_status
   ignore_errors: true
+  become: true
 
 - name: Create volume_pool if it does not exists
   virt_pool:
@@ -17,12 +18,14 @@
     name: "{{ vms.volume_pool }}"
     xml: '{{ lookup("template", "volume_pool.xml.j2") }}'
   when: volume_pool_status|failed
+  become: true
 
 - name: Create volume_pool if it does not exists
   virt_pool:
     command: create
     name: "{{ vms.volume_pool }}"
   when: volume_pool_status|failed
+  become: true
 
 # LKS: why for the 'touch' after 'virsh vol-create-as...'?
 - name: create baremetal vm storage
