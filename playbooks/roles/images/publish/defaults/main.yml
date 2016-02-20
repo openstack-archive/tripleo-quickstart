@@ -1,3 +1,7 @@
+# global build vars
+working_dir: /tmp/oooq-images
+
+# publish vars
 artifacts:
   - undercloud.qcow2
   - undercloud.qcow2.md5
