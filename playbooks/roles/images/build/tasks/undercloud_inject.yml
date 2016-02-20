@@ -12,3 +12,13 @@
     md5sum {{ working_dir }}/undercloud.qcow2 > {{ working_dir }}/undercloud.qcow2.md5
   environment:
     LIBGUESTFS_BACKEND: direct
+
+- name: Tar overcloud-full image files
+  shell: |
+    tar -cf overcloud-full.tar overcloud-full*;
+    md5sum overcloud-full.tar > overcloud-full.tar.md5
+
+- name: Tar agent ramdisk files
+  shell: |
+    tar -cf ironic-python-agent.tar ironic-python-agent*;
+    md5sum ironic-python-agent.tar > ironic-python-agent.tar.md5
