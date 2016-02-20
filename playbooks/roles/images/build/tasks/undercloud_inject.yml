@@ -17,8 +17,12 @@
   shell: |
     tar -cf overcloud-full.tar overcloud-full*;
     md5sum overcloud-full.tar > overcloud-full.tar.md5
+  args:
+    chdir: "{{ working_dir }}"
 
 - name: Tar agent ramdisk files
   shell: |
     tar -cf ironic-python-agent.tar ironic-python-agent*;
     md5sum ironic-python-agent.tar > ironic-python-agent.tar.md5
+  args:
+    chdir: "{{ working_dir }}"
