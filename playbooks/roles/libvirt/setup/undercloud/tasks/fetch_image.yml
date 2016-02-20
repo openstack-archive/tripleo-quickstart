@@ -1,0 +1,69 @@
+# Fetching the undercloud images can take a long time.  This
+# tasklist caches images in {{ image_cache_directory }} if an image is
+# (a) downloaded successfully and (b) successfully verifies against
+# the checksum.  Images are cached using the checksum as the filename,
+# and subsequent playbook runs will use the cached copy rather than
+# trying to fetch the remote copy.
+
+- name: ensure image cache directory exists
+  file:
+    path: "{{ image_cache_directory }}"
+    state: directory
+  become: true
+
+- name: get undercloud image expected checksum
+  command: >
+    curl -sf {{url}}.md5
+  register: undercloud_md5_expected
+
+- name: check for undercloud image in cache
+  command: >
+    test -f {{undercloud_md5_expected.stdout.split()[0]}}.qcow2
+  args:
+    chdir: "{{ image_cache_directory }}"
+  ignore_errors: true
+  register: image_exists
+  changed_when: false
+
+- name: get undercloud image
+  command: >
+    curl -sf -C- -o _undercloud.qcow2 {{ url }}
+  args:
+    chdir: "{{ image_cache_directory }}"
+  register: curl_result
+  until: curl_result.rc not in [18, 56]
+  retries: 20
+  delay: 5
+  become: true
+  when: image_exists|failed
+
+- name: get actual md5 checksum of undercloud image
+  command: >
+    md5sum _undercloud.qcow2
+  args:
+    chdir: "{{ image_cache_directory }}"
+  register: undercloud_md5_actual
+  when: image_exists|failed
+
+- name: verify undercloud image checksum
+  fail:
+    msg: undercloud image checksum does not match
+  when: >
+    image_exists|failed and (
+    undercloud_md5_expected.stdout.split()[0] !=
+    undercloud_md5_actual.stdout.split()[0])
+
+- name: cache undercloud image by checksum
+  command: >
+    mv _undercloud.qcow2 {{ undercloud_md5_expected.stdout.split()[0] }}.qcow2
+  args:
+    chdir: "{{ image_cache_directory }}"
+  when: image_exists|failed
+  become: true
+
+- name: get undercloud image from cache
+  command:
+    cp {{ image_cache_directory }}/{{undercloud_md5_expected.stdout.split()[0]}}.qcow2
+    {{ working_dir }}/undercloud.qcow2
+  become: true
+  become_user: "{{ non_root_user }}"
