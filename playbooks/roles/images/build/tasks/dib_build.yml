@@ -20,7 +20,7 @@
   with_items:
     #FIXME(trown) we need a newer diskimage-builder package than what is in the
     #RDO release repo, in the meantime install it from delorean.
-    - http://trunk.rdoproject.org/centos7-liberty/ce/30/ce30250c9e9858aeddb0f65583ceaa8a49fe62b4_a2b13371/diskimage-builder-1.11.1-0.20160217012327.352e58c.el7.centos.noarch.rpm
+    - http://trunk.rdoproject.org/centos7-liberty/ce/30/ce30250c9e9858aeddb0f65583ceaa8a49fe62b4_a2b13371/diskimage-builder-1.11.1-0.20160217003244.352e58c.el7.centos.noarch.rpm
     - instack-undercloud
     - openstack-heat-templates
     - openstack-tripleo-image-elements
