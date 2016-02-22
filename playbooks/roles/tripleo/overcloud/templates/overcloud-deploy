@@ -3,7 +3,7 @@
 
 set -eux
 
-source stackrc
+source {{ working_dir }}/stackrc
 
 while true; do
     count=$(openstack hypervisor stats show -c count -f value)
@@ -12,7 +12,7 @@ while true; do
     fi
 done
 
-{% if pingtest %}
+{% if test_ping %}
 DEPLOY_ENV_YAML=/tmp/deploy_env.yaml
 
 # Set most service workers to 1 to minimise memory usage on
@@ -39,6 +39,5 @@ parameter_defaults:
 EOENV
 {% endif %}
 
-openstack overcloud deploy --templates {{ deploy_args }} \
+exec openstack overcloud deploy --templates {{ deploy_args }} \
     ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML}
-

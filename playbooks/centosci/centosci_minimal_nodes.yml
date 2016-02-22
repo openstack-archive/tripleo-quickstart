@@ -1,7 +1,6 @@
 default_disk: 50
 
 undercloud_memory: 16384
-undercloud_vcpu: 4
 
 control_memory: 8192
 compute_memory: 8192

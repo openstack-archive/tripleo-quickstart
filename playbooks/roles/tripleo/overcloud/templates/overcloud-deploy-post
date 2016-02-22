@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eux
+source {{ working_dir }}/overcloudrc
+openstack role create heat_stack_owner
+openstack role add --project admin --user admin heat_stack_owner

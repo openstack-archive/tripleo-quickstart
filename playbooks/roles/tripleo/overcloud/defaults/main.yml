@@ -1,25 +1,14 @@
-undercloud_config_file: undercloud.conf
-
-install_script: undercloud-install
-install_log: "{{ working_dir }}/undercloud_install.log"
 deploy_script: overcloud-deploy
 deploy_log: "{{ working_dir }}/overcloud_deploy.log"
+post_deploy_script: overcloud-deploy-post
+post_deploy_log: "{{ working_dir }}/overcloud_deploy_post.log"
 validate_script: overcloud-validate
 validate_log: "{{ working_dir }}/overcloud_validate.log"
-
-local_working_dir: ~/.quickstart
-working_dir: /home/stack
 
 floating_ip_cidr: "192.0.2.0/24"
 floating_ip_start: 192.0.2.100
 floating_ip_end: 192.0.2.120
 external_network_gateway: 192.0.2.1
-
-introspect: true
-tempest: true
-pingtest: false
-
-bash_deploy_ramdisk: false
 
 deploy_timeout: 60
 extra_args: ""
@@ -52,6 +41,7 @@ deploy_args: >-
   {{ timeout_args }}
   {{ extra_args }}
 
-step_install_undercloud: true
 step_deploy_overcloud: true
 step_validate_overcloud: true
+test_tempest: true
+test_ping: false

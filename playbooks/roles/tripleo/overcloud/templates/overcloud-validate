@@ -1,0 +1,14 @@
+#!/bin/bash
+# Validate the overcloud deployment
+
+set -eux
+
+{% if test_ping|bool %}
+{% include 'tripleo-pingtest' %}
+{% endif %}
+
+{% if test_tempest|bool %}
+{% include 'configure-tempest' %}
+
+{% include 'run-tempest' %}
+{% endif %}

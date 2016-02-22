@@ -1,6 +1,11 @@
-set -eux
+#
+# configure-tempest
+#
 
 source {{ working_dir }}/overcloudrc
+
+# clean up network if it exists from previous run
+neutron net-delete nova > /dev/null 2>&1 || true
 
 neutron net-create nova --router:external=True \
     --provider:network_type flat \
@@ -8,12 +13,14 @@ neutron net-create nova --router:external=True \
 
 public_net_id=$(neutron net-show nova -f value -c id)
 
-neutron subnet-create --name ext-subnet --allocation-pool start={{ floating_ip_start }},end={{ floating_ip_end }} --disable-dhcp --gateway {{ external_network_gateway }} nova {{ floating_ip_cidr }}
+neutron subnet-create --name ext-subnet \
+	--allocation-pool \
+	start={{ floating_ip_start }},end={{ floating_ip_end }} \
+	--disable-dhcp \
+	--gateway {{ external_network_gateway }} \
+	nova {{ floating_ip_cidr }}
 
-# This should probably be done on deploy
-openstack role create heat_stack_owner
-openstack role add --project admin --user admin heat_stack_owner
-
+rm -rf {{ working_dir }}/tempest
 mkdir {{ working_dir }}/tempest
 cd {{ working_dir }}/tempest
 
