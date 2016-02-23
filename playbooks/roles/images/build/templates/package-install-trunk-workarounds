@@ -1,0 +1,33 @@
+#!/bin/bash
+# virt-customize script to install packages in the overcloud base image
+
+set -eux
+
+yum install -y {% for package in overcloud_packages %} {{ package }} {% endfor %}
+
+
+# Trunk Workarounds
+###################
+
+yum install -y unzip
+
+# https://review.openstack.org/#/c/278137/
+pushd /usr/share/instack-undercloud
+curl -o patch1.zip https://review.openstack.org/changes/278137/revisions/6f54ffae10eb06f53f563aee1099be0a5b2786ea/patch?zip
+unzip patch1.zip
+patch -p2 < 6f54ffae.diff
+popd
+
+
+# https://review.openstack.org/#/c/278134 and https://review.openstack.org/#/c/279184
+pushd /usr/share/openstack-tripleo-heat-templates
+
+curl -o patch1.zip https://review.openstack.org/changes/278134/revisions/8c6943e898453b3e6fb05c1d238301bdb7d0fef5/patch?zip
+unzip patch1.zip
+patch -p1 < 8c6943e8.diff
+
+curl -o patch2.zip https://review.openstack.org/changes/279184/revisions/ab068a824ed51e78bf111387223e58e885ec5c84/patch?zip
+unzip patch2.zip
+patch -p1 < ab068a82.diff
+
+popd
