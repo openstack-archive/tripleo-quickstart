@@ -3,6 +3,10 @@
 
 set -eux
 
+{% for var in (undercloud_env_vars|default([])) %}
+export {{ var }}
+{% endfor %}
+
 openstack undercloud install
 
 source {{ working_dir }}/stackrc
