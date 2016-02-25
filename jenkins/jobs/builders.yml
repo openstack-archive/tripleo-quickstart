@@ -36,7 +36,7 @@
 
               # tripleo-quickstart requires Ansible 2.0
               pip uninstall -y ansible
-              pip install ansible
+              pip install ansible==2.0.0
 
               # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
               pip install -e tripleo-quickstart
@@ -47,8 +47,7 @@
 
               pushd khaleesi
               ansible --version
-              cat ansible.cfg
-              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
+              $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
               --extra-vars virthost=$VIRTHOST \
               --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
               --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2" \
@@ -110,7 +109,7 @@
 
               # tripleo-quickstart requires Ansible 2.0
               pip uninstall -y ansible
-              pip install ansible
+              pip install ansible==2.0.0
 
               # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
               pip install -e tripleo-quickstart
@@ -121,8 +120,7 @@
 
               pushd khaleesi
               ansible --version
-              cat ansible.cfg
-              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
+              $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
               --extra-vars virthost=$VIRTHOST \
               --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
               --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2"
@@ -180,7 +178,7 @@
 
               # tripleo-quickstart requires Ansible 2.0
               pip uninstall -y ansible
-              pip install ansible
+              pip install ansible==2.0.0
 
               # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
               pip install -e tripleo-quickstart
@@ -191,8 +189,7 @@
 
               pushd khaleesi
               ansible --version
-              cat ansible.cfg
-              $anscmd -i hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
+              $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
               --extra-vars virthost=$VIRTHOST \
               --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
               --extra-vars url="file:///tmp/oooq-images/undercloud.qcow2" \

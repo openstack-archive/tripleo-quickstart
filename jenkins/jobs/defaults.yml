@@ -73,7 +73,7 @@
                       - compare-type: 'REG_EXP'
                         pattern: 'playbooks/centosci/minimal.yml'
                       - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/roles/(libvirt|nodes|overcloud|provision|rebuild-inventory)/.*'
+                        pattern: 'playbooks/roles/(libvirt|nodes|overcloud|provision|rebuild-inventory|tripleo)/.*'
             skip-vote:
                 successful: false
                 failed: false
