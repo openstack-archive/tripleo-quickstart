@@ -8,18 +8,18 @@ minimal_overwrite_existing: no
 base_os: centos7
 release: mitaka
 build_system: delorean
-repo_script: "repo-{{ base_os }}-{{ release }}-{{ build_system }}"
+repo_script: "repo-{{ base_os }}-{{ release }}-{{ build_system }}.sh.j2"
 
 # package_install vars
 overcloud_base_image_url: "file:///{{ working_dir }}/minimal-base.qcow2"
 overcloud_overwrite_existing: no
-package_install_script: package-install-default
+package_install_script: package-install-default.sh.j2
 overcloud_package_list: default_package_list.yml
 
 # convert_undercloud vars
 undercloud_base_image_url: "file:///{{ working_dir }}/overcloud-base.qcow2"
 undercloud_overwrite_existing: no
-undercloud_convert_script: undercloud-convert-default
+undercloud_convert_script: undercloud-convert-default.sh.j2
 undercloud_disk_size: 40
 virt_customize_ram: 28000
 virt_customize_cpu: 4
@@ -35,7 +35,7 @@ undercloud_selinux_permissive: true
 # dib_build vars
 remove_epel: true
 dib_workarounds: true
-dib_workaround_script: dib-workaround-default
+dib_workaround_script: dib-workaround-default.sh.j2
 dib_elements_path: /usr/share/tripleo-image-elements:/usr/share/tripleo-puppet-elements:/usr/share/instack-undercloud/:/usr/share/openstack-heat-templates/software-config/elements/
 
 # undercloud_inject vars

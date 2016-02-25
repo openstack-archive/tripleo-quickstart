@@ -3,7 +3,7 @@
     - overcloud-deploy
   template:
     src: "{{ deploy_script }}"
-    dest: "{{ working_dir }}"
+    dest: "{{ working_dir }}/overcloud-deploy.sh"
     mode: 0744
 
 - name: Create overcloud validate script
@@ -11,29 +11,29 @@
     - overcloud-validate
   template:
     src: "{{ validate_script }}"
-    dest: "{{ working_dir }}"
+    dest: "{{ working_dir }}/overcloud-validate.sh"
     mode: 0744
 
 - name: Create overcloud status script
   template:
-    src: overcloud-status
-    dest: "{{ working_dir }}"
+    src: overcloud-status.sh.j2
+    dest: "{{ working_dir }}/overcloud-status.sh"
     mode: 0744
 
 - name: Create tempest skipfile
   tags:
     - overcloud-validate
   template:
-    src: skipfile
-    dest: "{{ working_dir }}"
+    src: skipfile.j2
+    dest: "{{ working_dir }}/skipfile"
     mode: 0644
 
 - name: Create tempest run script
   tags:
     - overcloud-validate
   template:
-    src: run-tempest
-    dest: "{{ working_dir }}"
+    src: run-tempest.sh.j2
+    dest: "{{ working_dir }}/run-tempest.sh"
     mode: 0744
 
 - name: Create post-deploy script
@@ -41,14 +41,14 @@
     - overcloud-post-deploy
   template:
     src: "{{ post_deploy_script }}"
-    dest: "{{ working_dir }}"
+    dest: "{{ working_dir }}/overcloud-deploy-post.sh"
     mode: 0744
 
 - name: Deploy the overcloud
   tags:
     - overcloud-deploy
   shell: |
-    {{ working_dir }}/{{ deploy_script }} > {{ deploy_log }} 2>&1
+    {{ working_dir }}/overcloud-deploy.sh > {{ deploy_log }} 2>&1
   when: step_deploy_overcloud
 
 - name: Check overcloud deploy status
@@ -64,12 +64,12 @@
   tags:
     - overcloud-post-deploy
   shell: |
-    {{ working_dir }}/{{ post_deploy_script }} \
+    {{ working_dir }}/overcloud-deploy-post.sh \
       > {{ post_deploy_log }} 2>&1
 
 - name: Validate the overcloud
   tags:
     - overcloud-validate
   shell: |
-    {{ working_dir }}/{{ validate_script }} > {{ validate_log }} 2>&1
+    {{ working_dir }}/overcloud-validate.sh > {{ validate_log }} 2>&1
   when: step_validate_overcloud

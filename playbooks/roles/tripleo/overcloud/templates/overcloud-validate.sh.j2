@@ -4,11 +4,11 @@
 set -eux
 
 {% if test_ping|bool %}
-{% include 'tripleo-pingtest' %}
+{% include 'tripleo-pingtest.sh.j2' %}
 {% endif %}
 
 {% if test_tempest|bool %}
-{% include 'configure-tempest' %}
+{% include 'configure-tempest.sh.j2' %}
 
-{% include 'run-tempest' %}
+{% include 'run-tempest.sh.j2' %}
 {% endif %}

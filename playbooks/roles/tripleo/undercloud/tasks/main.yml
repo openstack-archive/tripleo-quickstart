@@ -7,10 +7,10 @@
 - name: Create undercloud install script
   template:
     src: "{{ install_script }}"
-    dest: "{{ working_dir }}"
+    dest: "{{ working_dir }}/undercloud-install.sh"
     mode: 0744
 
 - name: Install the undercloud
   shell: |
-    {{ working_dir }}/{{ install_script }} > {{ install_log }} 2>&1
+    {{ working_dir }}/undercloud-install.sh > {{ install_log }} 2>&1
   when: step_install_undercloud

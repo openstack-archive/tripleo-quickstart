@@ -1,5 +1,5 @@
-undercloud_config_file: undercloud.conf
-install_script: undercloud-install
+undercloud_config_file: undercloud.conf.j2
+install_script: undercloud-install.sh.j2
 install_log: "{{ working_dir }}/undercloud_install.log"
 
 step_introspect: false
