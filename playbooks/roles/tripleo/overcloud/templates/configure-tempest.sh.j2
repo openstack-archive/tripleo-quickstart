@@ -14,11 +14,11 @@ neutron net-create nova --router:external=True \
 public_net_id=$(neutron net-show nova -f value -c id)
 
 neutron subnet-create --name ext-subnet \
-	--allocation-pool \
-	start={{ floating_ip_start }},end={{ floating_ip_end }} \
-	--disable-dhcp \
-	--gateway {{ external_network_gateway }} \
-	nova {{ floating_ip_cidr }}
+    --allocation-pool \
+    start={{ floating_ip_start }},end={{ floating_ip_end }} \
+    --disable-dhcp \
+    --gateway {{ external_network_gateway }} \
+    nova {{ floating_ip_cidr }}
 
 rm -rf {{ working_dir }}/tempest
 mkdir {{ working_dir }}/tempest

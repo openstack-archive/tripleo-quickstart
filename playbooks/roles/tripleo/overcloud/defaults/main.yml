@@ -1,8 +1,8 @@
-deploy_script: overcloud-deploy
+deploy_script: overcloud-deploy.sh.j2
 deploy_log: "{{ working_dir }}/overcloud_deploy.log"
-post_deploy_script: overcloud-deploy-post
+post_deploy_script: overcloud-deploy-post.sh.j2
 post_deploy_log: "{{ working_dir }}/overcloud_deploy_post.log"
-validate_script: overcloud-validate
+validate_script: overcloud-validate.sh.j2
 validate_log: "{{ working_dir }}/overcloud_validate.log"
 
 floating_ip_cidr: "192.0.2.0/24"

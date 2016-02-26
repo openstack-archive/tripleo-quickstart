@@ -3,11 +3,11 @@
 - name: Template script with workarounds for overcloud-full image
   template:
     src: "{{ dib_workaround_script }}"
-    dest: "{{ working_dir }}"
+    dest: "{{ working_dir }}/dib-workaround.sh"
 
 - name: DIB workarounds
   shell:
-    "virt-customize -m {{ virt_customize_ram }} --smp {{ virt_customize_cpu }} -a {{ working_dir }}/overcloud-base.qcow2 --run {{ working_dir }}/{{ dib_workaround_script }}"
+    "virt-customize -m {{ virt_customize_ram }} --smp {{ virt_customize_cpu }} -a {{ working_dir }}/overcloud-base.qcow2 --run {{ working_dir }}/dib-workaround.sh"
   environment:
     LIBGUESTFS_BACKEND: direct
   when: dib_workarounds
