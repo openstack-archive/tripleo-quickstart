@@ -1,4 +1,9 @@
-- name: Create the working directory if it doesn't exist
+- name: Delete prior working directory if present
+  file:
+    path: "{{ working_dir }}"
+    state: absent
+
+- name: Create the working directory
   file:
     path: "{{ working_dir }}"
     state: directory
