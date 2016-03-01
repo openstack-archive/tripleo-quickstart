@@ -37,6 +37,31 @@
     rm -f /usr/share/diskimage-builder/elements/base/install.d/99-dkms
   when: remove_epel
 
+# remove "Defaults requiretty" from sudoers
+- name: ensure we can sudo without requiring tty for async tasks
+  lineinfile: dest=/etc/sudoers line='#Defaults requiretty' regexp='^Defaults\s+requiretty' backup=yes
+  become: true
+
+- name: Build the ironic-python-agent ramdisk
+  shell: |
+    disk-image-create \
+    -a amd64 \
+    -o {{ working_dir }}/ironic-python-agent \
+    centos7 \
+    dhcp-all-interfaces \
+    dynamic-login \
+    selinux-permissive \
+    pip-and-virtualenv-override \
+    ironic-agent \
+    --min-tmpfs 5 2>&1 | tee {{ working_dir }}/dib-agent-ramdisk.log
+  environment:
+    DIB_LOCAL_IMAGE: "{{ working_dir }}/minimal-base.qcow2"
+    DIB_DEFAULT_INSTALLTYPE: package
+    ELEMENTS_PATH: "{{ dib_elements_path }}"
+  async: 3600
+  poll: 0
+  register: done_build_ironic
+
 - name: Build overcloud-full image
   shell: |
     disk-image-create \
@@ -67,19 +92,9 @@
 # https://bugs.launchpad.net/tripleo/+bug/1447497
     DIB_CLOUD_INIT_ETC_HOSTS: ''
 
-- name: Build the ironic-python-agent ramdisk
-  shell: |
-    disk-image-create \
-    -a amd64 \
-    -o {{ working_dir }}/ironic-python-agent \
-    centos7 \
-    dhcp-all-interfaces \
-    dynamic-login \
-    selinux-permissive \
-    pip-and-virtualenv-override \
-    ironic-agent \
-    --min-tmpfs 5 2>&1 | tee {{ working_dir }}/dib-agent-ramdisk.log
-  environment:
-    DIB_LOCAL_IMAGE: "{{ working_dir }}/minimal-base.qcow2"
-    DIB_DEFAULT_INSTALLTYPE: package
-    ELEMENTS_PATH: "{{ dib_elements_path }}"
+- name: Async_Poll --> Wait for ironic task completion
+  async_status: jid={{ done_build_ironic.ansible_job_id }}
+  register: job_result
+  until: job_result.finished
+  retries: 720
+  delay: 5
