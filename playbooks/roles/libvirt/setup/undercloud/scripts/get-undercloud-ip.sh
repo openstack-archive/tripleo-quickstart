@@ -11,4 +11,9 @@ mac=$(sudo virsh dumpxml $vm | grep "mac address" | head -1 | awk -F "'" '{ prin
 
 ip=$(ip neigh | grep $mac | awk '{print $1;}')
 
-echo -en $ip
+if [ -z "$ip" ]; then
+	echo "undercloud ip is not available" >&2
+	exit 1
+fi
+
+echo $ip

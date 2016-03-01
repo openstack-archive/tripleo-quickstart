@@ -91,14 +91,14 @@
 - name: get undercloud vm ip address
   script: "scripts/get-undercloud-ip.sh {{ undercloud_nodes[0].name }}"
   register: undercloud_vm_ip_result
-  until: undercloud_vm_ip_result.stdout != ''
+  until: undercloud_vm_ip_result|success
   retries: 12
   delay: 10
   become: true
 
 - name: set_fact for undercloud ip
   set_fact:
-    undercloud_ip: "{{ undercloud_vm_ip_result.stdout }}"
+    undercloud_ip: "{{ undercloud_vm_ip_result.stdout_lines[0] }}"
 
 - name: wait until ssh is available on undercloud node
   wait_for:
