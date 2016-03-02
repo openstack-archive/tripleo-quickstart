@@ -8,10 +8,12 @@
 
 - name: Compress undercloud image
   shell: |
-    virt-sparsify --tmp {{ working_dir }} --check-tmpdir fail --compress {{ working_dir }}/undercloud-base.qcow2 {{ working_dir }}/undercloud.qcow2;
-    md5sum {{ working_dir }}/undercloud.qcow2 > {{ working_dir }}/undercloud.qcow2.md5
+    virt-sparsify --tmp {{ working_dir }} --check-tmpdir fail --compress undercloud-base.qcow2 undercloud.qcow2;
+    md5sum undercloud.qcow2 > undercloud.qcow2.md5
   environment:
     LIBGUESTFS_BACKEND: direct
+  args:
+    chdir: "{{ working_dir }}"
 
 - name: Tar overcloud-full image files
   shell: |
