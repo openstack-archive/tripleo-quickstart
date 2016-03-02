@@ -1,6 +1,6 @@
 # These defaults are used if there are no flavor-specific
 # overrides configured.
-default_disk: 40
+default_disk: 50
 default_memory: 4096
 default_vcpu: 1
 
