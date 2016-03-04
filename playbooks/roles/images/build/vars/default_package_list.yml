@@ -77,6 +77,7 @@ overcloud_packages:
   - pcs
   - pystache
   - python-gnocchiclient
+  - python-ipaddr
   - python-libguestfs
   - python-openvswitch
   - python-pip
