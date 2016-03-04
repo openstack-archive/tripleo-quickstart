@@ -15,4 +15,5 @@ glance image-list |
 rm -rf tripleo-common
 git clone https://github.com/openstack/tripleo-common.git
 pushd tripleo-common
+git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/11/288511/2 && git checkout FETCH_HEAD
 ./scripts/tripleo.sh --overcloud-pingtest
