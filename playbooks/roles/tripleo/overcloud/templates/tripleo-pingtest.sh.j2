@@ -15,5 +15,8 @@ glance image-list |
 rm -rf tripleo-common
 git clone https://github.com/openstack/tripleo-common.git
 pushd tripleo-common
-git fetch https://review.openstack.org/openstack/tripleo-common refs/changes/11/288511/2 && git checkout FETCH_HEAD
-./scripts/tripleo.sh --overcloud-pingtest
+
+# We need to use a yes hack here because mitaka heatclient introduced a
+# confirmation prompt, but it is not there in liberty.
+# openstack/python-heatclient/commit/4f4575565cf0f93781f4fb273ad65342536c33c2
+yes | ./scripts/tripleo.sh --overcloud-pingtest
