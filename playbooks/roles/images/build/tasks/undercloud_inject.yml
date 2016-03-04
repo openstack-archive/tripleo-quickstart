@@ -1,14 +1,18 @@
 ---
 - name: Inject overcloud images into undercloud image
-  shell:
-    "virt-customize -m {{ virt_customize_ram }} --smp {{ virt_customize_cpu }} -a {{ working_dir }}/undercloud-base.qcow2 --upload {{ working_dir }}/{{ item }}:/home/stack"
+  shell: >
+    virt-customize -m {{ virt_customize_ram }}
+    --smp {{ virt_customize_cpu }}
+    -a {{ working_dir }}/undercloud-base.qcow2
+    --upload {{ working_dir }}/{{ item }}:/home/stack
   environment:
     LIBGUESTFS_BACKEND: direct
   with_items: "{{ overcloud_images }}"
 
 - name: Compress undercloud image
   shell: |
-    virt-sparsify --tmp {{ working_dir }} --check-tmpdir fail --compress undercloud-base.qcow2 undercloud.qcow2;
+    virt-sparsify --tmp {{ working_dir }} --check-tmpdir fail \
+      --compress undercloud-base.qcow2 undercloud.qcow2
     md5sum undercloud.qcow2 > undercloud.qcow2.md5
   environment:
     LIBGUESTFS_BACKEND: direct
@@ -17,14 +21,14 @@
 
 - name: Tar overcloud-full image files
   shell: |
-    tar -cf overcloud-full.tar overcloud-full*;
+    tar -cf overcloud-full.tar overcloud-full*
     md5sum overcloud-full.tar > overcloud-full.tar.md5
   args:
     chdir: "{{ working_dir }}"
 
 - name: Tar agent ramdisk files
   shell: |
-    tar -cf ironic-python-agent.tar ironic-python-agent*;
+    tar -cf ironic-python-agent.tar ironic-python-agent*
     md5sum ironic-python-agent.tar > ironic-python-agent.tar.md5
   args:
     chdir: "{{ working_dir }}"

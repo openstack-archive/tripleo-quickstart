@@ -13,7 +13,10 @@
     dest: "{{ working_dir }}/package-install.sh"
 
 - name: Install the packages in the overcloud image using virt-customize
-  shell:
-    "virt-customize -m {{ virt_customize_ram }} --smp {{ virt_customize_cpu }} -a {{ working_dir }}/overcloud-base.qcow2 --run {{ working_dir }}/package-install.sh"
+  shell: >
+    virt-customize -m {{ virt_customize_ram }}
+    --smp {{ virt_customize_cpu }}
+    -a {{ working_dir }}/overcloud-base.qcow2
+    --run {{ working_dir }}/package-install.sh
   environment:
     LIBGUESTFS_BACKEND: direct
