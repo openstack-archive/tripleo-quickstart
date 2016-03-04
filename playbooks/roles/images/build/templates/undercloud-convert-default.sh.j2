@@ -19,7 +19,6 @@ echo "127.0.0.1  localhost undercloud" > /etc/hosts
 echo "HOSTNAME=undercloud" >> /etc/sysconfig/network
 echo "undercloud" > /etc/hostname
 
-cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf
 chown -R stack:stack /home/stack/
 
 {% if undercloud_selinux_permissive %}
