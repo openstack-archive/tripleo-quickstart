@@ -43,7 +43,10 @@
     dest: "{{ working_dir }}/undercloud-convert.sh"
 
 - name: Convert the overcloud image to an undercloud image
-  shell:
-    "virt-customize -m {{ virt_customize_ram }} --smp {{ virt_customize_cpu }} -a {{ working_dir }}/undercloud-base.qcow2 --run {{ working_dir }}/undercloud-convert.sh"
+  shell: >
+    virt-customize -m {{ virt_customize_ram }}
+    --smp {{ virt_customize_cpu }}
+    -a {{ working_dir }}/undercloud-base.qcow2
+    --run {{ working_dir }}/undercloud-convert.sh
   environment:
     LIBGUESTFS_BACKEND: direct

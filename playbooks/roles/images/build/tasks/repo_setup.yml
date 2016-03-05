@@ -11,7 +11,10 @@
     dest: "{{ working_dir }}/repo_setup.sh"
 
 - name: Setup repos in the base image using virt-customize
-  shell:
-    "virt-customize -m {{ virt_customize_ram }} --smp {{ virt_customize_cpu }} -a {{ working_dir }}/minimal-base.qcow2 --run {{ working_dir }}/repo_setup.sh"
+  shell: >
+    virt-customize -m {{ virt_customize_ram }}
+    --smp {{ virt_customize_cpu }}
+    -a {{ working_dir }}/minimal-base.qcow2
+    --run {{ working_dir }}/repo_setup.sh
   environment:
     LIBGUESTFS_BACKEND: direct
