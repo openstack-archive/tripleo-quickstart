@@ -35,7 +35,7 @@ usage () {
     echo "    --system-site-packages"
     echo "    --ansible-debug"
     echo "    --bootstrap"
-    echo "    --workdir-dir"
+    echo "    --working-dir"
     echo "    --undercloud-image-url"
 }
 
