@@ -4,22 +4,30 @@
 : ${OPT_SYSTEM_PACKAGES:=0}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 
+# Install commands before using them.
+ensure_command() {
+    command -v $1 || yum -y install /usr/bin/$1
+}
+
 # This creates a Python virtual environment and installs
 # tripleo-quickstart into that environment.  It only runs if
 # the local working directory does not exist, or if explicitly
 # requested via --bootstrap.
 bootstrap () {
+    ensure_command virtualenv
     virtualenv $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" ) $OPT_WORKDIR
     . $OPT_WORKDIR/bin/activate
 
     if ! [ -d "$OPT_WORKDIR/tripleo-quickstart" ]; then
         echo "Cloning tripleo-quickstart repository..."
+        ensure_command git
         git clone https://github.com/redhat-openstack/tripleo-quickstart.git \
             $OPT_WORKDIR/tripleo-quickstart
     fi
 
     (
     cd $OPT_WORKDIR/tripleo-quickstart
+    ensure_command pip
     pip install -r requirements.txt
     python setup.py install
     )
