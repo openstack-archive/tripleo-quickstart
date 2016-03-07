@@ -1,6 +1,6 @@
 - name: Create overcloud deploy script
   tags:
-    - overcloud-deploy
+    - overcloud-scripts
   template:
     src: "{{ deploy_script }}"
     dest: "{{ working_dir }}/overcloud-deploy.sh"
@@ -8,21 +8,15 @@
 
 - name: Create overcloud validate script
   tags:
-    - overcloud-validate
+    - overcloud-scripts
   template:
     src: "{{ validate_script }}"
     dest: "{{ working_dir }}/overcloud-validate.sh"
     mode: 0744
 
-- name: Create overcloud status script
-  template:
-    src: overcloud-status.sh.j2
-    dest: "{{ working_dir }}/overcloud-status.sh"
-    mode: 0744
-
 - name: Create tempest skipfile
   tags:
-    - overcloud-validate
+    - overcloud-scripts
   template:
     src: skipfile.j2
     dest: "{{ working_dir }}/skipfile"
@@ -30,7 +24,7 @@
 
 - name: Create tempest run script
   tags:
-    - overcloud-validate
+    - overcloud-scripts
   template:
     src: run-tempest.sh.j2
     dest: "{{ working_dir }}/run-tempest.sh"
@@ -38,7 +32,7 @@
 
 - name: Create post-deploy script
   tags:
-    - overcloud-post-deploy
+    - overcloud-scripts
   template:
     src: "{{ post_deploy_script }}"
     dest: "{{ working_dir }}/overcloud-deploy-post.sh"

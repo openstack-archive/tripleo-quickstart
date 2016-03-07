@@ -1,16 +1,39 @@
 - name: Create undercloud configuration
+  tags:
+    - undercloud-scripts
   template:
     src: "{{ undercloud_config_file }}"
     dest: "./undercloud.conf"
     mode: 0600
 
 - name: Create undercloud install script
+  tags:
+    - undercloud-scripts
   template:
-    src: "{{ install_script }}"
+    src: "{{ undercloud_install_script }}"
     dest: "{{ working_dir }}/undercloud-install.sh"
     mode: 0744
 
+- name: Create undercloud post-install script
+  tags:
+    - undercloud-scripts
+  template:
+    src: "{{ undercloud_post_install_script }}"
+    dest: "{{ working_dir }}/undercloud-post-install.sh"
+    mode: 0744
+
 - name: Install the undercloud
+  tags:
+    - undercloud-install
   shell: |
-    {{ working_dir }}/undercloud-install.sh > {{ install_log }} 2>&1
+    {{ working_dir }}/undercloud-install.sh > \
+    {{ undercloud_install_log }} 2>&1
+  when: step_install_undercloud
+
+- name: Prepare the undercloud for deploy
+  tags:
+    - undercloud-post-install
+  shell: |
+    {{ working_dir }}/undercloud-post-install.sh > \
+    {{ undercloud_post_install_log }} 2>&1
   when: step_install_undercloud

@@ -1,8 +1,11 @@
 #!/bin/bash
 
+DEFAULT_OPT_TAGS="untagged,undercloud-scripts,overcloud-scripts"
+
 : ${OPT_BOOTSTRAP:=0}
 : ${OPT_SYSTEM_PACKAGES:=0}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
+: ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 
 # Install commands before using them.
 ensure_command() {
@@ -45,6 +48,7 @@ usage () {
     echo "    --bootstrap"
     echo "    --working-dir"
     echo "    --undercloud-image-url"
+    echo "    --tags"
 }
 
 while [ "x$1" != "x" ]; do
@@ -69,6 +73,11 @@ while [ "x$1" != "x" ]; do
 
         --undercloud-image-url|-u)
             OPT_UNDERCLOUD_URL=$2
+            shift
+            ;;
+
+        --tags|-t)
+            OPT_TAGS=$2
             shift
             ;;
 
@@ -135,11 +144,6 @@ OPT_WORKDIR=$(cd $OPT_WORKDIR && pwd)
 export ANSIBLE_CONFIG=$OPT_WORKDIR/tripleo-quickstart/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
 
-if ! grep -q ssh_args $OPT_WORKDIR/ssh.config.ansible; then
-    echo "Setting ssh_args..."
-    echo "ssh_args = -F $OPT_WORKDIR/ssh.config.ansible" >> $ANSIBLE_CONFIG
-fi
-
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
     VERBOSITY=vvvv
 else
@@ -149,9 +153,15 @@ fi
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
     -e url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
-    -e virthost=$VIRTHOST
+    -e virthost=$VIRTHOST \
+    -t $OPT_TAGS
+
+# We only print out further usage instructions when using the default
+# tags, since this is for new users (and not even applicable to some tags).
 
 set +x
+
+if [ $OPT_TAGS = $DEFAULT_OPT_TAGS ] ; then
 
 cat <<EOF
 ##################################
@@ -160,14 +170,29 @@ Virtual Environment Setup Complete
 
 Access the undercloud by:
 
-  ssh -F $OPT_WORKDIR/ssh.config.ansible undercloud
+    ssh -F $OPT_WORKDIR/ssh.config.ansible undercloud
 
-Then continue the undercloud install with:
+There are scripts in the home directory to continue the deploy:
 
-  openstack undercloud install
-  source stackrc
+    undercloud-install.sh will run the undercloud install
+    undercloud-install.post.sh will perform all pre-deploy steps
+    overcloud-deploy.sh will deploy the overcloud
+    overcloud-deploy-post.sh will do any post-deploy configuration
+    overcloud-validate.sh will run post-deploy validation
+
+Alternatively, you can ignore these scripts and follow the upstream docs:
+
+First:
+
+    openstack undercloud install
+    source stackrc
+
+Then continue with the instructions (limit content using dropdown on the left):
+
+    http://ow.ly/Ze8nK
 
 ##################################
 Virtual Environment Setup Complete
 ##################################
 EOF
+fi

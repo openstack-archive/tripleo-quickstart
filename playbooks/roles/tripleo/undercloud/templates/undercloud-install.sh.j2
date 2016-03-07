@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prepare the undercloud for deploy
+# Run the undercloud install
 
 set -eux
 
@@ -8,41 +8,3 @@ export {{ var }}
 {% endfor %}
 
 openstack undercloud install
-
-source {{ working_dir }}/stackrc
-
-openstack overcloud image upload \
-    {% if bash_deploy_ramdisk %}--old-deploy-image{% endif %}
-
-openstack baremetal import --json instackenv.json
-openstack baremetal configure boot
-
-{% if step_introspect %}
-openstack baremetal introspection bulk start
-{% endif %}
-
-{% for name, flavor in (flavors|default({})).items() if name != 'undercloud' %}
-#
-# Create flavor oooq_{{name}}
-#
-
-# remove flavor before attempting to create
-openstack flavor delete oooq_{{ name }} > /dev/null 2>&1 || true
-
-# We subtract 1 from the total disk size here to resolve problems
-# encountered in CI in which the available disk space on the virtual
-# nodes was slightly less than what we requested.
-openstack flavor create --id auto \
-    --ram {{flavor.memory}} \
-    --disk $(( {{flavor.disk}} - 1)) \
-    --vcpus {{flavor.vcpu}} \
-    oooq_{{ name }}
-openstack flavor set \
-    --property "cpu_arch"="x86_64" \
-    --property "capabilities:boot_option"="local" \
-    --property "capabilities:profile"="oooq_{{ name }}" oooq_{{ name }}
-{% for propname,propval in (flavor.properties|default({})).items() %}
-openstack flavor set --property "{{propname}}={{propval}}" oooq_{{ name }}
-{% endfor %}
-
-{% endfor %}
