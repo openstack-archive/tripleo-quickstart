@@ -1,7 +1,7 @@
 - name: get a list of MACs to use
   generate_macs:
     nodes: "{{ overcloud_nodes }}"
-    bridges: "{{ networks.bridges }}"
+    networks: "{{ networks }}"
   register: node_mac_map
 
 - name: Check if volume_pool exists

@@ -9,7 +9,7 @@
 - name: get MACs for the undercloud
   generate_macs:
     nodes: "{{ undercloud_nodes }}"
-    bridges: "{{ networks.bridges }}"
+    networks: "{{ networks }}"
   register: undercloud_mac_map
 
 - include: fetch_image.yml

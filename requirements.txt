@@ -2,4 +2,4 @@ pbr>=1.6
 # ansible is pretty fragile, so we pin to an exact known good
 # release
 ansible==2.0.0
-
+netaddr>=0.7.18

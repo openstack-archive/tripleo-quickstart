@@ -55,3 +55,25 @@ overcloud_nodes:
 
   - name: ceph_0
     flavor: ceph
+
+# Describe our virtual networks.  These networks will be attached to
+# the undercloud node and to the overcloud nodes (except for the
+# "external" network) in the order in which they are defined.  The
+# playbooks expect to find both an "external" network and a
+# "provision" network.
+external_network_cidr: 192.168.23.1/24
+networks:
+  - name: external
+    bridge: brext
+    forward_mode: nat
+    address: "{{ external_network_cidr|ipaddr('address') }}"
+    netmask: "{{ external_network_cidr|ipaddr('netmask') }}"
+    dhcp_range:
+      - "{{ external_network_cidr|nthhost(10) }}"
+      - "{{ external_network_cidr|nthhost(50) }}"
+    nat_port_range:
+      - 1024
+      - 65535
+
+  - name: provision
+    bridge:  brprov

@@ -1,13 +1,7 @@
 ---
-- name: Delete external network
-  virt_net:
-    name: "{{ networks.external.name }}"
-    state: absent
-  become: true
-
-- name: Delete the bridge networks
+- name: Delete networks
   virt_net:
     name: "{{ item.name }}"
     state: absent
-  with_items: "{{ networks.bridges }}"
+  with_items: "{{ networks }}"
   become: true

@@ -1,42 +1,22 @@
-- name: Create external network
-  virt_net:
-    command: define
-    state: present
-    name: "{{ networks.external.name }}"
-    xml: '{{ lookup("template", "external.xml.j2") }}'
-  become: true
-
-- name: Start external network
-  virt_net:
-    name: "{{ networks.external.name }}"
-    state: active
-  become: true
-
-- name: Mark external network for autostart
-  virt_net:
-    name: "{{ networks.external.name }}"
-    autostart: "yes"
-  become: true
-
-- name: Create the bridge networks
+- name: Create networks
   virt_net:
     command: define
     state: present
     name: "{{ item.name }}"
-    xml: '{{ lookup("template", "bridge.xml.j2") }}'
-  with_items: "{{ networks.bridges }}"
+    xml: '{{ lookup("template", "network.xml.j2") }}'
+  with_items: "{{ networks }}"
   become: true
 
-- name: Start the bridge networks
+- name: Start networks
   virt_net:
     name: "{{ item.name }}"
     state: active
-  with_items: "{{ networks.bridges }}"
+  with_items: "{{ networks }}"
   become: true
 
-- name: Mark the bridge networks for autostart
+- name: Mark networks for autostart
   virt_net:
     name: "{{ item.name }}"
     autostart: "yes"
-  with_items: "{{ networks.bridges }}"
+  with_items: "{{ networks }}"
   become: true

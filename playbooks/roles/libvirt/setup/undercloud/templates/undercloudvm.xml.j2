@@ -28,17 +28,13 @@
       <source file='{{ vms.volume_path }}/{{ item.name }}.qcow2'/>
       <target dev='sda' bus='{{ vms.diskbus }}'/>
     </disk>
-    <interface type='network'>
-      <source network='{{ networks.external.name }}' bridge='{{ networks.external.bridge }}'/>
+{% for network in networks %}
+    <interface type='bridge'>
+      <mac address='{{ undercloud_mac_map.get(item.name).get(network.name) }}'/>
+      <source bridge='{{ network.bridge }}'/>
       <model type='virtio'/>
     </interface>
-  {% for bridge in networks.bridges %}
-    <interface type='network'>
-      <mac address='{{ undercloud_mac_map.get(item.name).get(bridge.name) }}'/>
-      <source network='{{ bridge.name }}'/>
-      <model type='virtio'/>
-    </interface>
-  {% endfor %}
+{% endfor %}
     <serial type='pty'>
       <target port='0'/>
     </serial>

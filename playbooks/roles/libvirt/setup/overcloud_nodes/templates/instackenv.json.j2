@@ -1,3 +1,6 @@
+{% set host_ip = (networks |
+                  selectattr('name', 'equalto', 'external') |
+                  list).0.address %}
 {
   "nodes": [
   {% for node in overcloud_nodes %}
@@ -5,14 +8,14 @@
       "pm_password": "{{ virt_power_private_key_txt.stdout }}",
       "pm_type": "pxe_ssh",
       "mac": [
-        "{{ node_mac_map.get(node.name).get(networks.bridges[0].name) }}"
+        "{{ node_mac_map.get(node.name).get('provision') }}"
       ],
       "cpu": "{{ flavors[node.flavor].vcpu }}",
       "memory": "{{ flavors[node.flavor].memory }}",
       "disk": "{{ flavors[node.flavor].disk }}",
       "arch": "{{ vms.arch }}",
       "pm_user": "{{ virt_power_user }}",
-      "pm_addr": "{{ networks.external.ip }}",
+      "pm_addr": "{{ host_ip }}",
       "capabilities": "profile:oooq_{{ node.flavor }},boot_option:local"
     }
     {% if not loop.last %}
@@ -21,7 +24,7 @@
   {% endfor %}
   ],
   "arch": "{{ vms.arch }}",
-  "host-ip": "{{ networks.external.ip }}",
+  "host-ip": "{{ host_ip }}",
   "power_manager": "{{ nova_power_manager }}",
   "seed-ip": "",
   "ssh-key": "{{ virt_power_private_key_txt.stdout }}",

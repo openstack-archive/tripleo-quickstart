@@ -19,7 +19,7 @@ import random
 MAX_NUM_MACS = math.trunc(0xff/2)
 
 
-def generate_baremetal_macs(nodes, bridges):
+def generate_baremetal_macs(nodes, networks):
     """Generate an Ethernet MAC address suitable for baremetal testing."""
     # NOTE(dprince): We generate our own bare metal MAC address's here
     # instead of relying on libvirt so that we can ensure the
@@ -33,7 +33,7 @@ def generate_baremetal_macs(nodes, bridges):
     # order, which matches how most BM machines are laid out as well.
     # Additionally we increment each MAC by two places.
     macs = []
-    count = len(nodes) * len(bridges)
+    count = len(nodes) * len(networks)
 
     if count > MAX_NUM_MACS:
         raise ValueError("The MAX num of MACS supported is %i." % MAX_NUM_MACS)
@@ -56,8 +56,8 @@ def generate_baremetal_macs(nodes, bridges):
     result = {}
     for node in nodes:
         result[node['name']] = {}
-        for bridge in bridges:
-            result[node['name']][bridge['name']] = macs.pop(0)
+        for network in networks:
+            result[node['name']][network['name']] = macs.pop(0)
 
     return result
 
@@ -66,11 +66,11 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             nodes=dict(required=True),
-            bridges=dict(required=True)
+            networks=dict(required=True)
         )
     )
     result = generate_baremetal_macs(module.params["nodes"],
-                                     module.params["bridges"])
+                                     module.params["networks"])
     module.exit_json(**result)
 
 # see http://docs.ansible.com/developing_modules.html#common-module-boilerplate

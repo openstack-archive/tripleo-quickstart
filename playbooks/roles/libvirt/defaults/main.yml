@@ -6,18 +6,7 @@ virt_power_key: /root/.ssh/id_rsa_virt_power
 virt_power_user: root
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
-networks:
-  bridges:
-    - name: bridget
-  external:
-    name: external
-    port_start: 65435
-    port_end: 65535
-    bridge: extbr
-    ip: 192.168.23.1
-    netmask: 255.255.255.0
-    dhcp_start: 192.168.23.2
-    dhcp_end: 192.168.23.50
+
 vms:
   engine: 'kvm'
   volume_path: /var/lib/libvirt/images/
