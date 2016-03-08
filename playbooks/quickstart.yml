@@ -26,3 +26,10 @@
     ansible_python_interpreter: "/usr/bin/python"
   roles:
     - rebuild-inventory
+
+- name:  Install undercloud and deploy overcloud
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - tripleo/undercloud
+    - tripleo/overcloud
