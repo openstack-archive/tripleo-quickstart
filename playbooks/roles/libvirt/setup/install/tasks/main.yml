@@ -1,11 +1,3 @@
-- name: install release repo
-  yum:
-    name: "{{ release_rpm }}"
-    state: present
-  become: true
-  # This repo is only installed to get openvswitch, which Fedora already has
-  when: ansible_os_family == 'RedHat' and ansible_distribution != 'Fedora'
-
 - name: ensure libvirt and other deps are installed
   package:
     name: "{{ item }}"
@@ -16,14 +8,6 @@
     - libvirt-python
     - python-lxml
     - libguestfs-tools
-    - openvswitch
-  become: true
-
-- name: start openvswitch
-  service:
-    name: openvswitch
-    state: started
-    enabled: true
   become: true
 
 - include: configure_kvm.yml

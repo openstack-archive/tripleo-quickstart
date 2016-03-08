@@ -1,22 +1,8 @@
 ---
-- name: check if bridge exists
-  command: ip link show {{item.name}}
-  with_items: "{{ networks.bridges }}"
-  register: _bridges
-  ignore_errors: true
-
 - name: Delete external network
   virt_net:
     name: "{{ networks.external.name }}"
     state: absent
-  become: true
-
-- name: Delete the OVS bridges
-  openvswitch_bridge:
-    bridge: "{{ item.item.name }}"
-    state: absent
-  with_items: "{{ _bridges.results }}"
-  when: item|success
   become: true
 
 - name: Delete the bridge networks
