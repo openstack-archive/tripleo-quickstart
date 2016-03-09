@@ -62,6 +62,7 @@ usage () {
     echo "    --working-dir <directory>"
     echo "    --undercloud-image-url <url>"
     echo "    --tags <tag1>[,<tag2>,...]"
+    echo "    --config <file>"
 }
 
 while [ "x$1" != "x" ]; do
@@ -105,6 +106,11 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
+        --config|-c)
+            OPT_CONFIG=$2
+            shift
+            ;;
+
         --help|-h)
             usage
             exit
@@ -125,6 +131,10 @@ while [ "x$1" != "x" ]; do
 
     shift
 done
+
+# Set this default after option processing, because the default depends
+# on another option.
+: ${OPT_CONFIG:=$OPT_WORKDIR/tripleo-quickstart/playbooks/centosci/minimal.yml}
 
 if [ "$OPT_INSTALL_DEPS" = 1 ]; then
     echo "NOTICE: installing dependencies"
@@ -188,10 +198,12 @@ else
 fi
 
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
+    -e @$OPT_CONFIG \
     -e image_url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
     -t $OPT_TAGS
+
 
 # We only print out further usage instructions when using the default
 # tags, since this is for new users (and not even applicable to some tags).
