@@ -1,6 +1,5 @@
 non_root_user: stack
 working_dir: "/home/{{ non_root_user }}/.quickstart"
-release_rpm: "http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm"
 url: https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/undercloud.qcow2
 virt_power_key: /root/.ssh/id_rsa_virt_power
 virt_power_user: root

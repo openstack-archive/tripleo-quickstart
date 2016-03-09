@@ -15,6 +15,11 @@
     LIBGUESTFS_BACKEND: direct
   when: dib_workarounds
 
+- name: install release repo
+  package:
+    name: "{{ dib_release_rpm }}"
+    state: present
+
 # install packages for image building
 - name: ensure DIB and element deps are installed
   package:

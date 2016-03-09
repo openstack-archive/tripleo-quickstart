@@ -37,6 +37,7 @@ remove_epel: true
 dib_workarounds: true
 dib_workaround_script: dib-workaround-default.sh.j2
 dib_elements_path: /usr/share/tripleo-image-elements:/usr/share/tripleo-puppet-elements:/usr/share/instack-undercloud/:/usr/share/openstack-heat-templates/software-config/elements/
+dib_release_rpm: "http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm"
 
 # undercloud_inject vars
 overcloud_images:
