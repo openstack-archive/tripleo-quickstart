@@ -1,11 +1,13 @@
-<domain type='{{ vms.engine }}'>
+<domain type='{{ libvirt_domain_type }}'>
   <name>{{ item.name }}</name>
   <memory unit='MiB'>{{ flavors[item.flavor].memory }}</memory>
   <vcpu>{{ flavors[item.flavor].vcpu }}</vcpu>
-{{baremetal_vm_xml|default('')}}
+
+  {{baremetal_vm_xml|default('')}}
+
   <os>
-    <type arch='{{ vms.arch }}'>hvm</type>
-    <boot dev='{{ overcloud_bootdev }}'/>
+    <type arch='{{ libvirt_arch }}'>hvm</type>
+    <boot dev='network'/>
     <bootmenu enable='no'/>
   </os>
   <features>
@@ -20,10 +22,10 @@
   <on_crash>restart</on_crash>
   <devices>
     <controller type='scsi' model='virtio-scsi' index='0'/>
-    <disk type='file' device='disk'>
+    <disk type='volume' device='disk'>
       <driver name='qemu' type='qcow2' cache='unsafe'/>
-      <source file='{{ vms.volume_path }}/{{ item.name }}.qcow2'/>
-      <target dev='sda' bus='{{ vms.diskbus }}'/>
+      <source pool='{{ libvirt_volume_pool }}' volume='{{ item.name }}.qcow2'/>
+      <target dev='sda' bus='{{ libvirt_diskbus }}'/>
     </disk>
 {% for network in networks|rejectattr('name', 'equalto', 'external') %}
     <interface type='bridge'>
@@ -32,17 +34,18 @@
       <model type='virtio'/>
     </interface>
 {% endfor %}
-    <serial type='pty'>
-      <target port='0'/>
-    </serial>
-    <console type='pty'>
-      <target type='serial' port='0'/>
-    </console>
+    <serial type='pty'/>
+    <console type='pty'/>
+
+{% if enable_vnc_console %}
     <input type='mouse' bus='ps2'/>
     <graphics type='vnc' port='-1' autoport='yes'/>
     <video>
       <model type='cirrus' vram='9216' heads='1'/>
     </video>
+{% endif %}
+
     {{baremetal_vm_device_xml|default('')}}
+
   </devices>
 </domain>

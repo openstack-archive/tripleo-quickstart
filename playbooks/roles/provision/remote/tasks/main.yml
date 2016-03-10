@@ -1,0 +1,40 @@
+- name: Create virthost access key
+  delegate_to: localhost
+  command: >
+    ssh-keygen -f {{ virt_host_key }} -N ''
+    -C 'ansible_generated_virt_host'
+    -t rsa -b 4096
+  args:
+    creates: "{{ virt_host_key }}"
+
+- name: Create non-root user
+  user:
+    name: "{{ non_root_user }}"
+    state: present
+    shell: /bin/bash
+  become: true
+
+- name: Configure non-root user authorized_keys
+  authorized_key:
+    user: "{{ non_root_user }}"
+    key: "{{ item }}"
+  with_file:
+    - "{{ virt_host_key }}.pub"
+
+- name: Grant sudo privileges to non-root user
+  copy:
+    content: |
+      {{ non_root_user }} ALL=(ALL) NOPASSWD:ALL
+    dest: /etc/sudoers.d/{{ non_root_user }}
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Re-add the virthost to the inventory
+  add_host:
+    name: "host0"
+    groups: "virthost"
+    ansible_fqdn: "{{ virthost }}"
+    ansible_user: "{{ non_root_user }}"
+    ansible_host: "{{ virthost }}"
+    ansible_private_key_file: "{{ virt_host_key }}"

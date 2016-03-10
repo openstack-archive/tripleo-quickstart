@@ -1,0 +1,30 @@
+- name: Add virthost to inventory
+  hosts: localhost
+  roles:
+    - provision/local
+
+- name: Create target user on virt host
+  hosts: virthost
+  roles:
+    - provision/teardown
+    - provision/remote
+
+- name: Rebuild inventory
+  hosts: localhost
+  vars:
+    # This allows running ansible in a virtualenv,
+    # while using python from the base install
+    ansible_python_interpreter: "/usr/bin/python"
+  roles:
+    - rebuild-inventory
+
+# We need to force-refresh facts because we are now connecting
+# as a different user ('stack' instead of 'root'), which affects
+# things like ansible_user_id and friends.
+- name: Install libvirt packages and configure networks
+  hosts: virthost
+  pre_tasks:
+    - setup:
+  roles:
+    - environment/teardown
+    - environment/setup

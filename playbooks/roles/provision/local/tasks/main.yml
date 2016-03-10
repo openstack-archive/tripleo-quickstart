@@ -1,6 +1,6 @@
 - name: Check that virthost is set
   fail:
-    msg: "You need to set VIRTHOST before running these playbooks."
+    msg: "You need to set virthost before running these playbooks."
   when: virthost is not defined
 
 - name: Create working_dir
@@ -19,6 +19,4 @@
     groups: "virthost"
     ansible_fqdn: "{{ virthost }}"
     ansible_user: "root"
-    ansible_private_key_file: "{{ priv_key }}"
     ansible_host: "{{ virthost }}"
-    local_working_dir: "{{ local_working_dir }}"

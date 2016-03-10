@@ -1,43 +1,45 @@
-- name: install packages
-  package:
-    name: "{{item}}"
-    state: present
-  with_items:
-    - libguestfs-tools
-  become: true
-
 - name: get MACs for the undercloud
   generate_macs:
-    nodes: "{{ undercloud_nodes }}"
+    nodes:
+      - "{{ undercloud_node }}"
     networks: "{{ networks }}"
   register: undercloud_mac_map
 
-- include: fetch_image.yml
+- name: Check if undercloud volume exists
+  command: >
+    virsh vol-info --pool '{{ libvirt_volume_pool }}'
+    '{{ undercloud_node.name }}.qcow2'
+  ignore_errors: true
+  register: undercloud_vol_check
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: copy instackenv.json to appliance
-  shell: |
-    virt-customize -a {{ working_dir }}/undercloud.qcow2 \
-      --run-command 'rm -f /home/stack/instackenv.json'
-    virt-customize --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json \
-      -a {{ working_dir }}/undercloud.qcow2
+- include: fetch_image.yml
+  when: undercloud_vol_check|failed
+
+- name: Copy instackenv.json to appliance
+  command: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json
   environment:
     LIBGUESTFS_BACKEND: direct
-  become: true
-  become_user: "{{non_root_user}}"
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  when: undercloud_vol_check|failed
 
-- name: inject ssh key to appliance
-  shell: |
-    virt-customize --mkdir {{item.homedir}}/.ssh/ \
-      -a {{ working_dir }}/undercloud.qcow2
-    cp /home/{{ non_root_user }}/.ssh/id_rsa.pub \
-      {{ working_dir }}/authorized_keys
-    chmod 600 {{ working_dir }}/authorized_keys
-    virt-customize --upload \
-      {{ working_dir }}/authorized_keys:{{item.homedir}}/.ssh/authorized_keys \
-      -a {{ working_dir }}/undercloud.qcow2
-    virt-customize --run-command 'sudo chown {{item.owner}}:{{item.group}} \
-      {{item.homedir}}/.ssh/authorized_keys' \
-      -a {{ working_dir }}/undercloud.qcow2
+- name: Copy undercloud ssh public key to working dir
+  copy:
+    src: "{{ undercloud_key }}.pub"
+    dest: "{{ working_dir }}/id_rsa_undercloud.pub"
+  when: undercloud_vol_check|failed
+
+- name: Inject undercloud ssh public key to appliance
+  command: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --mkdir {{item.homedir}}/.ssh/
+    --upload '{{ working_dir }}/id_rsa_undercloud.pub:{{item.homedir}}/.ssh/authorized_keys'
+    --run-command 'chown -R {{item.owner}}:{{item.group}} {{item.homedir}}/.ssh'
+    --run-command 'chmod 0700 {{item.homedir}}/.ssh'
+    --run-command 'chmod 0600 {{item.homedir}}/.ssh/authorized_keys'
   environment:
     LIBGUESTFS_BACKEND: direct
   with_items:
@@ -47,104 +49,90 @@
     - homedir: /home/stack
       owner: stack
       group: stack
-  become: true
-  become_user: "{{non_root_user}}"
+  when: undercloud_vol_check|failed
 
-- name: Install undercloud vm storage
-  shell: |
-    virsh pool-refresh {{ vms.volume_pool}}
-    virsh vol-create-as {{ vms.volume_pool}} {{ item.name }}.qcow2 \
-      {{ flavors[item.name].disk }}G --format qcow2
-    virt-resize --expand /dev/sda1 {{ working_dir }}/undercloud.qcow2 \
-      '{{ vms.volume_path }}''{{ item.name }}'.qcow2
+- name: Resize undercloud image (create target image)
+  command: >
+    qemu-img create -f qcow2 -o preallocation=off
+    '{{ working_dir }}/undercloud-resized.qcow2'
+    '{{ flavors[undercloud_node.name].disk }}G'
+  when: undercloud_vol_check|failed
+
+- name: Resize undercloud image (call virt-resize)
+  command: >
+    virt-resize --expand /dev/sda1
+    '{{ working_dir }}/undercloud.qcow2'
+    '{{ working_dir }}/undercloud-resized.qcow2'
   environment:
     LIBGUESTFS_BACKEND: direct
-  with_items: "{{ undercloud_nodes }}"
-  async: 300
+  when: undercloud_vol_check|failed
+
+- name: Create undercloud volume
+  command: >
+    virsh vol-create-as {{ libvirt_volume_pool}}
+    {{ undercloud_node.name }}.qcow2 \
+    {{ flavors[undercloud_node.name].disk }}G --format qcow2
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  when: undercloud_vol_check|failed
+
+- name: Upload undercloud volume to storage pool
+  command: >
+    virsh -k 0 vol-upload --pool '{{ libvirt_volume_pool }}'
+    '{{ undercloud_node.name }}.qcow2'
+    '{{ working_dir }}/undercloud-resized.qcow2'
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  async: 600
   poll: 10
-  register: undercloud_copy
-  ignore_errors: true
-  become: true
+  when: undercloud_vol_check|failed
 
-- name: Output debug message if undercloud copy hangs
-  fail:
-    msg: >
-      Undercloud copy took more than 5 minutes, it is likely that
-      there is not enough space in {{ vms.volume_path }}
-  when: undercloud_copy.failed is defined
-
-- name: define undercloud vm
+- name: Define undercloud vm
   virt:
-    name: "{{ item.name }}"
+    name: "{{ undercloud_node.name }}"
     command: define
     xml: "{{ lookup('template', 'undercloudvm.xml.j2') }}"
-  with_items: "{{ undercloud_nodes }}"
-  become: true
+    uri: "{{ libvirt_uri }}"
 
-- name: start undercloud vm
+- name: Start undercloud vm
   virt:
-    name: "{{ item.name }}"
+    name: "{{ undercloud_node.name }}"
     command: start
-  with_items: "{{ undercloud_nodes }}"
-  become: true
+    state: running
+    uri: "{{ libvirt_uri }}"
 
-- name: get undercloud vm ip address
-  script: "scripts/get-undercloud-ip.sh {{ undercloud_nodes[0].name }}"
+- name: Get undercloud vm ip address
+  script: "scripts/get-undercloud-ip.sh {{ undercloud_node.name }}"
   register: undercloud_vm_ip_result
   until: undercloud_vm_ip_result|success
   retries: 12
   delay: 10
-  become: true
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: set_fact for undercloud ip
+- name: Set_fact for undercloud ip
   set_fact:
     undercloud_ip: "{{ undercloud_vm_ip_result.stdout_lines[0] }}"
 
-- name: wait until ssh is available on undercloud node
+- name: Wait until ssh is available on undercloud node
   wait_for:
     host: "{{ undercloud_ip }}"
     state: started
     port: 22
-    delay: 15
     timeout: 300
 
-- name: add undercloud host(s)
+- name: Add undercloud vm to inventory
   add_host:
-    name: "{{ item.name }}"
+    name: undercloud
     groups: undercloud
-    ansible_host: "{{ item.name }}"
-    ansible_fqdn: "{{ item.name }}"
+    ansible_host: undercloud
+    ansible_fqdn: undercloud
     ansible_user: stack
-    ansible_private_key_file: "{{local_working_dir}}/id_rsa_virt_host"
+    ansible_private_key_file: "{{ undercloud_key }}"
     ansible_ssh_extra_args: '-F "{{local_working_dir}}/ssh.config.ansible"'
-  with_items: "{{ undercloud_nodes }}"
 
-- name: setup ssh config
+- name: Generate ssh configuration
+  delegate_to: localhost
   template:
     src: ssh.config.j2
-    dest: "{{ working_dir }}/ssh.config.ansible"
-    mode: 0755
-  become: true
-  become_user: "{{non_root_user}}"
-
-- name: copy ssh_config back to the local host
-  fetch:
-    src: "{{ working_dir }}/ssh.config.ansible"
     dest: "{{ local_working_dir }}/ssh.config.ansible"
-    flat: yes
-  become: true
-  become_user: "{{non_root_user}}"
-
-- name: copy ssh private key back to the local host
-  fetch:
-    src: "/home/{{ non_root_user }}/.ssh/id_rsa"
-    dest: "{{ local_working_dir }}/id_rsa_virt_host"
-    flat: yes
-  become: true
-  become_user: "{{non_root_user}}"
-
-- name: set permissions on private key file
-  delegate_to: localhost
-  file:
-    path: "{{ local_working_dir }}/id_rsa_virt_host"
-    mode: "0600"

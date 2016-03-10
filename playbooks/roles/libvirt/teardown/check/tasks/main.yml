@@ -1,6 +1,0 @@
----
-- name: check if libvirt is running
-  command: systemctl is-active libvirtd
-  changed_when: false
-  failed_when: false
-  register: libvirt_check

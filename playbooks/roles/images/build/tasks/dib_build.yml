@@ -19,6 +19,7 @@
   package:
     name: "{{ dib_release_rpm }}"
     state: present
+  become: true
 
 # install packages for image building
 - name: ensure DIB and element deps are installed
@@ -36,18 +37,25 @@
     #FIXME(trown) one of the above packages should have a requires
     #on python-six
     - python-six
+  become: true
 
 # workaround to remove EPEL from images
+# LKS: In the "99-dkms" component?
 - name: Remove EPEL from centos DIB element
   shell: |
     sed -i '/epel/d' \
     /usr/share/diskimage-builder/elements/centos7/element-deps;
     rm -f /usr/share/diskimage-builder/elements/base/install.d/99-dkms
   when: remove_epel
+  become: true
 
 # remove "Defaults requiretty" from sudoers
 - name: ensure we can sudo without requiring tty for async tasks
-  lineinfile: dest=/etc/sudoers line='#Defaults requiretty' regexp='^Defaults\s+requiretty' backup=yes
+  lineinfile:
+    dest: /etc/sudoers
+    line: '#Defaults requiretty'
+    regexp: '^Defaults\s+requiretty'
+    backup: yes
   become: true
 
 - name: Build the ironic-python-agent ramdisk
@@ -102,8 +110,10 @@
     DIB_CLOUD_INIT_ETC_HOSTS: ''
 
 - name: Async_Poll --> Wait for ironic task completion
-  async_status: jid={{ done_build_ironic.ansible_job_id }}
+  async_status:
+    jid: "{{ done_build_ironic.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   retries: 720
   delay: 5
+

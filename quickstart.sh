@@ -188,7 +188,7 @@ else
 fi
 
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
-    -e url=$OPT_UNDERCLOUD_URL \
+    -e image_url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
     -t $OPT_TAGS

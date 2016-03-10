@@ -1,15 +1,25 @@
-{% set proxycommand="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -i " + local_working_dir + "/id_rsa_virt_host " + non_root_user + "@" + hostvars[groups['virthost'][0]].ansible_host|default(hostvars[groups['virthost'][0]].inventory_hostname) + " -W " + undercloud_ip + ":22" %}
+{% set ssh_user = ansible_user|default(ansible_user_id, True) %}
+{% set ssh_host = ansible_host|default(inventory_hostname) %}
+{% if ansible_private_key_file is defined %}
+{% set ssh_key_arg = " -i " + ansible_private_key_file + " " %}
+{% else %}
+{% set ssh_key_arg = "" %}
+{% endif %}
+{% set proxycommand="ssh -o UserKnownHostsFile=/dev/null "
+    + "-o StrictHostKeyChecking=no -o ConnectTimeout=60 "
+    + ssh_key_arg
+    + ssh_user + '@' + ssh_host + " -W " + undercloud_ip + ":22" %}
 
 Host undercloud-root
     ProxyCommand {{proxycommand}}
-    IdentityFile {{ local_working_dir }}/id_rsa_virt_host
+    IdentityFile {{ local_working_dir }}/id_rsa_undercloud
     User root
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
 Host undercloud
     ProxyCommand {{proxycommand}}
-    IdentityFile {{ local_working_dir }}/id_rsa_virt_host
+    IdentityFile {{ local_working_dir }}/id_rsa_undercloud
     User stack
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null

@@ -1,19 +1,14 @@
-non_root_user: stack
-working_dir: "/home/{{ non_root_user }}/.quickstart"
-url: https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/undercloud.qcow2
-virt_power_key: /root/.ssh/id_rsa_virt_power
-virt_power_user: root
+working_dir: "{{ ansible_user_dir }}/.quickstart"
+image_cache_dir: "{{ ansible_user_dir }}/oooq_cache"
+image_url: http://artifacts.ci.centos.org/rdo/images/liberty/delorean/stable/undercloud.qcow2
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
-local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 
-vms:
-  engine: 'kvm'
-  volume_path: /var/lib/libvirt/images/
-  volume_pool: default
-  diskbus: 'sata'
-  arch: x86_64
+virt_power_key: "{{ local_working_dir }}/id_rsa_virt_power"
+undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
 
-# LKS: I'm not convinced these need to be configurable, but they were
-# before I got here, so leaving that capability for now.
-overcloud_bootdev: network
-undercloud_bootdev: hd
+libvirt_uri: qemu:///session
+libvirt_volume_path: "{{ working_dir }}/pool"
+libvirt_volume_pool: oooq_pool
+libvirt_domain_type: kvm
+libvirt_diskbus: sata
+libvirt_arch: x86_64

@@ -5,16 +5,16 @@
   "nodes": [
   {% for node in overcloud_nodes %}
     {
-      "pm_password": "{{ virt_power_private_key_txt.stdout }}",
+      "pm_password": {{ virt_power_key_pvt | to_nice_json }},
       "pm_type": "pxe_ssh",
       "mac": [
-        "{{ node_mac_map.get(node.name).get('provision') }}"
+        "{{ node_mac_map.get(node.name).get('overcloud') }}"
       ],
       "cpu": "{{ flavors[node.flavor].vcpu }}",
       "memory": "{{ flavors[node.flavor].memory }}",
       "disk": "{{ flavors[node.flavor].disk }}",
-      "arch": "{{ vms.arch }}",
-      "pm_user": "{{ virt_power_user }}",
+      "arch": "{{ libvirt_arch }}",
+      "pm_user": "{{ ansible_user_id }}",
       "pm_addr": "{{ host_ip }}",
       "capabilities": "profile:oooq_{{ node.flavor }},boot_option:local"
     }
@@ -23,10 +23,10 @@
     {% endif %}
   {% endfor %}
   ],
-  "arch": "{{ vms.arch }}",
+  "arch": "{{ libvirt_arch }}",
   "host-ip": "{{ host_ip }}",
   "power_manager": "{{ nova_power_manager }}",
   "seed-ip": "",
-  "ssh-key": "{{ virt_power_private_key_txt.stdout }}",
-  "ssh-user": "{{ virt_power_user }}"
+  "ssh-key": {{ virt_power_key_pvt | to_nice_json }},
+  "ssh-user": "{{ ansible_user_id }}"
 }

@@ -1,0 +1,63 @@
+- name: get a list of MACs to use
+  generate_macs:
+    nodes: "{{ overcloud_nodes }}"
+    networks: "{{ networks }}"
+  register: node_mac_map
+
+- name: Ensure volume pool directory exists
+  file:
+    path: "{{ libvirt_volume_path }}"
+    state: directory
+
+- name: Define volume pool
+  virt_pool:
+    command: define
+    state: present
+    name: "{{ libvirt_volume_pool }}"
+    xml: '{{ lookup("template", "volume_pool.xml.j2") }}'
+    uri: "{{ libvirt_uri }}"
+
+- name: Start volume pool
+  virt_pool:
+    command: start
+    state: active
+    name: "{{ libvirt_volume_pool }}"
+    uri: "{{ libvirt_uri }}"
+
+- name: Mark volume pool for autostart
+  virt_pool:
+    name: "{{ libvirt_volume_pool }}"
+    autostart: "yes"
+    uri: "{{ libvirt_uri }}"
+
+- name: Check if overcloud volumes exist
+  command: >
+    virsh vol-info --pool '{{libvirt_volume_pool}}' '{{item.name}}.qcow2'
+  register: overcloud_vol_check
+  ignore_errors: true
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  with_items: "{{ overcloud_nodes }}"
+
+- name: Create overcloud vm storage
+  command: >
+    virsh vol-create-as '{{ libvirt_volume_pool }}'
+    '{{ item.item.name }}'.qcow2 '{{ flavors[item.item.flavor].disk }}'G
+    --format qcow2
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  when: item|failed
+  with_items: "{{ overcloud_vol_check.results }}"
+
+- name: Define overcloud vms
+  virt:
+    name: "{{ item.name }}"
+    command: define
+    xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
+    uri: "{{ libvirt_uri }}"
+  with_items: "{{ overcloud_nodes }}"
+
+- name: Write instackenv script
+  template:
+    src: instackenv.json.j2
+    dest: "{{ working_dir }}/instackenv.json"

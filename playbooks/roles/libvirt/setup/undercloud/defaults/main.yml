@@ -1,6 +1,0 @@
-qemu_executable:
-  Fedora: /usr/bin/qemu-kvm
-  CentOS: /usr/libexec/qemu-kvm
-  'Red Hat Enterprise Linux': /usr/libexec/qemu-kvm
-
-image_cache_directory: /usr/share/oooq_images/

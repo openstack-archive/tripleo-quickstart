@@ -1,2 +1,0 @@
-local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
-priv_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"

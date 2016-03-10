@@ -1,3 +1,8 @@
+# This directory is used to store a variety of files generated
+# during the deploy process (ansible inventory, ssh configuration, ssh
+# key files, etc)
+local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
+
 # These defaults are used if there are no flavor-specific
 # overrides configured.
 default_disk: 50
@@ -36,9 +41,9 @@ flavors:
     vcpu: '{{undercloud_vcpu|default(default_vcpu)}}'
 
 # We create a single undercloud node.
-undercloud_nodes:
-  - name: undercloud
-    flavor: undercloud
+undercloud_node:
+  name: undercloud
+  flavor: undercloud
 
 # The overcloud will have three controllers, one compute node,
 # and a ceph storage node.
@@ -60,7 +65,7 @@ overcloud_nodes:
 # the undercloud node and to the overcloud nodes (except for the
 # "external" network) in the order in which they are defined.  The
 # playbooks expect to find both an "external" network and a
-# "provision" network.
+# "overcloud" network.
 external_network_cidr: 192.168.23.1/24
 networks:
   - name: external
@@ -75,5 +80,9 @@ networks:
       - 1024
       - 65535
 
-  - name: provision
-    bridge:  brprov
+  - name: overcloud
+    bridge:  brovc
+
+# Set this to `true` if you want your undercloud and overcloud vms to
+# have a VNC console available.
+enable_vnc_console: false

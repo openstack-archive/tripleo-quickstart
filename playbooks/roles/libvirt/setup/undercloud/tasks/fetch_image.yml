@@ -1,51 +1,49 @@
 # Fetching the undercloud images can take a long time.  This
-# tasklist caches images in {{ image_cache_directory }} if an image is
+# tasklist caches images in {{ image_cache_dir }} if an image is
 # (a) downloaded successfully and (b) successfully verifies against
 # the checksum.  Images are cached using the checksum as the filename,
 # and subsequent playbook runs will use the cached copy rather than
 # trying to fetch the remote copy.
 
-- name: ensure image cache directory exists
+- name: Ensure image cache directory exists
   file:
-    path: "{{ image_cache_directory }}"
+    path: "{{ image_cache_dir }}"
     state: directory
-  become: true
 
-- name: get undercloud image expected checksum
+- name: Get undercloud image expected checksum
   command: >
-    curl -sf {{url}}.md5
+    curl --trace-ascii /dev/stderr -sf {{ image_url }}.md5
   register: undercloud_md5_expected
 
-- name: check for undercloud image in cache
+- name: Check for undercloud image in cache
   command: >
     test -f {{undercloud_md5_expected.stdout.split()[0]}}.qcow2
   args:
-    chdir: "{{ image_cache_directory }}"
+    chdir: "{{ image_cache_dir }}"
   ignore_errors: true
   register: image_exists
   changed_when: false
 
-- name: get undercloud image
+- name: Get undercloud image
   command: >
-    curl -sf -C- -o _undercloud.qcow2 {{ url }}
+    curl -sf -C- -o _undercloud.qcow2 {{ image_url }}
   args:
-    chdir: "{{ image_cache_directory }}"
+    chdir: "{{ image_cache_dir }}"
   register: curl_result
   until: curl_result.rc not in [18, 56]
   retries: 20
   delay: 5
-  become: true
   when: image_exists|failed
 
-- name: get actual md5 checksum of undercloud image
+- name: Get actual md5 checksum of undercloud image
   command: >
     md5sum _undercloud.qcow2
   args:
-    chdir: "{{ image_cache_directory }}"
+    chdir: "{{ image_cache_dir }}"
   register: undercloud_md5_actual
   when: image_exists|failed
 
-- name: verify undercloud image checksum
+- name: Verify undercloud image checksum
   fail:
     msg: undercloud image checksum does not match
   when: >
@@ -53,17 +51,14 @@
     undercloud_md5_expected.stdout.split()[0] !=
     undercloud_md5_actual.stdout.split()[0])
 
-- name: cache undercloud image by checksum
+- name: Cache undercloud image by checksum
   command: >
     mv _undercloud.qcow2 {{ undercloud_md5_expected.stdout.split()[0] }}.qcow2
   args:
-    chdir: "{{ image_cache_directory }}"
+    chdir: "{{ image_cache_dir }}"
   when: image_exists|failed
-  become: true
 
-- name: get undercloud image from cache
+- name: Get undercloud image from cache
   command:
-    cp {{ image_cache_directory }}/{{undercloud_md5_expected.stdout.split()[0]}}.qcow2
+    cp {{ image_cache_dir }}/{{undercloud_md5_expected.stdout.split()[0]}}.qcow2
     {{ working_dir }}/undercloud.qcow2
-  become: true
-  become_user: "{{ non_root_user }}"

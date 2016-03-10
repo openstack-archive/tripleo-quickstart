@@ -8,31 +8,34 @@
   ignore_errors: true
   register: libvirt_check
 
-- name: Check libvirt networks
-  command: >
-    virsh net-uuid "{{ item.name }}"
-  with_items: "{{ networks }}"
-  register: network_check
-  ignore_errors: true
+- when: libvirt_check|success
+  block:
 
-- name: Stop libvirt networks
-  command: >
-    virsh net-destroy "{{ item.item.name }}"
-  when: libvirt_check|success and item|success
-  with_items: "{{ network_check.results }}"
-  become: true
+    - name: Check libvirt networks
+      command: >
+        virsh net-uuid "{{ item.name }}"
+      with_items: "{{ networks }}"
+      register: network_check
+      ignore_errors: true
 
-- name: Undefine libvirt networks
-  command: >
-    virsh net-undefine "{{ item.item.name }}"
-  when: libvirt_check|success and item|success
-  with_items: "{{ network_check.results }}"
-  become: true
+    - name: Stop libvirt networks
+      command: >
+        virsh net-destroy "{{ item.item.name }}"
+      when: libvirt_check|success and item|success
+      with_items: "{{ network_check.results }}"
+      become: true
 
-- name: Remove bridge whitelisting from qemu bridge helper
-  lineinfile:
-    dest: "{{ qemu_bridge_conf }}"
-    line: "allow {{item.bridge}}"
-    state: absent
-  with_items: "{{ networks }}"
-  become: true
+    - name: Undefine libvirt networks
+      command: >
+        virsh net-undefine "{{ item.item.name }}"
+      when: libvirt_check|success and item|success
+      with_items: "{{ network_check.results }}"
+      become: true
+
+    - name: Remove bridge whitelisting from qemu bridge helper
+      lineinfile:
+        dest: "{{ qemu_bridge_conf }}"
+        line: "allow {{item.bridge}}"
+        state: absent
+      with_items: "{{ networks }}"
+      become: true

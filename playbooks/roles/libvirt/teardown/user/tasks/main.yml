@@ -1,29 +1,9 @@
----
-- name: remove virt_power_key
-  file:
-    name: "{{ item }}"
+- name: Remove virt_power_key from remote authorized_keys
+  authorized_key:
+    user: "{{ ansible_user_id }}"
     state: absent
-  with_items:
-    - "{{ virt_power_key }}"
+    key: "{{ item }}"
+    manage_dir: true
+  with_file:
     - "{{ virt_power_key }}.pub"
-  become: true
-
-# Prevent "account is in use" errors when trying to
-# delete the user in the next task.
-- name: kill any processes owned by non-root user
-  command: pkill -9 -u {{ non_root_user }}
-  become: true
   ignore_errors: true
-
-- name: delete non-root user
-  user:
-    name: "{{ non_root_user }}"
-    state: absent
-    remove: yes
-  become: true
-
-- name: remove non-root user passwordless sudo priveledges
-  file:
-    name: "/etc/sudoers.d/{{ non_root_user }}"
-    state: absent
-  become: true

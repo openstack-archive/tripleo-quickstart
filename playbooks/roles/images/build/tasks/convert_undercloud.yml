@@ -5,43 +5,31 @@
     dest: '{{ working_dir }}/undercloud-base.qcow2'
     force: '{{ undercloud_overwrite_existing }}'
 
-- name: Define volume_pool if needed
-  virt_pool:
-    command: status
-    name: default
-  register: volume_pool_status
-  ignore_errors: true
+- name: Resize undercloud image (create target image)
+  command: >
+    qemu-img create -f qcow2 -o preallocation=off
+    '{{ working_dir }}/undercloud-resized.qcow2'
+    '{{ undercloud_disk_size }}G'
 
-- name: Create volume_pool if needed
-  virt_pool:
-    command: define
-    name: default
-    xml: '{{ lookup("template", "volume_pool.xml.j2") }}'
-  when: volume_pool_status.failed is defined
-
-- name: Create volume_pool if it does not exists
-  virt_pool:
-    command: create
-    name: default
-  when: volume_pool_status.failed is defined
-
-- name: Expand undercloud.qcow2 filesystem
-  shell: |
-    virsh vol-create-as default undercloud-base.qcow2 \
-      {{ undercloud_disk_size }}G --format qcow2
-    virt-resize --expand /dev/sda1 \
-      {{ working_dir }}/undercloud-base.qcow2 \
-      /var/lib/libvirt/images/undercloud-base.qcow2
-    cp -f /var/lib/libvirt/images/undercloud-base.qcow2 \
-      {{ working_dir }}/undercloud-base.qcow2
+- name: Resize undercloud image (call virt-resize)
+  command: >
+    virt-resize --expand /dev/sda1
+    '{{ working_dir }}/undercloud-base.qcow2'
+    '{{ working_dir }}/undercloud-resized.qcow2'
   environment:
     LIBGUESTFS_BACKEND: direct
+
+- name: Resize undercloud image (rename resized image)
+  command: >
+    mv -f {{ working_dir }}/undercloud-resized.qcow2
+    {{ working_dir }}/undercloud-base.qcow2
 
 - name: Template script to convert overcloud image to undercloud
   template:
     src: "{{ undercloud_convert_script }}"
     dest: "{{ working_dir }}/undercloud-convert.sh"
 
+# LKS: do we really care about smp settings here?
 - name: Convert the overcloud image to an undercloud image
   shell: >
     virt-customize -m {{ virt_customize_ram }}

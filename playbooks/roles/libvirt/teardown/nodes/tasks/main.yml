@@ -7,72 +7,108 @@
     virsh uri
   ignore_errors: true
   register: libvirt_check
-  become: true
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: Check overcloud vms
-  command: >
-    virsh domid "{{ item.name }}"
-  with_items: "{{ overcloud_nodes }}"
-  ignore_errors: true
-  register: overcloud_check
-  become: true
+- when: libvirt_check|success
+  block:
 
-- name: Destroy overcloud vms
-  command:
-    virsh destroy "{{ item.item.name }}"
-  when: item|success
-  with_items: "{{ overcloud_check.results }}"
-  ignore_errors: true
-  become: true
+    - name: Check overcloud vms
+      command: >
+        virsh domid "{{ item.name }}"
+      with_items: "{{ overcloud_nodes }}"
+      ignore_errors: true
+      register: overcloud_check
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: Undefine overcloud vms
-  command:
-    virsh undefine "{{ item.item.name }}"
-  when: item|success
-  with_items: "{{ overcloud_check.results }}"
-  become: true
+    - name: Destroy overcloud vms
+      command:
+        virsh destroy "{{ item.item.name }}"
+      when: item|success
+      with_items: "{{ overcloud_check.results }}"
+      ignore_errors: true
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: Check undercloud vm
-  command: >
-    virsh domid "{{ item.name }}"
-  with_items: "{{ undercloud_nodes }}"
-  ignore_errors: true
-  register: undercloud_check
-  become: true
+    - name: Undefine overcloud vms
+      command:
+        virsh undefine "{{ item.item.name }}"
+      when: item|success
+      with_items: "{{ overcloud_check.results }}"
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: Destroy undercloud vm
-  command: >
-    virsh destroy "{{ item.item.name }}"
-  when: item|success
-  with_items: "{{ undercloud_check.results }}"
-  ignore_errors: true
-  become: true
+    - name: Check undercloud vm
+      command: >
+        virsh domid "{{ undercloud_node.name }}"
+      ignore_errors: true
+      register: undercloud_check
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: Undefine undercloud vm
-  command: >
-    virsh undefine "{{ item.item.name }}"
-  when: item|success
-  with_items: "{{ undercloud_check.results }}"
-  become: true
+    - name: Destroy undercloud vm
+      command: >
+        virsh destroy "{{ undercloud_node.name }}"
+      when: undercloud_check|success
+      ignore_errors: true
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-# the virsh vol-dumpxml ... > /dev/null is here (and elsewhere) due to
-# https://bugzilla.redhat.com/show_bug.cgi?id=1293804
-- name: Delete baremetal vm storage
-  shell: |
-    virsh vol-dumpxml --pool '{{ vms.volume_pool }}' \
-      '{{ item.name }}'.qcow2 2>&1 > /dev/null
-    virsh vol-delete --pool '{{ vms.volume_pool }}' \
-      '{{ item.name }}'.qcow2
-  with_items: "{{ overcloud_nodes }}"
-  ignore_errors: true
-  become: true
+    - name: Undefine undercloud vm
+      command: >
+        virsh undefine "{{ undercloud_node.name }}"
+      when: undercloud_check|success
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: Delete undercloud vm storage
-  shell: |
-    virsh vol-dumpxml --pool '{{ vms.volume_pool }}' \
-      '{{ item.name }}'.qcow2 2>&1 > /dev/null
-    virsh vol-delete --pool '{{ vms.volume_pool }}' \
-      '{{ item.name }}'.qcow2
-  with_items: "{{ undercloud_nodes }}"
-  ignore_errors: true
-  become: true
+    # the virsh vol-dumpxml ... > /dev/null is here (and elsewhere) due to
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1293804
+    - name: Delete baremetal vm storage
+      shell: |
+        virsh vol-dumpxml --pool '{{ libvirt_volume_pool }}' \
+          '{{ item.name }}'.qcow2 2>&1 > /dev/null
+        virsh vol-delete --pool '{{ libvirt_volume_pool }}' \
+          '{{ item.name }}'.qcow2
+      with_items: "{{ overcloud_nodes }}"
+      ignore_errors: true
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
+    - name: Delete undercloud vm storage
+      shell: |
+        virsh vol-dumpxml --pool '{{ libvirt_volume_pool }}' \
+          '{{ undercloud_node.name }}'.qcow2 2>&1 > /dev/null
+        virsh vol-delete --pool '{{ libvirt_volume_pool }}' \
+          '{{ undercloud_node.name }}'.qcow2
+      ignore_errors: true
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
+    - name: Destroy intermediate disk image
+      file:
+        path: "{{ working_dir }}/undercloud-resized.qcow2"
+        state: absent
+
+    - name: Check volume pool
+      command: >
+        virsh pool-uuid "{{ libvirt_volume_pool }}"
+      register: pool_check
+      ignore_errors: true
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
+    - name: Destroy volume pool
+      command: >
+        virsh pool-destroy "{{ libvirt_volume_pool }}"
+      when: pool_check|success
+      ignore_errors: true
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
+    - name: Undefine volume pool
+      command: >
+        virsh pool-undefine "{{ libvirt_volume_pool }}"
+      when: pool_check|success
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"

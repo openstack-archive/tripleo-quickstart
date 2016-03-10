@@ -1,0 +1,38 @@
+- name: Check for processes owned by non-root user
+  command: >
+    pgrep -u {{ non_root_user }}
+  register: proc_exist
+  ignore_errors: true
+  become: true
+
+- name: Kill (SIGTERM) all processes owned by non-root user
+  command: >
+    pkill -u {{ non_root_user }}
+  ignore_errors: true
+  become: true
+  when: proc_exist|success
+
+- name: Wait for processes to exit
+  command: >
+    pgrep -c -u {{ non_root_user }}
+  register: proc_kill
+  retries: 5
+  delay: 1
+  until: proc_kill.stdout == '0'
+  ignore_errors: true
+  when: proc_exist|success
+  become: true
+
+- name: Kill (SIGKILL) all processes owned by non-root user
+  command: >
+    pkill -9 -u {{ non_root_user }}
+  when: proc_exist|success and proc_kill|success and proc_kill.stdout != 0
+  ignore_errors: true
+  become: true
+
+- name: Remove non-root user account
+  user:
+    name: "{{ non_root_user }}"
+    state: absent
+    remove: true
+  become: true
