@@ -1,39 +1,17 @@
----
-- name: Add virthost to inventory
-  hosts: localhost
-  vars:
-    # This allows running ansible in a virtualenv,
-    # while using python from the base install
-    ansible_python_interpreter: "/usr/bin/python"
-  gather_facts: no
-  roles:
-    - provision/manual
-    - rebuild-inventory
+control_memory: 6144
+compute_memory: 4096
 
-- name:  Setup undercloud and baremetal vms and networks in libvirt
-  hosts: host0
-  gather_facts: yes
-  vars_files:
-    - centosci_minimal_nodes.yml
-  roles:
-    # Use teardown role in minimal job just to gate it works on fresh host
-    - libvirt/teardown
-    - libvirt/setup
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+  - name: compute_0
+    flavor: compute
 
-- name: Rebuild inventory
-  hosts: localhost
-  gather_facts: no
-  vars:
-    # This allows running ansible in a virtualenv,
-    # while using python from the base install
-    ansible_python_interpreter: "/usr/bin/python"
-  roles:
-    - rebuild-inventory
+# FIXME(trown) This is only temporarily set to false so we can
+# change CI to use these settings without changing what is run.
+# Will be changed to true in a follow-up patch.
+introspect: false
 
-- name:  Install undercloud and deploy overcloud
-  hosts: undercloud
-  gather_facts: no
-  vars_files:
-    - centosci_minimal_nodes.yml
-  roles:
-    - overcloud
+extra_args: ""
+tempest: false
+pingtest: true

@@ -37,7 +37,7 @@
                         branch-pattern: 'master'
                   file-paths:
                       - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/centosci/build-images.yml'
+                        pattern: 'playbooks/build-images.yml'
                       - compare-type: 'REG_EXP'
                         pattern: 'playbooks/roles/images/.*'
             skip-vote:
@@ -52,7 +52,7 @@
             silent-start: true
 
 - trigger:
-    name: 'trigger-tripleo-quickstart-gate-minimal'
+    name: 'trigger-tripleo-quickstart-gate'
     triggers:
         - gerrit:
             server-name: 'rdo-ci-centos'
@@ -73,7 +73,9 @@
                       - compare-type: 'REG_EXP'
                         pattern: 'playbooks/centosci/minimal.yml'
                       - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/roles/(libvirt|nodes|overcloud|provision|rebuild-inventory|tripleo)/.*'
+                        pattern: 'playbooks/quickstart.yml'
+                      - compare-type: 'REG_EXP'
+                        pattern: 'playbooks/roles/(libvirt|common|overcloud|provision|rebuild-inventory|tripleo)/.*'
             skip-vote:
                 successful: false
                 failed: false

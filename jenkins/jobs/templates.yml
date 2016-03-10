@@ -1,30 +1,20 @@
 - job-template:
-    name: 'tripleo-quickstart-promote-{release}-{build_system}-{playbook}'
+    name: 'tripleo-quickstart-promote-{release}-{build_system}-{topology}'
     defaults: 'tripleo-quickstart-defaults'
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/centosci/{playbook}.yml" target="_blank">centosci/{playbook}.yml</a></p>
-        <h3>
-           For the image building job in the promote pipeline it is better to look at the
-           <a href="https://ci.centos.org/job/tripleo-quickstart-gate-{release}-{build_system}-images/" target="_blank">image building gate job</a>
-           for an example to run locally.
-
-           However, unless you are working on improving the image build process, it is much better to use pre-built images.
-        </h3>
-        <br>
-        In order to run this job locally (except in the case mentioned above):
+        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/quickstart.yml" target="_blank">quickstart.yml</a></p>
+        In order to run this job locally using quickstart.sh:
         <pre>
 
-        # It is assumed that tripleo-quickstart is installed in the default
-        # virtualenv created by running quickstart.sh
-        source $HOME/.quickstart/bin/activate
         export VIRTHOST='my-cool-virthost.example.com'
-        export ANSIBLE_CONFIG=$HOME/.quickstart/tripleo-quickstart/ansible.cfg
 
-        ansible-playbook -i local_hosts $HOME/.quickstart/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
-        --extra-vars virthost=$VIRTHOST \
-        --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2"
+        bash quickstart.sh \
+        -u "http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2" \
+        -t all \
+        -c centosci/{topology}.yml \
+        $VIRTHOST
 
         </pre>
     scm:
@@ -34,7 +24,7 @@
         - tripleo-quickstart-promote-builder:
             release: '{release}'
             build_system: '{build_system}'
-            playbook: '{playbook}'
+            topology: '{topology}'
     properties:
         - ownership:
             owner: trown@redhat.com
@@ -43,39 +33,81 @@
         - full-logs-link
 
 - job-template:
-    name: 'tripleo-quickstart-gate-{release}-{build_system}-minimal'
+    name: 'tripleo-quickstart-promote-{release}-{build_system}-build-images'
+    defaults: 'tripleo-quickstart-defaults'
+    description: |
+        <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
+        <br>
+        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/build-images.yml" target="_blank">build-images.yml</a></p>
+        In order to run this job locally:
+        <pre>
+
+        # It is assumed that tripleo-quickstart is installed in the default
+        # virtualenv created by running quickstart.sh
+        # (however quickstart.sh does not yet support building images)
+        source $HOME/.quickstart/bin/activate
+        export VIRTHOST='my-cool-virthost.example.com'
+        export ANSIBLE_CONFIG=$HOME/.quickstart/tripleo-quickstart/ansible.cfg
+
+        # For delorean, find the delorean hash from this job:
+        # https://ci.centos.org/job/rdo-promote-get-hash-{release}/
+        export dlrn_hash=\<hash from above job\>
+
+        ansible-playbook -i local_hosts $HOME/.quickstart/tripleo-quickstart/playbooks/build-images.yml \
+        --extra-vars virthost=$VIRTHOST \
+        --extra-vars release={release} \
+        --extra-vars build_system={build_system} \
+        --extra-vars delorean_hash=$dlrn_hash
+
+        # The images will be in /tmp/oooq-images dir on the virthost
+
+        </pre>
+    scm:
+        - repo-tripleo-quickstart
+        - repo-khaleesi
+    builders:
+        - tripleo-quickstart-images-promote-builder:
+            release: '{release}'
+            build_system: '{build_system}'
+    properties:
+        - ownership:
+            owner: trown@redhat.com
+    publishers:
+        - cleanup
+        - full-logs-link
+
+- job-template:
+    name: 'tripleo-quickstart-gate-{release}-{build_system}-{topology}'
     defaults: 'tripleo-quickstart-defaults'
     description: |
     defaults: 'tripleo-quickstart-defaults'
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/centosci/{playbook}.yml" target="_blank">centosci/{playbook}.yml</a></p>
+        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/quickstart.yml" target="_blank">quickstart.yml</a></p>
         <br>
-        In order to run this job locally:
+        In order to run this job locally using quickstart.sh:
         <pre>
 
-        # It is assumed that tripleo-quickstart is installed in the default
-        # virtualenv created by running quickstart.sh
-        source $HOME/.quickstart/bin/activate
         export VIRTHOST='my-cool-virthost.example.com'
-        export ANSIBLE_CONFIG=$HOME/.quickstart/tripleo-quickstart/ansible.cfg
 
-        ansible-playbook -i local_hosts $HOME/.quickstart/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
-        --extra-vars virthost=$VIRTHOST \
-        --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2"
+        bash quickstart.sh \
+        -u "http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2" \
+        -t all \
+        -c centosci/{topology}.yml \
+        $VIRTHOST
 
         </pre>
     triggers:
-        - trigger-tripleo-quickstart-gate-minimal
+        - trigger-tripleo-quickstart-gate
     scm:
         - repo-tripleo-quickstart-gerrit
         - repo-khaleesi
     builders:
-        - tripleo-quickstart-minimal-gate-builder:
+        - tripleo-quickstart-gate-builder:
             release: '{release}'
             build_system: '{build_system}'
-            playbook: '{playbook}'
+            topology: '{topology}'
     properties:
         - ownership:
             owner: trown@redhat.com
@@ -91,20 +123,24 @@
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/centosci/{playbook}.yml" target="_blank">centosci/{playbook}.yml</a></p>
+        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/build-images-and-quickstart.yml" target="_blank">build-images-and-quickstart.yml</a></p>
         <br>
         In order to run this job locally:
         <pre>
 
         # It is assumed that tripleo-quickstart is installed in the default
         # virtualenv created by running quickstart.sh
+        # (however quickstart.sh does not yet support building images)
         source $HOME/.quickstart/bin/activate
         export VIRTHOST='my-cool-virthost.example.com'
         export ANSIBLE_CONFIG=$HOME/.quickstart/tripleo-quickstart/ansible.cfg
 
-        ansible-playbook -i local_hosts $HOME/.quickstart/tripleo-quickstart/playbooks/centosci/{playbook}.yml \
+        ansible-playbook -i local_hosts $HOME/.quickstart/tripleo-quickstart/playbooks/build-images-and-quickstart.yml \
         --extra-vars virthost=$VIRTHOST \
-        --extra-vars url="file:///tmp/oooq-images/undercloud.qcow2"
+        --extra-vars release={release} \
+        --extra-vars build_system={build_system} \
+        --extra-vars url="file:///tmp/oooq-images/undercloud.qcow2" \
+        --extra-vars @$HOME/.quickstart/tripleo-quickstart/playbooks/centosci/{topology}.yml
 
         </pre>
 
@@ -117,7 +153,7 @@
         - tripleo-quickstart-images-gate-builder:
             release: '{release}'
             build_system: '{build_system}'
-            playbook: '{playbook}'
+            topology: '{topology}'
     properties:
         - ownership:
             owner: trown@redhat.com

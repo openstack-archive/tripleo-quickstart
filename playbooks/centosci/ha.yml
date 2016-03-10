@@ -1,38 +1,22 @@
----
-- name: Add virthost to inventory
-  hosts: localhost
-  gather_facts: no
-  vars:
-    # This allows running ansible in a virtualenv,
-    # while using python from the base install
-    ansible_python_interpreter: "/usr/bin/python"
-  roles:
-    - provision/manual
-    - rebuild-inventory
+control_memory: 6144
+compute_memory: 4096
 
-- name:  Setup undercloud and baremetal vms and networks in libvirt
-  hosts: host0
-  gather_facts: yes
-  roles:
-    - libvirt/setup
+undercloud_memory: 8192
+undercloud_vcpu: 2
 
-- name: Rebuild inventory
-  hosts: localhost
-  gather_facts: no
-  vars:
-    # This allows running ansible in a virtualenv,
-    # while using python from the base install
-    ansible_python_interpreter: "/usr/bin/python"
-  roles:
-    - rebuild-inventory
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+  - name: control_1
+    flavor: control
+  - name: control_2
+    flavor: control
 
-- name:  Install undercloud and deploy overcloud
-  hosts: undercloud
-  gather_facts: no
-  vars:
-    extra_args: "--control-scale 3 -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml --ntp-server pool.ntp.org"
-    tempest: false
-    introspect: false
-    pingtest: true
-  roles:
-    - overcloud
+  - name: compute_0
+    flavor: compute
+
+introspect: false
+
+extra_args: "--control-scale 3 -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml --ntp-server pool.ntp.org"
+tempest: false
+pingtest: true
