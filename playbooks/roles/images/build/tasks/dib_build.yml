@@ -61,6 +61,7 @@
     selinux-permissive \
     pip-and-virtualenv-override \
     ironic-agent \
+    -p python-hardware-detect \
     --min-tmpfs 5 2>&1 | tee {{ working_dir }}/dib-agent-ramdisk.log
   environment:
     DIB_LOCAL_IMAGE: "{{ working_dir }}/minimal-base.qcow2"
