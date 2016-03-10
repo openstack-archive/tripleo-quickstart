@@ -14,6 +14,7 @@
   hosts: virthost
   gather_facts: yes
   roles:
+    - environment/setup
     - libvirt/teardown
     - libvirt/setup
 

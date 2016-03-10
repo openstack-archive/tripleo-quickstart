@@ -1,0 +1,4 @@
+dependencies:
+  - parts/kvm
+  - parts/libvirt
+  - environment

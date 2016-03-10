@@ -1,9 +1,5 @@
 ---
 dependencies:
   - role: libvirt
-  - role: teardown/check
-  - role: teardown/networks
-    when: "libvirt_check.rc == 0"
   - role: teardown/nodes
-    when: "libvirt_check.rc == 0"
   - role: teardown/user

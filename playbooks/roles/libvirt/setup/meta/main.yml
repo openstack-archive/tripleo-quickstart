@@ -1,7 +1,6 @@
 ---
 dependencies:
   - role: libvirt
-  - role: setup/install
   - role: setup/user
   - role: setup/networks
   - role: setup/overcloud_nodes

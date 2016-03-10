@@ -1,0 +1,2 @@
+qemu_bridge_conf: /etc/qemu-kvm/bridge.conf
+

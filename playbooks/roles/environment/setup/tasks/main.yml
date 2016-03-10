@@ -1,0 +1,31 @@
+- name: Create libvirt networks
+  virt_net:
+    command: define
+    state: present
+    name: "{{ item.name }}"
+    xml: '{{ lookup("template", "network.xml.j2") }}'
+  with_items: "{{ networks }}"
+  become: true
+
+- name: Start libvirt networks
+  virt_net:
+    command: start
+    name: "{{ item.name }}"
+    state: active
+  with_items: "{{ networks }}"
+  become: true
+
+- name: Mark  libvirt networks as autostarted
+  virt_net:
+    name: "{{ item.name }}"
+    autostart: "yes"
+  with_items: "{{ networks }}"
+  become: true
+
+# See: http://wiki.qemu.org/Features-Done/HelperNetworking
+- name: Whitelist bridges for unprivileged access
+  lineinfile:
+    dest: "{{ qemu_bridge_conf }}"
+    line: "allow {{item.bridge}}"
+  with_items: "{{ networks }}"
+  become: true

@@ -1,7 +1,0 @@
----
-- name: Delete networks
-  virt_net:
-    name: "{{ item.name }}"
-    state: absent
-  with_items: "{{ networks }}"
-  become: true
