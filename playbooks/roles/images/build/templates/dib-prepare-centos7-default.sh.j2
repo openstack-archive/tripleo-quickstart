@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#
+# Install Disk Image Builder (DIB) and it's required packages.  This script is the default used by RDO to install
+# DIB (from liberty) atop centos to build current undercloud and overcloud images.
+#
+# Other platforms/releases can override this script as necessary.
+#
+set -x
+
+yum install -y {{ dib_release_rpm }}
+
+#FIXME(trown) we need a newer diskimage-builder package than what is in the
+# RDO release repo, in the meantime install it from delorean.
+yum install -y http://trunk.rdoproject.org/centos7-liberty/ce/30/ce30250c9e9858aeddb0f65583ceaa8a49fe62b4_a2b13371/diskimage-builder-1.11.1-0.20160217003244.352e58c.el7.centos.noarch.rpm
+
+yum install -y instack-undercloud openstack-heat-templates openstack-tripleo-image-elements openstack-tripleo-puppet-elements
+
+#FIXME(trown) one of the above packages should have a requires on python-six
+yum install -y python-six
+
+{% if dib_remove_epel %}
+
+# workaround to remove EPEL from images
+# LKS: In the "99-dkms" component?
+sed -i '/epel/d' /usr/share/diskimage-builder/elements/centos7/element-deps
+rm -f /usr/share/diskimage-builder/elements/base/install.d/99-dkms
+
+{% endif %}
+
+
+

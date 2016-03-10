@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# This is a generated file used to configure DIB.  normal = this line only.
+{#
+  Additional env variables used by DIB (such as DIB_YUM_REPO_CONF) can be
+  defined in  dict() dib_dib_environment_additional.  They will be emitted
+  to a script that is sourced prior to running dib.
+#}
+
+{% if dib_environment_additional is defined %}
+{% for varname, varval in dib_environment_additional.iteritems() %}
+export {{ varname }}="{{ varval }}"
+{% endfor %}
+{% endif %}
+
