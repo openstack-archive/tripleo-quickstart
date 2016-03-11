@@ -7,9 +7,12 @@ DEFAULT_OPT_TAGS="untagged,undercloud-scripts,overcloud-scripts"
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 
-# Install commands before using them.
-ensure_command() {
-    command -v $1 || yum -y install /usr/bin/$1
+install_deps () {
+    yum -y install \
+        /usr/bin/git \
+        /usr/bin/virtualenv \
+        gcc \
+        libyaml
 }
 
 # This creates a Python virtual environment and installs
@@ -17,13 +20,17 @@ ensure_command() {
 # the local working directory does not exist, or if explicitly
 # requested via --bootstrap.
 bootstrap () {
-    ensure_command virtualenv
+    (   # run in a subshell so that we can 'set -e' without aborting
+        # the main script immediately (because we want to clean up
+        # on failure).
+
+    set -e
+
     virtualenv $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" ) $OPT_WORKDIR
     . $OPT_WORKDIR/bin/activate
 
     if ! [ -d "$OPT_WORKDIR/tripleo-quickstart" ]; then
         echo "Cloning tripleo-quickstart repository..."
-        ensure_command git
         git clone https://github.com/redhat-openstack/tripleo-quickstart.git \
             $OPT_WORKDIR/tripleo-quickstart
     fi
@@ -36,7 +43,6 @@ bootstrap () {
         git remote update
         git checkout --quiet origin/master
     fi
-    ensure_command pip
     pip install -r requirements.txt
     python setup.py install
     )
@@ -48,6 +54,7 @@ activate_venv() {
 
 usage () {
     echo "$0: usage: $0 [options] virthost [release]"
+    echo "$0: usage: sudo $0 --install-deps"
     echo "$0: options:"
     echo "    --system-site-packages"
     echo "    --ansible-debug"
@@ -60,6 +67,10 @@ usage () {
 while [ "x$1" != "x" ]; do
 
     case "$1" in
+        --install-deps)
+            OPT_INSTALL_DEPS=1
+            ;;
+
         --system-site-packages|-s)
             OPT_SYSTEM_PACKAGES=1
             ;;
@@ -114,6 +125,12 @@ while [ "x$1" != "x" ]; do
 
     shift
 done
+
+if [ "$OPT_INSTALL_DEPS" = 1 ]; then
+	echo "NOTICE: installing dependencies"
+	install_deps
+	exit $?
+fi
 
 if [ "$#" -lt 1 ]; then
     echo "ERROR: You must specify a target machine." >&2
