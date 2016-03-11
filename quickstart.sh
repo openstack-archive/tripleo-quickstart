@@ -30,6 +30,12 @@ bootstrap () {
 
     (
     cd $OPT_WORKDIR/tripleo-quickstart
+    if [ -n "$OPT_GERRIT" ]; then
+        git review -d "$OPT_GERRIT"
+    else
+        git remote update
+        git checkout --quiet origin/master
+    fi
     ensure_command pip
     pip install -r requirements.txt
     python setup.py install
@@ -46,9 +52,9 @@ usage () {
     echo "    --system-site-packages"
     echo "    --ansible-debug"
     echo "    --bootstrap"
-    echo "    --working-dir"
-    echo "    --undercloud-image-url"
-    echo "    --tags"
+    echo "    --working-dir <directory>"
+    echo "    --undercloud-image-url <url>"
+    echo "    --tags <tag1>[,<tag2>,...]"
 }
 
 while [ "x$1" != "x" ]; do
@@ -78,6 +84,13 @@ while [ "x$1" != "x" ]; do
 
         --tags|-t)
             OPT_TAGS=$2
+            shift
+            ;;
+
+        # super-secret option for testing gerrit changes
+        --gerrit|-g)
+            OPT_GERRIT=$2
+            OPT_BOOTSTRAP=1
             shift
             ;;
 
@@ -115,12 +128,12 @@ RELEASE=$2
 # an explicit URL, then $RELEASE is a no-op so we should warn the user of that
 # fact.
 if [ -n "$RELEASE" ] && [ -n "$OPT_UNDERCLOUD_URL" ]; then
-	echo "WARNING: ignoring release $RELEASE because you have" >&2
-	echo "         provided an explicit undercloud image URL." >&2
+    echo "WARNING: ignoring release $RELEASE because you have" >&2
+    echo "         provided an explicit undercloud image URL." >&2
 
-	RELEASE=
+    RELEASE=
 elif [ -z "$RELEASE" ] && [ -z "$OPT_UNDERCLOUD_URL" ]; then
-	RELEASE=mitaka
+    RELEASE=mitaka
 fi
 
 # we use this only if --undercloud-image-url was not provided on the
