@@ -35,7 +35,6 @@ bootstrap () {
             $OPT_WORKDIR/tripleo-quickstart
     fi
 
-    (
     cd $OPT_WORKDIR/tripleo-quickstart
     if [ -n "$OPT_GERRIT" ]; then
         git review -d "$OPT_GERRIT"
@@ -43,6 +42,7 @@ bootstrap () {
         git remote update
         git checkout --quiet origin/master
     fi
+
     pip install -r requirements.txt
     python setup.py install
     )
@@ -127,9 +127,9 @@ while [ "x$1" != "x" ]; do
 done
 
 if [ "$OPT_INSTALL_DEPS" = 1 ]; then
-	echo "NOTICE: installing dependencies"
-	install_deps
-	exit $?
+    echo "NOTICE: installing dependencies"
+    install_deps
+    exit $?
 fi
 
 if [ "$#" -lt 1 ]; then
@@ -160,13 +160,20 @@ fi
 echo "Installing OpenStack ${RELEASE:+"$RELEASE "}on host $VIRTHOST"
 echo "Using directory $OPT_WORKDIR for a local working directory"
 
-set -ex
-
 if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
     bootstrap
-else
-    activate_venv
+
+    if [ $? -ne 0 ]; then
+        echo "ERROR: bootstrap failed; removing $OPT_WORKDIR"
+    echo "       try "sudo $0 --install-deps" to install requirements"
+        rm -rf $OPT_WORKDIR
+        exit 1
+    fi
 fi
+
+activate_venv
+
+set -ex
 
 # make sure we have an absolute path
 OPT_WORKDIR=$(cd $OPT_WORKDIR && pwd)
