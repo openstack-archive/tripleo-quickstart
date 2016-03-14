@@ -5,6 +5,7 @@
   "nodes": [
   {% for node in overcloud_nodes %}
     {
+      "name": "{{ node.name|replace('_', '-') }}",
       "pm_password": {{ virt_power_key_pvt | to_nice_json }},
       "pm_type": "pxe_ssh",
       "mac": [
