@@ -1,5 +1,9 @@
 {% set ssh_user = ansible_user|default(ansible_user_id, True) %}
-{% set ssh_host = ansible_host|default(inventory_hostname) %}
+{% if ansible_host is not defined or ansible_host == 'localhost' %}
+{% set ssh_host = inventory_hostname %}
+{% else %}
+{% set ssh_host = ansible_host %}
+{% endif %}
 {% if ansible_private_key_file is defined %}
 {% set ssh_key_arg = " -i " + ansible_private_key_file + " " %}
 {% else %}
