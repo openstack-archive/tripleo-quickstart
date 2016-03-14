@@ -21,7 +21,7 @@ openstack baremetal introspection bulk start
 #
 
 # remove flavor before attempting to create
-openstack flavor delete oooq_{{ name }} > /dev/null 2>&1 || true
+nova flavor-delete oooq_{{ name }} > /dev/null 2>&1 || true
 
 # We subtract 1 from the total disk size here to resolve problems
 # encountered in CI in which the available disk space on the virtual
