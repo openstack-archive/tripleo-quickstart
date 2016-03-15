@@ -11,4 +11,13 @@ artifacts:
   - overcloud-full.tar.md5
 release: mitaka
 build_system: delorean
+
 publish: false
+publish_dest_user:     rdo
+publish_dest_host:     artifacts.ci.centos.org
+publish_dest_basepath: rdo/images
+
+
+# optional
+# publish_dest_key: "localpath/to/your/identity/file"
+
