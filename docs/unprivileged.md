@@ -10,8 +10,11 @@ advance:
 
 ## Automatic system configuration
 
-If you place the following into `playbook.yml` in the
-`tripleo-quickstart` directory:
+If you want to perform the system configuration tasks manually, skip
+this section and start reading below at "Configure KVM".
+
+Place the following into `playbook.yml` in the `tripleo-quickstart`
+directory:
 
     - host: localhost
       roles:
@@ -22,36 +25,7 @@ local host):
 
     ansible-playbook playbook.yml
 
-Then our Ansible roles will take care of the necessary system
-configuration tasks on your behalf and you can skip the next several
-sections and start reading at [Deploying tripleo](#deploying-tripleo).
-
-## Required packages
-
-You will need to install the following packages:
-
-- `qemu-kvm`
-- `libvirt`
-- `libvirt-python`
-- `libguestfs-tools`
-- `python-lxml`
-
-Once these packages are installed, you need to start `libvirtd`:
-
-    # systemctl enable libvirtd
-    # systemctl start libvirtd
-
-## Configuring libvirt networks
-
-The quickstart requires two networks.  The `external` network provides
-inbound access into the virtual environment set up the playbooks.  The
-`overcloud` network connects the overcloud hosts to the undercloud,
-and is used both for provisioning, inbound access to the overcloud,
-and communication between overcloud hosts.
-
-In the following steps, note that the names you choose for the libvirt
-networks are unimportant (because the vms will be wired up to these
-networks using bridge names, rather than libvirt network names).
+Continue reading at [Deploying Tripleo](#deploying-tripleo).
 
 ## Configure KVM
 
@@ -86,6 +60,33 @@ file `/etc/modprobe.d/kvm.conf` with the following contents:
     options kvm_amd nested=1
 
 [nested kvm]: https://www.kernel.org/doc/Documentation/virtual/kvm/nested-vmx.txt
+
+## Required packages
+
+You will need to install the following packages:
+
+- `qemu-kvm`
+- `libvirt`
+- `libvirt-python`
+- `libguestfs-tools`
+- `python-lxml`
+
+Once these packages are installed, you need to start `libvirtd`:
+
+    # systemctl enable libvirtd
+    # systemctl start libvirtd
+
+## Configuring libvirt networks
+
+The quickstart requires two networks.  The `external` network provides
+inbound access into the virtual environment set up the playbooks.  The
+`overcloud` network connects the overcloud hosts to the undercloud,
+and is used both for provisioning, inbound access to the overcloud,
+and communication between overcloud hosts.
+
+In the following steps, note that the names you choose for the libvirt
+networks are unimportant (because the vms will be wired up to these
+networks using bridge names, rather than libvirt network names).
 
 ### The external network
 
