@@ -12,9 +12,9 @@ glance image-list |
   awk '/pingtest_image/ {print $2}' |
   xargs --no-run-if-empty -n1 glance image-delete
 
-rm -rf tripleo-common
-git clone https://github.com/openstack/tripleo-common.git
-pushd tripleo-common
+rm -rf tripleo-ci
+git clone https://github.com/openstack-infra/tripleo-ci.git
+pushd tripleo-ci
 
 # We need to use a yes hack here because mitaka heatclient introduced a
 # confirmation prompt, but it is not there in liberty.
