@@ -1,6 +1,12 @@
-- name: Create remote working dir
+- name: Ensure remote working dir exists
   file:
     path: "{{ working_dir }}"
+    state: directory
+
+- name: Ensure local working dir exists
+  delegate_to: localhost
+  file:
+    path: "{{ local_working_dir }}"
     state: directory
 
 - name: Generate ssh keys
