@@ -1,5 +1,5 @@
-control_memory: 6144
-compute_memory: 4096
+control_memory: 8192
+compute_memory: 8192
 
 overcloud_nodes:
   - name: control_0
