@@ -17,7 +17,7 @@
       "arch": "{{ libvirt_arch }}",
       "pm_user": "{{ ansible_user_id }}",
       "pm_addr": "{{ host_ip }}",
-      "capabilities": "profile:oooq_{{ node.flavor }},boot_option:local"
+      "capabilities": "profile:{{ node.flavor }},boot_option:local"
     }
     {% if not loop.last %}
     ,

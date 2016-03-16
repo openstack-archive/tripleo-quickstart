@@ -34,7 +34,7 @@ openstack flavor create --id auto \
 openstack flavor set \
     --property "cpu_arch"="x86_64" \
     --property "capabilities:boot_option"="local" \
-    --property "capabilities:profile"="oooq_{{ name }}" oooq_{{ name }}
+    --property "capabilities:profile"="{{ name }}" oooq_{{ name }}
 {% for propname,propval in (flavor.properties|default({})).items() %}
 openstack flavor set --property "{{propname}}={{propval}}" oooq_{{ name }}
 {% endfor %}
