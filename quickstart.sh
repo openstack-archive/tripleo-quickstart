@@ -29,22 +29,23 @@ bootstrap () {
     virtualenv $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" ) $OPT_WORKDIR
     . $OPT_WORKDIR/bin/activate
 
-    if ! [ -d "$OPT_WORKDIR/tripleo-quickstart" ]; then
-        echo "Cloning tripleo-quickstart repository..."
-        git clone https://github.com/redhat-openstack/tripleo-quickstart.git \
-            $OPT_WORKDIR/tripleo-quickstart
-    fi
+    if [ "$OPT_NO_CLONE" != 1 ]; then
+        if ! [ -d "$OPT_WORKDIR/tripleo-quickstart" ]; then
+            echo "Cloning tripleo-quickstart repository..."
+            git clone https://github.com/redhat-openstack/tripleo-quickstart.git \
+                $OPT_WORKDIR/tripleo-quickstart
+        fi
 
-    cd $OPT_WORKDIR/tripleo-quickstart
-    if [ -n "$OPT_GERRIT" ]; then
-        git review -d "$OPT_GERRIT"
-    else
-        git remote update
-        git checkout --quiet origin/master
+        cd $OPT_WORKDIR/tripleo-quickstart
+        if [ -n "$OPT_GERRIT" ]; then
+            git review -d "$OPT_GERRIT"
+        else
+            git remote update
+            git checkout --quiet origin/master
+        fi
     fi
 
     pip install -r requirements.txt
-    python setup.py install
     )
 }
 
@@ -99,13 +100,6 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        # super-secret option for testing gerrit changes
-        --gerrit|-g)
-            OPT_GERRIT=$2
-            OPT_BOOTSTRAP=1
-            shift
-            ;;
-
         --config|-c)
             OPT_CONFIG=$2
             shift
@@ -114,6 +108,18 @@ while [ "x$1" != "x" ]; do
         --help|-h)
             usage
             exit
+            ;;
+
+        # developer options
+
+        --gerrit|-g)
+            OPT_GERRIT=$2
+            OPT_BOOTSTRAP=1
+            shift
+            ;;
+
+        --no-clone|-n)
+            OPT_NO_CLONE=1
             ;;
 
         --) shift
@@ -132,9 +138,15 @@ while [ "x$1" != "x" ]; do
     shift
 done
 
+if [ "$OPT_NO_CLONE" = 1 ]; then
+    OOOQ_DIR=.
+else
+    OOOQ_DIR=$OPT_WORKDIR/tripleo-quickstart
+fi
+
 # Set this default after option processing, because the default depends
 # on another option.
-: ${OPT_CONFIG:=$OPT_WORKDIR/tripleo-quickstart/playbooks/centosci/minimal.yml}
+: ${OPT_CONFIG:=$OOOQ_DIR/playbooks/centosci/minimal.yml}
 
 if [ "$OPT_INSTALL_DEPS" = 1 ]; then
     echo "NOTICE: installing dependencies"
@@ -144,6 +156,11 @@ fi
 
 if [ "$#" -lt 1 ]; then
     echo "ERROR: You must specify a target machine." >&2
+    usage >&2
+    exit 2
+fi
+
+if [ "$#" -gt 2 ]; then
     usage >&2
     exit 2
 fi
@@ -185,10 +202,7 @@ activate_venv
 
 set -ex
 
-# make sure we have an absolute path
-OPT_WORKDIR=$(cd $OPT_WORKDIR && pwd)
-
-export ANSIBLE_CONFIG=$OPT_WORKDIR/tripleo-quickstart/ansible.cfg
+export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
 
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
@@ -197,14 +211,13 @@ else
     VERBOSITY=vv
 fi
 
-ansible-playbook -$VERBOSITY $OPT_WORKDIR/tripleo-quickstart/playbooks/quickstart.yml \
+ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/quickstart.yml \
     -e @$OPT_CONFIG \
     -e ansible_python_interpreter=/usr/bin/python \
     -e image_url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
-    -t $OPT_TAGS
-
+    ${OPT_TAGS:+-t $OPT_TAGS}
 
 # We only print out further usage instructions when using the default
 # tags, since this is for new users (and not even applicable to some tags).
