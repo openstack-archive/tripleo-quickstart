@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_OPT_TAGS="untagged,undercloud-scripts,overcloud-scripts"
+DEFAULT_OPT_TAGS="untagged,provision,undercloud-scripts,overcloud-scripts"
 
 : ${OPT_BOOTSTRAP:=0}
 : ${OPT_SYSTEM_PACKAGES:=0}
@@ -63,6 +63,7 @@ usage () {
     echo "    --working-dir <directory>"
     echo "    --undercloud-image-url <url>"
     echo "    --tags <tag1>[,<tag2>,...]"
+    echo "    --skip-tags <tag1>,[<tag2>,...]"
     echo "    --config <file>"
 }
 
@@ -97,6 +98,11 @@ while [ "x$1" != "x" ]; do
 
         --tags|-t)
             OPT_TAGS=$2
+            shift
+            ;;
+
+        --skip-tags)
+            OPT_SKIP_TAGS=$2
             shift
             ;;
 
@@ -205,6 +211,14 @@ set -ex
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
 
+if [ "$VIRTHOST" = "localhost" ]; then
+    echo "$0: WARNING: VIRTHOST == localhost; skipping provisioning" >&2
+    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}provision"
+
+    echo "[virthost]" > $ANSIBLE_INVENTORY
+    echo "localhost ansible_connection=local" >> $ANSIBLE_INVENTORY
+fi
+
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
     VERBOSITY=vvvv
 else
@@ -217,7 +231,8 @@ ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/quickstart.yml \
     -e image_url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
-    ${OPT_TAGS:+-t $OPT_TAGS}
+    ${OPT_TAGS:+-t $OPT_TAGS} \
+    ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS}
 
 # We only print out further usage instructions when using the default
 # tags, since this is for new users (and not even applicable to some tags).

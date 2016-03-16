@@ -1,5 +1,14 @@
 ---
 - include: provision.yml
+  tags:
+    - provision
+
+- name: Install libvirt packages and configure networks
+  hosts: virthost
+  tags:
+    - environment
+  roles:
+    - environment/setup
 
 - name:  Setup undercloud and baremetal vms and networks in libvirt
   hosts: virthost
@@ -8,9 +17,10 @@
     - libvirt/teardown
     - libvirt/setup
 
+# This adds the undercloud node to the generated 
+# inventory.
 - name: Rebuild inventory
   hosts: localhost
-  gather_facts: no
   roles:
     - rebuild-inventory
 
