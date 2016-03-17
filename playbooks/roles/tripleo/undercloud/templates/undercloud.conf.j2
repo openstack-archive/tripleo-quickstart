@@ -24,25 +24,25 @@ undercloud_hostname = {{undercloud_undercloud_hostname}}
 #undercloud_hostname = <None>
 {% endif %}
 
+# Network CIDR for the Neutron-managed network for Overcloud
+# instances. This should be the subnet used for PXE booting. (string
+# value)
+network_cidr = {{undercloud_network_cidr}}
+
 # IP information for the interface on the Undercloud that will be
 # handling the PXE boots and DHCP for Overcloud instances.  The IP
 # portion of the value will be assigned to the network interface
 # defined by local_interface, with the netmask defined by the prefix
 # portion of the value. (string value)
-{% if undercloud_local_ip is defined %}
-local_ip = {{undercloud_local_ip}}
-{% else %}
-#local_ip = 192.0.2.1/24
-{% endif %}
+local_ip = {{undercloud_local_ip|default(
+    '%s/%s' % (undercloud_network_cidr|nthhost(1),
+    undercloud_network_cidr.split('/').1))}}
 
 # Network gateway for the Neutron-managed network for Overcloud
 # instances. This should match the local_ip above when using
 # masquerading. (string value)
-{% if undercloud_network_gateway is defined %}
-network_gateway = {{undercloud_network_gateway}}
-{% else %}
-#network_gateway = 192.0.2.1
-{% endif %}
+network_gateway = {{undercloud_network_gateway|default(
+    undercloud_network_cidr|nthhost(1))}}
 
 # Virtual IP address to use for the public endpoints of Undercloud
 # services.  Only used if undercloud_service_certficate is set.
@@ -75,38 +75,20 @@ local_interface = {{undercloud_local_interface}}
 #local_interface = eth1
 {% endif %}
 
-# Network CIDR for the Neutron-managed network for Overcloud
-# instances. This should be the subnet used for PXE booting. (string
-# value)
-{% if undercloud_network_cidr is defined %}
-network_cidr = {{undercloud_network_cidr}}
-{% else %}
-#network_cidr = 192.0.2.0/24
-{% endif %}
-
 # Network that will be masqueraded for external access, if required.
 # This should be the subnet used for PXE booting. (string value)
-{% if undercloud_masquerade_network is defined %}
-masquerade_network = {{undercloud_masquerade_network}}
-{% else %}
-#masquerade_network = 192.0.2.0/24
-{% endif %}
+masquerade_network = {{undercloud_masquerade_network|default(
+    undercloud_network_cidr)}}
 
 # Start of DHCP allocation range for PXE and DHCP of Overcloud
 # instances. (string value)
-{% if undercloud_dhcp_start is defined %}
-dhcp_start = {{undercloud_dhcp_start}}
-{% else %}
-#dhcp_start = 192.0.2.5
-{% endif %}
+dhcp_start = {{undercloud_dhcp_start|default(
+    undercloud_network_cidr|nthhost(5))}}
 
 # End of DHCP allocation range for PXE and DHCP of Overcloud
 # instances. (string value)
-{% if undercloud_dhcp_end is defined %}
-dhcp_end = {{undercloud_dhcp_end}}
-{% else %}
-#dhcp_end = 192.0.2.24
-{% endif %}
+dhcp_end = {{undercloud_dhcp_end|default(
+    undercloud_network_cidr|nthhost(30))}}
 
 # Network interface on which inspection dnsmasq will listen.  If in
 # doubt, use the default value. (string value)
@@ -121,11 +103,9 @@ inspection_interface = {{undercloud_inspection_interface}}
 # process.  Should not overlap with the range defined by dhcp_start
 # and dhcp_end, but should be in the same network. (string value)
 # Deprecated group/name - [DEFAULT]/discovery_iprange
-{% if undercloud_inspection_iprange is defined %}
-inspection_iprange = {{undercloud_inspection_iprange}}
-{% else %}
-#inspection_iprange = 192.0.2.100,192.0.2.120
-{% endif %}
+inspection_iprange = {{undercloud_inspection_iprange|default(
+    '%s,%s' % (undercloud_network_cidr|nthhost(100),
+    undercloud_network_cidr|nthhost(120)))}}
 
 # Whether to run benchmarks when inspecting nodes. (boolean value)
 # Deprecated group/name - [DEFAULT]/discovery_runbench
