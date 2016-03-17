@@ -3,7 +3,7 @@
     msg: "You need to set virthost before running these playbooks."
   when: virthost is not defined
 
-- name: Create working_dir
+- name: Ensure local working dir exists
   file:
     path: "{{ local_working_dir }}"
     state: directory
