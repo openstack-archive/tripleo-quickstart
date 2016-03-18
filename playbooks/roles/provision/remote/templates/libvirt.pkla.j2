@@ -1,0 +1,6 @@
+[Libvirt management for {{ non_root_user }} user]
+Identity=unix-user:{{ non_root_user }}
+Action=org.libvirt.unix.manage
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
