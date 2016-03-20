@@ -61,6 +61,10 @@
     {{ working_dir }}/overcloud-deploy-post.sh \
       > {{ post_deploy_log }} 2>&1
 
+- include: updatessh.yml
+  tags:
+    - overcloud-post-deploy
+
 - name: Validate the overcloud
   tags:
     - overcloud-validate
