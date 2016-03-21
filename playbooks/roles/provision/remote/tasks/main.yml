@@ -21,6 +21,19 @@
   with_file:
     - "{{ virt_host_key }}.pub"
 
+- name: Ensure XDG_RUNTIME_DIR is set
+  blockinfile:
+    dest: .bashrc
+    create: true
+    block: |
+      # Make sure XDG_RUNTIME_DIR is set (used by libvirt
+      # for creating config and sockets for qemu:///session
+      # connections)
+      : ${XDG_RUNTIME_DIR:=/run/user/$(id -u)}
+      export XDG_RUNTIME_DIR
+  become: true
+  become_user: "{{ non_root_user }}"
+
 - name: Grant sudo privileges to non-root user
   copy:
     content: |
