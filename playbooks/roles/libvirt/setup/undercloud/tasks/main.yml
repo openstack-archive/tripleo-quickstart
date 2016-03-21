@@ -57,6 +57,14 @@
       group: stack
   when: undercloud_vol_check|failed
 
+- name: Perform selinux relabel on undercloud image
+  command: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --selinux-relabel
+  environment:
+    LIBGUESTFS_BACKEND: direct
+  when: undercloud_vol_check|failed
+
 - name: Resize undercloud image (create target image)
   command: >
     qemu-img create -f qcow2 -o preallocation=off
