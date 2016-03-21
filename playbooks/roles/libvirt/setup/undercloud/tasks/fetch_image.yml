@@ -10,55 +10,91 @@
     path: "{{ image_cache_dir }}"
     state: directory
 
-- name: Get undercloud image expected checksum
+- name: Check if we have a latest.qcow2
   command: >
-    curl --trace-ascii /dev/stderr -sf {{ image_url }}.md5
-  register: undercloud_md5_expected
-
-- name: Check for undercloud image in cache
-  command: >
-    test -f {{undercloud_md5_expected.stdout.split()[0]}}.qcow2
+    test -f latest.qcow2
   args:
     chdir: "{{ image_cache_dir }}"
   ignore_errors: true
-  register: image_exists
+  register: latest_exists
   changed_when: false
 
-- name: Get undercloud image
-  command: >
-    curl -sf -C- -o _undercloud.qcow2 {{ image_url }}
-  args:
-    chdir: "{{ image_cache_dir }}"
-  register: curl_result
-  until: curl_result.rc not in [18, 56]
-  retries: 20
-  delay: 5
-  when: image_exists|failed
+- when: use_cached_image|bool and latest_exists|success
+  block:
 
-- name: Get actual md5 checksum of undercloud image
-  command: >
-    md5sum _undercloud.qcow2
-  args:
-    chdir: "{{ image_cache_dir }}"
-  register: undercloud_md5_actual
-  when: image_exists|failed
+    - name: Set path to cached image [local]
+      set_fact:
+        image_cache_path: "{{ image_cache_dir }}/latest.qcow2"
+      when: latest_exists|success and use_cached_image|bool
 
-- name: Verify undercloud image checksum
-  fail:
-    msg: undercloud image checksum does not match
-  when: >
-    image_exists|failed and (
-    undercloud_md5_expected.stdout.split()[0] !=
-    undercloud_md5_actual.stdout.split()[0])
+- when: not use_cached_image|bool or latest_exists|failed
+  block:
 
-- name: Cache undercloud image by checksum
-  command: >
-    mv _undercloud.qcow2 {{ undercloud_md5_expected.stdout.split()[0] }}.qcow2
-  args:
-    chdir: "{{ image_cache_dir }}"
-  when: image_exists|failed
+    - name: Get undercloud image expected checksum
+      command: >
+        curl -sf {{ image_url }}.md5
+      register: undercloud_md5_expected
+
+    - name: Set path to cached image [upstream]
+      set_fact:
+        image_cache_path: "{{ image_cache_dir }}/{{ undercloud_md5_expected.stdout.split()[0] }}.qcow2"
+
+    - name: Check for undercloud image in cache
+      command: >
+        test -f {{ image_cache_path }}
+      args:
+        chdir: "{{ image_cache_dir }}"
+      ignore_errors: true
+      register: image_exists
+      changed_when: false
+
+- when: image_exists is defined and image_exists|failed
+  block:
+
+    - name: Get undercloud image
+      command: >
+        curl -sf -C- -o _undercloud.qcow2 {{ image_url }}
+      args:
+        chdir: "{{ image_cache_dir }}"
+      register: curl_result
+      until: curl_result.rc not in [18, 56]
+      retries: 20
+      delay: 5
+
+    - name: Get actual md5 checksum of undercloud image
+      command: >
+        md5sum _undercloud.qcow2
+      args:
+        chdir: "{{ image_cache_dir }}"
+      register: undercloud_md5_actual
+
+    - name: Verify undercloud image checksum
+      fail:
+        msg: undercloud image checksum does not match
+      when: >
+        image_exists|failed and (
+        undercloud_md5_expected.stdout.split()[0] !=
+        undercloud_md5_actual.stdout.split()[0])
+
+    - name: Cache undercloud image by checksum
+      command: >
+        mv _undercloud.qcow2 {{ image_cache_path }}
+      args:
+        chdir: "{{ image_cache_dir }}"
+
+    - name: Update "latest" symlink
+      file:
+        path: "{{ image_cache_dir }}/latest.qcow2"
+        state: link
+        src: "{{ image_cache_path }}"
+
+  always:
+
+    - name: Clean up temporary image file
+      file:
+        path: "{{ image_cache_dir }}/_undercloud.qcow2"
+        state: absent
 
 - name: Get undercloud image from cache
-  command:
-    cp {{ image_cache_dir }}/{{undercloud_md5_expected.stdout.split()[0]}}.qcow2
-    {{ working_dir }}/undercloud.qcow2
+  command: >
+    cp {{ image_cache_path }} {{ working_dir }}/undercloud.qcow2
