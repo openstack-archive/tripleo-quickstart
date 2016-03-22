@@ -1,0 +1,12 @@
+- name: Copy overcloudrc to ansible host
+  fetch:
+    flat: true
+    src: overcloudrc
+    dest: "{{ local_working_dir }}/overcloudrc"
+
+- name: Run post-deploy script
+  shell: |
+    {{ working_dir }}/overcloud-deploy-post.sh \
+      > {{ post_deploy_log }} 2>&1
+
+- include: updatessh.yml

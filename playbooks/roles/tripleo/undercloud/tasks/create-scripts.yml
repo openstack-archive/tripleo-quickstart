@@ -1,0 +1,19 @@
+- name: Create undercloud configuration
+  template:
+    src: "{{ undercloud_config_file }}"
+    dest: "./undercloud.conf"
+    mode: 0600
+
+- name: Create undercloud install script
+  template:
+    src: "{{ undercloud_install_script }}"
+    dest: "{{ working_dir }}/undercloud-install.sh"
+    mode: 0744
+
+- name: Create undercloud post-install script
+  template:
+    src: "{{ undercloud_post_install_script }}"
+    dest: "{{ working_dir }}/undercloud-post-install.sh"
+    mode: 0744
+
+

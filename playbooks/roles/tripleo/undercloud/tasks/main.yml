@@ -1,66 +1,11 @@
-- name: Create undercloud configuration
+- include: create-scripts.yml
   tags:
     - undercloud-scripts
-  template:
-    src: "{{ undercloud_config_file }}"
-    dest: "./undercloud.conf"
-    mode: 0600
 
-- name: Create undercloud install script
-  tags:
-    - undercloud-scripts
-  template:
-    src: "{{ undercloud_install_script }}"
-    dest: "{{ working_dir }}/undercloud-install.sh"
-    mode: 0744
-
-- name: Create undercloud post-install script
-  tags:
-    - undercloud-scripts
-  template:
-    src: "{{ undercloud_post_install_script }}"
-    dest: "{{ working_dir }}/undercloud-post-install.sh"
-    mode: 0744
-
-- name: Install the undercloud
+- include: install-undercloud.yml
   tags:
     - undercloud-install
-  shell: |
-    {{ working_dir }}/undercloud-install.sh > \
-    {{ undercloud_install_log }} 2>&1
-  when: step_install_undercloud
 
-- name: Get undercloud admin password
+- include: post-install.yml
   tags:
     - undercloud-post-install
-  command: >
-    awk -F= '$1 == "undercloud_admin_password" {print $2}'
-    {{ working_dir }}/undercloud-passwords.conf
-  register: undercloud_admin_password
-
-- name: Copy stackrc to ansible host
-  tags:
-    - undercloud-post-install
-  fetch:
-    flat: true
-    src: stackrc
-    dest: "{{ local_working_dir }}/stackrc"
-
-# we needs (and the previous task) in order to replace the
-# `sudo hiera admin_password` with an actual password.
-- name: Update admin password in local credentials file
-  tags:
-    - undercloud-post-install
-  delegate_to: localhost
-  lineinfile:
-    dest: "{{ local_working_dir }}/stackrc"
-    line: "export OS_PASSWORD={{ undercloud_admin_password.stdout }}"
-    regexp: "OS_PASSWORD"
-
-- name: Prepare the undercloud for deploy
-  tags:
-    - undercloud-post-install
-  shell: |
-    {{ working_dir }}/undercloud-post-install.sh > \
-    {{ undercloud_post_install_log }} 2>&1
-  when: step_install_undercloud
