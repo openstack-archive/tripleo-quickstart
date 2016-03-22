@@ -43,7 +43,7 @@
     {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/
     {% if publish_dest_key is defined %}
     {{ publish_dest_user }}@{{ publish_dest_host }}:{{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/testing/
-    {% else %}}
+    {% else %}
     {{ publish_dest_user }}@{{ publish_dest_host }}::{{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/testing/
     {% endif %}
 
