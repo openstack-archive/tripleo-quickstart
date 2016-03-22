@@ -1,12 +1,18 @@
 ---
-- include: provision.yml
+- name: Add virthost to inventory
+  hosts: localhost
+  roles:
+    - provision/local
+
+- name: Rebuild inventory
+  hosts: localhost
+  roles:
+    - rebuild-inventory
 
 - name:  Setup the virthost to build images then build them
   hosts: host0
   gather_facts: yes
   roles:
-    - libvirt
-    - libvirt/setup
     - images/build
 
 - name: Publish Images
