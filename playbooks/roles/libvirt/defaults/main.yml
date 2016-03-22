@@ -1,5 +1,6 @@
 working_dir: "{{ ansible_user_dir }}/.quickstart"
 image_cache_dir: "{{ ansible_user_dir }}/oooq_cache"
+use_cached_image: false
 release: mitaka
 image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/undercloud.qcow2
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
