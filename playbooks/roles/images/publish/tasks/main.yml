@@ -30,6 +30,7 @@
     {% endif %}
     {{ publish_dest_host }}
     mkdir -p {{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/testing
+  when: publish_create_dest_via_ssh
 
 - name: publish images
   delegate_to: localhost
@@ -40,7 +41,11 @@
     {% endif %}
     --delete -av
     {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/
+    {% if publish_dest_key is defined %}
     {{ publish_dest_user }}@{{ publish_dest_host }}:{{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/testing/
+    {% else %}}
+    {{ publish_dest_user }}@{{ publish_dest_host }}::{{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/testing/
+    {% endif %}
 
 - name: remove the images from the workspace
   local_action: "command rm -rf {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing"
