@@ -4,11 +4,15 @@
     state: present
   become: true
 
+# the existing infra does not allow for network connectivity between CI instances used to build the images and
+# the network location for resultant images.  For now this role uses the local ansible machine (jenkins slave)
+# as a staging area, which is removed after images are moved via rsync --> {{ publish_dest_base }}
 - name: create local dir to store images
   local_action: "command mkdir -p {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing"
 
 - name: create delorean_hash files
   local_action: "command echo {{ delorean_hash }} {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/delorean_hash"
+  when: delorean_hash is defined
 
 - name: fetch files to local workspace
   synchronize:
@@ -17,8 +21,26 @@
     mode: pull
   with_items: "{{ artifacts }}"
 
-- name: publish to artifacts.centos
-  local_action: "command rsync --delete -av {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/ rdo@artifacts.ci.centos.org::rdo/images/{{ release }}/{{ build_system }}/testing/"
+- name: create destination directory
+  delegate_to: localhost
+  command: >
+    ssh
+    {% if publish_dest_key is defined %}
+    -i {{ publish_dest_key }}
+    {% endif %}
+    {{ publish_dest_host }}
+    mkdir -p {{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/testing
+
+- name: publish images
+  delegate_to: localhost
+  command: >
+    rsync
+    {% if publish_dest_key is defined %}
+    -e 'ssh -i {{ publish_dest_key }}'
+    {% endif %}
+    --delete -av
+    {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing/
+    {{ publish_dest_user }}@{{ publish_dest_host }}:{{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/testing/
 
 - name: remove the images from the workspace
   local_action: "command rm -rf {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/testing"
