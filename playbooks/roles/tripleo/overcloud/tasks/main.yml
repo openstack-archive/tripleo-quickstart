@@ -54,6 +54,14 @@
   failed_when: deploy_result.rc == 0
   changed_when: false
 
+- name: Copy overcloudrc to ansible host
+  tags:
+    - overcloud-post-deploy
+  fetch:
+    flat: true
+    src: overcloudrc
+    dest: "{{ local_working_dir }}/overcloudrc"
+
 - name: Run post-deploy script
   tags:
     - overcloud-post-deploy
