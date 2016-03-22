@@ -77,16 +77,53 @@
         - full-logs-link
 
 - job-template:
-    name: 'tripleo-quickstart-gate-{release}-{build_system}-{topology}'
+    name: 'tripleo-quickstart-gate-{release}-{build_system}-quick-{test}'
     defaults: 'tripleo-quickstart-defaults'
     description: |
     defaults: 'tripleo-quickstart-defaults'
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/quickstart.yml" target="_blank">quickstart.yml</a></p>
+        <p>This job runs the script <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/ci-scripts/{test}.sh" target="_blank">{test}.sh</a></p>
         <br>
-        In order to run this job locally using quickstart.sh:
+        In order to run this job locally:
+        <pre>
+
+        export VIRTHOST='my-cool-virthost.example.com'
+        export RELEASE={release}
+
+        bash ci-scripts/{test}.sh
+
+        </pre>
+    concurrent: true
+    triggers:
+        - trigger-tripleo-quickstart-gate-quick
+    scm:
+        - repo-tripleo-quickstart-gerrit
+        - repo-khaleesi
+    builders:
+        - tripleo-quickstart-quick-gate-builder:
+            release: '{release}'
+            build_system: '{build_system}'
+            test: '{test}'
+    properties:
+        - ownership:
+            owner: trown@redhat.com
+    publishers:
+        - cleanup
+        - full-logs-link
+
+- job-template:
+    name: 'tripleo-quickstart-gate-{release}-{build_system}-full-{topology}'
+    defaults: 'tripleo-quickstart-defaults'
+    description: |
+    defaults: 'tripleo-quickstart-defaults'
+    description: |
+        <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
+        <br>
+        <p>This job runs <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/quickstart.sh" target="_blank">quickstart.sh</a> with all tags to get a full deploy</p>
+        <br>
+        In order to run this job locally:
         <pre>
 
         export VIRTHOST='my-cool-virthost.example.com'
@@ -99,12 +136,12 @@
 
         </pre>
     triggers:
-        - trigger-tripleo-quickstart-gate
+        - trigger-tripleo-quickstart-gate-full
     scm:
         - repo-tripleo-quickstart-gerrit
         - repo-khaleesi
     builders:
-        - tripleo-quickstart-gate-builder:
+        - tripleo-quickstart-full-gate-builder:
             release: '{release}'
             build_system: '{build_system}'
             topology: '{topology}'
@@ -116,7 +153,7 @@
         - full-logs-link
 
 - job-template:
-    name: 'tripleo-quickstart-gate-{release}-{build_system}-images'
+    name: 'tripleo-quickstart-gate-{release}-{build_system}-full-images'
     defaults: 'tripleo-quickstart-defaults'
     description: |
     defaults: 'tripleo-quickstart-defaults'

@@ -1,0 +1,285 @@
+node:
+  prefix:
+  - mf03f
+  - rhos-ci
+  - '37'
+  - rdo
+  - rmgr
+tmp:
+  node_prefix: '{{ node.prefix | reject("none") | join("-") }}-'
+  hostname_prefix: '{{ hostname.prefix | reject("none") | join("-") }}-'
+  anchors:
+  - http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
+  - http://trunk.rdoproject.org/centos7-liberty/
+product:
+  rpmrepo:
+    CentOS: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
+    Fedora: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
+    RedHat: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
+  repo_type: delorean
+  name: rdo
+  short_name: rdo
+  full_version: liberty
+  repo:
+    delorean_mgt_pin_version: current-passed-ci
+    delorean:
+      repo_file: delorean.repo
+      CentOS:
+        '7': http://trunk.rdoproject.org/centos7-liberty/
+      RedHat:
+        '7.2': http://trunk.rdoproject.org/centos7-liberty/
+        '7.0': http://trunk.rdoproject.org/centos7-liberty/
+        '7.1': http://trunk.rdoproject.org/centos7-liberty/
+    delorean_deps:
+      repo_file: delorean-deps.repo
+      CentOS:
+        '7': http://trunk.rdoproject.org/centos7-liberty/
+      RedHat:
+        '7.2': http://trunk.rdoproject.org/centos7-liberty/
+        '7.0': http://trunk.rdoproject.org/centos7-liberty/
+        '7.1': http://trunk.rdoproject.org/centos7-liberty/
+    delorean_pin_version: current-passed-ci
+  version:
+    major: 8
+    minor: 0
+    code_name: liberty
+  build: last_known_good
+  config:
+    enable_epel: y
+  short_repo: dln
+workaround:
+  set_key_encrypted_volumes: true
+hostname:
+  prefix:
+  - nh1nv
+  - rmgr
+instack_user_home: /home/stack
+job:
+  archive:
+  - /var/log/
+  - /etc/yum.repos.d
+  - /etc/selinux
+  - /root/
+  - /var/lib/mysql
+  - /etc/nova
+  - /etc/ceilometer
+  - /etc/cinder
+  - /etc/glance
+  - /etc/keystone
+  - /etc/neutron
+  - /etc/swift
+  - /etc/heat
+  - /etc/libvirt
+  - /etc/rabbitmq
+  - /etc/ntp
+  - /etc/puppet
+  - /etc/qpid
+  - /etc/qpidd.conf
+  - /home/stack/.instack/install-undercloud.log
+  - /home/stack/stackrc
+  - /home/stack/*.log
+  - /home/stack/*.json
+  - /home/stack/*.conf
+  - /home/stack/deploy-overcloudrc
+  - /home/stack/network-environment.yaml
+  - /home/stack/tempest/*.xml
+  - /home/stack/tempest/*.log
+  - /home/stack/tempest/etc/*.conf
+  - /usr/share/openstack-tripleo-heat-templates
+  gzip_logs: true
+  artifact_url: https://ci.centos.org/artifacts/rdo
+  rsync_path: rdo@artifacts.ci.centos.org::rdo
+  rsync_logs: true
+provisioner:
+  remote_user: stack
+  network:
+    type: none
+    network_list:
+      external:
+        subnet_cidr: ''
+        subnet_gateway: ''
+        allocation_end: ''
+        allocation_start: ''
+  url: http://admin.ci.centos.org:8080/
+  type: centosci
+  ram_gb: 32
+  node_count: 1
+  nodes:
+    host0:
+      remote_user: stack
+      name: host0
+      groups:
+      - provisioned
+      - virthost
+  arch: x86_64
+  key_file: /home/rhos-ci/rdo-ci-public.pem
+  distro:
+    version: 7
+    name: centos
+installer:
+  topology_name: minimal_no_ceph
+  remote_user: stack
+  network:
+    auto_assign_floating_ip: false
+    name: nova
+    plugin: ml2
+    overcloud_dns: 192.168.122.1
+    isolation: none
+    variant: vxlan
+    label: myphysnet
+    external:
+      vlan:
+        bridge: br-myphysnet
+        tag: ''
+      provider_network_type: flat
+    ha: false
+    type: neutron
+  deploy:
+    type: templates
+    command: --templates
+  firewall:
+    rules:
+    - ' -A INPUT -m state --state ESTABLISHED,RELATED -m comment --comment "001 QA
+      incoming related session exist the host interface MGMT" -j ACCEPT'
+    - ' -A INPUT -p tcp -m tcp --dport 22 -m comment --comment "002 QA incoming SSH"
+      -j ACCEPT'
+    - ' -A INPUT -p icmp -m comment --comment "003 QA incoming ICMP" -j ACCEPT'
+    - ' -A INPUT -i lo -m comment --comment "004 QA incoming loopback" -j ACCEPT'
+    - ' -A INPUT -p udp --sport 53 -m comment --comment "005 QA incoming DNS" -j ACCEPT'
+    - ' -A INPUT -p udp --sport 123 -m comment --comment "006 QA incoming NTP" -j
+      ACCEPT'
+    - ' -P INPUT DROP'
+  network_restart: true
+  post_action:
+  - none
+  tempest:
+    skip_file: rdoci-rdo-liberty-rdo-manager
+    test_regex: .*smoke
+    enabled: true
+    cirros_alt:
+      url: http://download.cirros-cloud.net/0.3.4/
+      name: cirros-0.3.4-x86_64-disk.img_alt
+      id: cirros-0.3.4-x86_64-disk.img_alt
+    cirros:
+      url: http://download.cirros-cloud.net/0.3.4/
+      name: cirros-0.3.4-x86_64-disk.img
+      id: cirros-0.3.4-x86_64-disk.img
+    dir: tempest
+  images:
+    mitaka:
+      files:
+      - no_op
+    7-director:
+      files:
+      - no_op
+    version: last_known_good
+    8-director:
+      files:
+      - no_op
+    liberty:
+      files:
+      - no_op
+  dib_dir: /home/stack/DIB
+  updates:
+    enabled: false
+  env:
+    type: virthost
+  custom_deploy:
+    type: none
+    command: ''
+  nodes:
+    blockstorage:
+      nova_list_type: cinderstorage
+      scale: 0
+      type: Cinder-Storage
+      flavor: baremetal
+    compute:
+      nova_list_type: compute
+      scale: 1
+      type: Compute
+      flavor: baremetal
+    node_cpu: 1
+    undercloud_node_cpu: 2
+    tester:
+      remote_user: root
+    cephstorage:
+      nova_list_type: cephstorage
+      scale: 0
+      type: Ceph-Storage
+      flavor: baremetal
+    node_mem: 6144
+    undercloud_node_mem: 8192
+    controller:
+      nova_list_type: controller
+      remote_user: heat-admin
+      flavor: baremetal
+      scale: 1
+    swiftstorage:
+      nova_list_type: swiftstorage
+      scale: 0
+      type: Swift-Storage
+      flavor: baremetal
+    node_count: 2
+  type: rdo-manager
+  validate:
+    keystone_endpoint: http://127.0.0.1:5000/v2.0/
+    image:
+      url: http://mirror.pnl.gov/fedora/linux/releases/21/Cloud/Images/x86_64/
+      user: fedora
+      id: Fedora-Cloud-Base-20141203-21.x86_64.qcow2
+    admin_tenant_name: admin
+    tenant_network_name: private
+    admin_username: admin
+    instance_name: khaleesi
+    admin_password: redhat
+    key_name: instance-key
+    router_name: ext-to-int
+  overcloud_images: build
+  short_type: rmgr
+distro:
+  epel_release: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  name: centos
+  centos:
+    '7.0':
+      repos: []
+  full_version: '7'
+  short_name: c
+  latest_version: 7
+  version:
+    major: '7'
+    minor: '0'
+  short_version: '70'
+  images:
+    fedora:
+      '20':
+        remote_file_server: http://dl.fedoraproject.org/pub/alt/openstack/20/x86_64/
+        remote_user: fedora
+        guest_image_name: Fedora-x86_64-20-20140618-sda.qcow2
+      '21':
+        remote_file_server: http://mirror.pnl.gov/fedora/linux/releases/21/Cloud/Images/x86_64/
+        remote_user: fedora
+        guest_image_name: Fedora-Cloud-Base-20141203-21.x86_64.qcow2
+    centos:
+      '7':
+        remote_file_server: http://cloud.centos.org/centos/7/devel/
+        remote_user: cloud-user
+        guest_image_name: CentOS-7-x86_64-GenericCloud-GA-7.0.1406_01.qcow2
+  config:
+    ntp_server_ip: 212.199.182.150
+    ntp_server: 0.rhel.pool.ntp.org
+    initial_boot_timeout: 180
+    reboot_delay: 1
+workarounds:
+  enabled: true
+base_dir: /home/rhos-ci/workspace/trown-poc-quickstart-gate-ha
+hw_env:
+  floating_ip_cidr: 192.0.2.0/24
+  floating_ip_start: 192.0.2.50
+  env_type: virt
+  floating_ip_end: 192.0.2.100
+  physical_network: datacentre
+  network_gateway: 192.0.2.1
+  libvirt_type: qemu
+  network_cidr: 192.168.0.0/24
+  ExternalNetworkVlanID: null
+  network_type: flat

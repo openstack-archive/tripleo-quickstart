@@ -1,5 +1,5 @@
 control_memory: 6144
-compute_memory: 4096
+compute_memory: 6144
 
 undercloud_memory: 8192
 undercloud_vcpu: 2

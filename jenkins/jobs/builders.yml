@@ -10,61 +10,37 @@
             system-site-packages: false
             ignore-exit-code: false
             command: |
-              pip install -U ansible==1.9.2 > ansible_build; ansible --version
-
-              #Use khaleesi to get a centosci node
-              pushd khaleesi
-              cp ansible.cfg.example ansible.cfg
-              sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
-              sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
-              echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
-              touch ssh.config.ansible
-
-              # get config
-              curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
-              sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" provision_centos_settings.yml
-
-              # get node
-              set +e
-              anscmd="stdbuf -oL -eL ansible-playbook -vv"
-              $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
-              # this hack allows us to use the in-tree manual provisioner so we control the hosts file
-              export VIRTHOST=$(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2)
-              popd
-
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/get-node.sh
+              export VIRTHOST=$(head -n1 $WORKSPACE/virthost)
               echo $VIRTHOST
 
-              # tripleo-quickstart requires Ansible 2.0
-              pip uninstall -y ansible
-              pip install ansible==2.0.0
+              pushd $WORKSPACE/tripleo-quickstart
 
-              # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
-              pip install -e tripleo-quickstart
-              pushd tripleo-quickstart
-              git log -n 5 --oneline
-              python setup.py install
-              popd
+              result=0
+              # (trown) This is so that we ensure seperate ssh sockets for
+              # concurrent jobs. Without this, two jobs running in parallel
+              # would try to use the same undercloud-stack socket.
+              socketdir=$(mktemp -d /tmp/sockXXXXXX)
+              export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-              pushd khaleesi
-              ansible --version
-              $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/quickstart.yml \
-              --extra-vars virthost=$VIRTHOST \
-              --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
-              --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2" \
-              --extra-vars @$WORKSPACE/tripleo-quickstart/playbooks/centosci/{topology}.yml
-
-              result=$?
+              bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+              --tags all \
+              --undercloud-image-url "http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/testing/undercloud.qcow2" \
+              --config $WORKSPACE/tripleo-quickstart/playbooks/centosci/{topology}.yml \
+              --working-dir $WORKSPACE/ \
+              --no-clone \
+              $VIRTHOST || result=1
 
               infra_result=0
 
-              $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
-              $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/collect-logs.sh &> $WORKSPACE/collect_logs.txt || infra_result=1
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/return-node.sh &> $WORKSPACE/cleanup.txt || infra_result=2
 
               if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
                 # if the job/test was ok, but collect_logs/cleanup failed,
                 # print out why the collect_logs/cleanup failed
-                cat collect_logs.txt
-                cat cleanup.txt
+                cat $WORKSPACE/collect_logs.txt
+                cat $WORKSPACE/cleanup.txt
               fi
               exit $result
 
@@ -80,46 +56,25 @@
             system-site-packages: false
             ignore-exit-code: false
             command: |
-              pip install -U ansible==1.9.2 > ansible_build; ansible --version
-
-              #Use khaleesi to get a centosci node
-              pushd khaleesi
-              cp ansible.cfg.example ansible.cfg
-              sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
-              sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
-              echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
-              touch ssh.config.ansible
-
-              # get config
-              curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
-              sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" provision_centos_settings.yml
-
-              # get node
-              set +e
-              anscmd="stdbuf -oL -eL ansible-playbook -vv"
-              $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
-              # this hack allows us to use the in-tree manual provisioner so we control the hosts file
-              export VIRTHOST=$(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2)
-              popd
-
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/get-node.sh
+              export VIRTHOST=$(head -n1 $WORKSPACE/virthost)
               echo $VIRTHOST
 
-              # tripleo-quickstart requires Ansible 2.0
-              pip uninstall -y ansible
-              pip install ansible==2.0.0
+              pushd $WORKSPACE/tripleo-quickstart
+              pip install -r requirements.txt
+              # (trown) This is so that we ensure seperate ssh sockets for
+              # concurrent jobs. Without this, two jobs running in parallel
+              # would try to use the same undercloud-stack socket.
+              socketdir=$(mktemp -d /tmp/sockXXXXXX)
+              export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-              # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
-              pip install -e tripleo-quickstart
-              pushd tripleo-quickstart
-              git log -n 5 --oneline
-              python setup.py install
-              popd
-
-              pushd khaleesi
+              ansible --version
+              anscmd="stdbuf -oL -eL ansible-playbook -vv"
               ansible --version
               $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/build-images.yml \
+              --extra-vars ansible_python_interpreter=/usr/bin/python \
               --extra-vars virthost=$VIRTHOST \
-              --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
+              --extra-vars local_working_dir=$WORKSPACE/ \
               --extra-vars release={release} \
               --extra-vars build_system={build_system} \
               --extra-vars delorean_hash=$delorean_current_hash \
@@ -129,19 +84,19 @@
 
               infra_result=0
 
-              $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
-              $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/collect-logs.sh &> $WORKSPACE/collect_logs.txt || infra_result=1
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/return-node.sh &> $WORKSPACE/cleanup.txt || infra_result=2
 
               if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
                 # if the job/test was ok, but collect_logs/cleanup failed,
                 # print out why the collect_logs/cleanup failed
-                cat collect_logs.txt
-                cat cleanup.txt
+                cat $WORKSPACE/collect_logs.txt
+                cat $WORKSPACE/cleanup.txt
               fi
               exit $result
 
 - builder:
-    name: 'tripleo-quickstart-gate-builder'
+    name: 'tripleo-quickstart-quick-gate-builder'
     builders:
         - shining-panda:
             build-environment: 'virtualenv'
@@ -152,61 +107,78 @@
             system-site-packages: false
             ignore-exit-code: false
             command: |
-              pip install -U ansible==1.9.2 > ansible_build; ansible --version
-
-              #Use khaleesi to get a centosci node
-              pushd khaleesi
-              cp ansible.cfg.example ansible.cfg
-              sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
-              sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
-              echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
-              touch ssh.config.ansible
-
-              # get config
-              curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
-              sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" provision_centos_settings.yml
-
-              # get node
-              set +e
-              anscmd="stdbuf -oL -eL ansible-playbook -vv"
-              $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
-              # this hack allows us to use the in-tree manual provisioner so we control the hosts file
-              export VIRTHOST=$(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2)
-              popd
-
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/get-node.sh
+              export VIRTHOST=$(head -n1 $WORKSPACE/virthost)
               echo $VIRTHOST
 
-              # tripleo-quickstart requires Ansible 2.0
-              pip uninstall -y ansible
-              pip install ansible==2.0.0
+              pushd $WORKSPACE/tripleo-quickstart
 
-              # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
-              pip install -e tripleo-quickstart
-              pushd tripleo-quickstart
-              git log -n 5 --oneline
-              python setup.py install
-              popd
+              result=0
+              # (trown) This is so that we ensure seperate ssh sockets for
+              # concurrent jobs. Without this, two jobs running in parallel
+              # would try to use the same undercloud-stack socket.
+              socketdir=$(mktemp -d /tmp/sockXXXXXX)
+              export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-              pushd khaleesi
-              ansible --version
-              $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/quickstart.yml \
-              --extra-vars virthost=$VIRTHOST \
-              --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
-              --extra-vars url="http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2" \
-              --extra-vars @$WORKSPACE/tripleo-quickstart/playbooks/centosci/{topology}.yml
-
-              result=$?
+              export RELEASE={release}
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/{test}.sh  || result=1
 
               infra_result=0
 
-              $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
-              $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/collect-logs.sh &> $WORKSPACE/collect_logs.txt || infra_result=1
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/return-node.sh &> $WORKSPACE/cleanup.txt || infra_result=2
 
               if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
                 # if the job/test was ok, but collect_logs/cleanup failed,
                 # print out why the collect_logs/cleanup failed
-                cat collect_logs.txt
-                cat cleanup.txt
+                cat $WORKSPACE/collect_logs.txt
+                cat $WORKSPACE/cleanup.txt
+              fi
+              exit $result
+
+- builder:
+    name: 'tripleo-quickstart-full-gate-builder'
+    builders:
+        - shining-panda:
+            build-environment: 'virtualenv'
+            python-version: 'system-CPython-2.7'
+            nature: 'shell'
+            clear: true
+            use-distribute: false
+            system-site-packages: false
+            ignore-exit-code: false
+            command: |
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/get-node.sh
+              export VIRTHOST=$(head -n1 $WORKSPACE/virthost)
+              echo $VIRTHOST
+
+              pushd $WORKSPACE/tripleo-quickstart
+
+              result=0
+              # (trown) This is so that we ensure seperate ssh sockets for
+              # concurrent jobs. Without this, two jobs running in parallel
+              # would try to use the same undercloud-stack socket.
+              socketdir=$(mktemp -d /tmp/sockXXXXXX)
+              export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
+
+              bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+              --tags all \
+              --undercloud-image-url "http://artifacts.ci.centos.org/artifacts/rdo/images/{release}/{build_system}/stable/undercloud.qcow2" \
+              --config $WORKSPACE/tripleo-quickstart/playbooks/centosci/{topology}.yml \
+              --working-dir $WORKSPACE/ \
+              --no-clone \
+              $VIRTHOST || result=1
+
+              infra_result=0
+
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/collect-logs.sh &> $WORKSPACE/collect_logs.txt || infra_result=1
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/return-node.sh &> $WORKSPACE/cleanup.txt || infra_result=2
+
+              if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
+                # if the job/test was ok, but collect_logs/cleanup failed,
+                # print out why the collect_logs/cleanup failed
+                cat $WORKSPACE/collect_logs.txt
+                cat $WORKSPACE/cleanup.txt
               fi
               exit $result
 
@@ -222,47 +194,25 @@
             system-site-packages: false
             ignore-exit-code: false
             command: |
-              pip install -U ansible==1.9.2 > ansible_build; ansible --version
-
-              #Use khaleesi to get a centosci node
-              pushd khaleesi
-              cp ansible.cfg.example ansible.cfg
-              sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
-              sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
-              echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
-              touch ssh.config.ansible
-
-              # get config
-              curl -O https://trown.fedorapeople.org/provision_centos_settings.yml
-              sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" provision_centos_settings.yml
-
-              # get node
-              set +e
-              anscmd="stdbuf -oL -eL ansible-playbook -vv"
-              $anscmd -i local_hosts playbooks/provision.yml --extra-vars @provision_centos_settings.yml
-              # this hack allows us to use the in-tree manual provisioner so we control the hosts file
-              export VIRTHOST=$(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2)
-              popd
-
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/get-node.sh
+              export VIRTHOST=$(head -n1 $WORKSPACE/virthost)
               echo $VIRTHOST
 
-              # tripleo-quickstart requires Ansible 2.0
-              pip uninstall -y ansible
-              pip install ansible==2.0.0
+              pushd $WORKSPACE/tripleo-quickstart
+              pip install -r requirements.txt
+              # (trown) This is so that we ensure seperate ssh sockets for
+              # concurrent jobs. Without this, two jobs running in parallel
+              # would try to use the same undercloud-stack socket.
+              socketdir=$(mktemp -d /tmp/sockXXXXXX)
+              export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-              # Install tripleo-quickstart from provided jenkins scm gerrit commit ref
-              pip install -e tripleo-quickstart
-              pushd tripleo-quickstart
-              git log -n 5 --oneline
-              python setup.py install
-              popd
-
-              pushd khaleesi
               ansible --version
+              anscmd="stdbuf -oL -eL ansible-playbook -vv"
               $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/build-images-and-quickstart.yml \
+              --extra-vars ansible_python_interpreter=/usr/bin/python \
               --extra-vars virthost=$VIRTHOST \
-              --extra-vars local_working_dir=$WORKSPACE/khaleesi/ \
-              --extra-vars url="file:///tmp/oooq-images/undercloud.qcow2" \
+              --extra-vars local_working_dir=$WORKSPACE/ \
+              --extra-vars image_url="file:///tmp/oooq-images/undercloud.qcow2" \
               --extra-vars release={release} \
               --extra-vars build_system={build_system} \
               --extra-vars @$WORKSPACE/tripleo-quickstart/playbooks/centosci/{topology}.yml
@@ -271,16 +221,17 @@
 
               infra_result=0
 
-              $anscmd -i hosts --extra-vars @provision_centos_settings.yml playbooks/collect_logs.yml &> collect_logs.txt || infra_result=1
-              $anscmd -i local_hosts --extra-vars @provision_centos_settings.yml playbooks/cleanup.yml &> cleanup.txt || infra_result=2
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/collect-logs.sh &> $WORKSPACE/collect_logs.txt || infra_result=1
+              bash $WORKSPACE/tripleo-quickstart/ci-scripts/return-node.sh &> $WORKSPACE/cleanup.txt || infra_result=2
 
               if [[ "$infra_result" != "0" && "$result" = "0" ]]; then
                 # if the job/test was ok, but collect_logs/cleanup failed,
                 # print out why the collect_logs/cleanup failed
-                cat collect_logs.txt
-                cat cleanup.txt
+                cat $WORKSPACE/collect_logs.txt
+                cat $WORKSPACE/cleanup.txt
               fi
               exit $result
+
 - builder:
     name: 'tripleo-quickstart-tox-builder'
     builders:

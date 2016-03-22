@@ -25,21 +25,14 @@
         - gerrit:
             server-name: 'rdo-ci-centos'
             trigger-on:
-                - patchset-created-event
-                - draft-published-event
                 - comment-added-contains-event:
-                    comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck)'
+                    comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(images-ci-check)'
             projects:
                 - project-compare-type: 'PLAIN'
                   project-pattern: 'redhat-openstack/tripleo-quickstart'
                   branches:
                       - branch-compare-type: 'PLAIN'
                         branch-pattern: 'master'
-                  file-paths:
-                      - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/build-images.yml'
-                      - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/roles/images/.*'
             skip-vote:
                 successful: false
                 failed: false
@@ -52,7 +45,33 @@
             silent-start: true
 
 - trigger:
-    name: 'trigger-tripleo-quickstart-gate'
+    name: 'trigger-tripleo-quickstart-gate-full'
+    triggers:
+        - gerrit:
+            server-name: 'rdo-ci-centos'
+            trigger-on:
+                - comment-added-contains-event:
+                    comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(full-ci-check)'
+            projects:
+                - project-compare-type: 'PLAIN'
+                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  branches:
+                      - branch-compare-type: 'PLAIN'
+                        branch-pattern: 'master'
+            skip-vote:
+                successful: false
+                failed: false
+                unstable: false
+                notbuilt: false
+            failure-message: 'Test failed'
+            successful-message: 'Test ran successfully'
+            unstable-message: 'Test is unstable'
+            silent: false
+            silent-start: true
+
+
+- trigger:
+    name: 'trigger-tripleo-quickstart-gate-quick'
     triggers:
         - gerrit:
             server-name: 'rdo-ci-centos'
@@ -67,15 +86,6 @@
                   branches:
                       - branch-compare-type: 'PLAIN'
                         branch-pattern: 'master'
-                  file-paths:
-                      - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/library/.*'
-                      - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/centosci/minimal.yml'
-                      - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/quickstart.yml'
-                      - compare-type: 'REG_EXP'
-                        pattern: 'playbooks/roles/(libvirt|common|overcloud|provision|rebuild-inventory|tripleo)/.*'
             skip-vote:
                 successful: false
                 failed: false
@@ -163,13 +173,8 @@
                 - log-text: Build was aborted
                   operator: AND
               escalate-status: false
-              script: |
-                source ~/ansible_venv/bin/activate
-                ansible --version
-                source $WORKSPACE/khaleesi-settings/jenkins/ansible_rdo_mang_settings.sh
-                cd $WORKSPACE/khaleesi
-                anscmd="stdbuf -oL -eL ansible-playbook -vv --extra-vars @ksgen_settings.yml"
-                $anscmd -i local_hosts playbooks/cleanup.yml
+              command: |
+                bash $WORKSPACE/tripleo-quickstart/ci-scripts/return-node.sh
 
 - publisher:
     name: 'full-logs-link'
