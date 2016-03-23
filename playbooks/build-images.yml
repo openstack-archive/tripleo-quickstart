@@ -10,13 +10,13 @@
     - rebuild-inventory
 
 - name:  Setup the virthost to build images then build them
-  hosts: host0
+  hosts: virthost
   gather_facts: yes
   roles:
     - images/build
 
 - name: Publish Images
-  hosts: host0
+  hosts: virthost
   gather_facts: no
   roles:
     - { role: "images/publish", when: "publish" }
