@@ -1,0 +1,31 @@
+- name: Create overcloud deploy script
+  template:
+    src: "{{ deploy_script }}"
+    dest: "{{ working_dir }}/overcloud-deploy.sh"
+    mode: 0744
+
+- name: Create overcloud validate script
+  template:
+    src: "{{ validate_script }}"
+    dest: "{{ working_dir }}/overcloud-validate.sh"
+    mode: 0744
+
+- name: Create tempest skipfile
+  template:
+    src: skipfile.j2
+    dest: "{{ working_dir }}/skipfile"
+    mode: 0644
+
+- name: Create tempest run script
+  template:
+    src: run-tempest.sh.j2
+    dest: "{{ working_dir }}/run-tempest.sh"
+    mode: 0744
+
+- name: Create post-deploy script
+  template:
+    src: "{{ post_deploy_script }}"
+    dest: "{{ working_dir }}/overcloud-deploy-post.sh"
+    mode: 0744
+
+

@@ -1,0 +1,15 @@
+- name: Deploy the overcloud
+  shell: |
+    {{ working_dir }}/overcloud-deploy.sh > {{ deploy_log }} 2>&1
+  when: step_deploy_overcloud
+
+# we don't get a useful error code from the previous script, so check
+# the log for a CREATE_FAILED message.
+- name: Check overcloud deploy status
+  command: >
+    grep -q 'Stack overcloud CREATE_FAILED' {{ deploy_log }}
+  register: deploy_result
+  failed_when: deploy_result.rc == 0
+  changed_when: false
+
+

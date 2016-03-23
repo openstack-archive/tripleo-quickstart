@@ -4,6 +4,8 @@ undercloud_post_install_script: undercloud-install-post.sh.j2
 undercloud_install_log: "{{ working_dir }}/undercloud_install.log"
 undercloud_post_install_log: "{{ working_dir }}/undercloud_post_install.log"
 
+undercloud_network_cidr: 192.0.2.0/24
+
 step_introspect: false
 bash_deploy_ramdisk: false
 step_install_undercloud: true

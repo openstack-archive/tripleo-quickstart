@@ -1,6 +1,23 @@
 #!/bin/sh
 
+HOSTFILE=/etc/hosts
+
 set -eux
-source {{ working_dir }}/overcloudrc
-openstack role create heat_stack_owner
-openstack role add --project admin --user admin heat_stack_owner
+
+. {{ working_dir }}/stackrc
+
+# Add overcloud hosts to /etc/hosts
+sudo sed -i '/^# BEGIN OVERCLOUD HOSTS/,/^# END OVERCLOUD HOSTS/ d' $HOSTFILE
+cat <<EOF | sudo tee -a $HOSTFILE
+# BEGIN OVERCLOUD HOSTS
+$(heat output-show -F raw overcloud HostsEntry)
+
+$(heat output-show -F raw overcloud PublicVip) overcloud-public-vip
+# END OVERCLOUD HOSTS
+EOF
+
+. {{ working_dir }}/overcloudrc
+if ! openstack role show heat_stack_owner > /dev/null 2>&1; then
+    openstack role create heat_stack_owner
+    openstack role add --project admin --user admin heat_stack_owner
+fi

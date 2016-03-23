@@ -2,6 +2,12 @@
 # test_ping
 #
 
+EXTERNAL_NETWORK_GATEWAY={{ external_network_gateway }}
+FLOATING_IP_CIDR={{ floating_ip_cidr }}
+FLOATING_IP_START={{ floating_ip_start }}
+FLOATING_IP_END={{ floating_ip_end }}
+export EXTERNAL_NETWORK_GATEWAY FLOATING_IP_CIDR
+export FLOATING_IP_START FLOATING_IP_END
 
 # clean up network if it exists from previous run
 source {{ working_dir }}/overcloudrc

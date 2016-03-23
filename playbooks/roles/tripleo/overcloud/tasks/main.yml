@@ -1,69 +1,15 @@
-- name: Create overcloud deploy script
+- include: create-scripts.yml
   tags:
     - overcloud-scripts
-  template:
-    src: "{{ deploy_script }}"
-    dest: "{{ working_dir }}/overcloud-deploy.sh"
-    mode: 0744
 
-- name: Create overcloud validate script
-  tags:
-    - overcloud-scripts
-  template:
-    src: "{{ validate_script }}"
-    dest: "{{ working_dir }}/overcloud-validate.sh"
-    mode: 0744
-
-- name: Create tempest skipfile
-  tags:
-    - overcloud-scripts
-  template:
-    src: skipfile.j2
-    dest: "{{ working_dir }}/skipfile"
-    mode: 0644
-
-- name: Create tempest run script
-  tags:
-    - overcloud-scripts
-  template:
-    src: run-tempest.sh.j2
-    dest: "{{ working_dir }}/run-tempest.sh"
-    mode: 0744
-
-- name: Create post-deploy script
-  tags:
-    - overcloud-scripts
-  template:
-    src: "{{ post_deploy_script }}"
-    dest: "{{ working_dir }}/overcloud-deploy-post.sh"
-    mode: 0744
-
-- name: Deploy the overcloud
+- include: deploy-overcloud.yml
   tags:
     - overcloud-deploy
-  shell: |
-    {{ working_dir }}/overcloud-deploy.sh > {{ deploy_log }} 2>&1
-  when: step_deploy_overcloud
 
-- name: Check overcloud deploy status
-  tags:
-    - overcloud-deploy
-  command: >
-    grep -q 'Stack overcloud CREATE_FAILED' {{ deploy_log }}
-  register: deploy_result
-  failed_when: deploy_result.rc == 0
-  changed_when: false
-
-- name: Run post-deploy script
+- include: post-deploy.yml
   tags:
     - overcloud-post-deploy
-  shell: |
-    {{ working_dir }}/overcloud-deploy-post.sh \
-      > {{ post_deploy_log }} 2>&1
 
-- name: Validate the overcloud
+- include: validate.yml
   tags:
     - overcloud-validate
-  shell: |
-    {{ working_dir }}/overcloud-validate.sh > {{ validate_log }} 2>&1
-  when: step_validate_overcloud

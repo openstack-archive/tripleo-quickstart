@@ -1,0 +1,27 @@
+- name: Get list of overcloud servers
+  shell: |
+    . {{ working_dir }}/stackrc
+    openstack server list -f json
+  register: overcloud_servers_cmd
+
+- name: Set overcloud_servers fact
+  set_fact:
+    overcloud_servers: "{{ overcloud_servers_cmd.stdout }}"
+
+- name: Ensure .ssh directory exists
+  file:
+    path: .ssh
+    state: directory
+    mode: "0700"
+
+- name: Add ssh config for accessing overcloud servers
+  blockinfile:
+    dest: .ssh/config
+    create: true
+    mode: "0600"
+    block: |
+      Host {{ overcloud_servers | map(attribute='Name') | join(' ') }}
+
+        User heat-admin
+        StrictHostkeyChecking no
+        UserKnownHostsFile /dev/null

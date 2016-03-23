@@ -20,6 +20,13 @@
     key: "{{ item }}"
   with_file:
     - "{{ virt_host_key }}.pub"
+  become: true
+
+- name: Grant libvirt privileges to non-root user
+  template:
+    src: libvirt.pkla.j2
+    dest: "/etc/polkit-1/localauthority/50-local.d/50-{{ non_root_user }}-libvirt.pkla"
+  become: true
 
 - name: Ensure XDG_RUNTIME_DIR is set
   blockinfile:
@@ -42,10 +49,11 @@
     owner: root
     group: root
     mode: 0440
+  become: true
 
 - name: Re-add the virthost to the inventory
   add_host:
-    name: "host0"
+    name: "{{ virthost }}"
     groups: "virthost"
     ansible_fqdn: "{{ virthost }}"
     ansible_user: "{{ non_root_user }}"

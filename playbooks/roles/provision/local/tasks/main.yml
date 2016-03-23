@@ -15,7 +15,7 @@
 
 - name: Add the virthost to the inventory
   add_host:
-    name: "host0"
+    name: "{{virthost}}"
     groups: "virthost"
     ansible_fqdn: "{{ virthost }}"
     ansible_user: "root"

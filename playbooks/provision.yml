@@ -17,10 +17,9 @@
 # We need to force-refresh facts because we are now connecting
 # as a different user ('stack' instead of 'root'), which affects
 # things like ansible_user_id and friends.
-- name: Install libvirt packages and configure networks
+- name: Tear down environment
   hosts: virthost
   pre_tasks:
     - setup:
   roles:
     - environment/teardown
-    - environment/setup
