@@ -17,6 +17,7 @@
       with_items: "{{ networks }}"
       register: network_check
       ignore_errors: true
+      become: true
 
     - name: Stop libvirt networks
       command: >
