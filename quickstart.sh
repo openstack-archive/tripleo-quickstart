@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_OPT_TAGS="untagged,provision,undercloud-scripts,overcloud-scripts"
+DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-scripts"
 
 : ${OPT_BOOTSTRAP:=0}
 : ${OPT_SYSTEM_PACKAGES:=0}
