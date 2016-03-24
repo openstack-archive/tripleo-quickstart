@@ -98,6 +98,15 @@
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
+    # See https://www.redhat.com/archives/libvirt-users/2016-March/msg00123.html
+    # TL;DR: ensure that the pool really exists if the previous
+    # task says it does.
+    - name: Work around libvirt bug
+      shell: |
+        virsh pool-dumpxml "{{ libvirt_volume_pool }}" |
+        virsh pool-define /dev/stdin
+      when: pool_check|success
+
     - name: Destroy volume pool
       command: >
         virsh pool-destroy "{{ libvirt_volume_pool }}"
