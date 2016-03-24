@@ -119,7 +119,7 @@
   script: "scripts/get-undercloud-ip.sh {{ undercloud_node.name }}"
   register: undercloud_vm_ip_result
   until: undercloud_vm_ip_result|success
-  retries: 12
+  retries: "{{ undercloud_ip_retries }}"
   delay: 10
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
