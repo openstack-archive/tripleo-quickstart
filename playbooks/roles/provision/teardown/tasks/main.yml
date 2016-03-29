@@ -1,38 +1,55 @@
-- name: Check for processes owned by non-root user
+- name: Get UID of non-root user
   command: >
-    pgrep -u {{ non_root_user }}
-  register: proc_exist
+    id -u {{ non_root_user }}
+  register: non_root_uid
   ignore_errors: true
-  become: true
 
-- name: Kill (SIGTERM) all processes owned by non-root user
-  command: >
-    pkill -u {{ non_root_user }}
-  ignore_errors: true
-  become: true
-  when: proc_exist|success
+- when: non_root_uid|success
+  block:
+    - name: Check for processes owned by non-root user
+      command: >
+        pgrep -u {{ non_root_user }}
+      register: proc_exist
+      ignore_errors: true
+      become: true
 
-- name: Wait for processes to exit
-  command: >
-    pgrep -c -u {{ non_root_user }}
-  register: proc_kill
-  retries: 5
-  delay: 1
-  until: proc_kill.stdout == '0'
-  ignore_errors: true
-  when: proc_exist|success
-  become: true
+    - name: Kill (SIGTERM) all processes owned by non-root user
+      command: >
+        pkill -u {{ non_root_user }}
+      ignore_errors: true
+      become: true
+      when: proc_exist|success
 
-- name: Kill (SIGKILL) all processes owned by non-root user
-  command: >
-    pkill -9 -u {{ non_root_user }}
-  when: proc_exist|success and proc_kill|success and proc_kill.stdout != 0
-  ignore_errors: true
-  become: true
+    - name: Wait for processes to exit
+      command: >
+        pgrep -c -u {{ non_root_user }}
+      register: proc_kill
+      retries: 5
+      delay: 1
+      until: proc_kill.stdout == '0'
+      ignore_errors: true
+      when: proc_exist|success
+      become: true
 
-- name: Remove non-root user account
-  user:
-    name: "{{ non_root_user }}"
-    state: absent
-    remove: true
-  become: true
+    - name: Kill (SIGKILL) all processes owned by non-root user
+      command: >
+        pkill -9 -u {{ non_root_user }}
+      when: proc_exist|success and proc_kill|success and proc_kill.stdout != 0
+      ignore_errors: true
+      become: true
+
+    - name: Remove non-root user account
+      user:
+        name: "{{ non_root_user }}"
+        state: absent
+        remove: true
+      become: true
+
+    # The XDG_RUNTIME_DIR (/run/user/<uid>) doesn't always get cleaned
+    # up when we remove the user, which can lead to libvirt problems
+    # later on.  We can't remove the directory itself -- it's a tmpfs
+    # mountpoint -- but we can remove the content.
+    - name: Remove non-root user ephemeral files
+      shell: >
+        rm -rf /run/user/{{ non_root_uid.stdout }}/*
+      become: true
