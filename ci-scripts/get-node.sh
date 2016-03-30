@@ -3,7 +3,7 @@
 
 set -eux
 
-pip install -U ansible==1.9.2 > ansible_build; ansible --version
+pip install -U ansible==1.9.4 > ansible_build; ansible --version
 
 ansible --version
 
