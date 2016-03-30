@@ -24,7 +24,7 @@ rm -rf {{ working_dir }}/tempest
 mkdir {{ working_dir }}/tempest
 cd {{ working_dir }}/tempest
 
-/usr/share/openstack-tempest-liberty/tools/configure-tempest-directory
+/usr/share/openstack-tempest-*/tools/configure-tempest-directory
 
 tools/config_tempest.py --out etc/tempest.conf --network-id $public_net_id --deployer-input ~/tempest-deployer-input.conf --debug --create \
 identity.uri $OS_AUTH_URL \
