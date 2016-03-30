@@ -7,8 +7,10 @@ set -eux
 {% include 'tripleo-pingtest.sh.j2' %}
 {% endif %}
 
-{% if test_tempest|bool %}
+{% if prepare_tempest|bool %}
 {% include 'configure-tempest.sh.j2' %}
+{% endif %}
 
+{% if test_tempest|bool %}
 {% include 'run-tempest.sh.j2' %}
 {% endif %}
