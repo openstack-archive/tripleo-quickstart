@@ -30,6 +30,13 @@ undercloud_remove_packages:
 undercloud_install_packages:
   - mariadb-server
   - openstack-tempest
+  # -tests packages which contains tempest-style tests
+  - python-aodh-tests
+  - python-ceilometer-tests
+  - python-heat-tests
+  - python-ironic-tests
+  - python-neutron-tests
+  - python-sahara-tests
 undercloud_selinux_permissive: true
 
 # dib_build vars
