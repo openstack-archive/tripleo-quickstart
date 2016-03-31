@@ -1,17 +1,10 @@
-control_memory: 8192
-compute_memory: 8192
+# We set introspection to true and use only the minimal amount of nodes
+# for this job, but test all defaults otherwise
+step_introspect: true
 
 overcloud_nodes:
   - name: control_0
     flavor: control
+
   - name: compute_0
     flavor: compute
-
-# FIXME(trown) This is only temporarily set to false so we can
-# change CI to use these settings without changing what is run.
-# Will be changed to true in a follow-up patch.
-introspect: false
-
-extra_args: ""
-tempest: false
-pingtest: true
