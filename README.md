@@ -5,13 +5,14 @@ has been the relative difficulty in getting an environment up quickly.
 
 This set of ansible roles is meant to help.
 
-You will need a host machine with at least **16G** of RAM, preferably
-**32G**, with **CentOS 7** installed, and you must be able to `ssh` to
-the machine as root without a password from the machine running
-ansible.
+You will need a host machine (referred to as `$VIRTHOST`) with at least **16G**
+of RAM, preferably **32G**, and you must be able to `ssh` to the virthost
+machine as root without a password from the machine running ansible. Currently
+the virthost machine must be running a recent Red Hat-based Linux distribution
+(CentOS 7, RHEL 7, Fedora 22 - only CentOS 7 is currently tested), but we hope to
+add support for non-Red Hat distributions too.
 
-A quick way to test that your host machine (referred to as `$VIRTHOST`)
-is ready to rock is:
+A quick way to test that your virthost machine is ready to rock is:
 
     ssh root@$VIRTHOST uname -a
 
