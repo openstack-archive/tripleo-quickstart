@@ -1,5 +1,5 @@
 [gerrit]
-host=review.gerrithub.io
+host=review.openstack.org
 port=29418
-project=redhat-openstack/tripleo-quickstart.git
+project=openstack/tripleo-quickstart.git
 defaultbranch=master
