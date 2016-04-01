@@ -43,5 +43,6 @@ deploy_args: >-
 
 step_deploy_overcloud: true
 step_validate_overcloud: true
+prepare_tempest: true
 test_tempest: false
 test_ping: true
