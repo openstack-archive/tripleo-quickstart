@@ -32,7 +32,7 @@ bootstrap () {
     if [ "$OPT_NO_CLONE" != 1 ]; then
         if ! [ -d "$OPT_WORKDIR/tripleo-quickstart" ]; then
             echo "Cloning tripleo-quickstart repository..."
-            git clone https://github.com/redhat-openstack/tripleo-quickstart.git \
+            git clone https://github.com/openstack/tripleo-quickstart.git \
                 $OPT_WORKDIR/tripleo-quickstart
         fi
 

@@ -29,7 +29,7 @@
                     comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(images-ci-check)'
             projects:
                 - project-compare-type: 'PLAIN'
-                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  project-pattern: 'openstack/tripleo-quickstart'
                   branches:
                       - branch-compare-type: 'PLAIN'
                         branch-pattern: 'master'
@@ -54,7 +54,7 @@
                     comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(full-ci-check)'
             projects:
                 - project-compare-type: 'PLAIN'
-                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  project-pattern: 'openstack/tripleo-quickstart'
                   branches:
                       - branch-compare-type: 'PLAIN'
                         branch-pattern: 'master'
@@ -82,7 +82,7 @@
                     comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck)'
             projects:
                 - project-compare-type: 'PLAIN'
-                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  project-pattern: 'openstack/tripleo-quickstart'
                   branches:
                       - branch-compare-type: 'PLAIN'
                         branch-pattern: 'master'
@@ -109,7 +109,7 @@
                     comment-contains-value:  '(?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*(recheck)'
             projects:
                 - project-compare-type: 'PLAIN'
-                  project-pattern: 'redhat-openstack/tripleo-quickstart'
+                  project-pattern: 'openstack/tripleo-quickstart'
                   branches:
                       - branch-compare-type: 'PLAIN'
                         branch-pattern: 'master'
@@ -132,7 +132,7 @@
     scm:
         - git:
             basedir: 'tripleo-quickstart'
-            url: 'ssh://rdo-ci-centos@review.gerrithub.io:29418/redhat-openstack/tripleo-quickstart.git'
+            url: 'ssh://rdo-ci-centos@review.gerrithub.io:29418/openstack/tripleo-quickstart.git'
             branches:
                 - "$GERRIT_BRANCH"
             credentials-id: 'aeb3af4f-6985-4c8f-8261-ec37cacad10b'
@@ -146,7 +146,7 @@
     scm:
         - git:
             basedir: 'tripleo-quickstart'
-            url: 'https://github.com/redhat-openstack/tripleo-quickstart.git'
+            url: 'https://github.com/openstack/tripleo-quickstart.git'
             branches:
                 - master
 

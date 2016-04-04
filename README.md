@@ -23,7 +23,7 @@ and running the quickstart.sh script.
 
 You can download the `quickstart.sh` script with `wget`:
 
-    wget https://raw.githubusercontent.com/redhat-openstack/tripleo-quickstart/master/quickstart.sh
+    wget https://raw.githubusercontent.com/openstack/tripleo-quickstart/master/quickstart.sh
 
 Alternatively, you can clone this repository and run the script from
 there.

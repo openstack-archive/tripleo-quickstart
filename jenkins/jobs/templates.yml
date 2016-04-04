@@ -4,7 +4,7 @@
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/quickstart.yml" target="_blank">quickstart.yml</a></p>
+        <p>This job runs the playbook <a href="https://github.com/openstack/tripleo-quickstart/blob/master/playbooks/quickstart.yml" target="_blank">quickstart.yml</a></p>
         In order to run this job locally using quickstart.sh:
         <pre>
 
@@ -38,7 +38,7 @@
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/build-images.yml" target="_blank">build-images.yml</a></p>
+        <p>This job runs the playbook <a href="https://github.com/openstack/tripleo-quickstart/blob/master/playbooks/build-images.yml" target="_blank">build-images.yml</a></p>
         In order to run this job locally:
         <pre>
 
@@ -84,7 +84,7 @@
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the script <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/ci-scripts/{test}.sh" target="_blank">{test}.sh</a></p>
+        <p>This job runs the script <a href="https://github.com/openstack/tripleo-quickstart/blob/master/ci-scripts/{test}.sh" target="_blank">{test}.sh</a></p>
         <br>
         In order to run this job locally:
         <pre>
@@ -121,7 +121,7 @@
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/quickstart.sh" target="_blank">quickstart.sh</a> with all tags to get a full deploy</p>
+        <p>This job runs <a href="https://github.com/openstack/tripleo-quickstart/blob/master/quickstart.sh" target="_blank">quickstart.sh</a> with all tags to get a full deploy</p>
         <br>
         In order to run this job locally:
         <pre>
@@ -160,7 +160,7 @@
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job runs the playbook <a href="https://github.com/redhat-openstack/tripleo-quickstart/blob/master/playbooks/build-images-and-quickstart.yml" target="_blank">build-images-and-quickstart.yml</a></p>
+        <p>This job runs the playbook <a href="https://github.com/openstack/tripleo-quickstart/blob/master/playbooks/build-images-and-quickstart.yml" target="_blank">build-images-and-quickstart.yml</a></p>
         <br>
         In order to run this job locally:
         <pre>
@@ -212,7 +212,7 @@
     description: |
         <p>Managed by Jenkins Job Builder. Do not edit via web.</p>
         <br>
-        <p>This job gates against commits done to <a href="https://github.com/redhat-openstack/tripleo-quickstart" target="_blank">tripleo-quickstart</a>.</p>
+        <p>This job gates against commits done to <a href="https://github.com/openstack/tripleo-quickstart" target="_blank">tripleo-quickstart</a>.</p>
         <p>It leverages tox for testing.</p>
         <br>
         This is what this job runs:

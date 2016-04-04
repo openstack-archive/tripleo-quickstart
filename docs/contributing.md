@@ -6,7 +6,7 @@ If you encounter any problems with `tripleo-quickstart` or if you have
 feature suggestions, please feel free to open a bug report in our [issue
 tracker][].
 
-[issue tracker]: https://github.com/redhat-openstack/tripleo-quickstart/issues/
+[issue tracker]: https://bugs.launchpad.net/tripleo-quickstart
 
 ## Code
 
