@@ -12,7 +12,8 @@ install_deps () {
         /usr/bin/git \
         /usr/bin/virtualenv \
         gcc \
-        libyaml
+        libyaml \
+        libselinux-python
 }
 
 # This creates a Python virtual environment and installs
