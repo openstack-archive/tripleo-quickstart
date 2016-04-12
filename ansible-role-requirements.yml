@@ -1,0 +1,5 @@
+- name: image-build
+  src: https://github.com/redhat-openstack/ansible-role-tripleo-image-build
+  scm: git
+  version: master
+

@@ -13,7 +13,15 @@
   hosts: virthost
   gather_facts: yes
   roles:
-    - images/build
+    - parts/kvm
+    - parts/libvirt
+    # TODO(trown): It is not ideal that we need to set this
+    # variable directly on the role. However, we have the
+    # same variable used in the tripleo-quickstart roles
+    # with a different meaning. We should namespace the
+    # variables better so that they can both be set separately
+    # in a config file or extra-vars passed to ansible.
+    - { role: "image-build", working_dir: "/var/lib/oooq-images" }
 
 - name: Publish Images
   hosts: virthost
