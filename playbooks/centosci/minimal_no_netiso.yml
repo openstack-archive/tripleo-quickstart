@@ -1,0 +1,10 @@
+# We set introspection to true and use only the minimal amount of nodes
+# for this job, but test all defaults otherwise
+step_introspect: true
+
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+
+  - name: compute_0
+    flavor: compute
