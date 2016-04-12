@@ -24,6 +24,7 @@
         virsh net-destroy "{{ item.item.name }}"
       when: libvirt_check|success and item|success
       with_items: "{{ network_check.results }}"
+      ignore_errors: true
       become: true
 
     - name: Undefine libvirt networks
