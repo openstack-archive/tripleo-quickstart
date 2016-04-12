@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Install this into .git/hooks/pre-commit
+
+echo "running commit checks"
+
+(
+tmpfile=$(mktemp -t gitXXXXXX)
+trap "rm -f $tmpfile" EXIT
+
+for x in ci-scripts/pre-commit.d/*; do
+    [ -x "$x" ] || continue
+
+    tput setaf 3
+    printf "%-50s" $x
+    tput sgr0
+
+    if $x > $tmpfile 2>&1 ; then
+        tput setaf 2
+        printf "[OK]\n"
+        tput sgr0
+    else
+        tput setaf 1
+        printf "[OK]\n"
+        tput sgr0
+        cat $tmpfile >&2
+        exit 1
+    fi
+done
+)
+
+if [ $? -ne 0 ]; then
+    tput setaf 1
+    echo "*** COMMIT CHECK FAILED ***" >&2
+    tput sgr0
+    exit 1
+fi
+
+exit 0
+
