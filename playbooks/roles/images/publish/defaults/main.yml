@@ -1,5 +1,5 @@
 # global build vars
-working_dir: /tmp/oooq-images
+working_dir: /var/lib/oooq-images
 
 # publish vars
 artifacts:
