@@ -3,9 +3,17 @@ undercloud_install_script: undercloud-install.sh.j2
 undercloud_post_install_script: undercloud-install-post.sh.j2
 undercloud_install_log: "{{ working_dir }}/undercloud_install.log"
 undercloud_post_install_log: "{{ working_dir }}/undercloud_post_install.log"
+network_environment_file: network-environment.yaml.j2
 
 undercloud_network_cidr: 192.0.2.0/24
 
 step_introspect: false
 bash_deploy_ramdisk: false
 step_install_undercloud: true
+
+network_environment_args:
+  NeutronExternalNetworkBridge: '""'
+  ControlPlaneSubnetCidr: '"24"'
+  ControlPlaneDefaultRoute: 192.0.2.1
+  EC2MetadataIp: 192.0.2.1
+  DnsServers: ['8.8.8.8','8.8.4.4']

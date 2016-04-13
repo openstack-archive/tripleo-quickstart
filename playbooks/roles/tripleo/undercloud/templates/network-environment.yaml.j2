@@ -1,0 +1,4 @@
+parameter_defaults:
+{% for key, value in network_environment_args.items() %}
+  {{ key }}: {{ value }}
+{% endfor %}
