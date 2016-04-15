@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SCRIPTS="$PWD/ci-scripts"
+
+tmpdir=$(mktemp -d commitXXXXXX)
+trap "rm -rf $tmpdir" EXIT
+
+# This checks out the index into a temporary directory, which is
+# necessary if you want to validate the files that are actually
+# part of the commit (because when performing an interactive add,
+# for example, files in a commit may not actually match the content
+# of files in the working directory).
+
+git checkout-index --prefix=$tmpdir/ -af
+git diff --cached --name-only --diff-filter=ACM | grep '.yml' | (
+cd $tmpdir
+xargs --no-run-if-empty $SCRIPTS/validate-yaml
+)
