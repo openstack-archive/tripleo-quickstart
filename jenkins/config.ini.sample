@@ -1,5 +1,0 @@
-[jenkins]
-user=username
-password=changeme
-url=http://jenkins.tld/
-ignore_cache=true
