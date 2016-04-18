@@ -25,4 +25,10 @@
   shell: |
     {{ working_dir }}/undercloud-post-install.sh > \
     {{ undercloud_post_install_log }} 2>&1
-  when: step_install_undercloud
+
+- name: Create network environment file for network isolation
+  template:
+    src: "{{ network_environment_file }}"
+    dest: "{{ working_dir }}/network-environment.yaml"
+    mode: 0755
+  when: network_isolation

@@ -55,24 +55,6 @@ OVS_BRIDGE={{ network.ovs_bridge }}
 OVS_OPTIONS={{ network.ovs_options }}
 EOF'
 
-sudo bash -c 'cat <<EOF > {{ working_dir }}/network-environment.yaml
-parameter_defaults:
-  InternalApiNetCidr: 172.16.20.0/24
-  StorageNetCidr: 172.16.21.0/24
-  TenantNetCidr: 172.16.22.0/24
-  ExternalNetCidr: 172.16.23.0/24
-  InternalApiAllocationPools: [{'start': '172.16.20.10', 'end': '172.16.20.100'}]
-  StorageAllocationPools: [{'start': '172.16.21.10', 'end': '172.16.21.100'}]
-  TenantAllocationPools: [{'start': '172.16.22.10', 'end': '172.16.22.100'}]
-  ExternalAllocationPools: [{'start': '172.16.23.110', 'end': '172.16.23.150'}]
-  ExternalInterfaceDefaultRoute: {{ network.address }}
-  NeutronExternalNetworkBridge: "''"
-  ControlPlaneSubnetCidr: "24"
-  ControlPlaneDefaultRoute: 192.0.2.1
-  EC2MetadataIp: 192.0.2.1
-  DnsServers: ['8.8.8.8','8.8.4.4']
-EOF'
-
 sudo ifup ifcfg-vlan{{ network.tag }}
 {% endfor %}
 {%endif%}
