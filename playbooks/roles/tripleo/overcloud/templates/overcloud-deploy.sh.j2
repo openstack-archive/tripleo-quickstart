@@ -20,12 +20,14 @@ DEPLOY_ENV_YAML=/tmp/deploy_env.yaml
 # test over tempest when we are memory constrained, ie the HA jobs.
 cat > $DEPLOY_ENV_YAML << EOENV
 parameter_defaults:
-  # HeatWorkers doesn't modify num_engine_workers, so handle
-  # via heat::config
   controllerExtraConfig:
+{% if release in ['mitaka','liberty'] %}
+  # In releases before Mitaka, HeatWorkers doesn't modify
+  # num_engine_workers, so handle via heat::config 
     heat::config::heat_config:
       DEFAULT/num_engine_workers:
         value: 1
+{% endif %}
     heat::api_cloudwatch::enabled: false
     heat::api_cfn::enabled: false
   HeatWorkers: 1
