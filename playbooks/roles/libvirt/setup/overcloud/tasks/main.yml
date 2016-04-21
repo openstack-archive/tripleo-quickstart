@@ -3,6 +3,7 @@
     nodes: "{{ overcloud_nodes }}"
     networks: "{{ networks }}"
   register: node_mac_map
+  when: overcloud_nodes
 
 - name: Ensure volume pool directory exists
   file:
@@ -38,6 +39,7 @@
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   with_items: "{{ overcloud_nodes }}"
+  when: overcloud_nodes
 
 - name: Create overcloud vm storage
   command: >
@@ -48,6 +50,7 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   when: item|failed
   with_items: "{{ overcloud_vol_check.results }}"
+  when: overcloud_nodes
 
 - name: Define overcloud vms
   virt:
@@ -56,8 +59,9 @@
     xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
     uri: "{{ libvirt_uri }}"
   with_items: "{{ overcloud_nodes }}"
+  when: overcloud_nodes
 
 - name: Write instackenv script
   template:
-    src: instackenv.json.j2
+    src: "{{ undercloud_instackenv_template }}"
     dest: "{{ working_dir }}/instackenv.json"
