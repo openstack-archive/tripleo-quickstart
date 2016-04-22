@@ -16,6 +16,26 @@ install_deps () {
         libselinux-python
 }
 
+
+print_logo () {
+
+cat <<EOBANNER
+-------------------------------------------------------------------------------------------------------
+|     ,   .   ,   _______   _       _       ____      ____        _      _        _             _     |
+|     )-_'''_-(  |__   __| (_)     | |     / __ \    / __ \      (_)    | |      | |           | |    |
+|    ./ o\ /o \.    | |_ __ _ _ __ | | ___| |  | |  | |  | |_   _ _  ___| | _____| |_ __ _ _ __| |_   |
+|   . \__/ \__/ .   | | '__| | '_ \| |/ _ \ |  | |  | |  | | | | | |/ __| |/ / __| __/ _\` | '__| __|  |
+|   ...   V   ...   | | |  | | |_) | |  __/ |__| |  | |__| | |_| | | (__|   <\__ \ |_|(_| | |  | |_   |
+|   ... - - - ...   |_|_|  |_| .__/|_|\___|\____/    \___\_\\\__,_|_|\___|_|\_\___/\__\__,_|_|   \__|  |
+|    .   - -   .             | |                                                                      |
+|     \`-.....-´              |_|                                                                      |
+-------------------------------------------------------------------------------------------------------
+
+
+EOBANNER
+
+}
+
 # This creates a Python virtual environment and installs
 # tripleo-quickstart into that environment.  It only runs if
 # the local working directory does not exist, or if explicitly
@@ -66,6 +86,8 @@ usage () {
     echo "    --tags <tag1>[,<tag2>,...]"
     echo "    --skip-tags <tag1>,[<tag2>,...]"
     echo "    --config <file>"
+    echo "    --print-logo"
+
 }
 
 while [ "x$1" != "x" ]; do
@@ -129,6 +151,10 @@ while [ "x$1" != "x" ]; do
             OPT_NO_CLONE=1
             ;;
 
+        --print-logo|-pl)
+            PRINT_LOGO=1
+            ;;
+
         --) shift
             break
             ;;
@@ -144,6 +170,14 @@ while [ "x$1" != "x" ]; do
 
     shift
 done
+
+if [ "$PRINT_LOGO" = 1 ]; then
+    print_logo
+    echo "..."
+    echo "Nothing more to do"
+    exit 1
+fi
+
 
 if [ "$OPT_NO_CLONE" = 1 ]; then
     OOOQ_DIR=.
@@ -191,6 +225,7 @@ fi
 # command line.
 : ${OPT_UNDERCLOUD_URL:=http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/${RELEASE}/delorean/undercloud.qcow2}
 
+print_logo
 echo "Installing OpenStack ${RELEASE:+"$RELEASE "}on host $VIRTHOST"
 echo "Using directory $OPT_WORKDIR for a local working directory"
 
