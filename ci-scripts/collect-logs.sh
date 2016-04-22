@@ -3,9 +3,10 @@
 
 set -eux
 
-cp -f $WORKSPACE/hosts $WORKSPACE/khaleesi/hosts
-cp -f $WORKSPACE/ssh.config.ansible $WORKSPACE/khaleesi/ssh.config.ansible
+git clone https://github.com/redhat-openstack/ansible-role-tripleo-collect-logs.git \
+    $WORKSPACE/tripleo-quickstart/playbooks/roles/collect-logs
 
+export ANSIBLE_INVENTORY=$WORKSPACE/hosts
 export ANSIBLE_CONFIG=$WORKSPACE/tripleo-quickstart/ansible.cfg
 # (trown) I don't totally understand why this is needed here, but activating
 # the venv is failing otherwise.
@@ -14,7 +15,14 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 source $WORKSPACE/bin/activate || true
 
 ansible --version
-pushd $WORKSPACE/khaleesi
+
+cat > collect-logs.yaml << EOY
+---
+- name: Gather logs
+  hosts: all:!localhost
+  roles:
+    - collect-logs
+EOY
+
 anscmd="stdbuf -oL -eL ansible-playbook -vvvv"
-$anscmd -i hosts --extra-vars @$WORKSPACE/tripleo-quickstart/ci-scripts/provision_centos_settings.yml playbooks/collect_logs.yml
-popd
+$anscmd collect-logs.yaml -e @$WORKSPACE/tripleo-quickstart/ci-scripts/centos_log_settings.yml

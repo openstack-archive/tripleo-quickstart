@@ -1,0 +1,41 @@
+artcl_collect_list:
+  - /var/log/
+  - /root/
+  - /var/lib/mysql
+  - /etc/nova
+  - /etc/ceilometer
+  - /etc/cinder
+  - /etc/glance
+  - /etc/ironic
+  - /etc/keystone
+  - /etc/neutron
+  - /etc/swift
+  - /etc/heat
+  - /etc/libvirt
+  - /etc/rabbitmq
+  - /etc/ntp
+  - /etc/puppet
+  - /etc/qpid
+  - /etc/qpidd.conf
+  - /home/stack/.instack/install-undercloud.log
+  - /home/stack/stackrc
+  - /home/stack/overcloudrc
+  - /home/stack/*.log
+  - /home/stack/*.json
+  - /home/stack/*.conf
+  - /home/stack/*.yml
+  - /home/stack/*.yaml
+  - /home/stack/*.sh
+  - /home/stack/deploy-overcloudrc
+  - /home/stack/network-environment.yaml
+  - /home/stack/tempest/*.xml
+  - /home/stack/tempest/*.log
+  - /home/stack/tempest/etc/*.conf
+  - /home/stack/local_tht
+  - /usr/share/openstack-tripleo-heat-templates
+  - /etc/yum.repos.d
+  - /etc/selinux
+artcl_gzip_only: true
+artcl_artifact_url: https://ci.centos.org/artifacts/rdo
+artcl_rsync_path: rdo@artifacts.ci.centos.org::rdo
+artcl_rsync_logs: true
