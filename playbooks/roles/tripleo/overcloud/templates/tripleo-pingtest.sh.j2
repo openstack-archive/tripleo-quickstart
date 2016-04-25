@@ -22,7 +22,8 @@ rm -rf tripleo-ci
 git clone https://github.com/openstack-infra/tripleo-ci.git
 pushd tripleo-ci
 
-# We need to use a yes hack here because mitaka heatclient introduced a
-# confirmation prompt, but it is not there in liberty.
-# openstack/python-heatclient/commit/4f4575565cf0f93781f4fb273ad65342536c33c2
-yes | ./scripts/tripleo.sh --overcloud-pingtest
+# We set STABLE_RELEASE unconditionally here, since it
+# will not break anything, but gets us the correct behavior
+# for liberty. Once we have https://review.openstack.org/#/c/308545/
+# we can change this to be release specific.
+STABLE_RELEASE=liberty ./scripts/tripleo.sh --overcloud-pingtest
