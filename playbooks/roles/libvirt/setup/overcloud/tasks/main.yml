@@ -1,10 +1,3 @@
-- name: get a list of MACs to use
-  generate_macs:
-    nodes: "{{ overcloud_nodes }}"
-    networks: "{{ networks }}"
-  register: node_mac_map
-  when: overcloud_nodes
-
 - name: Ensure volume pool directory exists
   file:
     path: "{{ libvirt_volume_path }}"
@@ -31,37 +24,44 @@
     autostart: "yes"
     uri: "{{ libvirt_uri }}"
 
-- name: Check if overcloud volumes exist
-  command: >
-    virsh vol-info --pool '{{libvirt_volume_pool}}' '{{item.name}}.qcow2'
-  register: overcloud_vol_check
-  ignore_errors: true
-  environment:
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  with_items: "{{ overcloud_nodes }}"
-  when: overcloud_nodes
+- when: overcloud_nodes
+  block:
 
-- name: Create overcloud vm storage
-  command: >
-    virsh vol-create-as '{{ libvirt_volume_pool }}'
-    '{{ item.item.name }}'.qcow2 '{{ flavors[item.item.flavor].disk }}'G
-    --format qcow2
-  environment:
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  when: item|failed
-  with_items: "{{ overcloud_vol_check.results }}"
-  when: overcloud_nodes
+    - name: get a list of MACs to use
+      generate_macs:
+        nodes: "{{ overcloud_nodes }}"
+        networks: "{{ networks }}"
+      register: node_mac_map
 
-- name: Define overcloud vms
-  virt:
-    name: "{{ item.name }}"
-    command: define
-    xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
-    uri: "{{ libvirt_uri }}"
-  with_items: "{{ overcloud_nodes }}"
-  when: overcloud_nodes
+    - name: Check if overcloud volumes exist
+      command: >
+        virsh vol-info --pool '{{libvirt_volume_pool}}' '{{item.name}}.qcow2'
+      register: overcloud_vol_check
+      ignore_errors: true
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+      with_items: "{{ overcloud_nodes }}"
+
+    - name: Create overcloud vm storage
+      command: >
+        virsh vol-create-as '{{ libvirt_volume_pool }}'
+        '{{ item.item.name }}'.qcow2 '{{ flavors[item.item.flavor].disk }}'G
+        --format qcow2
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+      when: item|failed
+      with_items: "{{ overcloud_vol_check.results }}"
+
+    - name: Define overcloud vms
+      virt:
+        name: "{{ item.name }}"
+        command: define
+        xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
+        uri: "{{ libvirt_uri }}"
+      with_items: "{{ overcloud_nodes }}"
 
 - name: Write instackenv script
   template:
     src: "{{ undercloud_instackenv_template }}"
     dest: "{{ working_dir }}/instackenv.json"
+
