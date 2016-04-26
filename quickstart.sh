@@ -251,7 +251,7 @@ fi
 
 # we use this only if --undercloud-image-url was not provided on the
 # command line.
-: ${OPT_UNDERCLOUD_URL:=http://buildlogs.cdn.centos.org/centos/7/cloud/x86_64/tripleo_images/$RELEASE/delorean/undercloud.qcow2}
+: ${OPT_UNDERCLOUD_URL:=http://artifacts.ci.centos.org/artifacts/rdo/images/${RELEASE}/delorean/stable/undercloud.qcow2}
 
 print_logo
 echo "Installing OpenStack ${RELEASE:+"$RELEASE "}on host $VIRTHOST"
