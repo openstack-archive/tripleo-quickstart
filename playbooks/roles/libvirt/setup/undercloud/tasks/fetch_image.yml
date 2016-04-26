@@ -88,12 +88,22 @@
         state: link
         src: "{{ image_cache_path }}"
 
+  rescue:
+
+    - name: Note that there was a failure.
+      set_fact:
+        image_fetch_failed: true
+
   always:
 
     - name: Clean up temporary image file
       file:
         path: "{{ image_cache_dir }}/_undercloud.qcow2"
         state: absent
+
+    - name: Propagate failure
+      fail:
+      when: image_fetch_failed|default(false)
 
 - name: Get undercloud image from cache
   command: >
