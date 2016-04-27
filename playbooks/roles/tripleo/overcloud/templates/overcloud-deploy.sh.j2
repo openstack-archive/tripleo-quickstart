@@ -45,8 +45,8 @@ openstack overcloud deploy --templates {{ deploy_args }} \
     ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} || deploy_status=1
 
 # we don't always get a useful error code from the openstack deploy command,
-# so check the log for a CREATE_FAILED message.
-if [ grep -q 'Stack overcloud CREATE_FAILED' {{ deploy_log }} ]; then
+# so check `heat stack-list` for a CREATE_FAILED status.
+if heat stack-list | grep -q 'CREATE_FAILED'; then
     deploy_status=1
 
     for failed in $(heat resource-list \
