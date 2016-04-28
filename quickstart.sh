@@ -237,14 +237,18 @@ fi
 VIRTHOST=$1
 RELEASE=$2
 
-# We use $RELEASE to build the undercloud image URL. If the user has provided
-# an explicit URL, then $RELEASE is a no-op so we should warn the user of that
+# We use $RELEASE to build the undercloud image URL. It is also passed to the
+# quickstart playbook, since there are now some version specific behaviors.
+# If the user has provided an explicit URL, we should warn them of that
 # fact.
-if [ -n "$RELEASE" ] && [ -n "$OPT_UNDERCLOUD_URL" ]; then
-    echo "WARNING: ignoring release $RELEASE because you have" >&2
-    echo "         provided an explicit undercloud image URL." >&2
+if [ -z "$RELEASE" ] && [ -n "$OPT_UNDERCLOUD_URL" ]; then
+    
+    RELEASE=mitaka
 
-    RELEASE=
+    echo "WARNING: The release defaults to $RELEASE, but you have" >&2
+    echo "         provided an explicit undercloud image URL. If" >&2
+    echo "         that image is not for $RELEASE, this may not work" >&2
+
 elif [ -z "$RELEASE" ] && [ -z "$OPT_UNDERCLOUD_URL" ]; then
     RELEASE=mitaka
 fi
@@ -295,6 +299,7 @@ ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/quickstart.yml \
     -e image_url=$OPT_UNDERCLOUD_URL \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
+    -e release=$RELEASE \
     ${OPT_TAGS:+-t $OPT_TAGS} \
     ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS}
 
