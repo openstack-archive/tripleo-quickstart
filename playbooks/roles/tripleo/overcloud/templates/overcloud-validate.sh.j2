@@ -3,14 +3,24 @@
 
 set -eux
 
-{% if test_ping|bool %}
+TEST_PING={% if test_ping|bool %}1{% else %}0{% endif %}
+
+PREPARE_TEMPEST={% if prepare_tempest|bool %}1{% else %}0{% endif %}
+
+TEST_TEMPEST={% if test_tempest|bool %}1{% else %}0{% endif %}
+
+
+if [ ${TEST_PING} == "1" ]; then
 {% include 'tripleo-pingtest.sh.j2' %}
-{% endif %}
 
-{% if prepare_tempest|bool %}
+fi
+
+if [ ${PREPARE_TEMPEST} == "1" ]; then
 {% include 'configure-tempest.sh.j2' %}
-{% endif %}
 
-{% if test_tempest|bool %}
+fi
+
+if [ ${TEST_TEMPEST} == "1" ]; then
 {% include 'run-tempest.sh.j2' %}
-{% endif %}
+
+fi
