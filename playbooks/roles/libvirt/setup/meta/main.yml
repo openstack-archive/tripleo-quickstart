@@ -1,4 +1,14 @@
----
+# Include settings from the libvirt role, and include all the
+# `setup/*` roles.  This means that when your playbook has:
+#
+#     roles:
+#       - libvirt/setup
+#
+# You also get:
+#
+# - `libvirt/setup/user`
+# - `libvirt/setup/overcloud`
+# - `libvirt/setup/undercloud`
 dependencies:
   - role: libvirt
   - role: setup/user

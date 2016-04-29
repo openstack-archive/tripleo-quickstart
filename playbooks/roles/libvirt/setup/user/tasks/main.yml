@@ -1,14 +1,21 @@
+# We're going to want to store things in `working_dir` so ensure it
+# exists first.  `working_dir` is a directory on the target host.
 - name: Ensure remote working dir exists
   file:
     path: "{{ working_dir }}"
     state: directory
 
+# Also make sure `local_working_dir` exists.  This is a directory on
+# the ansible control host.
 - name: Ensure local working dir exists
   delegate_to: localhost
   file:
     path: "{{ local_working_dir }}"
     state: directory
 
+# Create ssh keypairs.  `virt_power_key` is used by ironic on the
+# undercloud to control libvirt on the physical host, and
+# `undercloud_key` is used to log in to the undercloud.
 - name: Generate ssh keys
   delegate_to: localhost
   command: >

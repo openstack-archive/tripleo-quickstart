@@ -2,6 +2,7 @@
 # for this job, but test all defaults otherwise
 step_introspect: true
 
+# Define a single controller node and a single compute node.
 overcloud_nodes:
   - name: control_0
     flavor: control

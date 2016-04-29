@@ -1,8 +1,14 @@
----
+# This is the playbook used by the `quickstart.sh` script.
+
+# The [provision.yml](provision.yml.html) playbook is responsible for
+# creating an inventory entry for our `virthost` and for creating an
+# unprivileged user on that host for use by our virtual environment.
 - include: provision.yml
   tags:
     - provision
 
+# The `environment/setup` role performs any tasks that require `root`
+# access on the target host.
 - name: Install libvirt packages and configure networks
   hosts: virthost
   tags:
@@ -10,20 +16,25 @@
   roles:
     - environment/setup
 
-- name:  Setup undercloud and baremetal vms and networks in libvirt
+# The `libvirt/setup` role creates the undercloud and overcloud
+# virtual machines.
+- name:  Setup undercloud and overcloud vms
   hosts: virthost
   gather_facts: yes
   roles:
     - libvirt/teardown
     - libvirt/setup
 
-# This adds the undercloud node to the generated 
+# Add the undercloud node to the generated
 # inventory.
 - name: Rebuild inventory
   hosts: localhost
   roles:
     - rebuild-inventory
 
+# DEPLOY ALL THE THINGS!  Depending on the currently selected set of
+# tags, this will deploy the undercloud, deploy the overcloud, and
+# perform some validation tests on the overcloud.
 - name:  Install undercloud and deploy overcloud
   hosts: undercloud
   gather_facts: no

@@ -1,5 +1,5 @@
-# NB: We use "virsh" here instead of the "virt" module because
-# these tasks may be called before the dependencies of the "virt"
+# NB: We use `virsh` here instead of the `virt` module because
+# these tasks may be called before the dependencies of the `virt`
 # module are satisfied.
 
 - name: Check if libvirt is available
@@ -10,9 +10,11 @@
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
+# If libvirt isn't available we can skip everything else.
 - when: libvirt_check|success
   block:
 
+    # Check if the overcloud nodes exist.
     - name: Check overcloud vms
       command: >
         virsh domid "{{ item.name }}"
@@ -22,6 +24,7 @@
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
+      # Destroy and undefine the overcloud nodes.
     - name: Destroy overcloud vms
       command:
         virsh destroy "{{ item.item.name }}"
@@ -39,6 +42,7 @@
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
+    # Do the same thing to the undercloud node.
     - name: Check undercloud vm
       command: >
         virsh domid "{{ undercloud_node.name }}"
@@ -62,8 +66,10 @@
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-    # the virsh vol-dumpxml ... > /dev/null is here (and elsewhere) due to
-    # https://bugzilla.redhat.com/show_bug.cgi?id=1293804
+    # The `virsh vol-dumpxml ... > /dev/null` is here (and elsewhere) due to
+    # [1293804].
+    #
+    # [1293804]: https://bugzilla.redhat.com/show_bug.cgi?id=1293804
     - name: Delete baremetal vm storage
       shell: |
         virsh vol-dumpxml --pool '{{ libvirt_volume_pool }}' \

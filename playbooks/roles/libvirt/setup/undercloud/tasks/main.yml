@@ -1,9 +1,12 @@
+# We're going to try putting files in `local_working_dir`, so make
+# sure it exists first.
 - name: Ensure local working dir exists
   delegate_to: localhost
   file:
     path: "{{ local_working_dir }}"
     state: directory
 
+# Generate MAC addresses for the undercloud node.
 - name: get MACs for the undercloud
   generate_macs:
     nodes:
@@ -11,6 +14,8 @@
     networks: "{{ networks }}"
   register: undercloud_mac_map
 
+# Check if the undercloud volume exists.  If not, we call out to
+# [fetch_image.yml](fetch_image.yml.html) to download the image.
 - name: Check if undercloud volume exists
   command: >
     virsh vol-info --pool '{{ libvirt_volume_pool }}'
@@ -23,6 +28,8 @@
 - include: fetch_image.yml
   when: undercloud_vol_check|failed
 
+# This copies the `instackenv.json` configuration file that we
+# generated in the overcloud setup role to the undercloud host.
 - name: Copy instackenv.json to appliance
   command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
@@ -32,12 +39,16 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   when: undercloud_vol_check|failed
 
+# Copy the undercloud public key to the virthost, because we're going
+# to inject it into the undercloud image in the next task.
 - name: Copy undercloud ssh public key to working dir
   copy:
     src: "{{ undercloud_key }}.pub"
     dest: "{{ working_dir }}/id_rsa_undercloud.pub"
   when: undercloud_vol_check|failed
 
+# Copy the public key to `$HOME/.ssh/authorized_keys` for the `root`
+# and `stack` user on the undercloud.
 - name: Inject undercloud ssh public key to appliance
   command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
@@ -57,6 +68,9 @@
       group: stack
   when: undercloud_vol_check|failed
 
+# Perform an SELinux relabel on the undercloud image to avoid problems
+# caused by bad labelling, since by default the undercloud runs in
+# enforcing mode.
 - name: Perform selinux relabel on undercloud image
   command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
@@ -65,6 +79,7 @@
     LIBGUESTFS_BACKEND: direct
   when: undercloud_vol_check|failed
 
+# Resize the undercloud image to our desired size.
 - name: Resize undercloud image (create target image)
   command: >
     qemu-img create -f qcow2 -o preallocation=off
@@ -81,6 +96,8 @@
     LIBGUESTFS_BACKEND: direct
   when: undercloud_vol_check|failed
 
+# Create a libvirt volume and upload the undercloud image to
+# libvirt.
 - name: Create undercloud volume
   command: >
     virsh vol-create-as {{ libvirt_volume_pool}}
@@ -101,6 +118,7 @@
   poll: 10
   when: undercloud_vol_check|failed
 
+# Define (but do no start) the undercloud virtual machine.
 - name: Define undercloud vm
   virt:
     name: "{{ undercloud_node.name }}"
@@ -108,6 +126,7 @@
     xml: "{{ lookup('template', 'undercloudvm.xml.j2') }}"
     uri: "{{ libvirt_uri }}"
 
+# Start the undercloud virtual machine.
 - name: Start undercloud vm
   virt:
     name: "{{ undercloud_node.name }}"
@@ -115,6 +134,10 @@
     state: running
     uri: "{{ libvirt_uri }}"
 
+# Get the ip address of the undercloud.  This will retry several times
+# (`undercloud_ip_retries`) until the undercloud is ready.  The script
+# works by getting the MAC address of the first undercloud interface,
+# and then looking that up in the kernel ARP table.
 - name: Get undercloud vm ip address
   script: "scripts/get-undercloud-ip.sh {{ undercloud_node.name }}"
   register: undercloud_vm_ip_result
@@ -135,6 +158,7 @@
     port: 22
     timeout: 300
 
+# Add the undercloud to the in-memory inventory.
 - name: Add undercloud vm to inventory
   add_host:
     name: undercloud
@@ -151,8 +175,8 @@
     src: ssh.config.j2
     dest: "{{ local_working_dir }}/ssh.config.ansible"
 
-# Ironic defaults to using qemu:///system.  When running libvirtd
-# unprivileged we need to use qemu:///session.  This allows us to pass
+# Ironic defaults to using `qemu:///system`.  When running libvirtd
+# unprivileged we need to use `qemu:///session`.  This allows us to pass
 # the value of libvirt_uri into /etc/ironic/ironic.conf.
 - name: Configure Ironic pxe_ssh driver
   delegate_to: undercloud

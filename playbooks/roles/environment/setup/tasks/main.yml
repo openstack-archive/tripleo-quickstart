@@ -1,3 +1,5 @@
+# Create the global, root-managed libvirt networks to which we will
+# attach the undercoud and overcloud virtual machines.
 - name: Create libvirt networks
   virt_net:
     command: define
@@ -22,7 +24,12 @@
   with_items: "{{ networks }}"
   become: true
 
-# See: http://wiki.qemu.org/Features-Done/HelperNetworking
+# Whitelist the bridges associated with these networks for 
+# access using qemu [helper networking][helper].  Later on we
+# create virtual machines use an unprivileged `qemu://session` 
+# connection, and we connect to the networks using the bridge names.
+#
+# [helper]: http://wiki.qemu.org/Features-Done/HelperNetworking
 - name: Whitelist bridges for unprivileged access
   lineinfile:
     dest: "{{ qemu_bridge_conf }}"

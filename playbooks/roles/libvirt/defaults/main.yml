@@ -1,13 +1,32 @@
+# This is where we store generated artifacts (like ssh config files,
+# keys, etc).
 working_dir: "{{ ansible_user_dir }}/.quickstart"
+
+# This is where we store the downloaded underloud image.
 image_cache_dir: "{{ ansible_user_dir }}/oooq_cache"
+
+# If `use_cached_image` is `true`, don't check for a more recent
+# undercloud image.  Otherwise, we also check for a new undercloud
+# image and will only use the cached version if the remote MD5 is the
+# same.
 use_cached_image: false
+
+# Which image should we download?
 release: mitaka
 image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/undercloud.qcow2
+
+# Which power manager should we use?
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
 
+# These are keys that we generate; `virt_power_key` is used *by the
+# undercloud* to start/stop virtual machines on the virthost.
+# `undercloud_key` is used to log in to the undercloud.
 virt_power_key: "{{ local_working_dir }}/id_rsa_virt_power"
 undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
 
+# Which libvirt session should we use?  Using `qemu://session` does
+# not require privileged access (but does require the setup performed by the
+# `environment/setup` role).
 libvirt_uri: qemu:///session
 libvirt_volume_path: "{{ working_dir }}/pool"
 libvirt_volume_pool: oooq_pool

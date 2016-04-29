@@ -103,6 +103,7 @@ ipv6: false
 enable_vnc_console: false
 
 # We have some version specific behaviors, so we need a release variable
+#
 # TODO(trown): It would be better to write a release into the image itself
 # and set this variable from there.
 release: mitaka

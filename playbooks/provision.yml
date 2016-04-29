@@ -1,14 +1,20 @@
+# This playbooks is responsible for preparing a target host.
+#
+# We start by creating an inventory entry for the target host.
 - name: Add virthost to inventory
   hosts: localhost
   roles:
     - provision/local
 
+# Next, we create a non-root user on the remote system.
 - name: Create target user on virt host
   hosts: virthost
   roles:
     - provision/teardown
     - provision/remote
 
+# Regenerate the inventory file for use in subsequent
+# `ansible-playbook` runs.
 - name: Rebuild inventory
   hosts: localhost
   roles:
@@ -16,7 +22,7 @@
 
 # We need to force-refresh facts because we are now connecting
 # as a different user ('stack' instead of 'root'), which affects
-# things like ansible_user_id and friends.
+# things like ansible_user_id and other facts.
 - name: Tear down environment
   hosts: virthost
   pre_tasks:

@@ -1,5 +1,8 @@
-# NB: We use "virsh" here instead of the "virt_net" module because
-# these tasks may be called before the dependencies of the "virt"
+# Tear down the virtual environment that was created by the
+# `environment/setup` role.
+#
+# NB: We use `virsh` here instead of the `virt_net` module because
+# these tasks may be called before the dependencies of the `virt_net`
 # module are satisfied.
 
 - name: Check if libvirt is available
@@ -8,9 +11,11 @@
   ignore_errors: true
   register: libvirt_check
 
+# If libvirt is not available, we can skip the rest of the tasks.
 - when: libvirt_check|success
   block:
 
+  # Check to see if the networks exist.
     - name: Check libvirt networks
       command: >
         virsh net-uuid "{{ item.name }}"
@@ -19,6 +24,8 @@
       ignore_errors: true
       become: true
 
+    # If the networks exist, stop them, undefine them, and remove the
+    # bridges devices from the qemu whitelist.
     - name: Stop libvirt networks
       command: >
         virsh net-destroy "{{ item.item.name }}"

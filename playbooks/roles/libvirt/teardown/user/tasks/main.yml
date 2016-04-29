@@ -1,3 +1,5 @@
+# This removes the `virt_power_key` from the remote `authorized_keys`
+# file.
 - name: Remove virt_power_key from remote authorized_keys
   authorized_key:
     user: "{{ ansible_user_id }}"

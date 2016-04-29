@@ -1,5 +1,5 @@
 # Fetching the undercloud images can take a long time.  This
-# tasklist caches images in {{ image_cache_dir }} if an image is
+# tasklist caches images in `{{ image_cache_dir }}` if an image is
 # (a) downloaded successfully and (b) successfully verifies against
 # the checksum.  Images are cached using the checksum as the filename,
 # and subsequent playbook runs will use the cached copy rather than
@@ -10,6 +10,8 @@
     path: "{{ image_cache_dir }}"
     state: directory
 
+# This looks for the `latest.qcow2` symlink that may have been created
+# by a previous run of this tasklist.
 - name: Check if we have a latest.qcow2
   command: >
     test -f latest.qcow2
@@ -19,6 +21,9 @@
   register: latest_exists
   changed_when: false
 
+# If we want to use the most recent image in the local cache
+# (`use_cached_image` is `true`) *and* such an image exists, point
+# `image_cache_path` at `latest.qcow2`.
 - when: use_cached_image|bool and latest_exists|success
   block:
 
@@ -27,9 +32,11 @@
         image_cache_path: "{{ image_cache_dir }}/latest.qcow2"
       when: latest_exists|success and use_cached_image|bool
 
+# Otherwise, check if there's a new image available.
 - when: not use_cached_image|bool or latest_exists|failed
   block:
 
+    # Get the expected checksum for the remote image.
     - name: Get undercloud image expected checksum
       command: >
         curl -sf {{ image_url }}.md5
@@ -39,6 +46,7 @@
       set_fact:
         image_cache_path: "{{ image_cache_dir }}/{{ undercloud_md5_expected.stdout.split()[0] }}.qcow2"
 
+    # See if a matching image exists locally.
     - name: Check for undercloud image in cache
       command: >
         test -f {{ image_cache_path }}
@@ -48,9 +56,15 @@
       register: image_exists
       changed_when: false
 
+# Looks like we're going to have to download the image after all.
 - when: image_exists is defined and image_exists|failed
   block:
 
+    # This task will download the image.  We're using `curl` here
+    # rather than `wget` because while `wget` has built-in retry
+    # capabilities, it is unable to handle `file://` URLs.  We instead
+    # use an ansible `until` loop, combined with curl's `-C-` option
+    # to continue interrupted downloads.
     - name: Get undercloud image
       command: >
         curl -sf -C- -o _undercloud.qcow2 {{ image_url }}
@@ -61,6 +75,7 @@
       retries: 20
       delay: 5
 
+    # Compute the md5 checksum of the image we just downloaded
     - name: Get actual md5 checksum of undercloud image
       command: >
         md5sum _undercloud.qcow2
@@ -68,6 +83,7 @@
         chdir: "{{ image_cache_dir }}"
       register: undercloud_md5_actual
 
+    # Verify that what we have is what we wanted.
     - name: Verify undercloud image checksum
       fail:
         msg: undercloud image checksum does not match
@@ -90,12 +106,17 @@
 
   rescue:
 
+    # This is a workaround for ansible issue [15625][].
+    #
+    # [15625]: https://github.com/ansible/ansible/issues/15625
     - name: Note that there was a failure.
       set_fact:
         image_fetch_failed: true
 
   always:
 
+    # Ensure that even if there are failures we still clean up our
+    # temporary image file.
     - name: Clean up temporary image file
       file:
         path: "{{ image_cache_dir }}/_undercloud.qcow2"
@@ -105,6 +126,8 @@
       fail:
       when: image_fetch_failed|default(false)
 
+# Use `image_cache_path`, which was set by one of the above tasks, and
+# copy it to `undercloud.qcow2 in our `{{ working_dir }}`.
 - name: Get undercloud image from cache
   command: >
     cp {{ image_cache_path }} {{ working_dir }}/undercloud.qcow2

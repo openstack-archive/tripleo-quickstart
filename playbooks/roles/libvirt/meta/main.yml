@@ -1,3 +1,5 @@
+# Include the `common` role as a dependency. This makes sure the
+# variables defined in that role are available here.
 dependencies:
   - common
 
