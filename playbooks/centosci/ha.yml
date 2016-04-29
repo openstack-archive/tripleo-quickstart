@@ -17,7 +17,15 @@ overcloud_nodes:
 
 introspect: false
 
+# Tell tripleo about our environment.
+extra_args: >-
+  --control-scale 3 --neutron-network-type vxlan
+  --neutron-tunnel-types vxlan
+  -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml
+  -e /usr/share/openstack-tripleo-heat-templates/environments/net-single-nic-with-vlans.yaml
+  -e ~/network-environment.yaml
+  -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml
+  --ntp-server pool.ntp.org
 deploy_timeout: 75
-extra_args: "--control-scale 3 --neutron-network-type vxlan --neutron-tunnel-types vxlan -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/net-single-nic-with-vlans.yaml -e ~/network-environment.yaml -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml --ntp-server pool.ntp.org"
 tempest: false
 pingtest: true
