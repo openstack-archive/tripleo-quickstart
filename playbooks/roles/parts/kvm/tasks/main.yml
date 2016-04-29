@@ -1,6 +1,6 @@
 - name: get cpu flags
   command: >
-    awk -F: '/^flags/ {print $2}' /proc/cpuinfo
+    awk -F: '/^flags/ {print $2; exit}' /proc/cpuinfo
   register: cpu_flags_cmd
 
 - name: set cpu flags fact
