@@ -1,10 +1,13 @@
 #!/bin/bash
+
 # Simple overcloud deploy script
 
 set -eux
 
+# Source in undercloud credentials.
 source {{ working_dir }}/stackrc
 
+# Wait until there are hypervisors available.
 while true; do
     count=$(openstack hypervisor stats show -c count -f value)
     if [ $count -gt 0 ]; then
@@ -12,6 +15,8 @@ while true; do
     fi
 done
 
+# Include configuration necessary for the ping test here if requested via the
+# ansible `test_ping` variable.
 {% if test_ping %}
 DEPLOY_ENV_YAML=/tmp/deploy_env.yaml
 
@@ -43,10 +48,11 @@ EOENV
 
 deploy_status=0
 
+# Deploy the overcloud!
 openstack overcloud deploy --templates {{ deploy_args }} \
     ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} || deploy_status=1
 
-# we don't always get a useful error code from the openstack deploy command,
+# We don't always get a useful error code from the openstack deploy command,
 # so check `heat stack-list` for a CREATE_FAILED status.
 if heat stack-list | grep -q 'CREATE_FAILED'; then
     deploy_status=1

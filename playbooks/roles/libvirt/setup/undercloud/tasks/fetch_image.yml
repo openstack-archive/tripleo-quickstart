@@ -104,19 +104,19 @@
         state: link
         src: "{{ image_cache_path }}"
 
+  # This is a workaround for ansible issue [15625][].
+  #
+  # [15625]: https://github.com/ansible/ansible/issues/15625
   rescue:
 
-    # This is a workaround for ansible issue [15625][].
-    #
-    # [15625]: https://github.com/ansible/ansible/issues/15625
     - name: Note that there was a failure.
       set_fact:
         image_fetch_failed: true
 
+  # Ensure that even if there are failures we still clean up our
+  # temporary image file.
   always:
 
-    # Ensure that even if there are failures we still clean up our
-    # temporary image file.
     - name: Clean up temporary image file
       file:
         path: "{{ image_cache_dir }}/_undercloud.qcow2"

@@ -4,6 +4,10 @@
     path: "{{ local_working_dir }}"
     state: directory
 
+# Generate an ansible inventory file from our in-memory inventory.
+# This permits someone to run ad-hoc ansible commands or playbooks
+# against the hosts we create with `add_hosts` elsewhere in this
+# project.
 - name: rebuild-inventory
   template:
     dest: "{{ local_working_dir }}/hosts"

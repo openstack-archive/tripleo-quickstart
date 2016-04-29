@@ -1,3 +1,5 @@
+# Creat the scripts that will be used to deploy the undercloud
+# environment.
 - name: Create undercloud configuration
   template:
     src: "{{ undercloud_config_file }}"

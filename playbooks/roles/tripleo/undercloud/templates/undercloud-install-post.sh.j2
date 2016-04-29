@@ -1,24 +1,27 @@
 #!/bin/bash
+
 # Prepare the undercloud for deploy
 
 set -eux
 
+# Source in undercloud credentials.
 source {{ working_dir }}/stackrc
 
+# Upload images to glance.
 openstack overcloud image upload \
     {% if bash_deploy_ramdisk %}--old-deploy-image{% endif %}
 
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 
+# Perform introspection if requested.
 {% if step_introspect %}
 openstack baremetal introspection bulk start
 {% endif %}
 
 {% for name, flavor in (flavors|default({})).items() if name != 'undercloud' %}
-#
-# Create flavor oooq_{{name}}
-#
+# Create flavor oooq_{{name}} for each falvor in the ansible `flavors`
+# variable.
 
 # remove flavor before attempting to create
 nova flavor-delete oooq_{{ name }} > /dev/null 2>&1 || true

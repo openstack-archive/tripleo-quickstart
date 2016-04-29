@@ -1,3 +1,6 @@
+# Generate a number of scripts from templates.  These are scripts
+# rather than additional ansible tasks so that they can be run
+# manually from the undercloud host.
 - name: Create overcloud deploy script
   template:
     src: "{{ deploy_script }}"

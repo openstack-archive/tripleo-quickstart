@@ -1,3 +1,7 @@
+# Create `virt_host_key`, which we will use to log in to the target
+# host.  Note that this tasks runs on the ansible control host
+# (because of the `delegate_to: localhost`), and we will later copy
+# the public key to the appropriate location.
 - name: Create virthost access key
   delegate_to: localhost
   command: >
@@ -7,6 +11,8 @@
   args:
     creates: "{{ virt_host_key }}"
 
+# Create a non-root user on the target host.  This is the user that
+# will own the virtual infrastructure on which we deploy openstack.
 - name: Create non-root user
   user:
     name: "{{ non_root_user }}"
@@ -14,6 +20,8 @@
     shell: /bin/bash
   become: true
 
+# Install the public component of `virt_host_key` in the
+# `.ssh/authorized_keys` file for the non-root user.
 - name: Configure non-root user authorized_keys
   authorized_key:
     user: "{{ non_root_user }}"
@@ -22,12 +30,19 @@
     - "{{ virt_host_key }}.pub"
   become: true
 
+# This lets the non-root user access the `qemu://system` endpoint.  We
+# don't need this with the default configuration (which uses
+# `qemu://session`), but this permits things to work if someone
+# explicitly passes in `libvirt_uri`.
 - name: Grant libvirt privileges to non-root user
   template:
     src: libvirt.pkla.j2
     dest: "/etc/polkit-1/localauthority/50-local.d/50-{{ non_root_user }}-libvirt.pkla"
   become: true
 
+# This is a workaround for [this issue][xdg].
+#
+# [xdg]: https://www.redhat.com/archives/libvirt-users/2016-March/msg00056.html
 - name: Ensure XDG_RUNTIME_DIR is set
   blockinfile:
     dest: .bashrc
@@ -41,6 +56,7 @@
   become: true
   become_user: "{{ non_root_user }}"
 
+# I'm not always root, but when I am it's because of `sudo`.
 - name: Grant sudo privileges to non-root user
   copy:
     content: |
@@ -51,6 +67,9 @@
     mode: 0440
   become: true
 
+# This replaces the inventory entry for the virthost.  The original
+# entry had `ansible_user: root`, but from now on we will connect as
+# the non-root user.
 - name: Re-add the virthost to the inventory
   add_host:
     name: "{{ virthost }}"

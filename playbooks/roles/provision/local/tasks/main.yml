@@ -1,3 +1,4 @@
+# Error out early if the `virthost` variable is not set.
 - name: Check that virthost is set
   fail:
     msg: "You need to set virthost before running these playbooks."
@@ -8,11 +9,15 @@
     path: "{{ local_working_dir }}"
     state: directory
 
+# This file needs to exist because it will later be referenced in some
+# ssh command lines.
 - name: Create empty ssh config file
   file:
     path: "{{ local_working_dir }}/ssh.config.ansible"
     state: touch
 
+# Add the virthost to the in-memory inventory.  The inventory is not
+# wirtten out to disk unless you call the `rebuild-inventory` role.
 - name: Add the virthost to the inventory
   add_host:
     name: "{{virthost}}"

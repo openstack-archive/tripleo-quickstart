@@ -1,3 +1,10 @@
+# Update the ssh configuration on the undercloud to provide convenient
+# access to the overcloud hosts.  Creates an entry in `.ssh/config`
+# for each overcloud hosts that will:
+#
+# - Ensure we connect as the `heat-admin` user
+# - Avoid ssh hostkey checks, which can be a pain in rapidly changing
+#   development environments.
 - name: Get list of overcloud servers
   shell: |
     . {{ working_dir }}/stackrc

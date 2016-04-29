@@ -1,3 +1,5 @@
+# Extract the undercloud admin password from
+# `undercloud-passwords.conf`.
 - name: Get undercloud admin password
   command: >
     awk -F= '$1 == "undercloud_admin_password" {print $2}'
@@ -12,8 +14,9 @@
     src: stackrc
     dest: "{{ local_working_dir }}/stackrc"
 
-# we needs (and the previous task) in order to replace the
-# `sudo hiera admin_password` with an actual password.
+# We need this (and the previous task) in order to replace the
+# `sudo hiera admin_password` with an actual password in the `stackrc`
+# file.
 - name: Update admin password in local credentials file
   delegate_to: localhost
   lineinfile:
