@@ -13,7 +13,9 @@ install_deps () {
         /usr/bin/virtualenv \
         gcc \
         libyaml \
-        libselinux-python
+        libselinux-python \
+        libffi-devel \
+        openssl-devel
 }
 
 
