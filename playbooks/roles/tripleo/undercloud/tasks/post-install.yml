@@ -27,6 +27,8 @@
     {{ undercloud_post_install_log }} 2>&1
 
 - name: Create network environment file for network isolation
+  tags:
+    - undercloud-scripts
   template:
     src: "{{ network_environment_file }}"
     dest: "{{ working_dir }}/network-environment.yaml"
