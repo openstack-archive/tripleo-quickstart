@@ -3,6 +3,10 @@
 # key files, etc)
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 
+# This is a directory no the virthost in which we store the downloaded
+# undercloud image.
+image_cache_dir: "/var/cache/tripleo-quickstart/images"
+
 # These defaults are used if there are no flavor-specific
 # overrides configured.
 default_disk: 50

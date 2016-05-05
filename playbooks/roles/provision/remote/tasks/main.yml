@@ -78,3 +78,13 @@
     ansible_user: "{{ non_root_user }}"
     ansible_host: "{{ virthost }}"
     ansible_private_key_file: "{{ virt_host_key }}"
+
+# Create the image_cache_dir
+- name: Ensure image cache directory exists
+  file:
+    path: "{{ image_cache_dir }}"
+    state: directory
+    owner: "{{ non_root_user }}"
+    mode: "ug+rwx"
+  become: true
+

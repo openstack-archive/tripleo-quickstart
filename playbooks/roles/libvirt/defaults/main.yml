@@ -2,9 +2,6 @@
 # keys, etc).
 working_dir: "{{ ansible_user_dir }}/.quickstart"
 
-# This is where we store the downloaded underloud image.
-image_cache_dir: "{{ ansible_user_dir }}/oooq_cache"
-
 # If `use_cached_image` is `true`, don't check for a more recent
 # undercloud image.  Otherwise, we also check for a new undercloud
 # image and will only use the cached version if the remote MD5 is the
