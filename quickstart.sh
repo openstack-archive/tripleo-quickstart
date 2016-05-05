@@ -281,6 +281,10 @@ set -ex
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
 
+# Clear out inventory file to avoid tripping over data
+# from a previous invocation
+rm -f $ANSIBLE_INVENTORY
+
 if [ "$VIRTHOST" = "localhost" ]; then
     echo "$0: WARNING: VIRTHOST == localhost; skipping provisioning" >&2
     OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}provision"
