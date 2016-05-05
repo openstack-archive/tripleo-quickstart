@@ -5,9 +5,9 @@
 {{ host }}{% if 'ansible_host' in hostvars[host]
 %} ansible_host={{ hostvars[host]['ansible_host'] }} {% endif %}
 {% if 'ansible_user' in hostvars[host]
-%}ansible_user={{ hostvars[host]['ansible_user'] }} {% endif %}
+%} ansible_user={{ hostvars[host]['ansible_user'] }} {% endif %}
 {% if 'ansible_private_key_file' in hostvars[host]
-%}ansible_private_key_file={{ hostvars[host]['ansible_private_key_file'] }}
+%} ansible_private_key_file={{ hostvars[host]['ansible_private_key_file'] }}
 {% endif %}
 
 {% endif %}
