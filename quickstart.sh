@@ -97,7 +97,10 @@ bootstrap () {
         fi
     fi
 
-    pip install -r $OPT_WORKDIR/tripleo-quickstart/$REQUIREMENTS
+    pushd $OPT_WORKDIR/tripleo-quickstart
+        python setup.py install
+        pip install -r $REQUIREMENTS
+    popd
     )
 }
 
@@ -113,7 +116,6 @@ usage () {
     echo "    --ansible-debug"
     echo "    --bootstrap"
     echo "    --working-dir <directory>"
-    echo "    --undercloud-image-url <url>"
     echo "    --tags <tag1>[,<tag2>,...]"
     echo "    --skip-tags <tag1>,[<tag2>,...]"
     echo "    --config <file>"
@@ -150,11 +152,6 @@ while [ "x$1" != "x" ]; do
 
         --working-dir|-w)
             OPT_WORKDIR=$2
-            shift
-            ;;
-
-        --undercloud-image-url|-u)
-            OPT_UNDERCLOUD_URL=$2
             shift
             ;;
 
@@ -232,7 +229,7 @@ fi
 
 # Set this default after option processing, because the default depends
 # on another option.
-: ${OPT_CONFIG:=$OOOQ_DIR/playbooks/centosci/minimal.yml}
+: ${OPT_CONFIG:=$OOOQ_DIR/config/general_config/minimal.yml}
 
 if [ "$OPT_INSTALL_DEPS" = 1 ]; then
     echo "NOTICE: installing dependencies"
@@ -272,21 +269,11 @@ RELEASE=$2
 # quickstart playbook, since there are now some version specific behaviors.
 # If the user has provided an explicit URL, we should warn them of that
 # fact.
-if [ -z "$RELEASE" ] && [ -n "$OPT_UNDERCLOUD_URL" ]; then
+if [ -z "$RELEASE" ]; then
 
     RELEASE=mitaka
 
-    echo "WARNING: The release defaults to $RELEASE, but you have" >&2
-    echo "         provided an explicit undercloud image URL. If" >&2
-    echo "         that image is not for $RELEASE, this may not work" >&2
-
-elif [ -z "$RELEASE" ] && [ -z "$OPT_UNDERCLOUD_URL" ]; then
-    RELEASE=mitaka
 fi
-
-# we use this only if --undercloud-image-url was not provided on the
-# command line.
-: ${OPT_UNDERCLOUD_URL:=http://artifacts.ci.centos.org/artifacts/rdo/images/${RELEASE}/delorean/stable/undercloud.qcow2}
 
 print_logo
 echo "Installing OpenStack ${RELEASE:+"$RELEASE "}on host $VIRTHOST"
@@ -320,10 +307,9 @@ fi
 ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/quickstart.yml \
     -e @$OPT_CONFIG \
     -e ansible_python_interpreter=/usr/bin/python \
-    -e image_url=$OPT_UNDERCLOUD_URL \
+    -e @$OOOQ_DIR/config/release/$RELEASE.yml \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
-    -e release=$RELEASE \
     ${OPT_VARS[@]} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
     ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS}

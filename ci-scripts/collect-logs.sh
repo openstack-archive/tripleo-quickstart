@@ -4,7 +4,7 @@
 set -eux
 
 git clone https://github.com/redhat-openstack/ansible-role-tripleo-collect-logs.git \
-    $WORKSPACE/tripleo-quickstart/playbooks/roles/collect-logs
+    $WORKSPACE/tripleo-quickstart/roles/collect-logs
 
 export ANSIBLE_INVENTORY=$WORKSPACE/hosts
 export ANSIBLE_CONFIG=$WORKSPACE/tripleo-quickstart/ansible.cfg

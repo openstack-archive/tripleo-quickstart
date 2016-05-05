@@ -9,8 +9,8 @@ PATH=$PATH:/usr/sbin:/sbin
 VMNAME=$1
 
 # Get the MAC address of the first interface by looking for looking for the
-# `<mac address...` line.  Yes, we're parsing XML with awk.  It's probably 
-# safe (because the XML is coming from libvirt, so we can be reasonably 
+# `<mac address...` line.  Yes, we're parsing XML with awk.  It's probably
+# safe (because the XML is coming from libvirt, so we can be reasonably
 # confident that the formatting will remain the same).
 mac=$(virsh dumpxml $VMNAME | awk -F "'" '/mac address/ { print $2; exit }')
 

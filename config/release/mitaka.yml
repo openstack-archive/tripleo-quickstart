@@ -1,0 +1,2 @@
+release: mitaka
+image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2
