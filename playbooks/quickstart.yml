@@ -1,11 +1,24 @@
 # This is the playbook used by the `quickstart.sh` script.
 
+# Add the virthost to the in-memory inventory.  The inventory is not
+# wirtten out to disk unless you call the `rebuild-inventory` role.
+- name: Add the virthost to the inventory
+  hosts: localhost
+  tasks:
+    - add_host:
+        name: "{{virthost}}"
+        groups: "virthost"
+        ansible_fqdn: "{{ virthost }}"
+        ansible_user: "root"
+        ansible_host: "{{ virthost }}"
+
+
+- include: teardown.yml
+
 # The [provision.yml](provision.yml.html) playbook is responsible for
 # creating an inventory entry for our `virthost` and for creating an
 # unprivileged user on that host for use by our virtual environment.
 - include: provision.yml
-  tags:
-    - provision
 
 # The `environment/setup` role performs any tasks that require `root`
 # access on the target host.
@@ -22,8 +35,8 @@
   hosts: virthost
   gather_facts: yes
   roles:
-    - libvirt/teardown
     - libvirt/setup
+
 
 # Add the undercloud node to the generated
 # inventory.

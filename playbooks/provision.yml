@@ -5,13 +5,16 @@
   hosts: localhost
   roles:
     - provision/local
+  tags:
+    - provision
 
 # Next, we create a non-root user on the remote system.
 - name: Create target user on virt host
   hosts: virthost
   roles:
-    - provision/teardown
     - provision/remote
+  tags:
+    - provision
 
 # Regenerate the inventory file for use in subsequent
 # `ansible-playbook` runs.
@@ -19,13 +22,13 @@
   hosts: localhost
   roles:
     - rebuild-inventory
+  tags:
+    - provision
 
-# We need to force-refresh facts because we are now connecting
-# as a different user ('stack' instead of 'root'), which affects
-# things like ansible_user_id and other facts.
-- name: Tear down environment
+# We need to rerun setup to prevent any possible invalid fact on
+# virthost
+- name: Run setup again on virthost
   hosts: virthost
-  pre_tasks:
+  tasks:
     - setup:
-  roles:
-    - environment/teardown
+

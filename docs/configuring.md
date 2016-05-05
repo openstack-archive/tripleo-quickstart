@@ -83,3 +83,11 @@ following in `myconfigfile.yml`:
 
 And then pass that to the `ansible-playbook` command as described at
 the beginning of this document.
+
+## Explicit Teardown
+
+You can select what to delete prior to the run of quickstart adding a --teardown options
+with the following parameters:
+- nodes (default): remove only undercloud and overcloud nodes
+- virthost same as nodes but network setup is deleted too
+- all: same as virthost but user setup in virthost is deleted too
