@@ -5,8 +5,12 @@
 set -eux
 
 # Translate some ansible variables into shell variables.
+# (trown) the new lines in between these are needed so that
+# after templating they variable assignments are on separate lines.
 TEST_PING={% if test_ping|bool %}1{% else %}0{% endif %}
+
 PREPARE_TEMPEST={% if prepare_tempest|bool %}1{% else %}0{% endif %}
+
 TEST_TEMPEST={% if test_tempest|bool %}1{% else %}0{% endif %}
 
 
