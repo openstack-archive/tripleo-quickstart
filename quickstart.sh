@@ -116,9 +116,12 @@ usage () {
     echo "    --tags <tag1>[,<tag2>,...]"
     echo "    --skip-tags <tag1>,[<tag2>,...]"
     echo "    --config <file>"
+    echo "    --extra-vars <key>=<value>"
     echo "    --print-logo"
 
 }
+
+OPT_VARS=()
 
 while [ "x$1" != "x" ]; do
 
@@ -161,6 +164,12 @@ while [ "x$1" != "x" ]; do
 
         --config|-c)
             OPT_CONFIG=$2
+            shift
+            ;;
+
+        --extra-vars|-e)
+            OPT_VARS+=("-e")
+            OPT_VARS+=("$2")
             shift
             ;;
 
@@ -244,7 +253,7 @@ RELEASE=$2
 # If the user has provided an explicit URL, we should warn them of that
 # fact.
 if [ -z "$RELEASE" ] && [ -n "$OPT_UNDERCLOUD_URL" ]; then
-    
+
     RELEASE=mitaka
 
     echo "WARNING: The release defaults to $RELEASE, but you have" >&2
@@ -306,6 +315,7 @@ ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/quickstart.yml \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
     -e release=$RELEASE \
+    ${OPT_VARS[@]} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
     ${OPT_SKIP_TAGS:+--skip-tags $OPT_SKIP_TAGS}
 
