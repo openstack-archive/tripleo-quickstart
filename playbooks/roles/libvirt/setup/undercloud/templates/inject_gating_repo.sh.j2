@@ -1,0 +1,19 @@
+#!/bin/bash
+
+mkdir -p /opt
+pushd /opt
+tar xzf /tmp/gating_repo.tar.gz
+rm /tmp/gating_repo.tar.gz
+
+for file in /etc/yum.repos.d/*.repo; do
+    sed -i 's/priority=1/priority=2/' $file;
+done
+
+cat > /etc/yum.repos.d/gating.repo << EOF
+[gating-repo]
+name=Gating repository
+baseurl=file:///opt/gating_repo
+enabled=1
+gpgcheck=0
+priority=1
+EOF
