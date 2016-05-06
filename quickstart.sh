@@ -6,6 +6,7 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_SYSTEM_PACKAGES:=0}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
+: ${REQUIREMENTS:=requirements.txt}
 
 install_deps () {
     yum -y install \
@@ -96,7 +97,7 @@ bootstrap () {
         fi
     fi
 
-    pip install -r requirements.txt
+    pip install -r $REQUIREMENTS
     )
 }
 
@@ -117,6 +118,7 @@ usage () {
     echo "    --skip-tags <tag1>,[<tag2>,...]"
     echo "    --config <file>"
     echo "    --extra-vars <key>=<value>"
+    echo "    --requirements <requirements.txt>"
     echo "    --print-logo"
 
 }
@@ -132,6 +134,10 @@ while [ "x$1" != "x" ]; do
 
         --system-site-packages|-s)
             OPT_SYSTEM_PACKAGES=1
+            ;;
+
+        --requirements|-z)
+            REQUIREMENTS=$2
             ;;
 
         --bootstrap|-b)
