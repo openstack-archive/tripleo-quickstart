@@ -2,23 +2,25 @@
 
 ## Bug reports
 
-If you encounter any problems with `tripleo-quickstart` or if you have
-feature suggestions, please feel free to open a bug report in our [issue
-tracker][].
+If you encounter any problems with `tripleo-quickstart` or if you have feature
+suggestions, please feel free to open a bug report in our [issue tracker][].
 
 [issue tracker]: https://bugs.launchpad.net/tripleo-quickstart
 
 ## Code
 
-If you *fix* a problem or implement a new feature, you may submit your
-changes via Gerrit. The `tripleo-quickstart` project uses a Gerrit
-workflow similar to the [OpenStack Gerrit workflow][gerrit].
+If you *fix* a problem or implement a new feature, you may submit your changes
+via Gerrit. The `tripleo-quickstart` project uses the [OpenStack Gerrit
+workflow][gerrit].
 
-We're currently using <https://review.gerrithub.io/>, so you will need
-to establish an account there first.
+You can anonymously clone the repository via
+`git clone https://git.openstack.org/openstack/tripleo-quickstart.git`
 
-Once your gerrithub account is ready, install the [git-review][] tool,
-then from within a clone of the tripleo-quickstart repository run:
+If you wish to contribute, you'll want to get setup by following the
+documentation available at [How To Contribute].
+
+Once you've cloned the repository using your account, install the
+[git-review][] tool, then from the `tripleo-quickstart` repository run:
 
     git review -s
 
@@ -27,13 +29,12 @@ branch, and then submit them for review by running:
 
     git review
 
-Your changes will be tested by our automated CI infrastructure, and will
-also be reviewed by other developers. If you need to make changes (and
-you probably will; it's not uncommon for patches to go through several
-iterations before being accepted), make the changes on your feature
-branch, and instead of creating a new commit, *amend the existing
-commit*, making sure to retain the `Change-Id` line that was placed
-there by `git-review`:
+Your changes will be tested by our automated CI infrastructure, and will also
+be reviewed by other developers. If you need to make changes (and you probably
+will; it's not uncommon for patches to go through several iterations before
+being accepted), make the changes on your feature branch, and instead of
+creating a new commit, *amend the existing commit*, making sure to retain the
+`Change-Id` line that was placed there by `git-review`:
 
     git ci --amend
 
@@ -44,4 +45,4 @@ After committing your changes, resubmit the review:
 
 [gerrit]: http://docs.openstack.org/infra/manual/developers.html#development-workflow
 [git-review]: http://docs.openstack.org/infra/manual/developers.html#installing-git-review
-
+[How To Contribute]: https://wiki.openstack.org/wiki/How_To_Contribute
