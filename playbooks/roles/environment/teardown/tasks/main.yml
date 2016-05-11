@@ -39,6 +39,7 @@
         virsh net-undefine "{{ item.item.name }}"
       when: libvirt_check|success and item|success
       with_items: "{{ network_check.results }}"
+      ignore_errors: true
       become: true
 
     - name: Remove bridge whitelisting from qemu bridge helper
