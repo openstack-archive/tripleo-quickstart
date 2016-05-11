@@ -20,7 +20,7 @@ openstack baremetal introspection bulk start
 {% endif %}
 
 {% for name, flavor in (flavors|default({})).items() if name != 'undercloud' %}
-# Create flavor oooq_{{name}} for each falvor in the ansible `flavors`
+# Create flavor oooq_{{name}} for each flavor in the ansible `flavors`
 # variable.
 
 # remove flavor before attempting to create
