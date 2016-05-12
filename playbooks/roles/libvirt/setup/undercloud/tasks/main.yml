@@ -28,6 +28,9 @@
 - include: fetch_image.yml
   when: undercloud_vol_check|failed
 
+- include: inject_gating_repo.yml
+  when: compressed_gating_repo is defined
+
 # This copies the `instackenv.json` configuration file that we
 # generated in the overcloud setup role to the undercloud host.
 - name: Copy instackenv.json to appliance
