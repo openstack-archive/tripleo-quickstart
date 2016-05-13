@@ -9,3 +9,5 @@ overcloud_nodes:
 
   - name: compute_0
     flavor: compute
+
+network_isolation: false

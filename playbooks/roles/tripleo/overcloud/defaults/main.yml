@@ -44,10 +44,14 @@ flavor_args: >-
   if flavor_map is defined and 'ceph' in flavor_map else 'oooq_ceph'}}
 
 timeout_args: "--timeout {{deploy_timeout}}"
+
+network_args: ""
+
 deploy_args: >-
   {{ libvirt_args }}
   {{ flavor_args }}
   {{ timeout_args }}
+  {{ network_args }}
   {{ extra_args }}
 
 step_deploy_overcloud: true
