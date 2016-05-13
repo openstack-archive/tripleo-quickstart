@@ -17,3 +17,5 @@ enabled=1
 gpgcheck=0
 priority=1
 EOF
+
+yum --disablerepo="*" --enablerepo="gating-repo" update -y
