@@ -70,12 +70,12 @@ overcloud_nodes:
 # "external" network) in the order in which they are defined.  The
 # playbooks expect to find both an "external" network and a
 # "overcloud" network.
-external_network_cidr: 192.168.23.1/24
+external_network_cidr: 192.168.23.0/24
 networks:
   - name: external
     bridge: brext
     forward_mode: nat
-    address: "{{ external_network_cidr|ipaddr('address') }}"
+    address: "{{ external_network_cidr|nthhost(1) }}"
     netmask: "{{ external_network_cidr|ipaddr('netmask') }}"
     dhcp_range:
       - "{{ external_network_cidr|nthhost(10) }}"
@@ -91,7 +91,7 @@ networks:
 undercloud_external_network_cidr: 10.0.0.1/24
 undercloud_networks:
   external:
-    address: "{{ undercloud_external_network_cidr|ipaddr('address') }}"
+    address: "{{ undercloud_external_network_cidr|nthhost(1) }}"
     netmask: "{{ undercloud_external_network_cidr|ipaddr('netmask') }}"
     device_type: ovs
     type: OVSIntPort
