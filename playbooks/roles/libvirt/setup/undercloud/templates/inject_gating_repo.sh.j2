@@ -6,6 +6,7 @@ tar xzf /tmp/gating_repo.tar.gz
 rm /tmp/gating_repo.tar.gz
 
 for file in /etc/yum.repos.d/*.repo; do
+    sed -i 's/priority=2/priority=3/' $file;
     sed -i 's/priority=1/priority=2/' $file;
 done
 
