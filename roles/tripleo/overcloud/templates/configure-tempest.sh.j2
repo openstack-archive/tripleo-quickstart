@@ -26,9 +26,13 @@ mkdir {{ working_dir }}/tempest
 cd {{ working_dir }}/tempest
 
 # Generate a tempest configuration.
+sudo yum install -y libffi-devel openssl-devel python-virtualenv
 /usr/share/openstack-tempest-*/tools/configure-tempest-directory
-
-tools/config_tempest.py --out etc/tempest.conf \
+# TODO (sshnaidm): to move for packages when bug will be fixed:
+# https://bugzilla.redhat.com/show_bug.cgi?id=1333884
+python ./tools/install_venv.py
+./tools/with_venv.sh pip install junitxml httplib2
+./tools/with_venv.sh ./tools/config_tempest.py --out etc/tempest.conf \
   --network-id $public_net_id \
   --deployer-input ~/tempest-deployer-input.conf \
   --debug --create \
@@ -36,4 +40,11 @@ tools/config_tempest.py --out etc/tempest.conf \
   identity.admin_password $OS_PASSWORD \
   network.tenant_network_cidr 192.168.0.0/24 \
   object-storage.operator_role swiftoperator \
+  compute.allow_tenant_isolation true \
+  compute.build_timeout 500 \
+  compute.image_ssh_user cirros \
+  compute.ssh_user cirros \
+  network.build_timeout 500 \
+  volume.build_timeout 500 \
+  scenario.ssh_user cirros \
   orchestration.stack_owner_role heat_stack_owner
