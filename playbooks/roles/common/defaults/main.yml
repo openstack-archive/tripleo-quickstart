@@ -40,9 +40,9 @@ flavors:
     vcpu: '{{ceph_vcpu|default(default_vcpu)}}'
 
   undercloud:
-    memory: '{{undercloud_memory|default(default_memory)}}'
-    disk: '{{undercloud_disk|default(default_disk)}}'
-    vcpu: '{{undercloud_vcpu|default(default_vcpu)}}'
+    memory: '{{undercloud_memory|default(undercloud_memory)}}'
+    disk: '{{undercloud_disk|default(undercloud_disk)}}'
+    vcpu: '{{undercloud_vcpu|default(undercloud_vcpu)}}'
 
 # We create a single undercloud node.
 undercloud_node:
