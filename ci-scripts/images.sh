@@ -13,6 +13,9 @@ JOB_TYPE=$4
 ansible --version
 anscmd="stdbuf -oL -eL ansible-playbook -vv"
 
+pushd $WORKSPACE/tripleo-quickstart
+pip install -r requirements.txt
+
 # (trown) This is so that we ensure separate ssh sockets for
 # concurrent jobs. Without this, two jobs running in parallel
 # would try to use the same undercloud-stack socket.
