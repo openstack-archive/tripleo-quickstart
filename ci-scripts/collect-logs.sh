@@ -11,10 +11,7 @@ export ANSIBLE_CONFIG=$WORKSPACE/tripleo-quickstart/ansible.cfg
 # (trown) I don't totally understand why this is needed here, but activating
 # the venv is failing otherwise.
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-# (trown) In the image build case, we don't have a venv in the workspace.
-source $WORKSPACE/bin/activate || true
-
-ansible --version
+source $WORKSPACE/bin/activate
 
 cat > collect-logs.yaml << EOY
 ---

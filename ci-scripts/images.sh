@@ -10,11 +10,9 @@ BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
-ansible --version
 anscmd="stdbuf -oL -eL ansible-playbook -vv"
 
 pushd $WORKSPACE/tripleo-quickstart
-pip install -r requirements.txt
 
 # (trown) This is so that we ensure separate ssh sockets for
 # concurrent jobs. Without this, two jobs running in parallel
@@ -22,8 +20,14 @@ pip install -r requirements.txt
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
+# (trown) I don't totally understand why this is needed here, but activating
+# the venv is failing otherwise.
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+source $WORKSPACE/bin/activate
+
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
-    $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/build-images-and-quickstart.yml \
+    $anscmd -i local_hosts \
+    $WORKSPACE/tripleo-quickstart/playbooks/build-images-and-quickstart.yml \
     --extra-vars ansible_python_interpreter=/usr/bin/python \
     --extra-vars virthost=$VIRTHOST \
     --extra-vars local_working_dir=$WORKSPACE/ \
@@ -32,7 +36,8 @@ if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     --extra-vars artib_build_system=$BUILD_SYS \
     --extra-vars @$WORKSPACE/tripleo-quickstart/playbooks/centosci/$CONFIG.yml
 elif [ "$JOB_TYPE" = "promote" ]; then
-    $anscmd -i local_hosts $WORKSPACE/tripleo-quickstart/playbooks/build-images.yml \
+    $anscmd -i local_hosts \
+    $WORKSPACE/tripleo-quickstart/playbooks/build-images.yml \
     --extra-vars ansible_python_interpreter=/usr/bin/python \
     --extra-vars virthost=$VIRTHOST \
     --extra-vars local_working_dir=$WORKSPACE/ \

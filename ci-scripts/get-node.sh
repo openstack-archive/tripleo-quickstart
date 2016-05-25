@@ -3,27 +3,30 @@
 
 set -eux
 
-pip install -U ansible==1.9.4 > ansible_build; ansible --version
+# (trown) Use quickstart.sh to set up the environment.
+bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+    --working-dir $WORKSPACE/ \
+    --no-clone \
+    --bootstrap
 
-ansible --version
+# (trown) I don't totally understand why this is needed here, but activating
+# the venv is failing otherwise.
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+source $WORKSPACE/bin/activate
 
-#Use khaleesi to get a centosci node
-pushd khaleesi
-cp ansible.cfg.example ansible.cfg
-sed -i "s%roles_path = %roles_path = $WORKSPACE/tripleo-quickstart/playbooks/roles:playbooks/roles:%" ansible.cfg
-sed -i "s%library = %library = $WORKSPACE/tripleo-quickstart/playbooks/library:%" ansible.cfg
-echo "ssh_args = -F $PWD/ssh.config.ansible" >> ansible.cfg
-touch ssh.config.ansible
+pip install python-cicoclient
 
-# set the base_dir key in the settings file
-sed -i "s%/home/rhos-ci/workspace/trown-poc-quickstart-gate-ha%$WORKSPACE%" \
-    $WORKSPACE/tripleo-quickstart/ci-scripts/provision_centos_settings.yml
+cico node get --arch x86_64 \
+              --release 7 \
+              --count 1 \
+              --retry-count 2 \
+              --retry-interval 30 \
+              -f csv > $WORKSPACE/provisioned.csv
 
-# get node
-set +e
-anscmd="stdbuf -oL -eL ansible-playbook -vv"
-$anscmd -i local_hosts playbooks/provision.yml \
-    --extra-vars @$WORKSPACE/tripleo-quickstart/ci-scripts/provision_centos_settings.yml
-# this hack allows us to use the in-tree manual provisioner so we control the hosts file
-echo $(awk '/ansible_ssh_host/ {{print $2}}' $WORKSPACE/khaleesi/hosts | cut -d '=' -f2) > $WORKSPACE/virthost
-popd
+cico inventory
+cat $WORKSPACE/provisioned.csv
+
+export VIRTHOST=`cat provisioned.csv | tail -1 | cut -d "," -f 3| sed -e 's/"//g'`
+export VIRTHOST_KEY=`cat provisioned.csv | tail -1 | cut -d "," -f 7| sed -e 's/"//g'`
+echo $VIRTHOST > $WORKSPACE/virthost
+echo $VIRTHOST_KEY > $WORKSPACE/cico_key.txt

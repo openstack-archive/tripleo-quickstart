@@ -3,8 +3,11 @@
 
 set -eux
 
-ansible --version
-pushd $WORKSPACE/khaleesi
-anscmd="stdbuf -oL -eL ansible-playbook -vv --extra-vars @$WORKSPACE/tripleo-quickstart/ci-scripts/provision_centos_settings.yml"
-$anscmd -i local_hosts playbooks/cleanup.yml
-popd
+# (trown) I don't totally understand why this is needed here, but activating
+# the venv is failing otherwise.
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+source $WORKSPACE/bin/activate
+
+VIRTHOST_KEY=$(head -n1 $WORKSPACE/cico_key.txt)
+cico node done $VIRTHOST_KEY
+cico inventory

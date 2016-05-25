@@ -97,7 +97,7 @@ bootstrap () {
         fi
     fi
 
-    pip install -r $REQUIREMENTS
+    pip install -r $OPT_WORKDIR/tripleo-quickstart/$REQUIREMENTS
     )
 }
 
@@ -240,6 +240,20 @@ if [ "$OPT_INSTALL_DEPS" = 1 ]; then
     exit $?
 fi
 
+if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
+    bootstrap
+
+    if [ $? -ne 0 ]; then
+        echo "ERROR: bootstrap failed; removing $OPT_WORKDIR"
+    echo "       try "sudo $0 --install-deps" to install requirements"
+        rm -rf $OPT_WORKDIR
+        exit 1
+    elif [ "$OPT_BOOTSTRAP" = 1 ]; then
+        echo "BOOTSTRAP COMPLETE: exiting because --bootstrap was used."
+        exit 0
+    fi
+fi
+
 if [ "$#" -lt 1 ]; then
     echo "ERROR: You must specify a target machine." >&2
     usage >&2
@@ -277,17 +291,6 @@ fi
 print_logo
 echo "Installing OpenStack ${RELEASE:+"$RELEASE "}on host $VIRTHOST"
 echo "Using directory $OPT_WORKDIR for a local working directory"
-
-if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
-    bootstrap
-
-    if [ $? -ne 0 ]; then
-        echo "ERROR: bootstrap failed; removing $OPT_WORKDIR"
-    echo "       try "sudo $0 --install-deps" to install requirements"
-        rm -rf $OPT_WORKDIR
-        exit 1
-    fi
-fi
 
 activate_venv
 
