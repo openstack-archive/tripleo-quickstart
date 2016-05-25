@@ -25,8 +25,23 @@
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- include: fetch_image.yml
+- when: image_url is defined
+  block:
+
+  - name: Print warning about image_url deprecation
+    debug:
+      msg: image_url is deprecated please use undercloud_image_url
+
+  - name: Set undercloud_image_url to image_url for backwards compatibility
+    set_fact:
+      undercloud_image_url: "{{ image_url }}"
+
+# Conditionally include a playbook for all the images specified
+# in options that downloads, cache and extract if tar archived
+# only if the images aren't already in volume pool
+- include: fetch_image.yml image_item={{ item }}
   when: undercloud_vol_check|failed
+  with_items: "{{ images }}"
 
 - include: inject_gating_repo.yml
   when: compressed_gating_repo is defined
@@ -81,6 +96,18 @@
   environment:
     LIBGUESTFS_BACKEND: direct
   when: undercloud_vol_check|failed
+
+# This copies the overcloud and ipa images if we are not going to build
+# them
+- name: Inject additional images
+  shell: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }};
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  when: download_overcloud_images|bool
+  with_items: "{{ inject_images }}"
 
 # Resize the undercloud image to our desired size.
 - name: Resize undercloud image (create target image)

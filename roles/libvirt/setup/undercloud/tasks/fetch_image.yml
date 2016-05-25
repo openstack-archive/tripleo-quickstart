@@ -15,11 +15,13 @@
     path: "{{ image_cache_dir }}"
     state: directory
 
-# This looks for the `latest.qcow2` symlink that may have been created
+- set_fact: image={{ image_item }}
+
+# This looks for the latest image symlink that may have been created
 # by a previous run of this tasklist.
-- name: Check if we have a latest.qcow2
+- name: Check if we have a latest image
   command: >
-    test -f latest.qcow2
+    test -f latest-{{ image.name }}.{{ image.type }}
   args:
     chdir: "{{ image_cache_dir }}"
   ignore_errors: true
@@ -27,32 +29,30 @@
   changed_when: false
 
 # If we want to use the most recent image in the local cache
-# (`use_cached_image` is `true`) *and* such an image exists, point
+# (`force_cached_image` is `true`) *and* such an image exists, point
 # `image_cache_path` at `latest.qcow2`.
-- when: use_cached_image|bool and latest_exists|success
-  block:
 
-    - name: Set path to cached image [local]
-      set_fact:
-        image_cache_path: "{{ image_cache_dir }}/latest.qcow2"
-      when: latest_exists|success and use_cached_image|bool
+- name: Set path to cached image [local]
+  set_fact:
+    image_cache_path: "{{ image_cache_dir }}/latest-{{ image.name }}.{{ image.type }}"
+  when: latest_exists|success and image.force_cached|bool
 
 # Otherwise, check if there's a new image available.
-- when: not use_cached_image|bool or latest_exists|failed
+- when: not image.force_cached|bool or latest_exists|failed
   block:
 
     # Get the expected checksum for the remote image.
-    - name: Get undercloud image expected checksum
+    - name: Get image expected checksum
       command: >
-        curl -sf {{ image_url }}.md5
-      register: undercloud_md5_expected
+        curl -sf {{ image.url }}.md5
+      register: md5_expected
 
     - name: Set path to cached image [upstream]
       set_fact:
-        image_cache_path: "{{ image_cache_dir }}/{{ undercloud_md5_expected.stdout.split()[0] }}.qcow2"
+        image_cache_path: "{{ image_cache_dir }}/{{ md5_expected.stdout.split()[0] }}.{{ image.type }}"
 
     # See if a matching image exists locally.
-    - name: Check for undercloud image in cache
+    - name: Check for image in cache
       command: >
         test -f {{ image_cache_path }}
       args:
@@ -70,9 +70,9 @@
     # capabilities, it is unable to handle `file://` URLs.  We instead
     # use an ansible `until` loop, combined with curl's `-C-` option
     # to continue interrupted downloads.
-    - name: Get undercloud image
+    - name: Get image
       command: >
-        curl -sf -C- -o _undercloud.qcow2 {{ image_url }}
+        curl -sf -C- -o _{{ image.name }}.{{ image.type}} {{ image.url }}
       args:
         chdir: "{{ image_cache_dir }}"
       register: curl_result
@@ -81,31 +81,31 @@
       delay: 5
 
     # Compute the md5 checksum of the image we just downloaded
-    - name: Get actual md5 checksum of undercloud image
+    - name: Get actual md5 checksum of image
       command: >
-        md5sum _undercloud.qcow2
+        md5sum _{{ image.name }}.{{ image.type}}
       args:
         chdir: "{{ image_cache_dir }}"
-      register: undercloud_md5_actual
+      register: md5_actual
 
     # Verify that what we have is what we wanted.
-    - name: Verify undercloud image checksum
+    - name: Verify image checksum
       fail:
-        msg: undercloud image checksum does not match
+        msg: image checksum does not match
       when: >
         image_exists|failed and (
-        undercloud_md5_expected.stdout.split()[0] !=
-        undercloud_md5_actual.stdout.split()[0])
+        md5_expected.stdout.split()[0] !=
+        md5_actual.stdout.split()[0])
 
-    - name: Cache undercloud image by checksum
+    - name: Cache image by checksum
       command: >
-        mv _undercloud.qcow2 {{ image_cache_path }}
+        mv _{{ image.name }}.{{ image.type}} {{ image_cache_path }}
       args:
         chdir: "{{ image_cache_dir }}"
 
     - name: Update "latest" symlink
       file:
-        path: "{{ image_cache_dir }}/latest.qcow2"
+        path: "{{ image_cache_dir }}/latest-{{ image.name }}.{{ image.type }}"
         state: link
         src: "{{ image_cache_path }}"
 
@@ -124,7 +124,7 @@
 
     - name: Clean up temporary image file
       file:
-        path: "{{ image_cache_dir }}/_undercloud.qcow2"
+        path: "{{ image_cache_dir }}/_{{ image.name }}.{{ image.type }}"
         state: absent
 
     - name: Propagate failure
@@ -133,6 +133,16 @@
 
 # Use `image_cache_path`, which was set by one of the above tasks, and
 # copy it to `undercloud.qcow2 in our `{{ working_dir }}`.
-- name: Get undercloud image from cache
+- name: Get qcow2 image from cache
   command: >
-    cp {{ image_cache_path }} {{ working_dir }}/undercloud.qcow2
+    cp {{ image_cache_path }} {{ working_dir }}/{{ image.name }}.{{ image.type }}
+  when: image.type  == "qcow2"
+
+- name: Get tar images from cache
+  unarchive:
+    src: "{{ image_cache_path }}"
+    copy: no
+    dest: "{{ working_dir }}"
+    list_files: yes
+  when: image.type == "tar"
+

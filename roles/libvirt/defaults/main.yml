@@ -2,15 +2,21 @@
 # keys, etc).
 working_dir: "{{ ansible_user_dir }}/.quickstart"
 
-# If `use_cached_image` is `true`, don't check for a more recent
+# Which image should we download?
+release: mitaka
+undercloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/undercloud.qcow2
+overcloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/overcloud-full.tar
+ipa_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/ironic-python-agent.tar
+
+# If `force_cached` is `true`, don't check for a more recent
 # undercloud image.  Otherwise, we also check for a new undercloud
 # image and will only use the cached version if the remote MD5 is the
 # same.
-use_cached_image: false
-
-# Which image should we download?
-release: mitaka
-image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/undercloud.qcow2
+images:
+    - name: undercloud
+      url: "{{ undercloud_image_url }}"
+      type: qcow2
+      force_cached: false
 
 # Which power manager should we use?
 nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
