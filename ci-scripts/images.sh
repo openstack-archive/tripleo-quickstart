@@ -34,7 +34,7 @@ if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     --extra-vars image_url="file:///var/lib/oooq-images/undercloud.qcow2" \
     --extra-vars artib_release=$RELEASE \
     --extra-vars artib_build_system=$BUILD_SYS \
-    --extra-vars @$WORKSPACE/tripleo-quickstart/playbooks/centosci/$CONFIG.yml
+    --extra-vars @$WORKSPACE/tripleo-quickstart/config/general_config/$CONFIG.yml
 elif [ "$JOB_TYPE" = "promote" ]; then
     $anscmd -i local_hosts \
     $WORKSPACE/tripleo-quickstart/playbooks/build-images.yml \
