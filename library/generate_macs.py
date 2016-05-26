@@ -36,7 +36,8 @@ def generate_baremetal_macs(nodes, networks):
     count = len(nodes) * len(networks)
 
     if count > MAX_NUM_MACS:
-        raise ValueError("The MAX num of MACS supported is %i." % MAX_NUM_MACS)
+        raise ValueError("The MAX num of MACS supported is %i  "
+                         "(you specified %i)." % (MAX_NUM_MACS, count))
 
     base_nums = [0x00,
                  random.randint(0x00, 0xff),
@@ -65,8 +66,8 @@ def generate_baremetal_macs(nodes, networks):
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            nodes=dict(required=True),
-            networks=dict(required=True)
+            nodes=dict(required=True, type='list'),
+            networks=dict(required=True, type='list')
         )
     )
     result = generate_baremetal_macs(module.params["nodes"],
