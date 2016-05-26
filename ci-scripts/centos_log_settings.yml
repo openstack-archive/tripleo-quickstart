@@ -1,6 +1,5 @@
 artcl_collect_list:
   - /var/log/
-  - /root/
   - /var/lib/mysql
   - /etc/nova
   - /etc/ceilometer
