@@ -1,0 +1,2 @@
+release: master
+image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/stable/undercloud.qcow2
