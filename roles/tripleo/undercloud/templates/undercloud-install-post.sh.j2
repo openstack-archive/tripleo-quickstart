@@ -45,6 +45,14 @@ openstack flavor set --property "{{propname}}={{propval}}" oooq_{{ name }}
 {% endfor %}
 
 {% if network_isolation == true and ipv6 == false %}
+# enable NAT for "external" network
+RULE="-s {{undercloud_external_network_cidr}} ! -d {{undercloud_external_network_cidr}} -j MASQUERADE"
+
+if ! sudo iptables -t nat -C BOOTSTACK_MASQ $RULE; then
+    sudo iptables -t nat -A BOOTSTACK_MASQ $RULE
+    sudo sh -c 'iptables-save > /etc/sysconfig/iptables'
+fi
+
 {% for name, network in (undercloud_networks|default({})).items() if name == 'external' %}
 sudo bash -c 'cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-vlan{{ network.tag }}
 DEVICE=vlan{{ network.tag }}
