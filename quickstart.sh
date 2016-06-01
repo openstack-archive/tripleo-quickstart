@@ -7,6 +7,7 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 : ${REQUIREMENTS:=requirements.txt}
+: ${PLAYBOOK:=quickstart.yml}
 
 install_deps () {
     yum -y install \
@@ -119,6 +120,7 @@ usage () {
     echo "    --tags <tag1>[,<tag2>,...]"
     echo "    --skip-tags <tag1>,[<tag2>,...]"
     echo "    --config <file>"
+    echo "    --playbook <file>"
     echo "    --extra-vars <key>=<value>"
     echo "    --requirements <requirements.txt>"
     echo "    --print-logo"
@@ -167,6 +169,11 @@ while [ "x$1" != "x" ]; do
 
         --config|-c)
             OPT_CONFIG=$2
+            shift
+            ;;
+
+        --playbook|-p)
+            PLAYBOOK=$2
             shift
             ;;
 
@@ -304,7 +311,7 @@ else
     VERBOSITY=vv
 fi
 
-ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/quickstart.yml \
+ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/$PLAYBOOK \
     -e @$OPT_CONFIG \
     -e ansible_python_interpreter=/usr/bin/python \
     -e @$OOOQ_DIR/config/release/$RELEASE.yml \
