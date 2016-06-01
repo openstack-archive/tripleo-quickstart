@@ -6,8 +6,8 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_SYSTEM_PACKAGES:=0}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
-: ${REQUIREMENTS:=requirements.txt}
-: ${PLAYBOOK:=quickstart.yml}
+: ${OPT_REQUIREMENTS:=requirements.txt}
+: ${OPT_PLAYBOOK:=quickstart.yml}
 
 install_deps () {
     yum -y install \
@@ -100,7 +100,7 @@ bootstrap () {
 
     pushd $OPT_WORKDIR/tripleo-quickstart
         python setup.py install
-        pip install -r $REQUIREMENTS
+        pip install -r $OPT_REQUIREMENTS
     popd
     )
 }
@@ -141,7 +141,7 @@ while [ "x$1" != "x" ]; do
             ;;
 
         --requirements|-z)
-            REQUIREMENTS=$2
+            OPT_REQUIREMENTS=$2
             ;;
 
         --bootstrap|-b)
@@ -173,7 +173,7 @@ while [ "x$1" != "x" ]; do
             ;;
 
         --playbook|-p)
-            PLAYBOOK=$2
+            OPT_PLAYBOOK=$2
             shift
             ;;
 
@@ -311,7 +311,7 @@ else
     VERBOSITY=vv
 fi
 
-ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/$PLAYBOOK \
+ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
     -e ansible_python_interpreter=/usr/bin/python \
     -e @$OOOQ_DIR/config/release/$RELEASE.yml \
