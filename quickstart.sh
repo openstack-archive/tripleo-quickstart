@@ -142,6 +142,7 @@ while [ "x$1" != "x" ]; do
 
         --requirements|-z)
             OPT_REQUIREMENTS=$2
+            shift
             ;;
 
         --bootstrap|-b)
