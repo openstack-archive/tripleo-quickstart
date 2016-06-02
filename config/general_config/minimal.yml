@@ -1,3 +1,4 @@
+# We run tempest in this topology instead of ping test.
 # We set introspection to true and use only the minimal amount of nodes
 # for this job, but test all defaults otherwise.
 step_introspect: true
@@ -17,3 +18,10 @@ extra_args: >-
   --ntp-server pool.ntp.org
 
 network_isolation: true
+prepare_tempest: true
+
+# If `test_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+test_ping: false
+test_tempest: true
+tempest_regex: ".*smoke"
