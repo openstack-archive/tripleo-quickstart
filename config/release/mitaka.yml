@@ -1,2 +1,4 @@
 release: mitaka
-image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2
+undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/undercloud.qcow2
+overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/ironic-python-agent.tar
+ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/overcloud-full.tar

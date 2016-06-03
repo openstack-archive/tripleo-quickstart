@@ -1,0 +1,21 @@
+download_overcloud_images: true
+images:
+    - name: undercloud
+      url: "{{ undercloud_image_url }}"
+      type: qcow2
+      force_cached: false
+    - name: overcloud
+      url: "{{ overcloud_image_url }}"
+      type: tar
+      force_cached: false
+    - name: ipa
+      url: "{{ ipa_image_url }}"
+      type: tar
+      force_cached: false
+inject_images:
+    - "ironic-python-agent.initramfs"
+    - "ironic-python-agent.vmlinuz"
+    - "ironic-python-agent.kernel"
+    - "overcloud-full.qcow2"
+    - "overcloud-full.initrd"
+    - "overcloud-full.vmlinuz"
