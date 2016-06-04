@@ -42,3 +42,5 @@ libvirt_arch: x86_64
 undercloud_ip_retries: 20
 
 undercloud_instackenv_template: instackenv.json.j2
+
+download_overcloud_images: false
