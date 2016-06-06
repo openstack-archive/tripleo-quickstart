@@ -3,11 +3,13 @@
 
 set -eux
 
+pushd $WORKSPACE/tripleo-quickstart
 # (trown) Use quickstart.sh to set up the environment.
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap
+popd
 
 # (trown) I don't totally understand why this is needed here, but activating
 # the venv is failing otherwise.

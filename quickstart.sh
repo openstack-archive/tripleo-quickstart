@@ -83,13 +83,13 @@ bootstrap () {
     . $OPT_WORKDIR/bin/activate
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
-        if ! [ -d "$OPT_WORKDIR/tripleo-quickstart" ]; then
+        if ! [ -d "$OOOQ_DIR" ]; then
             echo "Cloning tripleo-quickstart repository..."
             git clone https://github.com/openstack/tripleo-quickstart.git \
-                $OPT_WORKDIR/tripleo-quickstart
+                $OOOQ_DIR
         fi
 
-        cd $OPT_WORKDIR/tripleo-quickstart
+        cd $OOOQ_DIR
         if [ -n "$OPT_GERRIT" ]; then
             git review -d "$OPT_GERRIT"
         else
@@ -98,7 +98,7 @@ bootstrap () {
         fi
     fi
 
-    pushd $OPT_WORKDIR/tripleo-quickstart
+    pushd $OOOQ_DIR
         python setup.py install
         pip install -r $OPT_REQUIREMENTS
     popd
