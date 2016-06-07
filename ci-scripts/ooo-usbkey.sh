@@ -56,9 +56,9 @@ $sshcmd stack@$VIRTHOST 'pushd /tmp/usb; ./RUN_ME.sh'
 export ANSIBLE_INVENTORY=$WORKSPACE/hosts
 export SSH_CONFIG=$WORKSPACE/ssh.config.ansible
 export ANSIBLE_SSH_ARGS="-F ${SSH_CONFIG}"
-$scpcmd stack@$VIRTHOST:~/ssh.config* $WORKSPACE/
-$scpcmd stack@$VIRTHOST:~/hosts* $WORKSPACE/
-$scpcmd stack@$VIRTHOST:~/id_* $WORKSPACE/
+$scpcmd stack@$VIRTHOST:~/.quickstart/ssh.config* $WORKSPACE/
+$scpcmd stack@$VIRTHOST:~/.quickstart/hosts* $WORKSPACE/
+$scpcmd stack@$VIRTHOST:~/.quickstart/id_* $WORKSPACE/
 sed -i 's,\/home\/stack\/\.quickstart,'"$WORKSPACE"',g' $WORKSPACE/ssh.config.ansible
 bash ci-scripts/collect-logs.sh
 
