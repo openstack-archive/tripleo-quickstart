@@ -312,7 +312,7 @@ else
     VERBOSITY=vv
 fi
 
-ansible-playbook -$VERBOSITY $OOOQ_DIR/playbooks/$OPT_PLAYBOOK \
+ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
     -e ansible_python_interpreter=/usr/bin/python \
     -e @$OOOQ_DIR/config/release/$RELEASE.yml \
