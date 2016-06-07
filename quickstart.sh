@@ -8,6 +8,14 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 : ${OPT_PLAYBOOK:=quickstart.yml}
+: ${OPT_CLEAN:=0}
+
+clean_virtualenv() {
+    if [ -d $OPT_WORKDIR ]; then
+        echo "WARNING: Removing $OPT_WORKDIR. Triggering virtualenv bootstrap."
+        rm -rf $OPT_WORKDIR
+    fi
+}
 
 : ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
 
@@ -103,7 +111,7 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
-        # (trown) This is a pretty big hack, but for the usbkey case, we don't
+        # (trown) This is a pretty big hack, but for the usbkey case, we do not
         # want to be writing files to the usbkey itself, and I can not find a
         # way to make setuptools not try to write the .eggs dir.
         sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
@@ -125,6 +133,7 @@ usage () {
     echo "$0: options:"
     echo "    --system-site-packages"
     echo "    --ansible-debug"
+    echo "    --clean"
     echo "    --bootstrap"
     echo "    --retain-inventory"
     echo "    --working-dir <directory>"
@@ -184,6 +193,10 @@ while [ "x$1" != "x" ]; do
         --config|-c)
             OPT_CONFIG=$2
             shift
+            ;;
+
+        --clean|-c)
+            OPT_CLEAN=1
             ;;
 
         --playbook|-p)
@@ -252,6 +265,10 @@ else
     OOOQ_DIR=$OPT_WORKDIR/tripleo-quickstart
 fi
 
+if [ "$OPT_CLEAN" = 1 ]; then
+    clean_virtualenv
+fi
+
 # Set this default after option processing, because the default depends
 # on another option.
 : ${OPT_CONFIG:=$OOOQ_DIR/config/general_config/minimal.yml}
@@ -266,9 +283,9 @@ if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
     bootstrap
 
     if [ $? -ne 0 ]; then
-        echo "ERROR: bootstrap failed; removing $OPT_WORKDIR"
-    echo "       try "sudo $0 --install-deps" to install requirements"
-        rm -rf $OPT_WORKDIR
+        echo "ERROR: bootstrap failed; try \"sudo $0 --install-deps\""
+        echo "       to install package dependencies or \"$0 --clean\""
+        echo "       to remove $OPT_WORKDIR and start over"
         exit 1
     fi
 fi
