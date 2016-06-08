@@ -58,4 +58,23 @@ echo $COMMAND
 sleep 15
 $COMMAND
 
+echo ""
+cat <<EOF
+##################################
+Note to ooo-usbkey users
+##################################
+
+Access the undercloud by:
+
+    ssh -F $HOME/.quickstart/ssh.config.local.ansible undercloud
+
+Note: Using quickstart directly on the localhost requires a separate ssh config file.
+Proceed with the above instructions.
+
+##################################
+Note to ooo-usbkey users
+##################################
+EOF
+
+
 popd
