@@ -6,6 +6,21 @@ set -e
 # to execute the quickstart from a usbkey on a test machine directly.
 #
 ######################################################################
+
+if [ -f /etc/redhat-release ]; then
+    if grep -q  -i "Red Hat\|CentOS" /etc/redhat-release; then
+        true;
+    else
+        echo "Red Hat Enterprise Linux and CentOS are currently supported"
+        echo "We are working to add support for Fedora."
+        exit 1
+    fi
+else
+    echo "Sorry your linux distribution is not supported at this time"
+    exit 1
+fi
+
+
 #Set ansible environmental variables
 source ansible_env
 
