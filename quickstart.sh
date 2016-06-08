@@ -79,7 +79,9 @@ bootstrap () {
 
     set -e
 
-    virtualenv $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" ) $OPT_WORKDIR
+    virtualenv\
+        $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
+        $OPT_WORKDIR
     . $OPT_WORKDIR/bin/activate
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
@@ -99,8 +101,13 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
-        python setup.py install
-        pip install -r $OPT_REQUIREMENTS
+        # (trown) This is a pretty big hack, but for the usbkey case, we don't
+        # want to be writing files to the usbkey itself, and I can not find a
+        # way to make setuptools not try to write the .eggs dir.
+        sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
+        python setup.py install egg_info --egg-base $OPT_WORKDIR
+        # Handle the case that pip is too old to use a cache-dir
+        pip install --no-cache-dir -r $OPT_REQUIREMENTS || pip install -r $OPT_REQUIREMENTS
     popd
     )
 }

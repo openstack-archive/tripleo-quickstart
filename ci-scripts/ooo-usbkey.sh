@@ -49,6 +49,8 @@ $sshcmd stack@$VIRTHOST "cp /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/* /tmp
 $sshcmd stack@$VIRTHOST "cp /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/quickstart-usb.yml /tmp/usb/tripleo-quickstart/playbooks/"
 # Simulate executable bit being unset when mounting usbkey
 $sshcmd stack@$VIRTHOST "chmod -x /tmp/usb/RUN_ME.sh /tmp/usb/tripleo-quickstart/quickstart.sh"
+# Simulate the usbkey not being writable
+$sshcmd stack@$VIRTHOST "chmod -w -R /tmp/usb"
 
 # Run the USB script
 $sshcmd stack@$VIRTHOST 'pushd /tmp/usb; bash RUN_ME.sh'
