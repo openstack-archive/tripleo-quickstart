@@ -1,0 +1,7 @@
+# Do a quickstart run without any further actions, useful for
+# basic syntax check and environment setup.
+
+- name: noop playbook
+  hosts: localhost
+  tasks:
+    - debug: msg="noop"
