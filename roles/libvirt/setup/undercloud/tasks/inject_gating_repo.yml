@@ -4,11 +4,31 @@
     src: inject_gating_repo.sh.j2
     dest: "{{ working_dir }}/inject_gating_repo.sh"
 
-- name: Inject the gating repo
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --upload {{ compressed_gating_repo }}:/tmp/gating_repo.tar.gz
-    --run '{{ working_dir }}/inject_gating_repo.sh'
+
+- block:
+  # We need to extract the overcloud image, so we can inject the gating
+  # repo into it.
+  - name: Extract overcloud-full image
+    command: >
+      virt-copy-out -a {{ working_dir }}/undercloud.qcow2
+      /home/stack/overcloud-full.qcow2 {{ working_dir }}
+
+  - name: Inject the gating repo (overcloud-full)
+    command: >
+      virt-customize -a {{ working_dir }}/overcloud-full.qcow2
+      --upload {{ compressed_gating_repo }}:/tmp/gating_repo.tar.gz
+      --run '{{ working_dir }}/inject_gating_repo.sh'
+
+  - name: Copy updated overcloud-full image back to undercloud
+    command: >
+      virt-copy-in -a {{ working_dir }}/undercloud.qcow2
+      {{ working_dir }}/overcloud-full.qcow2 /home/stack/
+
+  - name: Inject the gating repo (undercloud)
+    command: >
+      virt-customize -a {{ working_dir }}/undercloud.qcow2
+      --upload {{ compressed_gating_repo }}:/tmp/gating_repo.tar.gz
+      --run '{{ working_dir }}/inject_gating_repo.sh'
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
