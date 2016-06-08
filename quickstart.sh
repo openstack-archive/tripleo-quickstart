@@ -327,7 +327,7 @@ fi
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
     -e ansible_python_interpreter=/usr/bin/python \
-    -e @$OOOQ_DIR/config/release/$RELEASE.yml \
+    -e @$OPT_WORKDIR/config/release/$RELEASE.yml \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
     ${OPT_VARS[@]} \

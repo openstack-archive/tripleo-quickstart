@@ -33,7 +33,7 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
   --tags all \
-  --config $WORKSPACE/tripleo-quickstart/config/general_config/$CONFIG.yml \
+  --config $WORKSPACE/config/general_config/$CONFIG.yml \
   --working-dir $WORKSPACE/ \
   --playbook $PLAYBOOK \
   --extra-vars undercloud_image_url="file:///var/lib/oooq-images/undercloud.qcow2" \
