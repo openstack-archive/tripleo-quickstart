@@ -47,10 +47,11 @@ EOF
 rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress $WORKSPACE/tripleo-quickstart stack@$VIRTHOST:/tmp/usb/
 $sshcmd stack@$VIRTHOST "cp /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/* /tmp/usb/"
 $sshcmd stack@$VIRTHOST "cp /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/quickstart-usb.yml /tmp/usb/tripleo-quickstart/playbooks/"
-
+# Simulate executable bit being unset when mounting usbkey
+$sshcmd stack@$VIRTHOST "chmod -x /tmp/usb/RUN_ME.sh /tmp/usb/tripleo-quickstart/quickstart.sh"
 
 # Run the USB script
-$sshcmd stack@$VIRTHOST 'pushd /tmp/usb; ./RUN_ME.sh'
+$sshcmd stack@$VIRTHOST 'pushd /tmp/usb; bash RUN_ME.sh'
 
 # Support collect logs on the virthost by providing hosts and ssh config
 export ANSIBLE_INVENTORY=$WORKSPACE/hosts
