@@ -253,9 +253,6 @@ if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
     echo "       try "sudo $0 --install-deps" to install requirements"
         rm -rf $OPT_WORKDIR
         exit 1
-    elif [ "$OPT_BOOTSTRAP" = 1 ]; then
-        echo "BOOTSTRAP COMPLETE: exiting because --bootstrap was used."
-        exit 0
     fi
 fi
 

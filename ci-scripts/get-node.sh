@@ -5,10 +5,13 @@ set -eux
 
 pushd $WORKSPACE/tripleo-quickstart
 # (trown) Use quickstart.sh to set up the environment.
+# This serves as a fail-fast syntax check for quickstart gates.
 bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
-    --bootstrap
+    --bootstrap \
+    --playbook noop.yml \
+    localhost
 popd
 
 # (trown) I don't totally understand why this is needed here, but activating
