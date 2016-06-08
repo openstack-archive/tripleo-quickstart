@@ -17,7 +17,7 @@ export COMMAND="./quickstart.sh \
                 --requirements ci-scripts/usbkey/usb_requirements.txt \
                 --playbook quickstart-usb.yml \
                 --extra-vars image_cache_dir=$HOME \
-                --extra-vars image_url=file://$USB_DIR/undercloud.qcow2 \
+                --extra-vars undercloud_image_url=file://$USB_DIR/undercloud.qcow2 \
                 localhost"
 
 #check if the current user is root

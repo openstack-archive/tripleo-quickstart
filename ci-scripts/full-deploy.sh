@@ -28,7 +28,7 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
 --tags all \
--e image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
+-e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
 --config $WORKSPACE/tripleo-quickstart/config/general_config/$CONFIG.yml \
 --working-dir $WORKSPACE/ \
 --no-clone \

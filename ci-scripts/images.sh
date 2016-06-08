@@ -36,7 +36,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
   --config $WORKSPACE/tripleo-quickstart/config/general_config/$CONFIG.yml \
   --working-dir $WORKSPACE/ \
   --playbook $PLAYBOOK \
-  --extra-vars image_url="file:///var/lib/oooq-images/undercloud.qcow2" \
+  --extra-vars undercloud_image_url="file:///var/lib/oooq-images/undercloud.qcow2" \
   --extra-vars artib_release=$RELEASE \
   --extra-vars artib_build_system=$BUILD_SYS \
   --extra-vars artib_delorean_hash=$delorean_current_hash \
