@@ -12,7 +12,7 @@ source ansible_env
 #launch quickstart using the local image against the localhost
 USB_DIR=$PWD
 pushd tripleo-quickstart
-export COMMAND="./quickstart.sh \
+export COMMAND="bash quickstart.sh \
                 --no-clone \
                 --requirements ci-scripts/usbkey/usb_requirements.txt \
                 --playbook quickstart-usb.yml \
@@ -28,7 +28,7 @@ fi
 
 echo "==================================================================="
 echo "Installing Dependencies"
-sudo ./quickstart.sh --install-deps
+sudo bash quickstart.sh --install-deps
 
 echo "==================================================================="
 echo "Running tripelo-quickstart in 15 seconds w/ the following command"
