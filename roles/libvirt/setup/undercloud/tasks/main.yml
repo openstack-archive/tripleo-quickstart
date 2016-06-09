@@ -45,6 +45,11 @@
   when: undercloud_vol_check|failed
   with_items: "{{ images }}"
 
+# Conditionally include a playbook for all the images specified
+# in options that updates images to the latest delorean version
+- include: update_image.yml
+  when: undercloud_vol_check|failed and devmode|default(false)|bool
+
 - include: inject_gating_repo.yml
   when: compressed_gating_repo is defined
 
@@ -108,7 +113,7 @@
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  when: download_overcloud_images|bool
+  when: devmode|default(false)|bool
   with_items: "{{ inject_images }}"
 
 # Resize the undercloud image to our desired size.

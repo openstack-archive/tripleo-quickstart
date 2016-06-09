@@ -72,6 +72,19 @@ e.g. ~/.quickstart/ssh.config.ansible will try to proxy through the localhost to
 to the localhost and will cause an error if ssh is not setup to support it.  An alternative
 workflow is being tested and can be found under tripleo-quickstart/ci-scripts/usbkey/.
 
+## Enable Developer mode
+
+If you are working on TripleO upstream development, and need to reproduce
+what runs in tripleo-ci, you will want to use developer mode.
+
+This will fetch the images produced by tripleo-ci instead of the ones produced
+by RDO. The incanation for a job using the quickstart defaults other than
+developer mode would be:
+
+    bash quickstart.sh \
+        --extra-vars devmode=true \
+        --extra-vars @config/general_config/tripleo-ci-cached.yml \
+        $VIRTHOST master-tripleo
 
 ## Documentation
 

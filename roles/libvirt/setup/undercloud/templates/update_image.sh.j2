@@ -1,0 +1,16 @@
+#!/bin/bash
+
+sed -i -e "/proxy\=/d" /etc/yum.conf
+
+yum update -y
+
+{% if "undercloud" in item.path %}
+yum install -y python-tripleoclient
+{% endif  %}
+{% if "overcloud" in item.path  %}
+rm -rf /etc/puppet/modules/*
+rm -rf /opt/stack
+yum install -y openstack-puppet-modules
+ln -s /usr/share/openstack-puppet/modules/* /etc/puppet/modules/
+{% endif  %}
+
