@@ -1,0 +1,21 @@
+# This config file is used to deploy a dedicated node in the overcloud for ceph
+
+# Define a controller node, a compute node, and a ceph node.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+
+  - name: compute_0
+    flavor: compute
+
+  - name: ceph_0
+    flavor: ceph
+
+# Tell tripleo how we want things done.
+extra_args: >-
+  --neutron-network-type vxlan
+  --neutron-tunnel-types vxlan
+  --ntp-server pool.ntp.org
+  --ceph-storage-scale 1
+
+network_isolation: true
