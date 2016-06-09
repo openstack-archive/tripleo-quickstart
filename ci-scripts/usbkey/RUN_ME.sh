@@ -20,7 +20,8 @@ else
     exit 1
 fi
 
-USB_DIR=$( dirname "${BASH_SOURCE[0]}" )
+SCRIPT=$( readlink -f "${BASH_SOURCE[0]}" )
+USB_DIR=$( dirname $SCRIPT )
 
 #Set ansible environmental variables
 source $USB_DIR/ansible_env
