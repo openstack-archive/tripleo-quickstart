@@ -37,5 +37,5 @@ extra_args: >-
   -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml
   --ntp-server pool.ntp.org
 deploy_timeout: 75
-tempest: false
-pingtest: true
+test_tempest: false
+test_ping: true
