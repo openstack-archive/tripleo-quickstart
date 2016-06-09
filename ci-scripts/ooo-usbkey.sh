@@ -53,7 +53,7 @@ $sshcmd stack@$VIRTHOST "chmod -x /tmp/usb/RUN_ME.sh /tmp/usb/tripleo-quickstart
 $sshcmd stack@$VIRTHOST "chmod -w -R /tmp/usb"
 
 # Run the USB script
-$sshcmd stack@$VIRTHOST 'pushd /tmp/usb; bash RUN_ME.sh'
+$sshcmd stack@$VIRTHOST 'bash /tmp/usb/RUN_ME.sh'
 
 # Support collect logs on the virthost by providing hosts and ssh config
 export ANSIBLE_INVENTORY=$WORKSPACE/hosts
@@ -64,5 +64,3 @@ $scpcmd stack@$VIRTHOST:~/.quickstart/hosts* $WORKSPACE/
 $scpcmd stack@$VIRTHOST:~/.quickstart/id_* $WORKSPACE/
 sed -i 's,\/home\/stack\/\.quickstart,'"$WORKSPACE"',g' $WORKSPACE/ssh.config.ansible
 bash ci-scripts/collect-logs.sh
-
-

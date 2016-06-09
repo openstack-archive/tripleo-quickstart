@@ -20,13 +20,13 @@ else
     exit 1
 fi
 
+USB_DIR=$( dirname "${BASH_SOURCE[0]}" )
 
 #Set ansible environmental variables
-source ansible_env
+source $USB_DIR/ansible_env
 
 #launch quickstart using the local image against the localhost
-USB_DIR=$PWD
-pushd tripleo-quickstart
+pushd $USB_DIR/tripleo-quickstart
 export COMMAND="bash quickstart.sh \
                 --no-clone \
                 --requirements ci-scripts/usbkey/usb_requirements.txt \
