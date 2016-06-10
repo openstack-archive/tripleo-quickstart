@@ -314,8 +314,10 @@ if [ "$VIRTHOST" = "localhost" ]; then
     echo "$0: WARNING: VIRTHOST == localhost; skipping provisioning" >&2
     OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}provision"
 
-    echo "[virthost]" > $ANSIBLE_INVENTORY
-    echo "localhost ansible_connection=local" >> $ANSIBLE_INVENTORY
+    if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 ]; then
+        echo "[virthost]" > $ANSIBLE_INVENTORY
+        echo "localhost ansible_connection=local" >> $ANSIBLE_INVENTORY
+    fi
 fi
 
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then

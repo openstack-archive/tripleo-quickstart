@@ -3,9 +3,6 @@
 
 set -eux
 
-git clone https://github.com/redhat-openstack/ansible-role-tripleo-collect-logs.git \
-    $WORKSPACE/tripleo-quickstart/roles/collect-logs
-
 export ANSIBLE_INVENTORY=$WORKSPACE/hosts
 export ANSIBLE_CONFIG=$WORKSPACE/tripleo-quickstart/ansible.cfg
 export SSH_CONFIG=$WORKSPACE/ssh.config.ansible
@@ -16,13 +13,18 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 source $WORKSPACE/bin/activate
 
-cat > collect-logs.yaml << EOY
----
-- name: Gather logs
-  hosts: all:!localhost
-  roles:
-    - collect-logs
-EOY
+# (trown) This is so that we ensure separate ssh sockets for
+# concurrent jobs. Without this, two jobs running in parallel
+# would try to use the same undercloud-stack socket.
+socketdir=$(mktemp -d /tmp/sockXXXXXX)
+export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-anscmd="stdbuf -oL -eL ansible-playbook -vvvv"
-$anscmd collect-logs.yaml -e @$WORKSPACE/tripleo-quickstart/ci-scripts/centos_log_settings.yml
+bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+    --working-dir $WORKSPACE/ \
+    --no-clone \
+    --bootstrap \
+    --retain-inventory \
+    --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+    --config $WORKSPACE/config/general_config/centosci-logs.yml \
+    --playbook collect-logs.yml \
+    localhost
