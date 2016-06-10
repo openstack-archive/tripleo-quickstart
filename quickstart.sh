@@ -4,6 +4,7 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 
 : ${OPT_BOOTSTRAP:=0}
 : ${OPT_SYSTEM_PACKAGES:=0}
+: ${OPT_RETAIN_INVENTORY_FILE:=0}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 : ${OPT_REQUIREMENTS:=requirements.txt}
@@ -123,6 +124,7 @@ usage () {
     echo "    --system-site-packages"
     echo "    --ansible-debug"
     echo "    --bootstrap"
+    echo "    --retain-inventory"
     echo "    --working-dir <directory>"
     echo "    --tags <tag1>[,<tag2>,...]"
     echo "    --skip-tags <tag1>,[<tag2>,...]"
@@ -208,7 +210,11 @@ while [ "x$1" != "x" ]; do
             OPT_NO_CLONE=1
             ;;
 
-        --print-logo|-pl)
+        --retain-inventory)
+            OPT_RETAIN_INVENTORY_FILE=1
+            ;;
+
+        --print-logo|--pl)
             PRINT_LOGO=1
             ;;
 
@@ -298,9 +304,11 @@ set -ex
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
 
-# Clear out inventory file to avoid tripping over data
-# from a previous invocation
-rm -f $ANSIBLE_INVENTORY
+if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 ]; then
+    # Clear out inventory file to avoid tripping over data
+    # from a previous invocation
+    rm -f $ANSIBLE_INVENTORY
+fi
 
 if [ "$VIRTHOST" = "localhost" ]; then
     echo "$0: WARNING: VIRTHOST == localhost; skipping provisioning" >&2
