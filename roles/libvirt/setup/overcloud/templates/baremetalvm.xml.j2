@@ -21,11 +21,10 @@
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
-    <controller type='scsi' model='virtio-scsi' index='0'/>
     <disk type='volume' device='disk'>
       <driver name='qemu' type='qcow2' cache='unsafe'/>
       <source pool='{{ libvirt_volume_pool }}' volume='{{ item.name }}.qcow2'/>
-      <target dev='sda' bus='{{ libvirt_diskbus }}'/>
+      <target dev='{{ libvirt_diskdev }}' bus='{{ libvirt_diskbus }}'/>
     </disk>
 {% for network in networks|rejectattr('name', 'equalto', 'external') %}
     <interface type='bridge'>

@@ -34,7 +34,8 @@ libvirt_uri: qemu:///session
 libvirt_volume_path: "{{ working_dir }}/pool"
 libvirt_volume_pool: oooq_pool
 libvirt_domain_type: kvm
-libvirt_diskbus: sata
+libvirt_diskdev: vda
+libvirt_diskbus: virtio
 libvirt_arch: x86_64
 
 # how many times to try getting the undercloud ip
