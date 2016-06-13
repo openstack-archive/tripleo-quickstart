@@ -304,6 +304,9 @@ set -ex
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
 
+#set the ansible ssh.config options if not already set.
+source $OOOQ_DIR/ansible_ssh_env.sh
+
 if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 ]; then
     # Clear out inventory file to avoid tripping over data
     # from a previous invocation
