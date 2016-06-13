@@ -5,6 +5,7 @@ libvirt_packages:
   - libvirt-python
   - libguestfs-tools
   - python-lxml
+  - polkit-pkla-compat
 
 # The name of the libvirt service.
 libvirtd_service: libvirtd
