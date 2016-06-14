@@ -48,9 +48,17 @@ EOENV
 
 deploy_status=0
 
+# clone the t-h-t templates if needed
+{% if overcloud_templates_repo is defined and overcloud_templates_path is defined %}
+rm -rf {{overcloud_templates_path}}
+git clone {% if overcloud_templates_branch is defined %}-b {{overcloud_templates_branch}} \
+    --single-branch{% endif %} {{overcloud_templates_repo}} {{overcloud_templates_path}}
+{% endif %}
+
 # Deploy the overcloud!
-openstack overcloud deploy --templates {{ deploy_args }} \
-    ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} "$@"|| deploy_status=1
+openstack overcloud deploy --templates \
+    {% if overcloud_templates_path is defined %}{{overcloud_templates_path}}{% endif %} {{ deploy_args }} \
+    ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} "$@" || deploy_status=1
 
 # We don't always get a useful error code from the openstack deploy command,
 # so check `heat stack-list` for a CREATE_FAILED status.

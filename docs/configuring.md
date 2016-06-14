@@ -63,6 +63,20 @@ this:
       - name: ceph_0
         flavor: ceph
 
+## Specifying custom heat templates
+
+The `overcloud_templates_path` variable can be used to define a different path
+where to get the heat templates. By default this variable will not be set.
+
+The `overcloud_templates_repo` variable can be used to define the remote
+repository from where the templates need to be cloned. When this variable is
+set, along with `overcloud_templates_path`, the templates will be cloned from
+that remote repository into the target specified, and these will be used in
+overcloud deployment.
+
+The `overcloud_templates_branch` variable can be used to specify the branch
+that needs to be cloned from a specific repository. When this variable is set,
+git will clone only the branch specified.
 
 ## An example
 
