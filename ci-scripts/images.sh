@@ -42,4 +42,5 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
   --extra-vars artib_delorean_hash=$delorean_current_hash \
   --extra-vars publish=$PUBLISH \
   --no-clone \
-  $VIRTHOST $RELEASE
+  --release $RELEASE \
+  $VIRTHOST

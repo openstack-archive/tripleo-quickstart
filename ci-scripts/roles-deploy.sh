@@ -35,7 +35,8 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --bootstrap \
         --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
         --playbook gate-roles.yml \
-        $VIRTHOST $RELEASE
+        --release $RELEASE \
+        $VIRTHOST
 
     # once more to let the gating role be gated as well
     bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
@@ -44,7 +45,8 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --bootstrap \
         --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
         --playbook gate-roles.yml \
-        $VIRTHOST $RELEASE
+        --release $RELEASE \
+        $VIRTHOST
 fi
 
 # run the gate job using gated roles and the role based playbook
@@ -57,4 +59,5 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --playbook tripleo-roles.yml \
     --tags all \
-    $VIRTHOST $RELEASE
+    --release $RELEASE \
+    $VIRTHOST

@@ -20,4 +20,5 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
-    $VIRTHOST $RELEASE
+    --release $RELEASE \
+    $VIRTHOST

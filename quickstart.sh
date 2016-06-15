@@ -128,12 +128,13 @@ activate_venv() {
 }
 
 usage () {
-    echo "$0: usage: $0 [options] virthost [release]"
+    echo "$0: usage: $0 [options] virthost"
     echo "$0: usage: sudo $0 --install-deps"
     echo "$0: options:"
     echo "    --system-site-packages"
     echo "    --ansible-debug"
     echo "    --clean"
+    echo "    --release"
     echo "    --bootstrap"
     echo "    --retain-inventory"
     echo "    --working-dir <directory>"
@@ -161,9 +162,14 @@ while [ "x$1" != "x" ]; do
             OPT_SYSTEM_PACKAGES=1
             ;;
 
-        --requirements|-z)
+        --requirements|-r)
             OPT_REQARGS+=("-r")
             OPT_REQARGS+=("$2")
+            shift
+            ;;
+
+        --release|-R)
+            OPT_RELEASE=$2
             shift
             ;;
 
@@ -302,20 +308,19 @@ if [ "$#" -gt 2 ]; then
 fi
 
 VIRTHOST=$1
-RELEASE=$2
 
-# We use $RELEASE to build the undercloud image URL. It is also passed to the
+# We use $OPT_RELEASE to build the undercloud image URL. It is also passed to the
 # quickstart playbook, since there are now some version specific behaviors.
 # If the user has provided an explicit URL, we should warn them of that
 # fact.
-if [ -z "$RELEASE" ]; then
+if [ -z "$OPT_RELEASE" ]; then
 
-    RELEASE=mitaka
+    OPT_RELEASE=mitaka
 
 fi
 
 print_logo
-echo "Installing OpenStack ${RELEASE:+"$RELEASE "}on host $VIRTHOST"
+echo "Installing OpenStack ${OPT_RELEASE:+"$OPT_RELEASE "}on host $VIRTHOST"
 echo "Using directory $OPT_WORKDIR for a local working directory"
 
 activate_venv
@@ -358,7 +363,7 @@ fi
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
     -e ansible_python_interpreter=/usr/bin/python \
-    -e @$OPT_WORKDIR/config/release/$RELEASE.yml \
+    -e @$OPT_WORKDIR/config/release/$OPT_RELEASE.yml \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
     ${OPT_VARS[@]} \

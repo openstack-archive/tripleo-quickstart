@@ -84,7 +84,8 @@ developer mode would be:
     bash quickstart.sh \
         --extra-vars devmode=true \
         --extra-vars @config/general_config/tripleo-ci-cached.yml \
-        $VIRTHOST master-tripleo
+        --release master-tripleo \
+        $VIRTHOST
 
 ## Documentation
 

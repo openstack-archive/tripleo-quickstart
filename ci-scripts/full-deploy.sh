@@ -32,5 +32,6 @@ bash quickstart.sh \
 --config $WORKSPACE/config/general_config/$CONFIG.yml \
 --working-dir $WORKSPACE/ \
 --no-clone \
-$VIRTHOST $RELEASE
+--release $RELEASE \
+$VIRTHOST
 popd

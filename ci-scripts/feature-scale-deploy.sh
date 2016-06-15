@@ -36,8 +36,9 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     -e deploy_timeout=75 \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --tags all \
+    --release $RELEASE \
     --playbook scale_nodes.yml \
-    $VIRTHOST $RELEASE
+    $VIRTHOST
 
 # run scale phase 2 against the gate job: Re-inventory overcloud -> Validate
 # Note(hrybacki): The reason we need seperate playbook execution: During scale we create
@@ -50,8 +51,9 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     -e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --tags all \
+    --release $RELEASE \
     --playbook scale_nodes_verify.yml \
-    $VIRTHOST $RELEASE
+    $VIRTHOST
 fi
 
 popd
