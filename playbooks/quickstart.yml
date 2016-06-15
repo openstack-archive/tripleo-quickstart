@@ -27,10 +27,13 @@
 
 # Add the undercloud node to the generated
 # inventory.
-- name: Rebuild inventory
+- name:  Inventory the undercloud
   hosts: localhost
+  gather_facts: yes
+  vars:
+      inventory: undercloud
   roles:
-    - rebuild-inventory
+    - { role: tripleo-inventory, tags: ['undercloud-scripts'] }
 
 # DEPLOY ALL THE THINGS!  Depending on the currently selected set of
 # tags, this will deploy the undercloud, deploy the overcloud, and
@@ -41,3 +44,12 @@
   roles:
     - tripleo/undercloud
     - tripleo/overcloud
+
+# Add the overcloud nodes to the generated inventory.
+- name:  Inventory the overcloud
+  hosts: undercloud
+  gather_facts: yes
+  vars:
+      inventory: all
+  roles:
+    - { role: tripleo-inventory, tags: ['overcloud-deploy'] }

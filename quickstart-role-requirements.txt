@@ -2,7 +2,6 @@
 git+https://github.com/redhat-openstack/ansible-role-tripleo-cleanup-nfo.git/#egg=ansible-role-tripleo-cleanup-nfo
 git+https://github.com/redhat-openstack/ansible-role-tripleo-collect-logs.git/#egg=ansible-role-tripleo-collect-logs
 git+https://github.com/redhat-openstack/ansible-role-tripleo-gate.git#egg=ansible-role-tripleo-gate
-git+https://github.com/redhat-openstack/ansible-role-tripleo-inventory.git#egg=ansible-role-tripleo-inventory
 git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud.git#egg=ansible-role-tripleo-overcloud
 git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-validate.git#egg=ansible-role-tripleo-overcloud-validate
 git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-upgrade.git#egg=ansible-role-tripleo-overcloud-upgrade

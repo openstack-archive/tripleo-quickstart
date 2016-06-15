@@ -30,7 +30,6 @@ source $USB_DIR/ansible_env
 pushd $USB_DIR/tripleo-quickstart
 export COMMAND="bash quickstart.sh \
                 --no-clone \
-                --requirements ci-scripts/usbkey/usb_requirements.txt \
                 --playbook quickstart-usb.yml \
                 --extra-vars image_cache_dir=$HOME \
                 --extra-vars undercloud_image_url=file://$USB_DIR/undercloud.qcow2 \
