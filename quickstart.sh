@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-scripts"
+DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-scripts,undercloud-install,undercloud-post-install"
 
 : ${OPT_BOOTSTRAP:=0}
 : ${OPT_SYSTEM_PACKAGES:=0}
@@ -341,7 +341,7 @@ ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
 
 set +x
 
-if [ $OPT_TAGS = $DEFAULT_OPT_TAGS ] ; then
+if [ $OPT_TAGS = $DEFAULT_OPT_TAGS -a $OPT_PLAYBOOK = quickstart.yml ] ; then
 
 cat <<EOF
 ##################################
@@ -354,22 +354,14 @@ Access the undercloud by:
 
 There are scripts in the home directory to continue the deploy:
 
-    undercloud-install.sh will run the undercloud install
-    undercloud-post-install.sh will perform all pre-deploy steps
     overcloud-deploy.sh will deploy the overcloud
     overcloud-deploy-post.sh will do any post-deploy configuration
     overcloud-validate.sh will run post-deploy validation
 
-Alternatively, you can ignore these scripts and follow the upstream docs:
+Alternatively, you can ignore these scripts and follow the upstream docs,
+starting from the overcloud deploy section:
 
-First:
-
-    openstack undercloud install
-    source stackrc
-
-Then continue with the instructions (limit content using dropdown on the left):
-
-    http://ow.ly/Ze8nK
+    http://ow.ly/1Vc1301iBlb
 
 ##################################
 Virtual Environment Setup Complete
