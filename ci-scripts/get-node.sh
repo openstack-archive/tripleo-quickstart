@@ -10,25 +10,19 @@ bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
+    --requirements ci-scripts/ci-base-requirements.txt \
     --playbook noop.yml \
     localhost
 popd
 
-# (trown) I don't totally understand why this is needed here, but activating
-# the venv is failing otherwise.
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-source $WORKSPACE/bin/activate
-
-pip install python-cicoclient
-
-cico node get --arch x86_64 \
+$WORKSPACE/bin/cico node get --arch x86_64 \
               --release 7 \
               --count 1 \
               --retry-count 2 \
               --retry-interval 30 \
               -f csv > $WORKSPACE/provisioned.csv
 
-cico inventory
+$WORKSPACE/bin/cico inventory
 cat $WORKSPACE/provisioned.csv
 
 export VIRTHOST=`cat provisioned.csv | tail -1 | cut -d "," -f 3| sed -e 's/"//g'`
