@@ -7,8 +7,9 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_RETAIN_INVENTORY_FILE:=0}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
-: ${OPT_REQUIREMENTS:=requirements.txt}
 : ${OPT_PLAYBOOK:=quickstart.yml}
+
+: ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
 
 install_deps () {
     yum -y install \
@@ -108,7 +109,8 @@ bootstrap () {
         sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
         python setup.py install egg_info --egg-base $OPT_WORKDIR
         # Handle the case that pip is too old to use a cache-dir
-        pip install --no-cache-dir -r $OPT_REQUIREMENTS || pip install -r $OPT_REQUIREMENTS
+        pip install --no-cache-dir "${OPT_REQARGS[@]}" ||
+            pip install "${OPT_REQARGS[@]}"
     popd
     )
 }
@@ -136,6 +138,7 @@ usage () {
 
 }
 
+OPT_REQARGS=("-r"  "$OOOQ_BASE_REQUIREMENTS")
 OPT_VARS=()
 
 while [ "x$1" != "x" ]; do
@@ -150,7 +153,8 @@ while [ "x$1" != "x" ]; do
             ;;
 
         --requirements|-z)
-            OPT_REQUIREMENTS=$2
+            OPT_REQARGS+=("-r")
+            OPT_REQARGS+=("$2")
             shift
             ;;
 

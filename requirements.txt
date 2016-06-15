@@ -1,6 +1,4 @@
-pbr>=1.6
-setuptools>=11.3 #requirement for ansible on RHEL 7
-# ansible is pretty fragile, so we pin to an exact known good
-# release
-ansible==2.0.1
+ansible==2.1.0
 netaddr>=0.7.18
+pbr>=1.6
+setuptools>=11.3
