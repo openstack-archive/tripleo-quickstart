@@ -39,7 +39,9 @@
 # Conditionally include a playbook for all the images specified
 # in options that downloads, cache and extract if tar archived
 # only if the images aren't already in volume pool
-- include: fetch_image.yml image_item={{ item }}
+- include: fetch_image.yml
+  vars:
+    image: "{{ item }}"
   when: undercloud_vol_check|failed
   with_items: "{{ images }}"
 
