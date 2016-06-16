@@ -15,13 +15,22 @@
     path: "{{ image_cache_dir }}"
     state: directory
 
-- set_fact: image={{ image_item }}
+# Set some convenience variables here to avoid boilerplate code
+# elsewhere in this file.  These are all set unconditionally to avoid
+# any cruft leftover from a previous call to this file.
+- name: set local variables
+  set_fact:
+    _force_cached_image: >-
+      {{ force_cached_images|default(false)|bool
+      or image.force_cached|default(false)|bool }}
+    _latest: >-
+      {{ image_cache_dir }}/latest-{{ image.name }}.{{ image.type }}
 
 # This looks for the latest image symlink that may have been created
 # by a previous run of this tasklist.
 - name: Check if we have a latest image
   command: >
-    test -f latest-{{ image.name }}.{{ image.type }}
+    test -f {{ _latest }}
   args:
     chdir: "{{ image_cache_dir }}"
   ignore_errors: true
@@ -29,16 +38,15 @@
   changed_when: false
 
 # If we want to use the most recent image in the local cache
-# (`force_cached_image` is `true`) *and* such an image exists, point
-# `image_cache_path` at `latest.qcow2`.
-
+# (`_force_cached_image` is `true`) *and* such an image exists, point
+# `image_cache_path` at `latest-{{image.name}}.qcow2`.
 - name: Set path to cached image [local]
   set_fact:
-    image_cache_path: "{{ image_cache_dir }}/latest-{{ image.name }}.{{ image.type }}"
-  when: latest_exists|success and image.force_cached|bool
+    image_cache_path: "{{ _latest }}"
+  when: latest_exists|success and _force_cached_image
 
 # Otherwise, check if there's a new image available.
-- when: not image.force_cached|bool or latest_exists|failed
+- when: not _force_cached_image or latest_exists|failed
   block:
 
     # Get the expected checksum for the remote image.
@@ -105,7 +113,7 @@
 
     - name: Update "latest" symlink
       file:
-        path: "{{ image_cache_dir }}/latest-{{ image.name }}.{{ image.type }}"
+        path: "{{ _latest }}"
         state: link
         src: "{{ image_cache_path }}"
 
