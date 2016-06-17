@@ -12,7 +12,7 @@ bash quickstart.sh \
     --bootstrap \
     --requirements ci-scripts/ci-base-requirements.txt \
     --playbook noop.yml \
-    localhost
+    localhost &> noop.log || (cat noop.log && exit 1)
 popd
 
 $WORKSPACE/bin/cico node get --arch x86_64 \
