@@ -50,7 +50,7 @@ deploy_status=0
 
 # Deploy the overcloud!
 openstack overcloud deploy --templates {{ deploy_args }} \
-    ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} || deploy_status=1
+    ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} "$@"|| deploy_status=1
 
 # We don't always get a useful error code from the openstack deploy command,
 # so check `heat stack-list` for a CREATE_FAILED status.
