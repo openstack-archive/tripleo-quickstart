@@ -167,7 +167,7 @@ while [ "x$1" != "x" ]; do
             ;;
 
         --working-dir|-w)
-            OPT_WORKDIR=$2
+            OPT_WORKDIR=$(realpath $2)
             shift
             ;;
 
