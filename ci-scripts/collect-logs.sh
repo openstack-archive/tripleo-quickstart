@@ -7,11 +7,6 @@ export ANSIBLE_INVENTORY=$WORKSPACE/hosts
 export ANSIBLE_CONFIG=$WORKSPACE/tripleo-quickstart/ansible.cfg
 export SSH_CONFIG=$WORKSPACE/ssh.config.ansible
 export ANSIBLE_SSH_ARGS="-F ${SSH_CONFIG}"
-# (trown) I don't totally understand why this is needed here, but activating
-# the venv is failing otherwise.
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-
-source $WORKSPACE/bin/activate
 
 # (trown) This is so that we ensure separate ssh sockets for
 # concurrent jobs. Without this, two jobs running in parallel
