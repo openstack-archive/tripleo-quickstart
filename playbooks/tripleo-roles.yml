@@ -1,6 +1,5 @@
-
 # Add the virthost to the in-memory inventory.  The inventory is not
-# wirtten out to disk unless you call the `rebuild-inventory` role.
+# wirtten out to disk unless you call the `tripleo-inventory` role.
 - name: Add the virthost to the inventory
   hosts: localhost
   tasks:
@@ -10,6 +9,8 @@
         ansible_fqdn: "{{ virthost }}"
         ansible_user: "root"
         ansible_host: "{{ virthost }}"
+  tags:
+    - provision
 
 # Add the virthost node to the generated
 # inventory.
@@ -17,7 +18,9 @@
   hosts: localhost
   gather_facts: yes
   roles:
-    - { role: tripleo-inventory }
+    - tripleo-inventory
+  tags:
+    - provision
 
 - include: teardown.yml
 

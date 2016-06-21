@@ -1,0 +1,31 @@
+---
+- name: Add the virthost to the inventory
+  hosts: localhost
+  tasks:
+    - add_host:
+        name: "{{ virthost }}"
+        groups: "virthost"
+        ansible_fqdn: "{{ virthost }}"
+        ansible_user: "root"
+        ansible_host: "{{ virthost }}"
+  tags:
+    - provision
+
+- name:  Inventory the virthost
+  hosts: localhost
+  gather_facts: yes
+  roles:
+    - tripleo-inventory
+  tags:
+    - provision
+
+- include: teardown.yml
+
+- include: provision.yml
+  tags:
+    - provision
+
+- name: Clone the gated DLRN repos and trigger rpm injection
+  hosts: virthost
+  roles:
+    - tripleo-gate
