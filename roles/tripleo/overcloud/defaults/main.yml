@@ -19,7 +19,7 @@ floating_ip_end: "{{ floating_ip_cidr|nthhost(120) }}"
 external_network_gateway: "{{ floating_ip_cidr|nthhost(1) }}"
 
 # Minutes to wait before giving up on the deploy.
-deploy_timeout: 75
+deploy_timeout: 90
 extra_args: ""
 libvirt_args: "--libvirt-type qemu"
 
