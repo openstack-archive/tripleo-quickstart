@@ -1,3 +1,4 @@
+devmode: true
 force_cached_images: true
 images:
     - name: undercloud

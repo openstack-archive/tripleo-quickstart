@@ -82,10 +82,9 @@ by RDO. The incanation for a job using the quickstart defaults other than
 developer mode would be:
 
     bash quickstart.sh \
-        --extra-vars devmode=true \
-        --extra-vars @config/general_config/tripleo-ci-cached.yml \
-        --release master-tripleo \
-        $VIRTHOST
+            --config config/general_config/devmode.yml \
+            --release master-tripleo \
+            $VIRTHOST
 
 ## Documentation
 
