@@ -3,12 +3,14 @@
 DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-scripts,undercloud-install,undercloud-post-install"
 
 : ${OPT_BOOTSTRAP:=0}
-: ${OPT_SYSTEM_PACKAGES:=0}
-: ${OPT_RETAIN_INVENTORY_FILE:=0}
-: ${OPT_WORKDIR:=$HOME/.quickstart}
-: ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
-: ${OPT_PLAYBOOK:=quickstart.yml}
 : ${OPT_CLEAN:=0}
+: ${OPT_PLAYBOOK:=quickstart.yml}
+: ${OPT_RELEASE:=mitaka}
+: ${OPT_RETAIN_INVENTORY_FILE:=0}
+: ${OPT_SYSTEM_PACKAGES:=0}
+: ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
+: ${OPT_WORKDIR:=$HOME/.quickstart}
+
 
 clean_virtualenv() {
     if [ -d $OPT_WORKDIR ]; then
@@ -156,7 +158,7 @@ OPT_VARS=()
 while [ "x$1" != "x" ]; do
 
     case "$1" in
-        --install-deps)
+        --install-deps|-i)
             OPT_INSTALL_DEPS=1
             ;;
 
@@ -193,7 +195,7 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        --skip-tags)
+        --skip-tags|-S)
             OPT_SKIP_TAGS=$2
             shift
             ;;
@@ -203,7 +205,7 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        --clean|-c)
+        --clean|-X)
             OPT_CLEAN=1
             ;;
 
@@ -218,7 +220,7 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        --teardown|-d)
+        --teardown|-T)
             OPT_TEARDOWN=$2
             shift
             ;;
@@ -240,11 +242,11 @@ while [ "x$1" != "x" ]; do
             OPT_NO_CLONE=1
             ;;
 
-        --retain-inventory)
+        --retain-inventory|-I)
             OPT_RETAIN_INVENTORY_FILE=1
             ;;
 
-        --print-logo|--pl)
+        --print-logo|-l)
             PRINT_LOGO=1
             ;;
 
@@ -268,7 +270,7 @@ if [ "$PRINT_LOGO" = 1 ]; then
     print_logo
     echo "..."
     echo "Nothing more to do"
-    exit 1
+    exit
 fi
 
 
@@ -329,16 +331,6 @@ if [ "$#" -gt 2 ]; then
 fi
 
 VIRTHOST=$1
-
-# We use $OPT_RELEASE to build the undercloud image URL. It is also passed to the
-# quickstart playbook, since there are now some version specific behaviors.
-# If the user has provided an explicit URL, we should warn them of that
-# fact.
-if [ -z "$OPT_RELEASE" ]; then
-
-    OPT_RELEASE=mitaka
-
-fi
 
 print_logo
 echo "Installing OpenStack ${OPT_RELEASE:+"$OPT_RELEASE "}on host $VIRTHOST"
