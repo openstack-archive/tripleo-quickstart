@@ -47,6 +47,16 @@ EOF
 rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress $WORKSPACE/tripleo-quickstart stack@$VIRTHOST:/tmp/usb/
 $sshcmd stack@$VIRTHOST "cp /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/* /tmp/usb/"
 $sshcmd stack@$VIRTHOST "cp /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/quickstart-usb.yml /tmp/usb/tripleo-quickstart/playbooks/"
+
+#quickstart.sh has changed since the usbkey image was pressed.
+# The ci-scripts/usbkey/usb_requirements.txt has to be the requirements file now that
+# requirements are additive vs. a selection.
+$sshcmd stack@$VIRTHOST "mv /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/usb_requirements.txt /tmp/usb/tripleo-quickstart/requirements.txt"
+
+#Use the version of quickstart.sh that was shipped on the usbkey
+$sshcmd stack@$VIRTHOST "mv /tmp/usb/tripleo-quickstart/ci-scripts/usbkey/quickstart.sh /tmp/usb/tripleo-quickstart/quickstart.sh"
+
+
 # Simulate executable bit being unset when mounting usbkey
 $sshcmd stack@$VIRTHOST "chmod -x /tmp/usb/RUN_ME.sh /tmp/usb/tripleo-quickstart/quickstart.sh"
 # Simulate the usbkey not being writable
