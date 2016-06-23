@@ -100,6 +100,7 @@ undercloud_networks:
     tag: 10
 
 network_isolation: true
+enable_pacemaker: false
 ipv6: false
 
 # Set this to `true` if you want your undercloud and overcloud vms to
