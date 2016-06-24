@@ -93,6 +93,7 @@ bootstrap () {
         $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
         $OPT_WORKDIR
     . $OPT_WORKDIR/bin/activate
+    pip install pip --upgrade
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
         if ! [ -d "$OOOQ_DIR" ]; then
@@ -117,8 +118,7 @@ bootstrap () {
         sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
         python setup.py install egg_info --egg-base $OPT_WORKDIR
         # Handle the case that pip is too old to use a cache-dir
-        pip install --no-cache-dir "${OPT_REQARGS[@]}" ||
-            pip install "${OPT_REQARGS[@]}"
+        pip install --no-cache-dir "${OPT_REQARGS[@]}"
     popd
     )
 }
