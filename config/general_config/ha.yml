@@ -34,7 +34,7 @@ network_isolation: true
 extra_args: >-
   --control-scale 3 --neutron-network-type vxlan
   --neutron-tunnel-types vxlan
-  -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml
   --ntp-server pool.ntp.org
 test_tempest: false
 test_ping: true
+enable_pacemaker: true

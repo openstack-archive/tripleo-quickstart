@@ -46,3 +46,9 @@
       -e $HOME/network-environment.yaml
   when: network_isolation
 
+- name: enable pacemaker
+  set_fact:
+    extra_args: >-
+      {{ extra_args }}
+      -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml
+  when: enable_pacemaker
