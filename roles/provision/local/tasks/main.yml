@@ -16,12 +16,3 @@
     path: "{{ local_working_dir }}/ssh.config.ansible"
     state: touch
 
-# Add the virthost to the in-memory inventory.  The inventory is not
-# wirtten out to disk unless you call the `rebuild-inventory` role.
-- name: Add the virthost to the inventory
-  add_host:
-    name: "{{virthost}}"
-    groups: "virthost"
-    ansible_fqdn: "{{ virthost }}"
-    ansible_user: "root"
-    ansible_host: "{{ virthost }}"

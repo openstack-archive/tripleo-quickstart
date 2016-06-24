@@ -1,0 +1,31 @@
+
+# This teardown role will destroy all vms defined in the overcloud_nodes
+# key, and the undercloud
+- name:  Teardown undercloud and overcloud vms
+  hosts: virthost
+  gather_facts: yes
+  roles:
+    - libvirt/teardown
+  tags:
+    - teardown-all
+    - teardown-virthost
+    - teardown-nodes
+
+# This teardown role will destroy libvirt networks
+- name: Tear down environment
+  hosts: virthost
+  roles:
+    - environment/teardown
+  tags:
+    - teardown-all
+    - teardown-virthost
+
+# Finally, we conditionally remove basic setup (users,
+# groups, directories)to start from scratch
+- name: Teardown user setup on virt host
+  hosts: virthost
+  roles:
+    - provision/teardown
+  tags:
+    - teardown-all
+

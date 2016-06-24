@@ -145,6 +145,7 @@ usage () {
     echo "    --extra-vars <key>=<value>"
     echo "    --requirements <requirements.txt>"
     echo "    --print-logo"
+    echo "    --teardown [all, virthost, nodes]"
 
 }
 
@@ -216,6 +217,11 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
+        --teardown|-d)
+            OPT_TEARDOWN=$2
+            shift
+            ;;
+
         --help|-h)
             usage
             exit
@@ -274,6 +280,20 @@ fi
 if [ "$OPT_CLEAN" = 1 ]; then
     clean_virtualenv
 fi
+
+set -x
+
+TEARDOWN_TAGS="teardown-nodes"
+
+if [ "$OPT_TEARDOWN" = "all" ]; then
+    TEARDOWN_TAGS="teardown-all,teardown-virthost,teardown-nodes"
+elif [ "$OPT_TEARDOWN" = "virthost" ]; then
+    TEARDOWN_TAGS="teardown-virthost,teardown-nodes"
+elif [ "$OPT_TEARDOWN" = "nodes" ]; then
+    TEARDOWN_TAGS="teardown-nodes"
+fi
+
+OPT_TAGS="${TEARDOWN_TAGS+$TEARDOWN_TAGS,}${OPT_TAGS:+$OPT_TAGS,}"
 
 # Set this default after option processing, because the default depends
 # on another option.
