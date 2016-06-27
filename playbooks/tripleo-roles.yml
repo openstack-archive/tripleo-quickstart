@@ -1,7 +1,30 @@
----
+
+# Add the virthost to the in-memory inventory.  The inventory is not
+# wirtten out to disk unless you call the `rebuild-inventory` role.
+- name: Add the virthost to the inventory
+  hosts: localhost
+  tasks:
+    - add_host:
+        name: "{{virthost}}"
+        groups: "virthost"
+        ansible_fqdn: "{{ virthost }}"
+        ansible_user: "root"
+        ansible_host: "{{ virthost }}"
+
+# Add the virthost node to the generated
+# inventory.
+- name:  Inventory the virthost
+  hosts: localhost
+  gather_facts: yes
+  roles:
+    - { role: tripleo-inventory }
+
+- include: teardown.yml
+
+# The [provision.yml](provision.yml.html) playbook is responsible for
+# creating an inventory entry for our `virthost` and for creating an
+# unprivileged user on that host for use by our virtual environment.
 - include: provision.yml
-  tags:
-    - provision
 
 # The `environment/setup` role performs any tasks that require `root`
 # access on the target host.
@@ -12,11 +35,12 @@
   roles:
     - environment/setup
 
-- name:  Setup undercloud and baremetal vms and networks in libvirt
+# The `libvirt/setup` role creates the undercloud and overcloud
+# virtual machines.
+- name:  Setup undercloud and overcloud vms
   hosts: virthost
   gather_facts: yes
   roles:
-    - libvirt/teardown
     - libvirt/setup
 
 # Add the undercloud node to the generated
