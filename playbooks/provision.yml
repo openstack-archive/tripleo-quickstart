@@ -25,8 +25,9 @@
   tags:
     - provision
 
-# We need to rerun setup to prevent any possible invalid fact on
-# virthost
+# We need to force-refresh fact gathering because we are now connecting
+# as a different user ('stack' instead of 'root'), which affects
+# things like ansible_user_id and other facts.
 - name: Run setup again on virthost
   hosts: virthost
   tasks:
