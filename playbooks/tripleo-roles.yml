@@ -79,6 +79,21 @@
   roles:
     - tripleo-inventory
 
+  # to-do replace this with a role that debugs
+  # the deployment based on the results
+- name:  Check the result of the deployment
+  hosts: localhost
+  tags:
+    - overcloud-deploy
+  tasks:
+    - name: ensure the deployment result has been read into memory
+      include_vars: "{{ local_working_dir }}/overcloud_deployment_result.json"
+
+    # overcloud_deploy_result = ["failed", "passed"]
+    - name: did the deployment pass or fail?
+      debug: var=overcloud_deploy_result
+      failed_when: overcloud_deploy_result == "failed"
+
 - name:  validate the overcloud
   hosts: undercloud
   gather_facts: no
