@@ -1,16 +1,24 @@
 #!/bin/bash
 
-sed -i -e "/proxy\=/d" /etc/yum.conf
+# execute script in a subshell so it
+# can be controlled by a timeout
+# send a TERM signal after 15 minutes
+# send a KILL signal after 20 minutes
 
-yum update -y
+timeout -s 15 -k 1200 900 bash << EOS
+    set -x
+    sed -i -e "/proxy\=/d" /etc/yum.conf
 
-{% if "undercloud" in item.path %}
-yum install -y python-tripleoclient
-{% endif  %}
-{% if "overcloud" in item.path  %}
-rm -rf /etc/puppet/modules/*
-rm -rf /opt/stack
-yum install -y openstack-puppet-modules
-ln -s /usr/share/openstack-puppet/modules/* /etc/puppet/modules/
-{% endif  %}
+    yum update -y
 
+    {% if "undercloud" in item.path %}
+    yum install -y python-tripleoclient
+    {% endif  %}
+    {% if "overcloud" in item.path  %}
+    rm -rf /etc/puppet/modules/*
+    rm -rf /opt/stack
+    yum install -y openstack-puppet-modules
+    ln -s /usr/share/openstack-puppet/modules/* /etc/puppet/modules/
+    {% endif  %}
+
+EOS
