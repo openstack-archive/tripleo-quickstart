@@ -37,18 +37,3 @@
     dest: "{{ working_dir }}/network-environment.yaml"
     mode: 0755
   when: network_isolation
-
-- name: set network_args fact
-  set_fact:
-    network_args: >-
-      -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml
-      -e /usr/share/openstack-tripleo-heat-templates/environments/net-single-nic-with-vlans.yaml
-      -e $HOME/network-environment.yaml
-  when: network_isolation
-
-- name: enable pacemaker
-  set_fact:
-    extra_args: >-
-      {{ extra_args }}
-      -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml
-  when: enable_pacemaker
