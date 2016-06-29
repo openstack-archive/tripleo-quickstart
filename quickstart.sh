@@ -9,6 +9,7 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_RETAIN_INVENTORY_FILE:=0}
 : ${OPT_SYSTEM_PACKAGES:=0}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
+: ${OPT_TEARDOWN:=nodes}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 
 
@@ -175,11 +176,11 @@ usage () {
     echo "  -t, --tags <tag1>[,<tag2>,...]"
     echo "                      only run plays and tasks tagged with these values,"
     echo "                      specify 'all' to run everything"
-    echo "                      (default=$DEFAULT_OPT_TAGS)"
-    echo "  -T, --teardown [all, virthost, nodes]"
-    echo "                      teardown only specific parts of a previous deployment"
-    echo "                      before starting a new one. Default is to teardown guest"
-    echo "                      nodes only"
+    echo "                      (default=$OPT_TAGS)"
+    echo "  -T, --teardown [ all | virthost | nodes | none ]"
+    echo "                      parts of a previous deployment to tear down before"
+    echo "                      starting a new one, see the docs for full description"
+    echo "                      (default=$OPT_TEARDOWN)"
     echo "  -S, --skip-tags <tag1>[,<tag2>,...]"
     echo "                      only run plays and tasks whose tags do"
     echo "                      not match these values"
@@ -322,17 +323,17 @@ fi
 
 set -x
 
-TEARDOWN_TAGS="teardown-nodes"
-
 if [ "$OPT_TEARDOWN" = "all" ]; then
-    TEARDOWN_TAGS="teardown-all,teardown-virthost,teardown-nodes"
+    OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-all,teardown-virthost,teardown-nodes"
 elif [ "$OPT_TEARDOWN" = "virthost" ]; then
-    TEARDOWN_TAGS="teardown-virthost,teardown-nodes"
+    OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-virthost,teardown-nodes"
+    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}teardown-all"
 elif [ "$OPT_TEARDOWN" = "nodes" ]; then
-    TEARDOWN_TAGS="teardown-nodes"
+    OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-nodes"
+    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}teardown-all,teardown-virthost"
+elif [ "$OPT_TEARDOWN" = "none" ]; then
+    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}teardown-all,teardown-virthost,teardown-nodes"
 fi
-
-OPT_TAGS="${TEARDOWN_TAGS+$TEARDOWN_TAGS,}${OPT_TAGS:+$OPT_TAGS,}"
 
 # Set this default after option processing, because the default depends
 # on another option.

@@ -100,8 +100,11 @@ the beginning of this document.
 
 ## Explicit Teardown
 
-You can select what to delete prior to the run of quickstart adding a --teardown options
-with the following parameters:
-- nodes (default): remove only undercloud and overcloud nodes
-- virthost same as nodes but network setup is deleted too
+You can select what to delete prior to the run of quickstart adding a
+--teardown (or -T) options with the following parameters:
+
+- nodes: default, remove only undercloud and overcloud nodes
+- virthost: same as nodes but network setup is deleted too
 - all: same as virthost but user setup in virthost is deleted too
+- none: will not teardown anything (useful for testing multiple actions against
+  a deployed overcloud)
