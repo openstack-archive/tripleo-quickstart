@@ -1,3 +1,7 @@
+- include: pre-deploy.yml
+  tags:
+    - overcloud-scripts
+
 - include: create-scripts.yml
   tags:
     - overcloud-scripts
