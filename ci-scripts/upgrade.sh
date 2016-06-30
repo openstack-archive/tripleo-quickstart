@@ -1,7 +1,7 @@
 #!/bin/bash
 # CI test that does an upgrade of a full oooq deployment.
 # Use the major_upgrade flag to switch between major and minor upgrade
-# Usage: upgrade.sh <release> <build_system> <config> <job_type> <delorean_hahs> <major_upgrade>
+# Usage: upgrade.sh <release> <build_system> <config> <job_type> <delorean_hahs> <major_upgrade> <enable_pacemaker>
 set -eux
 
 RELEASE=$1
@@ -10,6 +10,7 @@ CONFIG=$3
 JOB_TYPE=$4
 DELOREAN_HASH=$5
 MAJOR_UPGRADE=$6
+PACEMAKER=$7
 
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     LOCATION='stable'
@@ -32,6 +33,7 @@ bash quickstart.sh \
 --config $WORKSPACE/config/general_config/$CONFIG.yml \
 --extra-vars upgrade_delorean_hash=$DELOREAN_HASH \
 --extra-vars major_upgrade=$MAJOR_UPGRADE \
+--extra-vars enable_pacemaker=$PACEMAKER \
 --working-dir $WORKSPACE/ \
 --no-clone \
 --tags all \
