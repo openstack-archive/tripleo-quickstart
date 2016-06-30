@@ -36,6 +36,7 @@ bash quickstart.sh \
 --extra-vars enable_pacemaker=$PACEMAKER \
 --working-dir $WORKSPACE/ \
 --no-clone \
+--bootstrap \
 --tags all \
 --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
 --playbook upgrade.yml \
