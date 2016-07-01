@@ -10,6 +10,8 @@ BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
+SKIP_TAGS="undercloud-post-install"
+
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     LOCATION='stable'
 elif [ "$JOB_TYPE" = "promote" ]; then
@@ -58,6 +60,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     -e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --playbook tripleo-roles.yml \
+    --skip-tags $SKIP_TAGS \
     --tags all \
     --release $RELEASE \
     $VIRTHOST
