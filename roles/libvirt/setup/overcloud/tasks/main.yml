@@ -8,13 +8,15 @@
 
 # Create a libvirt volume pool.  This is where we'll be creating
 # images for the undercloud and overcloud.
+# Note: the virt_pool module is not working properly on rhel-7.2
+# https://bugs.launchpad.net/tripleo-quickstart/+bug/1597905
+- name: create the volume pool xml file
+  template:
+    src: volume_pool.xml.j2
+    dest: "{{ working_dir }}/volume_pool.xml"
+
 - name: Define volume pool
-  virt_pool:
-    command: define
-    state: present
-    name: "{{ libvirt_volume_pool }}"
-    xml: '{{ lookup("template", "volume_pool.xml.j2") }}'
-    uri: "{{ libvirt_uri }}"
+  command: "virsh pool-define {{ working_dir }}/volume_pool.xml"
 
 - name: Start volume pool
   virt_pool:
