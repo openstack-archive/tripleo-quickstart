@@ -10,13 +10,23 @@
 # images for the undercloud and overcloud.
 # Note: the virt_pool module is not working properly on rhel-7.2
 # https://bugs.launchpad.net/tripleo-quickstart/+bug/1597905
+- name: Check volume pool
+  command: >
+    virsh pool-uuid "{{ libvirt_volume_pool }}"
+  register: pool_check
+  ignore_errors: true
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
 - name: create the volume pool xml file
   template:
     src: volume_pool.xml.j2
     dest: "{{ working_dir }}/volume_pool.xml"
+  when: pool_check|failed
 
 - name: Define volume pool
   command: "virsh pool-define {{ working_dir }}/volume_pool.xml"
+  when: pool_check|failed
 
 - name: Start volume pool
   virt_pool:

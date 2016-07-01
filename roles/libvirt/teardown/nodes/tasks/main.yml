@@ -130,3 +130,11 @@
       when: pool_check|success
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
+    - name: destroy /run/user/$uuid/libvirt/storage/run/{{ libvirt_volume_pool }}
+      shell: >
+        uuid=`cat /etc/passwd | grep "{{ ansible_user_id }}" | awk -F ':' '{ print $3 }' | head -n 1`;
+        rm -Rf "/run/user/$uuid/libvirt/storage/run/{{ libvirt_volume_pool }}"
+      when: pool_check|success
+      ignore_errors: true
+
