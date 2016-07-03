@@ -38,7 +38,7 @@
     - name: Kill (SIGKILL) all processes owned by non-root user
       command: >
         pkill -9 -u {{ non_root_user }}
-      when: proc_exist|success and proc_kill|success and proc_kill.stdout != 0
+      when: proc_exist|success
       ignore_errors: true
       become: true
 
