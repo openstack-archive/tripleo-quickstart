@@ -20,4 +20,4 @@ network_environment_args:
   ControlPlaneSubnetCidr: "{{ undercloud_network_cidr|ipaddr('prefix') }}"
   ControlPlaneDefaultRoute: "{{ undercloud_network_cidr|nthhost(1) }}"
   EC2MetadataIp: "{{ undercloud_network_cidr|nthhost(1) }}"
-  DnsServers: ['8.8.8.8','8.8.4.4']
+  DnsServers: [ '{{ external_network_cidr|nthhost(1) }}' ]
