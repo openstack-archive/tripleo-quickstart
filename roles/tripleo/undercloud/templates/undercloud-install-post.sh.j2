@@ -69,3 +69,19 @@ EOF'
 sudo ifup ifcfg-vlan{{ network.tag }}
 {% endfor %}
 {%endif%}
+
+# clone the t-h-t templates if needed
+{% if overcloud_templates_repo is defined and overcloud_templates_path is defined %}
+rm -rf {{ overcloud_templates_path }}
+git clone {% if overcloud_templates_branch is defined %}-b {{ overcloud_templates_branch }} \
+    --single-branch{% endif %} {{ overcloud_templates_repo }} {{ overcloud_templates_path }}
+
+{% if overcloud_templates_refspec is defined %}
+# checkout an open t-h-t review if specified
+# (this will stomp on the overcloud_templates_branch, so only one should be used)
+pushd {{overcloud_templates_path}}
+git fetch {{ overcloud_templates_repo }} {{ overcloud_templates_refspec }} && git checkout FETCH_HEAD
+popd
+{% endif %}
+{% endif %}
+
