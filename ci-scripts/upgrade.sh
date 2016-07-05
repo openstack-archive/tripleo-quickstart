@@ -40,5 +40,6 @@ bash quickstart.sh \
 --tags all \
 --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
 --playbook upgrade.yml \
-$VIRTHOST $RELEASE
+--release $RELEASE \
+$VIRTHOST
 popd
