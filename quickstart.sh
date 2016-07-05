@@ -27,7 +27,8 @@ install_deps () {
         libyaml \
         libselinux-python \
         libffi-devel \
-        openssl-devel
+        openssl-devel \
+        redhat-rpm-config
 }
 
 
