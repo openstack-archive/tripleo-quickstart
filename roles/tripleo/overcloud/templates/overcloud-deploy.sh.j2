@@ -48,13 +48,6 @@ EOENV
 
 deploy_status=0
 
-# clone the t-h-t templates if needed
-{% if overcloud_templates_repo is defined and overcloud_templates_path is defined %}
-rm -rf {{overcloud_templates_path}}
-git clone {% if overcloud_templates_branch is defined %}-b {{overcloud_templates_branch}} \
-    --single-branch{% endif %} {{overcloud_templates_repo}} {{overcloud_templates_path}}
-{% endif %}
-
 # Deploy the overcloud!
 openstack overcloud deploy --templates \
     {% if overcloud_templates_path is defined %}{{overcloud_templates_path}}{% endif %} {{ deploy_args }} \
