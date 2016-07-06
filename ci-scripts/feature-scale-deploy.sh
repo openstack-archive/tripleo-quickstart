@@ -54,6 +54,5 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --release $RELEASE \
     --playbook scale_nodes_verify.yml \
     $VIRTHOST
-fi
 
 popd
