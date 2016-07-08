@@ -20,7 +20,7 @@ if [ ${TEST_PING} == "1" ]; then
 
 fi
 
-if [ ${PREPARE_TEMPEST} == "1" ]; then
+if [[ ${PREPARE_TEMPEST} == "1" || ${TEST_TEMPEST} == "1" ]]; then
 {% include 'configure-tempest.sh.j2' %}
 
 fi
