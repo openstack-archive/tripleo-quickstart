@@ -1,7 +1,7 @@
 #!/bin/bash
 # CI test that does an upgrade of a full oooq deployment.
 # Use the major_upgrade flag to switch between major and minor upgrade
-# Usage: upgrade.sh <release> <build_system> <config> <job_type> <delorean_hahs> <major_upgrade> <enable_pacemaker>
+# Usage: upgrade.sh <release> <build_system> <config> <job_type> <delorean_hahs> <major_upgrade> <enable_pacemaker> [<target_upgrade_version>]
 set -eux
 
 RELEASE=$1
@@ -11,6 +11,7 @@ JOB_TYPE=$4
 DELOREAN_HASH=$5
 MAJOR_UPGRADE=$6
 PACEMAKER=$7
+TARGET_VERSION=$8
 
 SKIP_TAGS="undercloud-post-install"
 
@@ -36,6 +37,7 @@ bash quickstart.sh \
     --extra-vars upgrade_delorean_hash=$DELOREAN_HASH \
     --extra-vars major_upgrade=$MAJOR_UPGRADE \
     --extra-vars enable_pacemaker=$PACEMAKER \
+    --extra-vars target_upgrade_version=$TARGET_VERSION \
     --working-dir $WORKSPACE/ \
     --skip-tags $SKIP_TAGS \
     --no-clone \
