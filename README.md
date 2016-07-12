@@ -42,7 +42,7 @@ Deploy your virtual environment by running:
     bash quickstart.sh $VIRTHOST
 
 Where `$VIRTHOST` is the name of the host on which you want to install
-your virtual triple0 environment. The `quickstart.sh` script will
+your virtual tripleO environment. The `quickstart.sh` script will
 install this repository along with ansible in a virtual environment on
 your Ansible host and run the quickstart playbook. Note, the
 quickstart playbook will delete the `stack` user on `$VIRTHOST` and
