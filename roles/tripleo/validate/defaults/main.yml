@@ -1,0 +1,2 @@
+working_dir: /home/stack
+validate_log: "{{ working_dir }}/overcloud_validate.log"

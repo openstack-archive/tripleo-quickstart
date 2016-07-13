@@ -1,0 +1,3 @@
+- include: validate.yml
+  tags:
+    - overcloud-validate

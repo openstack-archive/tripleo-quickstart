@@ -4,7 +4,6 @@ deploy_log: "{{ working_dir }}/overcloud_deploy.log"
 post_deploy_script: overcloud-deploy-post.sh.j2
 post_deploy_log: "{{ working_dir }}/overcloud_deploy_post.log"
 validate_script: overcloud-validate.sh.j2
-validate_log: "{{ working_dir }}/overcloud_validate.log"
 
 # `floating_ip_cidr` controls the address range used in the network
 # created for tempest tests.  We use Ansible's [ipaddr][] filter to
