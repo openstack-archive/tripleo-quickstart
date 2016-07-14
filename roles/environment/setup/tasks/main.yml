@@ -23,10 +23,53 @@
     autostart: "yes"
   with_items: "{{ networks }}"
   become: true
+  register: net_autostart
+  ignore_errors: true
 
-# Whitelist the bridges associated with these networks for 
+# https://bugs.launchpad.net/tripleo-quickstart/+bug/1581676
+# There is a bug w/ virt_net and RHEL where the network xml
+# file is not written to /etc/libvirt/qemu/networks/ This causes
+# network to be considered transient.
+- when: net_autostart.changed != true
+  block:
+
+    - name: Check if "virsh net-autostart" was successful
+      debug: msg="Some libvirt networks were not set to autostart. Please see
+             https://bugs.launchpad.net/tripleo-quickstart/+bug/1581676"
+
+    # get the network xml from the running network
+    - name: Get libvirt networks xml
+      virt_net:
+        command: get_xml
+        name: "{{ item.name }}"
+      with_items: "{{ networks }}"
+      register: net_xml
+      become: true
+
+    # copy the xml to a file
+    - name: copy network-xml to file
+      copy: content={{ item.get_xml }} dest=/tmp/network-{{item.item.name}}.xml
+      with_items: "{{ net_xml.results }}"
+      become: true
+
+    # redefine the network w/ virsh, this will write the xml file to
+    # /etc/libvirt/qemu/networks/ and it will no longer be transient
+    - name: redefine the libvirt networks so the config is written to /etc/libvirt
+      command: virsh net-define /tmp/network-{{item.name}}.xml
+      with_items: "{{ networks }}"
+      become: true
+
+    # Now we're ready to mark the network autostart
+    - name: Mark libvirt networks as autostarted
+      virt_net:
+        name: "{{ item.name }}"
+        autostart: "yes"
+      with_items: "{{ networks }}"
+      become: true
+
+# Whitelist the bridges associated with these networks for
 # access using qemu [helper networking][helper].  Later on we
-# create virtual machines use an unprivileged `qemu://session` 
+# create virtual machines use an unprivileged `qemu://session`
 # connection, and we connect to the networks using the bridge names.
 #
 # [helper]: http://wiki.qemu.org/Features-Done/HelperNetworking
