@@ -55,7 +55,7 @@ undercloud. If a release name is not given, `mitaka` is used.
 
     bash quickstart.sh --tags all $VIRTHOST
 
-You may choose to execute an end to end deployment with out displaying
+You may choose to execute an end to end deployment without displaying
 the instructions and scripts provided by default.  Using the "--tags all"
 flag will instruct quickstart to provision the environment and deploy
 both the undercloud and overcloud.  Additionally a validation test will
