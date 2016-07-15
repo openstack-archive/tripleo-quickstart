@@ -41,6 +41,7 @@ bash quickstart.sh \
     --no-clone \
     --bootstrap \
     --tags all \
+    --teardown all \
     --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
     --playbook upgrade.yml \
     --release $RELEASE \
