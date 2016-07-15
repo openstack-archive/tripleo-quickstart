@@ -45,13 +45,14 @@
   when: undercloud_vol_check|failed
   with_items: "{{ images }}"
 
+# inject any additional repo into images
+- include: inject_gating_repo.yml
+  when: compressed_gating_repo is defined
+
 # Conditionally include a playbook for all the images specified
 # in options that updates images to the latest delorean version
 - include: update_image.yml
   when: undercloud_vol_check|failed and devmode|default(false)|bool
-
-- include: inject_gating_repo.yml
-  when: compressed_gating_repo is defined
 
 # This copies the `instackenv.json` configuration file that we
 # generated in the overcloud setup role to the undercloud host.

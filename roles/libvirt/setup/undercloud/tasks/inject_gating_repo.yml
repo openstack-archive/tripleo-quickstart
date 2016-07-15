@@ -6,12 +6,20 @@
 
 
 - block:
-  # We need to extract the overcloud image, so we can inject the gating
-  # repo into it.
+  # We need to extract the overcloud image, if it's not already extracted.
+  # so we can inject the gating repo into it.
+  - name: check if overcloud image is already extracted
+    stat:
+      path: '{{ working_dir }}/overcloud-full.qcow2'
+    register: overcloud_image_stat
+    ignore_errors: true
+
   - name: Extract overcloud-full image
     command: >
       virt-copy-out -a {{ working_dir }}/undercloud.qcow2
       /home/stack/overcloud-full.qcow2 {{ working_dir }}
+    register: overcloud_image_extracted
+    when: overcloud_image_stat|failed
 
   - name: Inject the gating repo (overcloud-full)
     command: >
@@ -23,6 +31,7 @@
     command: >
       virt-copy-in -a {{ working_dir }}/undercloud.qcow2
       {{ working_dir }}/overcloud-full.qcow2 /home/stack/
+    when: overcloud_image_extracted is defined and overcloud_image_extracted|changed
 
   - name: Inject the gating repo (undercloud)
     command: >
