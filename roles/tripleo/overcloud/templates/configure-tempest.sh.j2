@@ -25,6 +25,13 @@ rm -rf {{ working_dir }}/tempest
 mkdir {{ working_dir }}/tempest
 cd {{ working_dir }}/tempest
 
+# workaround: clone missing packages: https://bugzilla.redhat.com/show_bug.cgi?id=1333884
+# when using that venv install, we need requirements.txt and test-requirements.txt
+# as package does not provide it, curl from the origin and set on the right directory
+# before venv install
+curl https://raw.githubusercontent.com/redhat-openstack/tempest/master/requirements.txt -o requirements.txt
+curl https://raw.githubusercontent.com/redhat-openstack/tempest/master/test-requirements.txt -o test-requirements.txt
+
 # Generate a tempest configuration.
 sudo yum install -y libffi-devel openssl-devel python-virtualenv
 /usr/share/openstack-tempest-*/tools/configure-tempest-directory

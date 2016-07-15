@@ -21,8 +21,6 @@ network_isolation: true
 
 # If `test_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
-# Run ping test instead of tempest until the bug will be fixed:
-# https://bugzilla.redhat.com/show_bug.cgi?id=1344339
-# prepare_tempest: true
+prepare_tempest: true
 # test_ping: false
-# test_tempest: true
+test_tempest: true
