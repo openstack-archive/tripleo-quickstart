@@ -57,7 +57,7 @@
     # Create libvirt volumes for the overcloud hosts.
     - name: Check if overcloud volumes exist
       command: >
-        virsh vol-info --pool '{{libvirt_volume_pool}}' '{{item.name}}.qcow2'
+        virsh vol-info --pool "{{libvirt_volume_pool}}" "{{item.name}}.qcow2"
       register: overcloud_vol_check
       ignore_errors: true
       environment:
@@ -66,8 +66,8 @@
 
     - name: Create overcloud vm storage
       command: >
-        virsh vol-create-as '{{ libvirt_volume_pool }}'
-        '{{ item.item.name }}'.qcow2 '{{ flavors[item.item.flavor].disk }}'G
+        virsh vol-create-as "{{ libvirt_volume_pool }}"
+        "{{ item.item.name }}".qcow2 "{{ flavors[item.item.flavor].disk }}"
         --format qcow2
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
