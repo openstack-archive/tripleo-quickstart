@@ -93,6 +93,14 @@ developer mode would be::
             --release master-tripleo-ci \
             $VIRTHOST
 
+Working With Quickstart Extras
+------------------------
+
+TripleO Quickstart is more than just a tool for quickly deploying a single machine
+TripleO instance; it is an easily extensible framework for deploying OpenStack.
+
+For a how-to please see :ref:`working-with-extras`
+
 Documentation
 -------------
 
