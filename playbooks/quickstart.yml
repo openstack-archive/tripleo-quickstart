@@ -24,6 +24,7 @@
 # access on the target host.
 - name: Install libvirt packages and configure networks
   hosts: virthost
+  gather_facts: yes
   tags:
     - environment
   roles:
