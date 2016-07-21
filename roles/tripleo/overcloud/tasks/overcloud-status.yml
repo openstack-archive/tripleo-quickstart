@@ -1,0 +1,36 @@
+---
+# The overlcoud deployment has been known at times to not provide an
+# accurate error code.
+# If we don't get a useful error code from the previous script, so check
+# the log for a CREATE_FAILED message.
+# use ! to invert the error code so 1 = fail, 0 = pass
+# don't use -q to allow stdout to be visible.
+
+# Other option to consider vs. grep
+#/usr/bin/awk '/Stack overcloud CREATE_/ && /FAILED/{exit 1}' {{ deploy_log }}
+
+- name: Check overcloud deploy status
+  shell: >
+    ! /usr/bin/grep 'Stack overcloud CREATE_FAILED' {{ deploy_log }}
+  register: deploy_result
+  ignore_errors: true
+
+- name: write out overcloud status to a file on the localhost
+  shell: >
+    echo '{ "overcloud_deploy_result": "failed" }' > "{{ local_working_dir }}/overcloud_deployment_result.json"
+  delegate_to: localhost
+  when: deploy_result.rc != 0
+
+- name: write out overcloud status to a file on the localhost
+  shell: >
+    echo '{ "overcloud_deploy_result": "passed" }' > "{{ local_working_dir }}/overcloud_deployment_result.json"
+  delegate_to: localhost
+  when: deploy_result.rc == 0
+
+- name: import deployment status from file
+  include_vars: "{{ local_working_dir }}/overcloud_deployment_result.json"
+
+- name: echo deployment_status
+  debug: var=overcloud_deploy_result
+
+

@@ -28,7 +28,7 @@ parameter_defaults:
   controllerExtraConfig:
 {% if release in ['mitaka','liberty'] %}
   # In releases before Mitaka, HeatWorkers doesn't modify
-  # num_engine_workers, so handle via heat::config 
+  # num_engine_workers, so handle via heat::config
     heat::config::heat_config:
       DEFAULT/num_engine_workers:
         value: 1
@@ -46,17 +46,14 @@ parameter_defaults:
 EOENV
 {% endif %}
 
-deploy_status=0
-
 # Deploy the overcloud!
 openstack overcloud deploy --templates \
     {% if overcloud_templates_path is defined %}{{overcloud_templates_path}}{% endif %} {{ deploy_args }} \
-    ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} "$@" || deploy_status=1
+    ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} "$@" || true
 
 # We don't always get a useful error code from the openstack deploy command,
 # so check `heat stack-list` for a CREATE_FAILED status.
 if heat stack-list | grep -q 'CREATE_FAILED'; then
-    deploy_status=1
 
     for failed in $(heat resource-list \
         --nested-depth 5 overcloud | grep FAILED |
@@ -65,4 +62,3 @@ if heat stack-list | grep -q 'CREATE_FAILED'; then
     done
 fi
 
-exit $deploy_status

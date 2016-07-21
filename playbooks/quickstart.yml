@@ -49,14 +49,18 @@
   roles:
     - { role: tripleo-inventory, tags: ['undercloud-scripts'] }
 
-# DEPLOY ALL THE THINGS!  Depending on the currently selected set of
-# tags, this will deploy the undercloud, deploy the overcloud, and
-# perform some validation tests on the overcloud.
+# Deploy the undercloud
 - name:  Install undercloud and deploy overcloud
   hosts: undercloud
   gather_facts: no
   roles:
     - tripleo/undercloud
+
+# Deploy the overcloud
+- name:  Deploy the overcloud
+  hosts: undercloud
+  gather_facts: no
+  roles:
     - tripleo/overcloud
 
 # Add the overcloud nodes to the generated inventory.
@@ -67,3 +71,26 @@
       inventory: all
   roles:
     - { role: tripleo-inventory, tags: ['overcloud-deploy'] }
+
+# Check the results of the deployment, note after inventory has executed
+- name:  Check the result of the deployment
+  hosts: localhost
+  tags:
+    - overcloud-deploy
+  tasks:
+    - name: ensure the deployment result has been read into memory
+      include_vars: "{{ local_working_dir }}/overcloud_deployment_result.json"
+
+    # overcloud_deploy_result = ["failed", "passed"]
+    - name: did the deployment pass or fail?
+      debug: var=overcloud_deploy_result
+      failed_when: overcloud_deploy_result == "failed"
+
+# Validate the deployment
+- name:  validate the overcloud
+  hosts: undercloud
+  tags:
+    - overcloud-validate
+  gather_facts: no
+  roles:
+    - tripleo/validate
