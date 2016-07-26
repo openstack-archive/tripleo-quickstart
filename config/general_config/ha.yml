@@ -27,7 +27,7 @@ overcloud_nodes:
 # We don't need introspection in a virtual environment (because we are
 # creating all the "hardware" we really know the necessary
 # information).
-introspect: false
+step_introspect: false
 
 # Tell tripleo about our environment.
 network_isolation: true
