@@ -10,7 +10,7 @@ undercloud_memory: 8192
 
 # Giving the undercloud additional CPUs can greatly improve heat's
 # performance (and result in a shorter deploy time).
-undercloud_vcpu: 2
+undercloud_vcpu: 4
 
 # Create three controller nodes and one compute node.
 overcloud_nodes:
