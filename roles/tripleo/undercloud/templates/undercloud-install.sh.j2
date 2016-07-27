@@ -1,11 +1,16 @@
 #!/bin/bash
 
-# Run the undercloud install
-
 set -eux
+
+### --start_docs
+## -------------------------
+## Installing the undercloud
+## -------------------------
+## ::
 
 {% for var in (undercloud_env_vars|default([])) %}
 export {{ var }}
 {% endfor %}
 
 openstack undercloud install
+### --stop_docs

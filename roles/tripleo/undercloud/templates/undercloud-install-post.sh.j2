@@ -1,34 +1,59 @@
 #!/bin/bash
 
-# Prepare the undercloud for deploy
-
 set -eux
 
-# Source in undercloud credentials.
+### --start_docs
+## --------------------------------------------------
+## Prepare the undercloud for deploying the overcloud
+## --------------------------------------------------
+
+## ########################
+## Prepare Your Environment
+## ########################
+
+## * Source in the undercloud credentials.
+## ::
+
 source {{ working_dir }}/stackrc
 
-# Upload images to glance.
-openstack overcloud image upload \
-    {% if bash_deploy_ramdisk %}--old-deploy-image{% endif %}
+## * Upload images to glance.
+## ::
+
+openstack overcloud image upload {% if bash_deploy_ramdisk %}--old-deploy-image{% endif %}
+
+## * Register nodes with Ironic.
+## ::
 
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 
-# Perform introspection if requested.
 {% if step_introspect %}
+
+## * Introspect hardware attributes of nodes.
+## ::
+
 openstack baremetal introspection bulk start
+
 {% endif %}
 
-{% for name, flavor in (flavors|default({})).items() if name != 'undercloud' %}
-# Create flavor oooq_{{name}} for each flavor in the ansible `flavors`
-# variable.
+## ##############
+## Flavor Details
+## ##############
 
-# remove flavor before attempting to create
+## * Create flavor oooq_<name> for each flavor in the ansible `flavors` variable.
+
+{% for name, flavor in (flavors|default({})).items() if name != 'undercloud' %}
+
+## * Remove flavor before attempting to create.
+## ::
+
 nova flavor-delete oooq_{{ name }} > /dev/null 2>&1 || true
 
-# We subtract 1 from the total disk size here to resolve problems
-# encountered in CI in which the available disk space on the virtual
-# nodes was slightly less than what we requested.
+## * We subtract 1 from the total disk size here to resolve problems
+##   encountered in CI in which the available disk space on the virtual
+##   nodes was slightly less than what we requested.
+## ::
+
 openstack flavor create --id auto \
     --ram {{flavor.memory}} \
     --disk $(( {{flavor.disk}} - 1)) \
@@ -45,7 +70,14 @@ openstack flavor set --property "{{propname}}={{propval}}" oooq_{{ name }}
 {% endfor %}
 
 {% if network_isolation == true and ipv6 == false %}
-# enable NAT for "external" network
+
+## ################
+## Setup Networking
+## ################
+
+## * Enable NAT for "external" network.
+## ::
+
 RULE="-s {{undercloud_external_network_cidr}} ! -d {{undercloud_external_network_cidr}} -j MASQUERADE"
 
 if ! sudo iptables -t nat -C BOOTSTACK_MASQ $RULE; then
@@ -54,6 +86,7 @@ if ! sudo iptables -t nat -C BOOTSTACK_MASQ $RULE; then
 fi
 
 {% for name, network in (undercloud_networks|default({})).items() if name == 'external' %}
+
 sudo bash -c 'cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-vlan{{ network.tag }}
 DEVICE=vlan{{ network.tag }}
 ONBOOT=yes
@@ -70,18 +103,22 @@ sudo ifup ifcfg-vlan{{ network.tag }}
 {% endfor %}
 {%endif%}
 
-# clone the t-h-t templates if needed
 {% if overcloud_templates_repo is defined and overcloud_templates_path is defined %}
+## * Clone the t-h-t templates if needed.
+## ::
+
 rm -rf {{ overcloud_templates_path }}
 git clone {% if overcloud_templates_branch is defined %}-b {{ overcloud_templates_branch }} \
     --single-branch{% endif %} {{ overcloud_templates_repo }} {{ overcloud_templates_path }}
 
 {% if overcloud_templates_refspec is defined %}
-# checkout an open t-h-t review if specified
-# (this will stomp on the overcloud_templates_branch, so only one should be used)
+## * Checkout an open t-h-t review if specified
+##    (this will stomp on the overcloud_templates_branch, so only one should be used).
+## ::
+
 pushd {{overcloud_templates_path}}
 git fetch {{ overcloud_templates_repo }} {{ overcloud_templates_refspec }} && git checkout FETCH_HEAD
 popd
 {% endif %}
 {% endif %}
-
+### --stop_docs

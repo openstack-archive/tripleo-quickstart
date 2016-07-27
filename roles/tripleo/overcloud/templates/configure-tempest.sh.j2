@@ -1,12 +1,20 @@
-# Configure tempest
+## ###############
+## Prepare tempest
+## ###############
 
-# Source in the overcloud credentials.
+## * Source in the overcloud credentials.
+## ::
+
 source {{ working_dir }}/overcloudrc
 
-# Clean up the "nova" network if it exists from a previous run.
+## * Clean up the "nova" network if it exists from a previous run.
+## ::
+
 neutron net-delete nova > /dev/null 2>&1 || true
 
-# Create a network named "nova" for use when running tempest.
+## * Create a network named "nova" for use when running tempest.
+## ::
+
 neutron net-create nova --router:external=True \
     --provider:network_type flat \
     --provider:physical_network datacentre
@@ -20,19 +28,25 @@ neutron subnet-create --name ext-subnet \
     --gateway {{ external_network_gateway }} \
     nova {{ floating_ip_cidr }}
 
-# Clean up from any previous tempest run.
+## * Clean up from any previous tempest run.
+## ::
+
 rm -rf {{ working_dir }}/tempest
 mkdir {{ working_dir }}/tempest
 cd {{ working_dir }}/tempest
 
-# workaround: clone missing packages: https://bugzilla.redhat.com/show_bug.cgi?id=1333884
-# when using that venv install, we need requirements.txt and test-requirements.txt
-# as package does not provide it, curl from the origin and set on the right directory
-# before venv install
+## .. note:: Workaround: clone missing packages: https://bugzilla.redhat.com/show_bug.cgi?id=1333884
+##           when using that venv install, we need requirements.txt and test-requirements.txt
+##           as package does not provide it, curl from the origin and set on the right directory
+##           before venv install.
+## ::
+
 curl https://raw.githubusercontent.com/redhat-openstack/tempest/master/requirements.txt -o requirements.txt
 curl https://raw.githubusercontent.com/redhat-openstack/tempest/master/test-requirements.txt -o test-requirements.txt
 
-# Generate a tempest configuration.
+## * Generate a tempest configuration.
+## ::
+
 sudo yum install -y libffi-devel openssl-devel python-virtualenv
 /usr/share/openstack-tempest-*/tools/configure-tempest-directory
 # TODO (sshnaidm): to move for packages when bug will be fixed:

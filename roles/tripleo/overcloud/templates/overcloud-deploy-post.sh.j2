@@ -1,29 +1,48 @@
 #!/bin/sh
 
-HOSTFILE=/etc/hosts
-
 set -eux
 
-# Source in undercloud credentials.
+### --start_docs
+## -------------------------------
+## Post overcloud deployment steps
+## -------------------------------
+
+## * Prepare Your Environment.
+## ::
+
+HOSTFILE=/etc/hosts
+
+## * Source in the undercloud credentials.
+## ::
+
 . {{ working_dir }}/stackrc
 
-# Remove any old overcloud host entries from `/etc/hosts`.
+## * Remove any old overcloud host entries from `/etc/hosts`.
+## ::
+
 sudo sed -i '/^## BEGIN OVERCLOUD HOSTS/,/^## END OVERCLOUD HOSTS/ d' $HOSTFILE
 
-# Add overcloud hosts to `/etc/hosts`.
+## * Add overcloud hosts to `/etc/hosts`.
+## ::
+
 cat <<EOF | sudo tee -a $HOSTFILE
-## BEGIN OVERCLOUD HOSTS
+## BEGIN OVERCLOUD HOSTS  #nodocs
 $(heat output-show -F raw overcloud HostsEntry)
 
 $(heat output-show -F raw overcloud PublicVip) overcloud-public-vip
-## END OVERCLOUD HOSTS
+## END OVERCLOUD HOSTS    #nodocs
 EOF
 
-# Source in overcloud credentials.
+## * Source in the overcloud credentials.
+## ::
+
 . {{ working_dir }}/overcloudrc
 
-# Create the `heat_stack_owner` role if it doesn't already exist.
+## * Create the `heat_stack_owner` role if it doesn't already exist.
+## ::
+
 if ! openstack role show heat_stack_owner > /dev/null 2>&1; then
     openstack role create heat_stack_owner
     openstack role add --project admin --user admin heat_stack_owner
 fi
+### --stop_docs

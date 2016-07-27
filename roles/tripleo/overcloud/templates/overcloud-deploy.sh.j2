@@ -1,12 +1,22 @@
 #!/bin/bash
 
-# Simple overcloud deploy script
-
 set -eux
 
-# Source in undercloud credentials.
+### --start_docs
+## -----------------------
+## Deploying the overcloud
+## -----------------------
+
+## ########################
+## Prepare Your Environment
+## ########################
+
+## * Source in the undercloud credentials.
+## ::
+
 source {{ working_dir }}/stackrc
 
+### --stop_docs
 # Wait until there are hypervisors available.
 while true; do
     count=$(openstack hypervisor stats show -c count -f value)
@@ -15,14 +25,20 @@ while true; do
     fi
 done
 
-# Include configuration necessary for the ping test here if requested via the
-# ansible `test_ping` variable.
+### --start_docs
+
 {% if test_ping %}
+## * Include configuration necessary for the ping test here if requested via the
+##   ansible `test_ping` variable.
+## ::
+
 DEPLOY_ENV_YAML=/tmp/deploy_env.yaml
 
-# Set most service workers to 1 to minimise memory usage on
-# the deployed overcloud when using the pingtest. We use this
-# test over tempest when we are memory constrained, ie the HA jobs.
+## * Set most service workers to 1 to minimise memory usage on
+##   the deployed overcloud when using the pingtest. We use this
+##   test over tempest when we are memory constrained, ie the HA jobs.
+## ::
+
 cat > $DEPLOY_ENV_YAML << EOENV
 parameter_defaults:
   controllerExtraConfig:
@@ -46,34 +62,35 @@ parameter_defaults:
 EOENV
 {% endif %}
 
-# Deploy the overcloud!
+## * Deploy the overcloud!
+## ::
 openstack overcloud deploy \
     --templates {{overcloud_templates_path}} \
     {{ deploy_args }} \
     ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} "$@" || true
 
+### --stop_docs
 # We don't always get a useful error code from the openstack deploy command,
 # so check `heat stack-list` for a CREATE_FAILED status.
 if heat stack-list | grep -q 'CREATE_FAILED'; then
+# get the failures list
+openstack stack failures list overcloud > failed_deployment_list.log || true
 
-    # get the failures list
-    openstack stack failures list overcloud > failed_deployment_list.log || true
-
-    # get any puppet related errors
-    for failed in $(heat resource-list \
-        --nested-depth 5 overcloud | grep FAILED |
-        grep 'StructuredDeployment ' | cut -d '|' -f3)
-    do
-       echo "heat deployment-show out put for deployment: $failed" >> failed_deployments.log
-       echo "######################################################" >> failed_deployments.log
-       heat deployment-show $failed >> failed_deployments.log
-       echo "######################################################" >> failed_deployments.log
-       echo "puppet standard error for deployment: $failed" >> failed_deployments.log
-       echo "######################################################" >> failed_deployments.log
-       # the sed part removes color codes from the text
-       heat deployment-show $failed |
-           jq -r .output_values.deploy_stderr |
-           sed -r "s:\x1B\[[0-9;]*[mK]::g" >> failed_deployments.log
-       echo "######################################################" >> failed_deployments.log
-    done
+# get any puppet related errors
+for failed in $(heat resource-list \
+    --nested-depth 5 overcloud | grep FAILED |
+    grep 'StructuredDeployment ' | cut -d '|' -f3)
+do
+   echo "heat deployment-show out put for deployment: $failed" >> failed_deployments.log
+   echo "######################################################" >> failed_deployments.log
+   heat deployment-show $failed >> failed_deployments.log
+   echo "######################################################" >> failed_deployments.log
+   echo "puppet standard error for deployment: $failed" >> failed_deployments.log
+   echo "######################################################" >> failed_deployments.log
+   # the sed part removes color codes from the text
+   heat deployment-show $failed |
+       jq -r .output_values.deploy_stderr |
+       sed -r "s:\x1B\[[0-9;]*[mK]::g" >> failed_deployments.log
+   echo "######################################################" >> failed_deployments.log
+done
 fi

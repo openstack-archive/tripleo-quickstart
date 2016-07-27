@@ -1,4 +1,7 @@
-# Ping test
+## #########
+## Ping test
+## #########
+## ::
 
 EXTERNAL_NETWORK_GATEWAY={{ external_network_gateway }}
 FLOATING_IP_CIDR={{ floating_ip_cidr }}
@@ -7,11 +10,15 @@ FLOATING_IP_END={{ floating_ip_end }}
 export EXTERNAL_NETWORK_GATEWAY FLOATING_IP_CIDR
 export FLOATING_IP_START FLOATING_IP_END
 
-# Clean up network if it exists from previous run.
+## * Clean up network if it exists from previous run.
+## ::
+
 source {{ working_dir }}/overcloudrc
 neutron net-delete nova > /dev/null 2>&1 || true
 
-# Clean up test images.
+## Clean up test images.
+## ::
+
 glance image-list |
   awk '/pingtest_image/ {print $2}' |
   xargs --no-run-if-empty -n1 glance image-delete
@@ -20,8 +27,15 @@ rm -rf tripleo-ci
 git clone https://github.com/openstack-infra/tripleo-ci.git
 pushd tripleo-ci
 
-# We set STABLE_RELEASE unconditionally here, since it
-# will not break anything, but gets us the correct behavior
-# for liberty. Once we have https://review.openstack.org/#/c/308545/
-# we can change this to be release specific.
-STABLE_RELEASE=liberty ./scripts/tripleo.sh --overcloud-pingtest
+## .. note:: We set STABLE_RELEASE unconditionally here, since it
+##           will not break anything, but gets us the correct behavior
+##           for liberty. Once we have https://review.openstack.org/#/c/308545/
+##           we can change this to be release specific.
+## ::
+
+STABLE_RELEASE=liberty
+
+## * Execute the ping test
+## ::
+
+./scripts/tripleo.sh --overcloud-pingtest

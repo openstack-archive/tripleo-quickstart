@@ -17,5 +17,3 @@
     src: "{{ undercloud_post_install_script }}"
     dest: "{{ working_dir }}/undercloud-post-install.sh"
     mode: 0755
-
-
