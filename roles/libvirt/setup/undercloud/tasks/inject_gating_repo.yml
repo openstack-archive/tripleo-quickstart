@@ -12,14 +12,13 @@
     stat:
       path: '{{ working_dir }}/overcloud-full.qcow2'
     register: overcloud_image_stat
-    ignore_errors: true
 
   - name: Extract overcloud-full image
     command: >
       virt-copy-out -a {{ working_dir }}/undercloud.qcow2
       /home/stack/overcloud-full.qcow2 {{ working_dir }}
     register: overcloud_image_extracted
-    when: overcloud_image_stat|failed
+    when: not overcloud_image_stat.stat.exists
 
   - name: Inject the gating repo (overcloud-full)
     command: >
