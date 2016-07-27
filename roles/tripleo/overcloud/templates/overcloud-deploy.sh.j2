@@ -62,7 +62,14 @@ if heat stack-list | grep -q 'CREATE_FAILED'; then
     for failed in $(heat resource-list \
         --nested-depth 5 overcloud | grep FAILED |
         grep 'StructuredDeployment ' | cut -d '|' -f3)
-    do heat deployment-show $failed >> failed_deployment_$failed.log
+    do echo -n "heat deployment-show out put for deployment: $failed" >> failed_deployments.log
+       echo -n "######################################################" >> failed_deployments.log
+       heat deployment-show $failed >> failed_deployments.log
+       echo -n "######################################################" >> failed_deployments.log
+       echo "puppet standard error for deployment: $failed" >> failed_deployments.log
+       echo -n "######################################################" >> failed_deployments.log
+       echo -e $(heat deployment-show $failed | jq -r .output_values.deploy_stderr) >> failed_deployments.log
+       echo -n "######################################################" >> failed_deployments.log
     done
 fi
 
