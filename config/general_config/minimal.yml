@@ -22,5 +22,5 @@ network_isolation: true
 # If `test_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 prepare_tempest: true
-# test_ping: false
+test_ping: false
 test_tempest: true
