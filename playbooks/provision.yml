@@ -25,6 +25,13 @@
   tags:
     - provision
 
+# check the target virthost distro for RHEL or CentOS
+  hosts: virthost
+  roles:
+    - provision/support_check
+  tags:
+    - provision
+
 # We need to force-refresh fact gathering because we are now connecting
 # as a different user ('stack' instead of 'root'), which affects
 # things like ansible_user_id and other facts.
