@@ -23,7 +23,7 @@ clean_virtualenv() {
 : ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
 
 install_deps () {
-    yum -y install \
+    sudo yum -y install \
         /usr/bin/git \
         /usr/bin/virtualenv \
         gcc \
@@ -132,7 +132,7 @@ activate_venv() {
 }
 
 usage () {
-    echo "Usage: sudo $0 --install-deps"
+    echo "Usage: $0 --install-deps"
     echo "                      install quickstart package dependencies and exit"
     echo ""
     echo "Usage: $0 [options] virthost"
@@ -349,7 +349,7 @@ if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
     bootstrap
 
     if [ $? -ne 0 ]; then
-        echo "ERROR: bootstrap failed; try \"sudo $0 --install-deps\""
+        echo "ERROR: bootstrap failed; try \"$0 --install-deps\""
         echo "       to install package dependencies or \"$0 --clean\""
         echo "       to remove $OPT_WORKDIR and start over"
         exit 1

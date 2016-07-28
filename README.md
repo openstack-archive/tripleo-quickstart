@@ -33,7 +33,7 @@ there.
 You need some software available on your local system before you can run
 `quickstart.sh`. You can install the necessary dependencies by running:
 
-    sudo bash quickstart.sh --install-deps
+    bash quickstart.sh --install-deps
 
 ## Deploying with instructions
 
