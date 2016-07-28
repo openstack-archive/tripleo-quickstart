@@ -63,6 +63,7 @@ prepare_tempest: false
 # run them.
 test_tempest: false
 tempest_regex: ".*smoke"
+tempest_workers: 2
 
 # If `test_ping` is `true`, run a simple ping test to validate the
 # overcloud.

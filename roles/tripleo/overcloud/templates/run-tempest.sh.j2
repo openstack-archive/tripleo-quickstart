@@ -1,5 +1,5 @@
 # Run tempest.
 
-./tools/with_venv.sh ./tools/run-tests.sh {{tempest_regex}} --skip-file {{ working_dir }}/skipfile 2>&1 > ~/tempest_console.log && exitval=0 || exitval=$?
+./tools/with_venv.sh ./tools/run-tests.sh {{tempest_regex}} --concurrency {{ tempest_workers }} --skip-file {{ working_dir }}/skipfile 2>&1 > ~/tempest_console.log && exitval=0 || exitval=$?
 subunit2html $(find ~/tempest/.testrepository -name [0-9] | head -1) ~/tempest.html >> ~/tempest_console.log ||:
 exit ${exitval}
