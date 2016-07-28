@@ -55,10 +55,14 @@ openstack overcloud deploy --templates \
 # so check `heat stack-list` for a CREATE_FAILED status.
 if heat stack-list | grep -q 'CREATE_FAILED'; then
 
+    # get the failures list
+    openstack stack failures list overcloud > failed_deployment_list.log || true
+
+    # get any puppet related errors
     for failed in $(heat resource-list \
         --nested-depth 5 overcloud | grep FAILED |
         grep 'StructuredDeployment ' | cut -d '|' -f3)
-    do heat deployment-show $failed > failed_deployment_$failed.log
+    do heat deployment-show $failed >> failed_deployment_$failed.log
     done
 fi
 
