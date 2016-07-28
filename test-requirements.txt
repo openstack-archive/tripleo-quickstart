@@ -1,2 +1,4 @@
-jenkins-job-builder
+hacking<0.11,>=0.10
 
+ansible-lint
+jenkins-job-builder
