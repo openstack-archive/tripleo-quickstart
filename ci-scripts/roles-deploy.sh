@@ -88,7 +88,7 @@ else
         -e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
         --playbook tripleo-roles.yml \
-        --skip-tags undercloud-post-install
+        --skip-tags undercloud-post-install \
         --tags all \
         --release $RELEASE \
         $VIRTHOST
