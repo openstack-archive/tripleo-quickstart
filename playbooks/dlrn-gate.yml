@@ -22,8 +22,6 @@
 - include: teardown.yml
 
 - include: provision.yml
-  tags:
-    - provision
 
 - name: Clone the gated DLRN repos and trigger rpm injection
   hosts: virthost

@@ -5,8 +5,8 @@
   roles:
     - libvirt/setup
 
-- name: Rebuild inventory
+- name: Add nodes to the generated inventory
   hosts: localhost
-  gather_facts: no
+  gather_facts: yes
   roles:
-    - rebuild-inventory
+    - tripleo-inventory

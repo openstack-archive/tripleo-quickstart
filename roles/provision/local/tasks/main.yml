@@ -17,7 +17,7 @@
     state: touch
 
 # Add the virthost to the in-memory inventory.  The inventory is not
-# wirtten out to disk unless you call the `rebuild-inventory` role.
+# written out to disk unless you call the `tripleo-inventory` role.
 - name: Add the virthost to the inventory
   add_host:
     name: "{{virthost}}"

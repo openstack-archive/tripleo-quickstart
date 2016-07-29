@@ -1,7 +1,7 @@
 # This is the playbook used by the `quickstart.sh` script.
 
-# Add the virthost to the in-memory inventory.  The inventory is not
-# wirtten out to disk unless you call the `rebuild-inventory` role.
+# Add the virthost to the in-memory inventory. The inventory is not
+# written out to disk unless you call the `tripleo-inventory` role.
 - name: Add the virthost to the inventory
   hosts: localhost
   tasks:
@@ -11,7 +11,6 @@
         ansible_fqdn: "{{ virthost }}"
         ansible_user: "root"
         ansible_host: "{{ virthost }}"
-
 
 - include: teardown.yml
 
@@ -39,15 +38,13 @@
     - libvirt/setup
 
 
-# Add the undercloud node to the generated
-# inventory.
-- name:  Inventory the undercloud
+- name: Add the undercloud node to the generated inventory
   hosts: localhost
   gather_facts: yes
-  vars:
-      inventory: undercloud
+  tags:
+    - undercloud-scripts
   roles:
-    - { role: tripleo-inventory, tags: ['undercloud-scripts'] }
+    - tripleo-inventory
 
 # Deploy the undercloud
 - name:  Install undercloud and deploy overcloud
@@ -63,14 +60,15 @@
   roles:
     - tripleo/overcloud
 
-# Add the overcloud nodes to the generated inventory.
-- name:  Inventory the overcloud
+- name: Add the overcloud nodes to the generated inventory
   hosts: undercloud
   gather_facts: yes
+  tags:
+    - overcloud-deploy
   vars:
       inventory: all
   roles:
-    - { role: tripleo-inventory, tags: ['overcloud-deploy'] }
+    - tripleo-inventory
 
 # Check the results of the deployment, note after inventory has executed
 - name:  Check the result of the deployment

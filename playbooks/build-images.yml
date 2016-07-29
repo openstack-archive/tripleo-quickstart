@@ -4,10 +4,11 @@
   roles:
     - provision/local
 
-- name: Rebuild inventory
+- name: Add the virthost node to the generated inventory
   hosts: localhost
+  gather_facts: yes
   roles:
-    - rebuild-inventory
+    - tripleo-inventory
 
 - name:  Setup the virthost to build images then build them
   hosts: virthost
