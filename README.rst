@@ -1,4 +1,5 @@
-# tripleo-quickstart
+tripleo-quickstart
+==================
 
 One of the barriers to entry for trying out TripleO and its derivatives
 has been the relative difficulty in getting an environment up quickly.
@@ -19,7 +20,8 @@ A quick way to test that your virthost machine is ready to rock is:
 The defaults are meant to "just work", so it is as easy as downloading
 and running the quickstart.sh script.
 
-## Getting the script
+Getting the script
+------------------
 
 You can download the `quickstart.sh` script with `wget`:
 
@@ -28,14 +30,16 @@ You can download the `quickstart.sh` script with `wget`:
 Alternatively, you can clone this repository and run the script from
 there.
 
-## Requirements
+Requirements
+------------
 
 You need some software available on your local system before you can run
 `quickstart.sh`. You can install the necessary dependencies by running:
 
     bash quickstart.sh --install-deps
 
-## Deploying with instructions
+Deploying with instructions
+---------------------------
 
 Deploy your virtual environment by running:
 
@@ -51,7 +55,8 @@ recreate it.
 This script will output instructions at the end to access the deployed
 undercloud. If a release name is not given, `mitaka` is used.
 
-## Deploying without instructions
+Deploying without instructions
+------------------------------
 
     bash quickstart.sh --tags all $VIRTHOST
 
@@ -61,7 +66,8 @@ flag will instruct quickstart to provision the environment and deploy
 both the undercloud and overcloud.  Additionally a validation test will
 be executed to ensure the overcloud is functional.
 
-## Deploying on localhost
+Deploying on localhost
+----------------------
 
     bash quickstart.sh localhost
 
@@ -72,7 +78,8 @@ e.g. ~/.quickstart/ssh.config.ansible will try to proxy through the localhost to
 to the localhost and will cause an error if ssh is not setup to support it.  An alternative
 workflow is being tested and can be found under tripleo-quickstart/ci-scripts/usbkey/.
 
-## Enable Developer mode
+Enable Developer mode
+---------------------
 
 If you are working on TripleO upstream development, and need to reproduce
 what runs in tripleo-ci, you will want to use developer mode.
@@ -86,11 +93,13 @@ developer mode would be:
             --release master-tripleo \
             $VIRTHOST
 
-## Documentation
+Documentation
+-------------
 
 Additional documentation is available in the [docs/](docs/) directory.
 
-## Copyright
+Copyright
+---------
 
 Copyright 2015-2016 Red Hat, Inc.
 
