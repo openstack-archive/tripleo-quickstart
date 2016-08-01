@@ -25,7 +25,7 @@
   tags:
     - provision
 
-# check the target virthost distro for RHEL or CentOS
+- name: Check if the target virthost distro is supported (RHEL or CentOS)
   hosts: virthost
   roles:
     - provision/support_check
