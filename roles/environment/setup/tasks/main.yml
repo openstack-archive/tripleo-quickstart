@@ -79,3 +79,21 @@
     line: "allow {{item.bridge}}"
   with_items: "{{ networks }}"
   become: true
+
+- name: install the latest version of dstat on virthost
+  yum:
+    name: dstat
+    state: present
+  become: true
+
+- name: Prepare directory with extra logs
+  file: dest=/var/log/extra state=directory
+  become: true
+
+- name: Run dstat for collecting metrics during 2 hours on virthost
+  command: >
+    dstat -tcmndrylpg --nocolor --output /var/log/extra/dstat-csv.log 1 7200 \
+    >/dev/null
+  async: 7200
+  poll: 0
+  become: true
