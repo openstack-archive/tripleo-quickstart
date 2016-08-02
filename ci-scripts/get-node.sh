@@ -6,13 +6,13 @@ set -eux
 pushd $WORKSPACE/tripleo-quickstart
 # (trown) Use quickstart.sh to set up the environment.
 # This serves as a fail-fast syntax check for quickstart gates.
-bash quickstart.sh \
+./quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
     --requirements ci-scripts/ci-base-requirements.txt \
     --playbook noop.yml \
-    localhost &> noop.log || (cat noop.log && exit 1)
+    localhost
 popd
 
 $WORKSPACE/bin/cico node get --arch x86_64 \
