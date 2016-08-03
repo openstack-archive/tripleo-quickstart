@@ -75,5 +75,6 @@ def main():
     module.exit_json(**result)
 
 # see http://docs.ansible.com/developing_modules.html#common-module-boilerplate
-from ansible.module_utils.basic import *
-main()
+from ansible.module_utils.basic import AnsibleModule
+if __name__ == '__main__':
+    main()
