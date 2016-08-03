@@ -16,7 +16,7 @@ description:
 import math
 import random
 
-MAX_NUM_MACS = math.trunc(0xff/2)
+MAX_NUM_MACS = math.trunc(0xff / 2)
 
 
 def generate_baremetal_macs(nodes, networks):
@@ -50,7 +50,7 @@ def generate_baremetal_macs(nodes, networks):
     if (start + (count * 2)) > 0xff:
         # leave room to generate macs in sequence
         start = 0xff - count * 2
-    for num in range(0, count*2, 2):
+    for num in range(0, count * 2, 2):
         mac = start + num
         macs.append(base_mac + ":" + ("%02x" % mac))
 
