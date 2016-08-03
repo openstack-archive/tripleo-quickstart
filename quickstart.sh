@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Some scripts requires output to be in LANG=C and 
+#  only in ascii. Avoid localized command output
+#  eg. yum,... 
+export LANG=C
+
 DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-scripts,undercloud-install,undercloud-post-install"
 
 : ${OPT_BOOTSTRAP:=0}
