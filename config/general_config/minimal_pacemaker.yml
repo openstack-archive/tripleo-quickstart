@@ -1,0 +1,21 @@
+# This config deploys a minimal configuration but with pacemaker to
+# simulate a configuration close to HA without requiring 3 controllers
+
+# Define a controller node, a compute node, and a ceph node.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+
+  - name: compute_0
+    flavor: compute
+
+# Tell tripleo how we want things done.
+extra_args: >-
+  --neutron-network-type vxlan
+  --neutron-tunnel-types vxlan
+  --ntp-server pool.ntp.org
+
+network_isolation: true
+test_tempest: false
+test_ping: true
+enable_pacemaker: true
