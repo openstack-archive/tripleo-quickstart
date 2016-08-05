@@ -113,6 +113,12 @@ dhcp_start = {{undercloud_dhcp_start|default(
 dhcp_end = {{undercloud_dhcp_end|default(
     undercloud_network_cidr|nthhost(30))}}
 
+# Path to hieradata override file. If set, the file will be copied
+# under /etc/puppet/hieradata and set as the first file in the hiera
+# hierarchy. This can be used to to custom configure services beyond
+# what undercloud.conf provides (string value)
+hieradata_override = quickstart-hieradata-overrides.yaml
+
 # Network interface on which inspection dnsmasq will listen.  If in
 # doubt, use the default value. (string value)
 # Deprecated group/name - [DEFAULT]/discovery_interface
