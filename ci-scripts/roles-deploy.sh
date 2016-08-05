@@ -10,15 +10,12 @@ BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
-if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
+if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ] || [ "$JOB_TYPE" = "dlrn-gate" ]; then
     LOCATION='stable'
-elif [ "$JOB_TYPE" = "promote" ]; then
+elif [ "$JOB_TYPE" = "promote" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
     LOCATION='testing'
-elif [ "$JOB_TYPE" = "dlrn-gate" ]; then
-    # this is actually not used anywhere
-    LOCATION='current'
 else
-    echo "Job type must be one of gate, dlrn-gate, periodic, or promote"
+    echo "Job type must be one of gate, dlrn-gate, dlrn-gate-testing, periodic, or promote"
     exit 1
 fi
 
@@ -52,7 +49,7 @@ if [ "$JOB_TYPE" = "gate" ]; then
         $VIRTHOST
 fi
 
-if [ "$JOB_TYPE" = "dlrn-gate" ]; then
+if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
     # provison the virthost and build the gated DLRN packages
     bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
         --working-dir $WORKSPACE/ \
@@ -71,6 +68,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ]; then
         --no-clone \
         --retain-inventory \
         --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+        --extra-vars undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
         --playbook tripleo-roles.yml \
         --skip-tags provision,undercloud-post-install \
@@ -85,7 +83,7 @@ else
         --no-clone \
         --bootstrap \
         --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
-        -e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
+        --extra-vars undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
         --playbook tripleo-roles.yml \
         --skip-tags undercloud-post-install \
