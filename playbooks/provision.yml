@@ -16,12 +16,11 @@
   tags:
     - provision
 
-# Regenerate the inventory file for use in subsequent
-# `ansible-playbook` runs.
-- name: Rebuild inventory
+- name: Add the virthost node to the generated inventory
   hosts: localhost
+  gather_facts: yes
   roles:
-    - rebuild-inventory
+    - tripleo-inventory
   tags:
     - provision
 
