@@ -67,6 +67,29 @@ undercloud_admin_vip = {{undercloud_undercloud_admin_vip}}
 # unset disables SSL. (string value)
 #undercloud_service_certificate =
 
+# When set to True, an SSL certificate will be generated as part of
+# the undercloud install and this certificate will be used in place of
+# the value for undercloud_service_certificate.  The resulting
+# certificate will be written to
+# /etc/pki/tls/certs/undercloud-[undercloud_public_vip].pem.  This
+# certificate is signed by CA selected by the
+# "certificate_generation_ca" option. (boolean value)
+#generate_service_certificate = false
+{% if undercloud_generate_service_certificate is defined %}
+generate_service_certificate = {{undercloud_generate_service_certificate}}
+{% endif %}
+
+# The certmonger nickname of the CA from which the certificate will be
+# requested. This is used only if the generate_service_certificate
+# option is set. Note that if the "local" CA is selected the
+# certmonger's local CA certificate will be extracted to /etc/pki/ca-
+# trust/source/anchors/cm-local-ca.pem and subsequently added to the
+# trust chain. (string value)
+#certificate_generation_ca = local
+{% if undercloud_certificate_generation_ca is defined %}
+certificate_generation_ca = {{undercloud_certificate_generation_ca}}
+{% endif %}
+
 # Network interface on the Undercloud that will be handling the PXE
 # boots and DHCP for Overcloud instances. (string value)
 {% if undercloud_local_interface is defined %}
