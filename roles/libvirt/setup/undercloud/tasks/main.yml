@@ -60,6 +60,7 @@
   command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
     --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json
+    --run-command 'chown stack:stack /home/stack/instackenv.json'
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
@@ -108,13 +109,14 @@
 # This copies the overcloud and ipa images if we are not going to build
 # them
 - name: Inject additional images
-  shell: >
+  command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }};
+    --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }}
+    --run-command 'chown stack:stack /home/stack/{{ item }}'
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  when: devmode|default(false)|bool
+  when: undercloud_vol_check|failed and devmode|default(false)|bool
   with_items: "{{ inject_images }}"
 
 # Resize the undercloud image to our desired size.
@@ -139,7 +141,7 @@
 - name: Create undercloud volume
   command: >
     virsh vol-create-as {{ libvirt_volume_pool}}
-    {{ undercloud_node.name }}.qcow2 \
+    {{ undercloud_node.name }}.qcow2
     {{ flavors[undercloud_node.name].disk }}G --format qcow2
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
