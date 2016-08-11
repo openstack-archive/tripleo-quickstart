@@ -19,8 +19,6 @@ else
     exit 1
 fi
 
-export SSH_CONFIG=$WORKSPACE/ssh.config.ansible
-export ANSIBLE_SSH_ARGS="-F ${SSH_CONFIG}"
 # (trown) This is so that we ensure separate ssh sockets for
 # concurrent jobs. Without this, two jobs running in parallel
 # would try to use the same undercloud-stack socket.
