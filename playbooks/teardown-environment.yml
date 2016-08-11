@@ -1,0 +1,8 @@
+# This teardown role will destroy libvirt networks
+- name: Tear down environment
+  hosts: virthost
+  roles:
+    - environment/teardown
+  tags:
+    - teardown-environment
+    - teardown-all

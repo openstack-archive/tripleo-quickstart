@@ -12,12 +12,18 @@
   tags:
     - provision
 
-- include: teardown.yml
+- include: teardown-provision.yml
 
 # The [provision.yml](provision.yml.html) playbook is responsible for
 # creating an inventory entry for our `virthost` and for creating an
 # unprivileged user on that host for use by our virtual environment.
 - include: provision.yml
+
+# These teardown tasks only make sense after running provision.yml,
+# because they assume they are connecting as the `stack` user rather
+# than `root`.
+- include: teardown-nodes.yml
+- include: teardown-environment.yml
 
 # The `environment/setup` role performs any tasks that require `root`
 # access on the target host.

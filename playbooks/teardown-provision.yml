@@ -1,0 +1,9 @@
+# Finally, we conditionally remove basic setup (users,
+# groups, directories)to start from scratch
+- name: Tear down non-root user on virt host
+  hosts: virthost
+  roles:
+    - provision/teardown
+  tags:
+    - teardown-provision
+    - teardown-all

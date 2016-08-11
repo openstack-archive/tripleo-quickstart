@@ -322,15 +322,13 @@ if [ "$OPT_CLEAN" = 1 ]; then
 fi
 
 if [ "$OPT_TEARDOWN" = "all" ]; then
-    OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-all,teardown-virthost,teardown-nodes"
+    OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-all"
 elif [ "$OPT_TEARDOWN" = "virthost" ]; then
-    OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-virthost,teardown-nodes"
-    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}teardown-all"
+    OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-nodes,teardown-environment"
 elif [ "$OPT_TEARDOWN" = "nodes" ]; then
     OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,}teardown-nodes"
-    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}teardown-all,teardown-virthost"
 elif [ "$OPT_TEARDOWN" = "none" ]; then
-    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}teardown-all,teardown-virthost,teardown-nodes"
+    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}teardown-all"
 fi
 
 # Set this default after option processing, because the default depends
