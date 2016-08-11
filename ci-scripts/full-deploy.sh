@@ -13,7 +13,7 @@ JOB_TYPE=$4
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     LOCATION='stable'
 elif [ "$JOB_TYPE" = "promote" ]; then
-    LOCATION='testing'
+    LOCATION="${LOCATION:-'testing'}"
 else
     echo "Job type must be one of gate, periodic, or promote"
     exit 1

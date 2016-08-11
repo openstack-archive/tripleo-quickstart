@@ -20,6 +20,7 @@ if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     delorean_current_hash='current-passed-ci'
 elif [ "$JOB_TYPE" = "promote" ]; then
     PLAYBOOK='build-images.yml'
+    LOCATION="${LOCATION:-'testing'}"
 else
     echo "Job type must be one of gate, periodic, or promote"
     exit 1
@@ -41,6 +42,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
   --extra-vars artib_build_system=$BUILD_SYS \
   --extra-vars artib_delorean_hash=$delorean_current_hash \
   --extra-vars publish=$PUBLISH \
+  --extra-vars artib_image_stage_location=$LOCATION \
   --no-clone \
   --release $RELEASE \
   $VIRTHOST
