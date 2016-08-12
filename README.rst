@@ -96,7 +96,14 @@ developer mode would be::
 Documentation
 -------------
 
-Additional documentation is available in the ``doc/source`` directory.
+The full documentation is in the ``doc/source`` directory, it can be built
+using::
+
+    tox -e docs
+
+An up-to-date HTML version is available on docs.openstack.org_.
+
+.. _docs.openstack.org: http://docs.openstack.org/developer/tripleo-quickstart/
 
 Copyright
 ---------
