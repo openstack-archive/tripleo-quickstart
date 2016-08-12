@@ -68,3 +68,6 @@ tempest_workers: 2
 # If `test_ping` is `true`, run a simple ping test to validate the
 # overcloud.
 test_ping: true
+
+# Path to tripleo-heat-templates
+overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates

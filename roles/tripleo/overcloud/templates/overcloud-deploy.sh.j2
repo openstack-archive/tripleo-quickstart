@@ -47,8 +47,9 @@ EOENV
 {% endif %}
 
 # Deploy the overcloud!
-openstack overcloud deploy --templates \
-    {% if overcloud_templates_path is defined %}{{overcloud_templates_path}}{% endif %} {{ deploy_args }} \
+openstack overcloud deploy \
+    --templates {{overcloud_templates_path}} \
+    {{ deploy_args }} \
     ${DEPLOY_ENV_YAML:+-e $DEPLOY_ENV_YAML} "$@" || true
 
 # We don't always get a useful error code from the openstack deploy command,
