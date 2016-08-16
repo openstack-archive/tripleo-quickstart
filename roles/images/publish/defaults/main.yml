@@ -21,3 +21,4 @@ publish_create_dest_via_ssh: false
 # optional
 # publish_dest_key: "localpath/to/your/identity/file"
 
+artib_image_stage_location: testing
