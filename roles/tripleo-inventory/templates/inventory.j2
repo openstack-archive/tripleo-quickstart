@@ -1,0 +1,26 @@
+{% for host in groups['all'] %}
+{% if hostvars[host].get('ansible_connection', '') == 'local' %}
+{{ host }} ansible_connection=local
+{% else %}
+
+{{ host }}{% if 'ansible_host' in hostvars[host]
+%} ansible_host={{ hostvars[host]['ansible_host'] }}{% endif %}
+{% if 'ansible_user' in hostvars[host]
+%} ansible_user={{ hostvars[host]['ansible_user'] }}{% endif %}
+{% if 'ansible_private_key_file' in hostvars[host]
+%} ansible_private_key_file={{ hostvars[host]['ansible_private_key_file'] }}{% endif %}
+{% if 'undercloud_ip' in hostvars[host]
+%} undercloud_ip={{ hostvars[host]['undercloud_ip'] }}{% endif %}
+
+{% endif %}
+{% endfor %}
+
+{% for group in groups %}
+{% if group not in ['ungrouped', 'all'] %}
+[{{ group }}]
+{% for host in groups[group] %}
+{{ host }}
+{% endfor %}
+
+{% endif %}
+{% endfor %}
