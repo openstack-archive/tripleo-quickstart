@@ -47,20 +47,14 @@ network_gateway = {{undercloud_network_gateway|default(
 # Virtual IP address to use for the public endpoints of Undercloud
 # services.  Only used if undercloud_service_certficate is set.
 # (string value)
-{% if undercloud_undercloud_public_vip is defined %}
-undercloud_public_vip = {{undercloud_undercloud_public_vip}}
-{% else %}
-#undercloud_public_vip = 192.0.2.2
-{% endif %}
+undercloud_public_vip = {{undercloud_undercloud_public_vip|default(
+    undercloud_network_cidr|nthhost(2))}}
 
 # Virtual IP address to use for the admin endpoints of Undercloud
 # services.  Only used if undercloud_service_certficate is set.
 # (string value)
-{% if undercloud_undercloud_admin_vip is defined %}
-undercloud_admin_vip = {{undercloud_undercloud_admin_vip}}
-{% else %}
-#undercloud_admin_vip = 192.0.2.3
-{% endif %}
+undercloud_admin_vip = {{undercloud_undercloud_admin_vip|default(
+    undercloud_network_cidr|nthhost(3))}}
 
 # Certificate file to use for OpenStack service SSL connections.
 # Setting this enables SSL for the OpenStack API endpoints, leaving it

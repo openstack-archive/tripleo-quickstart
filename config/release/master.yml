@@ -2,3 +2,9 @@ release: master
 undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/stable/undercloud.qcow2
 overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/stable/overcloud-full.tar
 ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/stable/ironic-python-agent.tar
+
+# release specific ansible variables
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: True
