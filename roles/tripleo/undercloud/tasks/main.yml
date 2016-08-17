@@ -10,6 +10,7 @@
 # unprivileged we need to use `qemu:///session`.  This allows us to pass
 # the value of libvirt_uri into /etc/ironic/ironic.conf.
 - name: Configure Ironic pxe_ssh driver
+  when: release in ['mitaka', 'liberty']
   delegate_to: undercloud
   ini_file:
     dest: /etc/ironic/ironic.conf
@@ -21,6 +22,7 @@
     - undercloud-install
 
 - name: restart ironic conductor after changing configuration
+  when: release in ['mitaka', 'liberty']
   become: true
   service:
     name: openstack-ironic-conductor

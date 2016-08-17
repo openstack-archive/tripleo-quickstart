@@ -6,6 +6,12 @@
     dest: "./undercloud.conf"
     mode: 0600
 
+- name: Create undercloud hieradata overrides
+  template:
+    src: "{{ undercloud_hieradata_override_file }}"
+    dest: "./quickstart-hieradata-overrides.yaml"
+    mode: 0600
+
 - name: Create undercloud install script
   template:
     src: "{{ undercloud_install_script }}"

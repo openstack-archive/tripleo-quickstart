@@ -4,6 +4,7 @@ undercloud_post_install_script: undercloud-install-post.sh.j2
 undercloud_install_log: "{{ working_dir }}/undercloud_install.log"
 undercloud_post_install_log: "{{ working_dir }}/undercloud_post_install.log"
 network_environment_file: network-environment.yaml.j2
+undercloud_hieradata_override_file: quickstart-hieradata-overrides.yaml.j2
 
 undercloud_network_cidr: 192.0.2.0/24
 
@@ -21,3 +22,8 @@ network_environment_args:
   ControlPlaneDefaultRoute: "{{ undercloud_network_cidr|nthhost(1) }}"
   EC2MetadataIp: "{{ undercloud_network_cidr|nthhost(1) }}"
   DnsServers: [ '{{ external_network_cidr|nthhost(1) }}' ]
+
+# Which libvirt session should we use?  Using `qemu://session` does
+# not require privileged access (but does require the setup performed by the
+# `environment/setup` role).
+libvirt_uri: qemu:///session

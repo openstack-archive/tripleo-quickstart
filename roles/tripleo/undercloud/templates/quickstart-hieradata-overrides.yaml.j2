@@ -1,0 +1,4 @@
+# Ironic defaults to using `qemu:///system`.  When running libvirtd
+# unprivileged we need to use `qemu:///session`.  This allows us to pass
+# the value of libvirt_uri into /etc/ironic/ironic.conf.
+ironic::drivers::ssh::libvirt_uri: '{{libvirt_uri}}'
