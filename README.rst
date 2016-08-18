@@ -55,7 +55,6 @@ undercloud. If a release name is not given, ``mitaka`` is used.
 
 Deploying without instructions
 ------------------------------
-
 ::
 
     bash quickstart.sh --tags all $VIRTHOST
@@ -68,7 +67,6 @@ ensure the overcloud is functional.
 
 Deploying on localhost
 ----------------------
-
 ::
 
     bash quickstart.sh localhost
@@ -108,7 +106,7 @@ Copyright 2015-2016 Red Hat, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may
 not use this file except in compliance with the License. You may obtain
-a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>
+a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
