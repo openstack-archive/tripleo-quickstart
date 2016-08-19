@@ -1,0 +1,71 @@
+# This is the playbook used by the `quickstart.sh` script.
+
+- include: quickstart.yml
+
+# Prepare any additional configuration files required by the overcloud
+- name:  Prepare configuration files for the overcloud deployment
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - overcloud-prep-config
+
+# Prepare the overcloud images for deployment
+- name:  Prepare the overcloud images for deployment
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - overcloud-prep-images
+
+# Prepare the overcloud flavor configuration
+- name:  Prepare overcloud flavors
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - overcloud-prep-flavors
+
+# Prepare the undercloud networks for the overcloud deployment
+- name:  Prepare the undercloud networks for the overcloud deployment
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - overcloud-prep-network
+
+# Deploy the overcloud
+- name:  Deploy the overcloud
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - tripleo-overcloud
+
+- name: Add the overcloud nodes to the generated inventory
+  hosts: undercloud
+  gather_facts: yes
+  tags:
+    - overcloud-deploy
+  vars:
+      inventory: all
+  roles:
+    - tripleo-inventory
+
+# Check the results of the deployment, note after inventory has executed
+- name:  Check the result of the deployment
+  hosts: localhost
+  tags:
+    - overcloud-deploy
+  tasks:
+    - name: ensure the deployment result has been read into memory
+      include_vars: "{{ local_working_dir }}/overcloud_deployment_result.json"
+
+    # overcloud_deploy_result = ["failed", "passed"]
+    - name: did the deployment pass or fail?
+      debug: var=overcloud_deploy_result
+      failed_when: overcloud_deploy_result == "failed"
+
+# Validate the deployment
+- name:  validate the overcloud
+  hosts: undercloud
+  tags:
+    - overcloud-validate
+  gather_facts: no
+  roles:
+    - tripleo-overcloud-validate

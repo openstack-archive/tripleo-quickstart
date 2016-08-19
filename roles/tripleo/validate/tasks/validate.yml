@@ -1,3 +1,0 @@
-- name: Validate the overcloud
-  shell: |
-    {{ working_dir }}/overcloud-validate.sh > {{ validate_log }} 2>&1

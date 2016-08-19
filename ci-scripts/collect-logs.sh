@@ -23,7 +23,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --no-clone \
     --bootstrap \
     --retain-inventory \
-    --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+    --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --playbook collect-logs.yml \
     --extra-vars @$WORKSPACE/config/general_config/centosci-logs.yml \

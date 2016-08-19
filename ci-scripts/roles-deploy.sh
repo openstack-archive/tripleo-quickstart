@@ -34,7 +34,7 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
         --playbook gate-roles.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
@@ -44,7 +44,7 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
         --playbook gate-roles.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
@@ -57,7 +57,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
         --no-clone \
         --bootstrap \
         --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
         --playbook dlrn-gate.yml \
         --tags all \
         --teardown all \
@@ -70,8 +70,8 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
         --retain-inventory \
         --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
-        --playbook tripleo-roles.yml \
-        --skip-tags provision,undercloud-post-install \
+        --playbook quickstart-extras.yml \
+        --skip-tags provision \
         --tags all \
         --teardown none \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
@@ -82,10 +82,9 @@ else
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
-        --playbook tripleo-roles.yml \
-        --skip-tags undercloud-post-install \
+        --playbook quickstart-extras.yml \
         --tags all \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST

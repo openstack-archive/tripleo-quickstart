@@ -24,6 +24,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --extra-vars @$WORKSPACE/config/general_config/devmode.yml \
     --release "${RELEASE}-tripleo" \
     --extra-vars test_ping=False \
+    --playbook quickstart-extras.yml \
     $VIRTHOST
 
 bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
@@ -32,10 +33,11 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --no-clone \
     --bootstrap \
     --retain-inventory \
-    --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+    --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
     --playbook tempest.yml \
     --extra-vars tempest_source=rdo \
     --extra-vars tempest_format=venv \
+    --playbook quickstart-extras.yml \
     $VIRTHOST
 
 popd

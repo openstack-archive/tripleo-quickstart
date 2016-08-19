@@ -432,16 +432,9 @@ Access the undercloud by:
 
     ssh -F $OPT_WORKDIR/ssh.config.ansible undercloud
 
-There are scripts in the home directory to continue the deploy:
+Follow the documentation in the link below to complete your deployment.
 
-    overcloud-deploy.sh will deploy the overcloud
-    overcloud-deploy-post.sh will do any post-deploy configuration
-    overcloud-validate.sh will run post-deploy validation
-
-Alternatively, you can ignore these scripts and follow the upstream docs,
-starting from the overcloud deploy section:
-
-    http://ow.ly/1Vc1301iBlb
+    http://ow.ly/c44w304begR
 
 ##################################
 Virtual Environment Setup Complete

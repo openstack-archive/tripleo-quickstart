@@ -35,7 +35,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --working-dir $WORKSPACE/ \
     --bootstrap \
     --no-clone \
-    --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+    --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
     -e deploy_timeout=75 \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --tags all \

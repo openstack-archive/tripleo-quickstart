@@ -24,16 +24,3 @@
     line: "export OS_PASSWORD={{ undercloud_admin_password.stdout }}"
     regexp: "OS_PASSWORD"
 
-- name: Prepare the undercloud for deploy
-  shell: |
-    {{ working_dir }}/undercloud-post-install.sh > \
-    {{ undercloud_post_install_log }} 2>&1
-
-- name: Create network environment file for network isolation
-  tags:
-    - undercloud-scripts
-  template:
-    src: "{{ network_environment_file }}"
-    dest: "{{ working_dir }}/network-environment.yaml"
-    mode: 0755
-  when: network_isolation
