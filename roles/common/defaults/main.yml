@@ -39,6 +39,12 @@ flavors:
     disk: '{{ceph_disk|default(default_disk)}}'
     vcpu: '{{ceph_vcpu|default(default_vcpu)}}'
 
+  objectstorage:
+    memory: '{{objectstorage_memory|default(default_memory)}}'
+    disk: '{{objectstorage_disk|default(default_disk)}}'
+    vcpu: '{{objectstorage_vcpu|default(default_vcpu)}}'
+    extradisks: true
+
   undercloud:
     memory: '{{undercloud_memory|default(undercloud_memory)}}'
     disk: '{{undercloud_disk|default(undercloud_disk)}}'
