@@ -6,14 +6,15 @@
 set -eux
 
 RELEASE=$1
+# unused variable in script, kept for consistency
 BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
-    LOCATION='stable'
+    unset REL_TYPE
 elif [ "$JOB_TYPE" = "promote" ]; then
-    LOCATION="${LOCATION:-'testing'}"
+    REL_TYPE="${LOCATION:-'testing'}"
 else
     echo "Job type must be one of gate, periodic, or promote"
     exit 1
@@ -27,11 +28,10 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
---tags all \
--e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
---config $WORKSPACE/config/general_config/$CONFIG.yml \
---working-dir $WORKSPACE/ \
---no-clone \
---release $RELEASE \
-$VIRTHOST
+    --tags all \
+    --config $WORKSPACE/config/general_config/$CONFIG.yml \
+    --working-dir $WORKSPACE/ \
+    --no-clone \
+    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    $VIRTHOST
 popd

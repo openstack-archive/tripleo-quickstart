@@ -21,21 +21,20 @@ PLAYBOOK=$6
 
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
---ansible-debug \
---bootstrap \
---working-dir $WORKSPACE/ \
---tags all \
---no-clone \
---teardown all \
---requirements quickstart-role-requirements.txt \
---requirements $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/requirements_files/$REQUIREMENTS_FILE \
---config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG_FILE \
---extra-vars @$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/env_settings.yml \
---playbook $PLAYBOOK \
---extra-vars undercloud_instackenv_template=$WORKSPACE/$HW_ENV_DIR/instackenv.json \
---extra-vars network_environment_file=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/${NETWORK_ISOLATION}.yml \
---extra-vars nic_configs_dir=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/nic_configs/ \
---release $RELEASE \
-$VIRTHOST
+    --ansible-debug \
+    --bootstrap \
+    --working-dir $WORKSPACE/ \
+    --tags all \
+    --no-clone \
+    --teardown all \
+    --requirements quickstart-role-requirements.txt \
+    --requirements $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/requirements_files/$REQUIREMENTS_FILE \
+    --config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG_FILE \
+    --extra-vars @$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/env_settings.yml \
+    --playbook $PLAYBOOK \
+    --extra-vars undercloud_instackenv_template=$WORKSPACE/$HW_ENV_DIR/instackenv.json \
+    --extra-vars network_environment_file=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/${NETWORK_ISOLATION}.yml \
+    --extra-vars nic_configs_dir=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/nic_configs/ \
+    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    $VIRTHOST
 popd
-

@@ -16,9 +16,9 @@ TARGET_VERSION=$8
 SKIP_TAGS="undercloud-post-install"
 
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
-    LOCATION='stable'
+    unset REL_TYPE
 elif [ "$JOB_TYPE" = "promote" ]; then
-    LOCATION='testing'
+    REL_TYPE="testing"
 else
     echo "Job type must be one of gate, periodic, or promote"
     exit 1
@@ -32,7 +32,6 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
-    -e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --extra-vars upgrade_delorean_hash=$DELOREAN_HASH \
     --extra-vars major_upgrade=$MAJOR_UPGRADE \
@@ -46,6 +45,6 @@ bash quickstart.sh \
     --teardown all \
     --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
     --playbook upgrade.yml \
-    --release $RELEASE \
+    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
 popd

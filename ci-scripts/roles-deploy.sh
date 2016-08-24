@@ -6,14 +6,15 @@ set -eux
 # CONFIG and JOB_TYPE are not used here, but kept for
 # consistency with other jobs to make JJB cleaner.
 RELEASE=$1
+# unused variable in script, kept for consistency
 BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ] || [ "$JOB_TYPE" = "dlrn-gate" ]; then
-    LOCATION='stable'
+    unset REL_TYPE
 elif [ "$JOB_TYPE" = "promote" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
-    LOCATION='testing'
+    REL_TYPE="testing"
 else
     echo "Job type must be one of gate, dlrn-gate, dlrn-gate-testing, periodic, or promote"
     exit 1
@@ -33,7 +34,7 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --bootstrap \
         --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
         --playbook gate-roles.yml \
-        --release $RELEASE \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
 
     # once more to let the gating role be gated as well
@@ -43,7 +44,7 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --bootstrap \
         --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
         --playbook gate-roles.yml \
-        --release $RELEASE \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
 fi
 
@@ -58,7 +59,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
         --playbook dlrn-gate.yml \
         --tags all \
         --teardown all \
-        --release $RELEASE \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
     # skip provisioning and run the gate using the previously built RPMs
     bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
@@ -66,13 +67,12 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
         --no-clone \
         --retain-inventory \
         --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --extra-vars undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
         --playbook tripleo-roles.yml \
         --skip-tags provision,undercloud-post-install \
         --tags all \
         --teardown none \
-        --release $RELEASE \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
 else
     # run the gate job using gated roles and the role based playbook
@@ -81,11 +81,10 @@ else
         --no-clone \
         --bootstrap \
         --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
-        --extra-vars undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
         --playbook tripleo-roles.yml \
         --skip-tags undercloud-post-install \
         --tags all \
-        --release $RELEASE \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
 fi

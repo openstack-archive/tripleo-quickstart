@@ -25,19 +25,18 @@ PLAYBOOK=$8
 
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
---ansible-debug \
---bootstrap \
---working-dir $WORKSPACE/ \
---tags all \
---no-clone \
---requirements quickstart-role-requirements.txt \
---requirements $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/requirements_files/$REQUIREMENTS_FILE \
---config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG_FILE \
---extra-vars @$OVB_SETTINGS_FILE \
---extra-vars @$OVB_CREDS_FILE \
---extra-vars @$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/env_settings.yml \
---playbook $PLAYBOOK \
---release $RELEASE \
-localhost
+    --ansible-debug \
+    --bootstrap \
+    --working-dir $WORKSPACE/ \
+    --tags all \
+    --no-clone \
+    --requirements quickstart-role-requirements.txt \
+    --requirements $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/requirements_files/$REQUIREMENTS_FILE \
+    --config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG_FILE \
+    --extra-vars @$OVB_SETTINGS_FILE \
+    --extra-vars @$OVB_CREDS_FILE \
+    --extra-vars @$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/env_settings.yml \
+    --playbook $PLAYBOOK \
+    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    localhost
 popd
-

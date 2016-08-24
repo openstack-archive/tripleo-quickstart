@@ -7,6 +7,7 @@ set -eux
 # CONFIG and JOB_TYPE are not used here, but kept for
 # consistency with other jobs to make JJB cleaner.
 RELEASE=$1
+# unused variable in script, kept for consistency
 BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
@@ -17,8 +18,11 @@ JOB_TYPE=$4
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
+# CI_ENV is set on the slave running the jobs
+# REL_TYPE can be specific release type like 'testing'
+
 bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
-    --release $RELEASE \
+    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST

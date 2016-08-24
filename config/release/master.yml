@@ -1,7 +1,7 @@
 release: master
-undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/stable/undercloud.qcow2
-overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/stable/overcloud-full.tar
-ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/stable/ironic-python-agent.tar
+undercloud_image_url: http://images.rdoproject.org/master/delorean/current-tripleo/stable/undercloud.qcow2
+overcloud_image_url: http://images.rdoproject.org/master/delorean/current-tripleo/stable/overcloud-full.tar
+ipa_image_url: http://images.rdoproject.org/master/delorean/current-tripleo/stable/ironic-python-agent.tar
 
 # release specific ansible variables
 
