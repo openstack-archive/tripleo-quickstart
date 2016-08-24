@@ -379,6 +379,12 @@ export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
 #set the ansible ssh.config options if not already set.
 source $OOOQ_DIR/ansible_ssh_env.sh
 
+# (trown) This is so that we ensure separate ssh sockets for
+# concurrent jobs. Without this, two jobs running in parallel
+# would try to use the same undercloud-stack socket.
+socketdir=$(mktemp -d /tmp/sockXXXXXX)
+export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
+
 if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 ]; then
     # Clear out inventory file to avoid tripping over data
     # from a previous invocation

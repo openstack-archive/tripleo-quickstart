@@ -18,12 +18,6 @@ else
     exit 1
 fi
 
-# (trown) This is so that we ensure separate ssh sockets for
-# concurrent jobs. Without this, two jobs running in parallel
-# would try to use the same undercloud-stack socket.
-socketdir=$(mktemp -d /tmp/sockXXXXXX)
-export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
-
 pushd $WORKSPACE/tripleo-quickstart
 
 # run scale phase 1 against the gate job: Scale new compute node -> Delete original compute node

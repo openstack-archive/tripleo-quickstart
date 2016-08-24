@@ -24,12 +24,6 @@ else
     exit 1
 fi
 
-# (trown) This is so that we ensure separate ssh sockets for
-# concurrent jobs. Without this, two jobs running in parallel
-# would try to use the same undercloud-stack socket.
-socketdir=$(mktemp -d /tmp/sockXXXXXX)
-export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
-
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
     -e undercloud_image_url="http://artifacts.ci.centos.org/artifacts/rdo/images/$RELEASE/$BUILD_SYS/$LOCATION/undercloud.qcow2" \
