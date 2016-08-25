@@ -28,10 +28,8 @@ fi
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-pushd $WORKSPACE/tripleo-quickstart
-
 # run scale phase 1 against the gate job: Scale new compute node -> Delete original compute node
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --bootstrap \
     --no-clone \
@@ -48,7 +46,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
 #     one /additional/ compute node and then delete the /original/ compute node.
 #     The deleted node is still in memory and subsequently will cause issues
 #     while re-inventorying and validating the overcloud
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --retain-inventory \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
@@ -56,5 +54,3 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     --playbook scale_nodes_verify.yml \
     $VIRTHOST
-
-popd

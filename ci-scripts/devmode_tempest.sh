@@ -16,7 +16,7 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 pushd $WORKSPACE/tripleo-quickstart
 
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --tags all \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --working-dir $WORKSPACE/ \
@@ -26,7 +26,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --playbook quickstart-extras.yml \
     $VIRTHOST
 
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --tags all \
     --working-dir $WORKSPACE/ \
     --no-clone \

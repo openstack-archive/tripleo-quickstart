@@ -26,7 +26,6 @@ PLAYBOOK=$8
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
     --ansible-debug \
     --bootstrap \
@@ -42,4 +41,3 @@ bash quickstart.sh \
     --playbook $PLAYBOOK \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     localhost
-popd
