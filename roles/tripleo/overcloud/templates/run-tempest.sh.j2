@@ -1,4 +1,5 @@
-## * Run tempest tests.
+## Run tempest tests
+## -----------------
 ## ::
 
 ./tools/with_venv.sh ./tools/run-tests.sh {{tempest_regex}} --concurrency {{ tempest_workers }} --skip-file {{ working_dir }}/skipfile 2>&1 > ~/tempest_console.log && exitval=0 || exitval=$?

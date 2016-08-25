@@ -3,13 +3,11 @@
 set -eux
 
 ### --start_docs
-## --------------------------------------------------
 ## Prepare the undercloud for deploying the overcloud
-## --------------------------------------------------
+## ==================================================
 
-## ########################
 ## Prepare Your Environment
-## ########################
+## ------------------------
 
 ## * Source in the undercloud credentials.
 ## ::
@@ -20,6 +18,7 @@ source {{ working_dir }}/stackrc
 ## ::
 
 openstack overcloud image upload {% if bash_deploy_ramdisk %}--old-deploy-image{% endif %}
+
 
 ## * Register nodes with Ironic.
 ## ::
@@ -36,9 +35,8 @@ openstack baremetal introspection bulk start
 
 {% endif %}
 
-## ##############
 ## Flavor Details
-## ##############
+## --------------
 
 ## * Create flavor oooq_<name> for each flavor in the ansible `flavors` variable.
 
@@ -71,9 +69,8 @@ openstack flavor set --property "{{propname}}={{propval}}" oooq_{{ name }}
 
 {% if network_isolation == true and ipv6 == false %}
 
-## ################
 ## Setup Networking
-## ################
+## ---------------
 
 ## * Enable NAT for "external" network.
 ## ::
