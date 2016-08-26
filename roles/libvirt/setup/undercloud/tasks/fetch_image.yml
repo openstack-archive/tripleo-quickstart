@@ -52,7 +52,7 @@
     # Get the expected checksum for the remote image.
     - name: Get image expected checksum
       command: >
-        curl -sf {{ image.url }}.md5
+        curl -sfL {{ image.url }}.md5
       register: md5_expected
 
     - name: Set path to cached image [upstream]
@@ -80,7 +80,7 @@
     # to continue interrupted downloads.
     - name: Get image
       command: >
-        curl -sf -C- -o _{{ image.name }}.{{ image.type}} {{ image.url }}
+        curl -sfL -C- -o _{{ image.name }}.{{ image.type}} {{ image.url }}
       args:
         chdir: "{{ image_cache_dir }}"
       register: curl_result
