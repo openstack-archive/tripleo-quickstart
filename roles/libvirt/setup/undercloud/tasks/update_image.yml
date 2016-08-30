@@ -9,7 +9,7 @@
     - url: "https://trunk.rdoproject.org/centos7/current/delorean.repo"
       dest: "{{working_dir}}/delorean-current.repo"
     - url: "http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-master-tripleo/delorean.repo"
-      dest: "{{working_dir}}/delorean-tripleo.repo"
+      dest: "{{working_dir}}/delorean.repo"
     - url: "https://trunk.rdoproject.org/centos7/delorean-deps.repo"
       dest: "{{working_dir}}/delorean-deps.repo"
 
@@ -21,7 +21,7 @@
   with_items:
     - dest: "{{working_dir}}/delorean-current.repo"
       replace: "[delorean-current]"
-    - dest: "{{working_dir}}/delorean-tripleo.repo"
+    - dest: "{{working_dir}}/delorean.repo"
       replace: "[delorean-tripleo]"
 
 - name: alter repo priority
@@ -32,7 +32,7 @@
   with_items:
     - dest: "{{working_dir}}/delorean-current.repo"
       replace: "priority=10"
-    - dest: "{{working_dir}}/delorean-tripleo.repo"
+    - dest: "{{working_dir}}/delorean.repo"
       replace: "priority=20"
     - dest: "{{working_dir}}/delorean-deps.repo"
       replace: "priority=30"
@@ -59,8 +59,9 @@
 - name: upload repos on image and run update
   command: >
     virt-customize -v --smp 2 -m 4096 -a {{ item.path }}
+    --delete '/etc/yum.repos.d/delorean*'
     --upload delorean-current.repo:/etc/yum.repos.d/delorean-current.repo
-    --upload delorean-tripleo.repo:/etc/yum.repos.d/delorean-tripleo.repo
+    --upload delorean.repo:/etc/yum.repos.d/delorean.repo
     --upload delorean-deps.repo:/etc/yum.repos.d/delorean-deps.repo
     --run update_image-{{ item.inode }}.sh
   args:
