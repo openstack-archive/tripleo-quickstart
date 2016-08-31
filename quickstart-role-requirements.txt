@@ -1,13 +1,15 @@
+# This requirements file is deprecated, see quickstart-extras-requirements.txt
+
 # Roles
 git+https://github.com/redhat-openstack/ansible-role-tripleo-cleanup-nfo.git/#egg=ansible-role-tripleo-cleanup-nfo
 git+https://github.com/redhat-openstack/ansible-role-tripleo-collect-logs.git/#egg=ansible-role-tripleo-collect-logs
 git+https://github.com/redhat-openstack/ansible-role-tripleo-gate.git#egg=ansible-role-tripleo-gate
-git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud.git#egg=ansible-role-tripleo-overcloud
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud.git@0a9c8d06e1c126e2469f5eaa10331bead9e9cd6d#egg=ansible-role-tripleo-overcloud
 git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-validate.git#egg=ansible-role-tripleo-overcloud-validate
 git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-upgrade.git#egg=ansible-role-tripleo-overcloud-upgrade
 git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-scale-nodes.git#egg=ansible-role-tripleo-overcloud-scale-nodes
 git+https://github.com/redhat-openstack/ansible-role-tripleo-tempest.git#egg=ansible-role-tripleo-tempest
-git+https://github.com/redhat-openstack/ansible-role-tripleo-undercloud-post.git/#egg=ansible-role-tripleo-undercloud-post
+git+https://github.com/redhat-openstack/ansible-role-tripleo-undercloud-post.git@ca01e438ae219416895b6bc07bac112771134e2b#egg=ansible-role-tripleo-undercloud-post
 
 # To pull in local development changes
 #file:///<dir>/ansible-role-foo/#egg=ansible-role-foo
