@@ -1,0 +1,48 @@
+# Deploy a big HA OpenStack environment
+#
+# This will require (8192 * 6) == approx. 48GB for the overcloud
+# nodes, plus another 12GB for the undercloud, for a total of around
+# 60GB.
+control_memory: 8192
+compute_memory: 8192
+
+undercloud_memory: 12288
+
+# Giving the undercloud additional CPUs can greatly improve heat's
+# performance (and result in a shorter deploy time).
+# Using a total of 10 vcpus (1 is the default for overcloud nodes)
+undercloud_vcpu: 4
+
+
+# Create three controller nodes and three compute nodes.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+  - name: control_1
+    flavor: control
+  - name: control_2
+    flavor: control
+
+  - name: compute_0
+    flavor: compute
+  - name: compute_1
+    flavor: compute
+  - name: compute_2
+    flavor: compute
+
+# We don't need introspection in a virtual environment (because we are
+# creating all the "hardware" we really know the necessary
+# information).
+step_introspect: false
+
+# Tell tripleo about our environment.
+network_isolation: true
+extra_args: >-
+  --compute-scale 3
+  --control-scale 3
+  --neutron-network-type vxlan
+  --neutron-tunnel-types vxlan
+  --ntp-server pool.ntp.org
+test_tempest: false
+test_ping: true
+enable_pacemaker: true
