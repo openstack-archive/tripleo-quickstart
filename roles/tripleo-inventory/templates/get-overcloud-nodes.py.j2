@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+
+import os
+
+from novaclient import client
+
+nova = client.Client(2,
+                     os.environ.get("OS_USERNAME"),
+                     os.environ.get("OS_PASSWORD"),
+                     os.environ.get("OS_TENANT_NAME"),
+                     os.environ.get("OS_AUTH_URL"))
+print {server.name: server.networks['ctlplane'][0] for server in nova.servers.list()}

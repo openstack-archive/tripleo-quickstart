@@ -1,0 +1,46 @@
+# This is the playbook used by the `quickstart.sh` script.
+
+# The [provision.yml](provision.yml.html) playbook is responsible for
+# creating an inventory entry for our `virthost` and for creating an
+# unprivileged user on that host for use by our virtual environment.
+- include: provision.yml
+  tags:
+    - provision
+
+# The `environment/setup` role performs any tasks that require `root`
+# access on the target host.
+- name: Install libvirt packages and configure networks
+  hosts: virthost
+  tags:
+    - environment
+  roles:
+    - environment/setup
+
+# The `libvirt/setup` role creates the undercloud and overcloud
+# virtual machines.
+- name:  Setup undercloud and overcloud vms
+  hosts: virthost
+  gather_facts: yes
+  roles:
+    - libvirt/teardown
+    - libvirt/setup
+
+# Add the undercloud node to the generated
+# inventory.
+- name:  Inventory the undercloud
+  hosts: undercloud
+  gather_facts: no
+  vars:
+      inventory: undercloud
+  roles:
+    - tripleo-inventory
+
+# DEPLOY ALL THE THINGS!  Depending on the currently selected set of
+# tags, this will deploy the undercloud, deploy the overcloud, and
+# perform some validation tests on the overcloud.
+- name:  Install undercloud and deploy overcloud
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - tripleo/undercloud
+    - tripleo/overcloud

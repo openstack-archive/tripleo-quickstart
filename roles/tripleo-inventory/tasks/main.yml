@@ -1,0 +1,121 @@
+---
+
+- name: Ensure gather_facts has been run against localhost
+  setup:
+  delegate_to: localhost
+  delegate_facts: True
+  when: hostvars['localhost'].ansible_user_dir is not defined
+
+- when: inventory == 'all'
+  block:
+    #required for liberty based deployments
+    - name: copy get-overcloud-nodes.py to undercloud
+      template:
+        src: 'get-overcloud-nodes.py.j2'
+        dest: '{{ working_dir }}/get-overcloud-nodes.py'
+        mode: 0755
+
+    #required for liberty based deployments
+    - name: fetch overcloud node names and IPs
+      shell: >
+          source {{ working_dir }}/stackrc;
+          python {{ working_dir }}/get-overcloud-nodes.py
+      register: registered_overcloud_nodes
+
+    - name: list the overcloud nodes
+      debug: var=registered_overcloud_nodes.stdout
+
+    - name: fetch the undercloud ssh key
+      fetch:
+        src: '{{ working_dir }}/.ssh/id_rsa'
+        dest: '{{ local_working_dir }}/id_rsa_overcloud'
+        flat: yes
+        mode: 0400
+
+    # add host to the ansible group formed from its type
+    # novacompute nodes are added as compute for backwards compatibility
+    - name: add overcloud node to ansible
+      with_dict: '{{ registered_overcloud_nodes.stdout | default({}) }}'
+      add_host:
+        name: '{{ item.key }}'
+        groups: "overcloud,{{ item.key | regex_replace('overcloud-(?:nova)?([a-zA-Z0-9_]+)-[0-9]+$', '\\1') }}"
+        ansible_host: '{{ item.key }}'
+        ansible_fqdn: '{{ item.value }}'
+        ansible_user: 'heat-admin'
+        ansible_private_key_file: "{{ local_working_dir }}/id_rsa_overcloud"
+
+#required for regeneration of ssh.config.ansible
+- name: set_fact for undercloud ip
+  set_fact: undercloud_ip={{ hostvars['undercloud'].undercloud_ip }}
+  when: hostvars['undercloud'] is defined and hostvars['undercloud'].undercloud_ip is defined
+
+#readd the undercloud to reset the ansible_ssh parameters set in quickstart
+- name: Add undercloud vm to inventory
+  add_host:
+    name: undercloud
+    groups: undercloud
+    ansible_host: undercloud
+    ansible_fqdn: undercloud
+    ansible_user: stack
+    ansible_private_key_file: '{{ local_working_dir }}/id_rsa_undercloud'
+    ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.local.ansible"'
+    undercloud_ip: "{{ undercloud_ip }}"
+  when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined and undercloud_ip is defined
+
+#required for regeneration of ssh.config.ansible
+- name: set undercloud ssh proxy command
+  set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+      -o ConnectTimeout=60 -i {{ hostvars[groups['virthost'][0]].ansible_private_key_file }}
+      {{ ansible_user }}@{{ hostvars[groups['virthost'][0]].ansible_host }}
+      -W {{ undercloud_ip }}:22"
+  when: hostvars[groups['virthost'][0]].ansible_private_key_file is defined and undercloud_ip is defined
+
+#required for regeneration of ssh.config.ansible
+- name: set undercloud ssh proxy command
+  set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+      -o ConnectTimeout=60 -i {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/id_rsa_virt_power
+      {{ ansible_user }}@{{ hostvars['localhost'].ansible_default_ipv4.address }}
+      -W {{ undercloud_ip }}:22"
+  when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined and undercloud_ip is defined
+
+- name: create inventory from template
+  delegate_to: localhost
+  template:
+    src: 'inventory.j2'
+    dest: '{{ local_working_dir }}/hosts'
+
+- name: regenerate ssh config
+  delegate_to: localhost
+  template:
+    src: 'ssh_config.j2'
+    dest: '{{ local_working_dir }}/ssh.config.ansible'
+    mode: 0755
+  when: undercloud_ip is defined
+
+- name: regenerate ssh config for ssh connections from the virthost
+  delegate_to: localhost
+  template:
+    src: 'ssh_config_localhost.j2'
+    dest: '{{ local_working_dir }}/ssh.config.local.ansible'
+    mode: 0755
+  when: undercloud_ip is defined
+
+# just setup the ssh.config.ansible and hosts file for the virthost
+- name: check for existence of identity key
+  delegate_to: localhost
+  stat: path="{{ local_working_dir }}/id_rsa_virt_power"
+  when: undercloud_ip is not defined
+  register: result_stat_id_rsa_virt_power
+
+- name: set fact used in ssh_config_no_undercloud.j2 to determine if IdentityFile should be included
+  set_fact:
+    id_rsa_virt_power_exists: true
+  when: undercloud_ip is not defined and result_stat_id_rsa_virt_power.stat.exists == True
+
+- name: regenerate ssh config, if no undercloud has been launched.
+  delegate_to: localhost
+  template:
+    src: 'ssh_config_no_undercloud.j2'
+    dest: '{{ local_working_dir }}/ssh.config.ansible'
+    mode: 0755
+  when: undercloud_ip is not defined
