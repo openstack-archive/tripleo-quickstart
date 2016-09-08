@@ -19,6 +19,9 @@ REQUIREMENTS_FILE=$4
 CONFIG_FILE=$5
 PLAYBOOK=$6
 
+socketdir=$(mktemp -d /tmp/sockXXXXXX)
+export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
+
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
     --ansible-debug \
