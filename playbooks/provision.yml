@@ -37,5 +37,6 @@
 - name: Run setup again on virthost
   hosts: virthost
   tasks:
-    - setup:
+    - name: Force-refresh facts
+      setup:
 

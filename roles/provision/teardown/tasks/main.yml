@@ -4,6 +4,7 @@
     id -u {{ non_root_user }}
   register: non_root_uid
   ignore_errors: true
+  changed_when: false
 
 # If the non-root user exists, perform a variety of cleanup tasks.
 - when: non_root_uid|success
@@ -56,6 +57,9 @@
     # later on.  We can't remove the directory itself -- it's a tmpfs
     # mountpoint -- but we can remove the content.
     - name: Remove non-root user ephemeral files
-      shell: >
-        rm -rf /run/user/{{ non_root_uid.stdout }}/*
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_fileglob:
+        - /run/user/{{ non_root_uid.stdout }}/*
       become: true
