@@ -13,8 +13,10 @@ JOB_TYPE=$4
 
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ] || [ "$JOB_TYPE" = "dlrn-gate" ]; then
     unset REL_TYPE
-elif [ "$JOB_TYPE" = "promote" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
-    REL_TYPE="testing"
+elif [ "$JOB_TYPE" = "promote" ]; then
+    REL_TYPE=$LOCATION
+elif [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
+    REL_TYPE="current-tripleo"
 else
     echo "Job type must be one of gate, dlrn-gate, dlrn-gate-testing, periodic, or promote"
     exit 1
