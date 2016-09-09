@@ -23,6 +23,9 @@ OVB_SETTINGS_FILE=$6
 OVB_CREDS_FILE=$7
 PLAYBOOK=$8
 
+socketdir=$(mktemp -d /tmp/sockXXXXXX)
+export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
+
 pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
     --ansible-debug \
