@@ -18,7 +18,7 @@ SKIP_TAGS="undercloud-post-install"
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     unset REL_TYPE
 elif [ "$JOB_TYPE" = "promote" ]; then
-    REL_TYPE="testing"
+    REL_TYPE=$LOCATION
 else
     echo "Job type must be one of gate, periodic, or promote"
     exit 1
