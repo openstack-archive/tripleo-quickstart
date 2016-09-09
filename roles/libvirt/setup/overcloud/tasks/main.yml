@@ -84,6 +84,24 @@
         uri: "{{ libvirt_uri }}"
       with_items: "{{ overcloud_nodes }}"
 
+    # Create additional blockdevices for each objectstorage flavor node
+    # These are sparse files, not using space if unused
+    - name: Create additional blockdevice for objectstorage nodes
+      command: >
+        dd if=/dev/zero of={{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img bs=1 count=0 seek=1G
+      when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
+      with_nested:
+        - "{{ overcloud_nodes }}"
+        - ["vdb", "vdc", "vdd"]
+
+    - name: Attach additional blockdevices to overcloud objectstorage VMs
+      command: >
+        virsh attach-disk --config {{ item[0].name }} {{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img {{ item[1] }}
+      when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
+      with_nested:
+        - "{{ overcloud_nodes }}"
+        - ["vdb", "vdc", "vdd"]
+
 # Generate the `instackenv.json` configuration file.  Note that this
 # task *must* occur after the above overcloud tasks, because if
 # `overcloud_nodes` is defined the template depends on the

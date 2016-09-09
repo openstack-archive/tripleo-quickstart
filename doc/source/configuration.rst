@@ -47,11 +47,26 @@ These variables control the resources assigned to ceph storage nodes:
 -  ``ceph_memory``
 -  ``ceph_vcpu``
 
+There is another option ``extradevices`` that can be used to create three
+additional blockdevices ``vdb``, ``vdc`` and ``vdd`` per node. By default it
+is only enabled on the objectstorage node flavor.
+
 Setting number and type of overcloud nodes
 ------------------------------------------
 
 The ``overcloud_nodes`` variable can be used to change the number and
-type of nodes deployed in your overcloud. The default looks like this::
+type of nodes deployed in your overcloud. The default
+(``config/general_config/minimal.yml``) looks like this::
+
+    overcloud_nodes:
+      - name: control_0
+        flavor: control
+
+      - name: compute_0
+        flavor: compute
+
+You can use your own config if you want to test a different setup. For
+example::
 
     overcloud_nodes:
       - name: control_0
@@ -66,6 +81,9 @@ type of nodes deployed in your overcloud. The default looks like this::
 
       - name: ceph_0
         flavor: ceph
+
+      - name: swift_0
+        flavor: objectstorage
 
 Specifying custom heat templates
 --------------------------------
