@@ -5,4 +5,3 @@ pbr>=1.6
 setuptools>=11.3
 
 # Roles
-git+https://github.com/redhat-openstack/ansible-role-tripleo-inventory.git#egg=ansible-role-tripleo-inventory
