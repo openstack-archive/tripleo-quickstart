@@ -24,3 +24,22 @@ network_isolation: true
 prepare_tempest: true
 test_ping: false
 test_tempest: true
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - undercloud-post-install
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - undercloud-post-install
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
