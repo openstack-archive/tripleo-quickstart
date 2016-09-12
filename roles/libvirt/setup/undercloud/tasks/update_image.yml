@@ -60,6 +60,7 @@
   command: >
     virt-customize -v --smp 2 -m 4096 -a {{ item.path }}
     --delete '/etc/yum.repos.d/delorean*'
+    --delete '/etc/yum.repos.d/epel*'
     --upload delorean-current.repo:/etc/yum.repos.d/delorean-current.repo
     --upload delorean.repo:/etc/yum.repos.d/delorean.repo
     --upload delorean-deps.repo:/etc/yum.repos.d/delorean-deps.repo

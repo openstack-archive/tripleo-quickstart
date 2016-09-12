@@ -22,7 +22,6 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --extra-vars @$WORKSPACE/config/general_config/devmode.yml \
-    --release "${RELEASE}-tripleo" \
     --extra-vars test_ping=False \
     $VIRTHOST
 
