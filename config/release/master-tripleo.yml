@@ -1,4 +1,0 @@
-release: master
-undercloud_image_url: http://8.43.87.241/builds/current-tripleo/instack.qcow2
-overcloud_image_url: http://8.43.87.241/builds/current-tripleo/overcloud-full.tar
-ipa_image_url: http://8.43.87.241/builds/current-tripleo/ipa_images.tar

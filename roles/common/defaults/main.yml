@@ -7,6 +7,11 @@ local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 # undercloud image.
 image_cache_dir: "/var/cache/tripleo-quickstart/images"
 
+# This determines whether to download a pre-built undercloud.qcow2 or
+# whether to instead use an overcloud-full.qcow2 and convert it on
+# the fly. The default is to use a pre-built undercloud.qcow2.
+overcloud_as_undercloud: false
+
 # These defaults are used if there are no flavor-specific
 # overrides configured.
 default_disk: 50
@@ -118,3 +123,9 @@ enable_vnc_console: false
 # TODO(trown): It would be better to write a release into the image itself
 # and set this variable from there.
 release: mitaka
+
+# This option controls whether or not to use the repo setup for TripleO
+# development. Since this requires some other options to be funtional,
+# it is best to include config/general_config/devmode.yml rather than
+# just flipping this to true.
+devmode: false

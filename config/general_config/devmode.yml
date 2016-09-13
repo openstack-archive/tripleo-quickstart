@@ -1,9 +1,6 @@
 devmode: true
-force_cached_images: true
+overcloud_as_undercloud: true
 images:
-    - name: undercloud
-      url: "{{ undercloud_image_url }}"
-      type: qcow2
     - name: overcloud-full
       url: "{{ overcloud_image_url }}"
       type: tar
@@ -17,3 +14,8 @@ inject_images:
     - "overcloud-full.qcow2"
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
+# devmode is only valid on master, so we explicitly set
+# release variables here
+release: master
+overcloud_image_url: http://66.187.229.139/builds/current-tripleo/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds/current-tripleo/ipa_images.tar

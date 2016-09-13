@@ -1,0 +1,20 @@
+#!/bin/bash
+
+yum remove -y cloud-init
+yum install -y python-tripleoclient openstack-tempest python-aodh-tests python-ceilometer-tests \
+python-heat-tests python-ironic-tests python-keystone-tests python-manila-tests \
+python-mistral-tests python-neutron-tests python-sahara-tests python-zaqar-tests
+
+useradd stack
+echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
+chmod 0440 /etc/sudoers.d/stack
+
+mkdir /home/stack/.ssh
+
+echo "127.0.0.1  localhost undercloud" > /etc/hosts
+echo "HOSTNAME=undercloud" >> /etc/sysconfig/network
+echo "undercloud" > /etc/hostname
+
+chown -R stack:stack /home/stack/
+
+sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config

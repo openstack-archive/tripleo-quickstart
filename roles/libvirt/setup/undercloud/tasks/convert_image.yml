@@ -1,0 +1,48 @@
+- name: generate convert script
+  template:
+    src: convert_image.sh.j2
+    dest: "{{ working_dir}}/convert_image.sh"
+
+- name: copy overcloud-full.qcow2 to undercloud.qcow2
+  command: >
+    cp {{ working_dir}}/overcloud-full.qcow2 {{ working_dir}}/undercloud.qcow2
+
+# Resize the undercloud image using qemu-img resize
+- name: Resize the undercloud image using qemu-image resize
+  command: >
+    qemu-img resize {{ working_dir }}/undercloud.qcow2 {{ flavors[undercloud_node.name].disk }}G
+
+- name: Resize the filesystem in the undercloud image
+  command: >
+    virt-customize --run-command "resize2fs /dev/sda" -a {{ working_dir }}/undercloud.qcow2
+  environment:
+    LIBGUESTFS_BACKEND: direct
+  ignore_errors: true
+
+- name: Resize the filesystem in the undercloud image
+  command: >
+    virt-customize --run-command "xfs_growfs /" -a {{ working_dir }}/undercloud.qcow2
+  environment:
+    LIBGUESTFS_BACKEND: direct
+  ignore_errors: true
+
+- name: convert image
+  command: >
+    virt-customize -v --smp 2 -m 4096 -a {{ working_dir }}/undercloud.qcow2
+    --run convert_image.sh
+  args:
+    chdir: "{{ working_dir }}"
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
+# Copy the overcloud and ipa images into the converted undercloud.qcow2
+- name: Inject additional images
+  command: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }}
+    --run-command 'chown stack:stack /home/stack/{{ item }}'
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  with_items: "{{ inject_images }}"

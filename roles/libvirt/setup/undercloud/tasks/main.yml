@@ -25,138 +25,121 @@
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- when: image_url is defined
+- when: undercloud_vol_check|failed
   block:
+  # Conditionally include a playbook for all the images specified
+  # in options that downloads, cache and extract if tar archived
+  # only if the images aren't already in volume pool
+  - include: fetch_image.yml
+    vars:
+      image: "{{ item }}"
+    with_items: "{{ images }}"
 
-  - name: Print warning about image_url deprecation
-    debug:
-      msg: image_url is deprecated please use undercloud_image_url
+  # inject any additional repo into images
+  - include: inject_gating_repo.yml
+    when: compressed_gating_repo is defined
 
-  - name: Set undercloud_image_url to image_url for backwards compatibility
-    set_fact:
-      undercloud_image_url: "{{ image_url }}"
+  # Conditionally include a playbook for all the images specified
+  # in options that updates images to the latest delorean version
+  - include: update_image.yml
+    when: devmode|bool
 
-# Conditionally include a playbook for all the images specified
-# in options that downloads, cache and extract if tar archived
-# only if the images aren't already in volume pool
-- include: fetch_image.yml
-  vars:
-    image: "{{ item }}"
-  when: undercloud_vol_check|failed
-  with_items: "{{ images }}"
+  # Converts an overcloud-full.qcow2 into a undercloud.qcow2
+  - include: convert_image.yml
+    when: overcloud_as_undercloud|bool
 
-# inject any additional repo into images
-- include: inject_gating_repo.yml
-  when: compressed_gating_repo is defined
+  # This copies the `instackenv.json` configuration file that we
+  # generated in the overcloud setup role to the undercloud host.
+  - name: Copy instackenv.json to appliance
+    command: >
+      virt-customize -a {{ working_dir }}/undercloud.qcow2
+      --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json
+      --run-command 'chown stack:stack /home/stack/instackenv.json'
+    environment:
+      LIBGUESTFS_BACKEND: direct
+      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-# Conditionally include a playbook for all the images specified
-# in options that updates images to the latest delorean version
-- include: update_image.yml
-  when: undercloud_vol_check|failed and devmode|default(false)|bool
+  # Copy the undercloud public key to the virthost, because we're going
+  # to inject it into the undercloud image in the next task.
+  - name: Copy undercloud ssh public key to working dir
+    copy:
+      src: "{{ undercloud_key }}.pub"
+      dest: "{{ working_dir }}/id_rsa_undercloud.pub"
 
-# This copies the `instackenv.json` configuration file that we
-# generated in the overcloud setup role to the undercloud host.
-- name: Copy instackenv.json to appliance
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json
-    --run-command 'chown stack:stack /home/stack/instackenv.json'
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  when: undercloud_vol_check|failed
+  # Copy the public key to `$HOME/.ssh/authorized_keys` for the `root`
+  # and `stack` user on the undercloud.
+  - name: Inject undercloud ssh public key to appliance
+    command: >
+      virt-customize -a {{ working_dir }}/undercloud.qcow2
+      --mkdir {{item.homedir}}/.ssh/
+      --upload '{{ working_dir }}/id_rsa_undercloud.pub:{{item.homedir}}/.ssh/authorized_keys'
+      --run-command 'chown -R {{item.owner}}:{{item.group}} {{item.homedir}}/.ssh'
+      --run-command 'chmod 0700 {{item.homedir}}/.ssh'
+      --run-command 'chmod 0600 {{item.homedir}}/.ssh/authorized_keys'
+    environment:
+      LIBGUESTFS_BACKEND: direct
+    with_items:
+      - homedir: /root
+        owner: root
+        group: root
+      - homedir: /home/stack
+        owner: stack
+        group: stack
 
-# Copy the undercloud public key to the virthost, because we're going
-# to inject it into the undercloud image in the next task.
-- name: Copy undercloud ssh public key to working dir
-  copy:
-    src: "{{ undercloud_key }}.pub"
-    dest: "{{ working_dir }}/id_rsa_undercloud.pub"
-  when: undercloud_vol_check|failed
+  # Perform an SELinux relabel on the undercloud image to avoid problems
+  # caused by bad labelling, since by default the undercloud runs in
+  # enforcing mode.
+  - name: Perform selinux relabel on undercloud image
+    command: >
+      virt-customize -a {{ working_dir }}/undercloud.qcow2
+      --selinux-relabel
+    environment:
+      LIBGUESTFS_BACKEND: direct
 
-# Copy the public key to `$HOME/.ssh/authorized_keys` for the `root`
-# and `stack` user on the undercloud.
-- name: Inject undercloud ssh public key to appliance
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --mkdir {{item.homedir}}/.ssh/
-    --upload '{{ working_dir }}/id_rsa_undercloud.pub:{{item.homedir}}/.ssh/authorized_keys'
-    --run-command 'chown -R {{item.owner}}:{{item.group}} {{item.homedir}}/.ssh'
-    --run-command 'chmod 0700 {{item.homedir}}/.ssh'
-    --run-command 'chmod 0600 {{item.homedir}}/.ssh/authorized_keys'
-  environment:
-    LIBGUESTFS_BACKEND: direct
-  with_items:
-    - homedir: /root
-      owner: root
-      group: root
-    - homedir: /home/stack
-      owner: stack
-      group: stack
-  when: undercloud_vol_check|failed
+  # Resize the undercloud image to our desired size.
+  # We only do the next three tasks if using a pre-created undercloud.qcow2.
+  # The convert script takes care of this for the overcloud as undercloud case.
+  - name: Resize undercloud image (create target image)
+    command: >
+      qemu-img create -f qcow2 -o preallocation=off
+      '{{ working_dir }}/undercloud-resized.qcow2'
+      '{{ flavors[undercloud_node.name].disk }}G'
+    when: not overcloud_as_undercloud|bool
 
-# Perform an SELinux relabel on the undercloud image to avoid problems
-# caused by bad labelling, since by default the undercloud runs in
-# enforcing mode.
-- name: Perform selinux relabel on undercloud image
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --selinux-relabel
-  environment:
-    LIBGUESTFS_BACKEND: direct
-  when: undercloud_vol_check|failed
+  - name: Resize undercloud image (call virt-resize)
+    command: >
+      virt-resize --expand /dev/sda1
+      '{{ working_dir }}/undercloud.qcow2'
+      '{{ working_dir }}/undercloud-resized.qcow2'
+    environment:
+      LIBGUESTFS_BACKEND: direct
+    when: not overcloud_as_undercloud|bool
 
-# This copies the overcloud and ipa images if we are not going to build
-# them
-- name: Inject additional images
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }}
-    --run-command 'chown stack:stack /home/stack/{{ item }}'
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  when: undercloud_vol_check|failed and devmode|default(false)|bool
-  with_items: "{{ inject_images }}"
+  - name: Rename resized image to original name
+    command: >
+      mv -f '{{ working_dir }}/undercloud-resized.qcow2'
+      '{{ working_dir }}/undercloud.qcow2'
+    when: not overcloud_as_undercloud|bool
 
-# Resize the undercloud image to our desired size.
-- name: Resize undercloud image (create target image)
-  command: >
-    qemu-img create -f qcow2 -o preallocation=off
-    '{{ working_dir }}/undercloud-resized.qcow2'
-    '{{ flavors[undercloud_node.name].disk }}G'
-  when: undercloud_vol_check|failed
+  # Create a libvirt volume and upload the undercloud image to
+  # libvirt.
+  - name: Create undercloud volume
+    command: >
+      virsh vol-create-as {{ libvirt_volume_pool}}
+      {{ undercloud_node.name }}.qcow2
+      {{ flavors[undercloud_node.name].disk }}G --format qcow2
+    environment:
+      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- name: Resize undercloud image (call virt-resize)
-  command: >
-    virt-resize --expand /dev/sda1
-    '{{ working_dir }}/undercloud.qcow2'
-    '{{ working_dir }}/undercloud-resized.qcow2'
-  environment:
-    LIBGUESTFS_BACKEND: direct
-  when: undercloud_vol_check|failed
-
-# Create a libvirt volume and upload the undercloud image to
-# libvirt.
-- name: Create undercloud volume
-  command: >
-    virsh vol-create-as {{ libvirt_volume_pool}}
-    {{ undercloud_node.name }}.qcow2
-    {{ flavors[undercloud_node.name].disk }}G --format qcow2
-  environment:
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  when: undercloud_vol_check|failed
-
-- name: Upload undercloud volume to storage pool
-  command: >
-    virsh -k 0 vol-upload --pool '{{ libvirt_volume_pool }}'
-    '{{ undercloud_node.name }}.qcow2'
-    '{{ working_dir }}/undercloud-resized.qcow2'
-  environment:
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  async: 600
-  poll: 10
-  when: undercloud_vol_check|failed
+  - name: Upload undercloud volume to storage pool
+    command: >
+      virsh -k 0 vol-upload --pool '{{ libvirt_volume_pool }}'
+      '{{ undercloud_node.name }}.qcow2'
+      '{{ working_dir }}/undercloud.qcow2'
+    environment:
+      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+    async: 600
+    poll: 10
 
 # Define (but do no start) the undercloud virtual machine.
 - name: Define undercloud vm
