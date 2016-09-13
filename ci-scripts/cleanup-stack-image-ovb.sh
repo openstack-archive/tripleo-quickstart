@@ -34,7 +34,7 @@ bash quickstart.sh \
 --ansible-debug \
 --bootstrap \
 --working-dir $WORKSPACE/ \
---requirements quickstart-role-requirements.txt \
+--requirements quickstart-extras-requirements.txt \
 --requirements $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/requirements_files/$REQUIREMENTS_FILE \
 --release $RELEASE \
 --extra-vars prefix=$PREFIX \

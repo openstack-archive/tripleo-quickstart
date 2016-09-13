@@ -17,9 +17,3 @@
     src: "{{ undercloud_install_script }}"
     dest: "{{ working_dir }}/undercloud-install.sh"
     mode: 0755
-
-- name: Create undercloud post-install script
-  template:
-    src: "{{ undercloud_post_install_script }}"
-    dest: "{{ working_dir }}/undercloud-post-install.sh"
-    mode: 0755

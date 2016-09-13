@@ -33,7 +33,7 @@ bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --tags all \
     --no-clone \
-    --requirements quickstart-role-requirements.txt \
+    --requirements quickstart-extras-requirements.txt \
     --requirements $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/requirements_files/$REQUIREMENTS_FILE \
     --config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG_FILE \
     --extra-vars @$OVB_SETTINGS_FILE \

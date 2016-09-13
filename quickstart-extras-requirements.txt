@@ -1,0 +1,23 @@
+# Roles
+
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-prep-config.git/#egg=ansible-role-tripleo-overcloud-prep-config
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-prep-flavors.git/#egg=ansible-role-tripleo-overcloud-prep-flavors
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-prep-images.git/#egg=ansible-role-tripleo-overcloud-prep-images
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-prep-network.git/#egg=ansible-role-tripleo-overcloud-prep-network
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud.git/#egg=ansible-role-tripleo-overcloud
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-validate.git/#egg=ansible-role-tripleo-overcloud-validate
+git+https://github.com/redhat-openstack/ansible-role-tripleo-cleanup-nfo.git/#egg=ansible-role-tripleo-cleanup-nfo
+git+https://github.com/redhat-openstack/ansible-role-tripleo-collect-logs.git/#egg=ansible-role-tripleo-collect-logs
+git+https://github.com/redhat-openstack/ansible-role-tripleo-gate.git#egg=ansible-role-tripleo-gate
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-upgrade.git#egg=ansible-role-tripleo-overcloud-upgrade
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-scale-nodes.git#egg=ansible-role-tripleo-overcloud-scale-nodes
+git+https://github.com/redhat-openstack/ansible-role-tripleo-tempest.git#egg=ansible-role-tripleo-tempest
+git+https://github.com/redhat-openstack/ansible-role-tripleo-baremetal-prep-virthost.git#egg=ansible-role-tripleo-baremetal-prep-virthost
+git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-prep-baremetal.git#egg=ansible-role-tripleo-overcloud-prep-baremetal
+git+https://github.com/redhat-openstack/ansible-role-tripleo-provision-heat.git#egg=ansible-role-tripleo-provision-heat
+git+https://github.com/redhat-openstack/ansible-role-tripleo-validate-ipmi.git#egg=ansible-role-tripleo-validate-ipmi
+
+
+# To pull in local development changes
+#file:///<dir>/ansible-role-foo/#egg=ansible-role-foo
+

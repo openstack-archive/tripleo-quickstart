@@ -33,5 +33,8 @@ bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    --bootstrap \
+    --requirements quickstart-extras-requirements.txt \
+    --playbook quickstart-extras.yml \
     $VIRTHOST
 popd

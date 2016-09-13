@@ -1,4 +1,0 @@
-- name: Deploy the overcloud
-  shell: |
-    {{ working_dir }}/overcloud-deploy.sh > {{ deploy_log }} 2>&1
-  when: step_deploy_overcloud

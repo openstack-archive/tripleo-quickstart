@@ -1,8 +1,0 @@
-{#
-This takes advantage of the fact that valid JSON is also
-valid YAML.  The default to_nice_yaml filter doesn't quote strings,
-which can cause unexpected implicit type conversion when the
-resulting YAML is consumed, whereas with JSON all strings are quoted.
-#}
-{% set parameter_defaults = {'parameter_defaults': network_environment_args} %}
-{{ parameter_defaults|to_nice_json }}
