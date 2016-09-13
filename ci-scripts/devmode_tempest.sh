@@ -21,7 +21,7 @@ bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --working-dir $WORKSPACE/ \
     --no-clone \
-    --extra-vars @$WORKSPACE/config/general_config/devmode.yml \
+    --release master-tripleo-ci
     --extra-vars test_ping=False \
     $VIRTHOST
 

@@ -90,7 +90,7 @@ by RDO. The incanation for a job using the quickstart defaults other than
 developer mode would be::
 
     bash quickstart.sh \
-            --extra-vars @config/general_config/devmode.yml \
+            --release master-tripleo-ci \
             $VIRTHOST
 
 Documentation
