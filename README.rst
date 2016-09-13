@@ -57,7 +57,7 @@ Deploying without instructions
 ------------------------------
 ::
 
-    bash quickstart.sh --tags all $VIRTHOST
+    bash quickstart.sh -p quickstart-extras.yml -r quickstart-extras-requirements.txt --tags all $VIRTHOST
 
 You may choose to execute an end to end deployment without displaying the
 instructions and scripts provided by default.  Using the ``--tags all`` flag
