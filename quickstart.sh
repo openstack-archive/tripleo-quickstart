@@ -37,7 +37,7 @@ install_deps () {
 
 print_logo () {
 
-if [ `tput cols` -lt 105 ]; then
+if [ `TERM=${TERM:-vt100} tput cols` -lt 105 ]; then
 
 cat <<EOBANNER
 ----------------------------------------------------------------------------
