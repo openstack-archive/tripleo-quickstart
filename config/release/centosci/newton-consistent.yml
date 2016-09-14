@@ -1,0 +1,4 @@
+release: newton
+undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/delorean/consistent/testing/undercloud.qcow2
+overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/delorean/consistent/testing/overcloud-full.tar
+ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/delorean/consistent/testing/ironic-python-agent.tar

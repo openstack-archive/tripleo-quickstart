@@ -1,7 +1,7 @@
 release: newton
-undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/delorean/stable/undercloud.qcow2
-overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/delorean/stable/overcloud-full.tar
-ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/delorean/stable/ironic-python-agent.tar
+undercloud_image_url: https://images.rdoproject.org/newton/delorean/consistent/stable/undercloud.qcow2
+overcloud_image_url: http://images.rdoproject.org/newton/delorean/consistent/stable/overcloud-full.tar
+ipa_image_url: http://images.rdoproject.org/newton/delorean/consistent/stable/ironic-python-agent.tar
 
 # release specific ansible variables
 
