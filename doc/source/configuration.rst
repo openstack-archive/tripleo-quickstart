@@ -134,3 +134,25 @@ You can select what to delete prior to the run of quickstart adding a
 -  all: same as virthost but user setup in virthost is deleted too
 -  none: will not teardown anything (useful for testing multiple actions
    against a deployed overcloud)
+
+Undercloud customization
+------------------------
+
+You can perform extra undercloud customization steps, using a script
+that will be applied with ``virt-customize`` on the final undercloud
+image. To allow that, you need to pass the ``undercloud_customize_script``
+var, that needs to point to an script living on your filesystem.
+That script will be copied to working directory, and applied on the
+undercloud. The script can be in Jinja template format, so you can benefit
+from ansible var substitutions.
+
+Overcloud customization
+-----------------------
+
+You can perform extra overclud customization steps, using a script
+that will be applied with ``virt-customize`` on the overcloud-full
+image. To allow that, you need to pass the ``overcloud_customize_script``
+var, that needs to point to an script living on your filesystem.
+That script will be copied to working directory, and applied on the
+overcloud. The script can be in Jinja template format, so you can benefit
+from ansible var substitutions.
