@@ -22,7 +22,6 @@ PLAYBOOK=$6
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
     --ansible-debug \
     --bootstrap \
@@ -40,4 +39,3 @@ bash quickstart.sh \
     --extra-vars nic_configs_dir=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/nic_configs/ \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
-popd

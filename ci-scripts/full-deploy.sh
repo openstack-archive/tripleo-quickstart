@@ -26,7 +26,6 @@ fi
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
     --tags all \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
@@ -37,4 +36,3 @@ bash quickstart.sh \
     --requirements quickstart-extras-requirements.txt \
     --playbook quickstart-extras.yml \
     $VIRTHOST
-popd

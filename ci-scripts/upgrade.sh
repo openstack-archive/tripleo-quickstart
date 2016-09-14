@@ -30,7 +30,6 @@ fi
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --extra-vars upgrade_delorean_hash=$DELOREAN_HASH \
@@ -43,8 +42,7 @@ bash quickstart.sh \
     --bootstrap \
     --tags all \
     --teardown all \
-    --requirements $WORKSPACE/tripleo-quickstart/quickstart-role-requirements.txt \
+    --requirements quickstart-role-requirements.txt \
     --playbook upgrade.yml \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
-popd

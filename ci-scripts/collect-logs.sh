@@ -18,12 +18,12 @@ export ANSIBLE_SSH_ARGS="-F ${SSH_CONFIG}"
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
     --retain-inventory \
-    --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
+    --requirements quickstart-extras-requirements.txt \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --playbook collect-logs.yml \
     --extra-vars @$WORKSPACE/config/general_config/centosci-logs.yml \

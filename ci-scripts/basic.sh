@@ -21,7 +21,7 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 # CI_ENV is set on the slave running the jobs
 # REL_TYPE can be specific release type like 'testing'
 
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \

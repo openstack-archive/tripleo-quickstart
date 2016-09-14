@@ -30,21 +30,21 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 if [ "$JOB_TYPE" = "gate" ]; then
     # set up the gated repos and modify the requirements file to use them
-    bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+    bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
+        --requirements quickstart-extras-requirements.txt \
         --playbook gate-roles.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
 
     # once more to let the gating role be gated as well
-    bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+    bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
+        --requirements quickstart-extras-requirements.txt \
         --playbook gate-roles.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
@@ -52,19 +52,19 @@ fi
 
 if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
     # provison the virthost and build the gated DLRN packages
-    bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+    bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
         --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
+        --requirements quickstart-extras-requirements.txt \
         --playbook dlrn-gate.yml \
         --tags all \
         --teardown all \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $VIRTHOST
     # skip provisioning and run the gate using the previously built RPMs
-    bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+    bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
         --retain-inventory \
@@ -78,11 +78,11 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-testing" ]; then
         $VIRTHOST
 else
     # run the gate job using gated roles and the role based playbook
-    bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+    bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
+        --requirements quickstart-extras-requirements.txt \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
         --playbook quickstart-extras.yml \
         --tags all \

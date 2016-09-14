@@ -32,7 +32,7 @@ fi
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
+bash quickstart.sh \
     --tags all \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --working-dir $WORKSPACE/ \
