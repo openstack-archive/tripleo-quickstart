@@ -126,6 +126,6 @@ release: mitaka
 
 # This option controls whether or not to use the repo setup for TripleO
 # development. Since this requires some other options to be funtional,
-# it is best to include config/general_config/devmode.yml rather than
+# it is best to specify release master-tripleo-ci rather than
 # just flipping this to true.
 devmode: false
