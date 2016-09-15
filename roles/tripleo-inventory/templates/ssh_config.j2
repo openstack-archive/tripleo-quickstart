@@ -9,7 +9,7 @@
 
 Host virthost
     Hostname {{ hostvars[groups['virthost'][0]].ansible_host }}
-    IdentityFile {{ local_working_dir }}/id_rsa_virt_power
+    IdentityFile {{ hostvars[groups['virthost'][0]].ansible_private_key_file }}
     User {{ ansible_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
@@ -18,7 +18,7 @@ Host virthost
 
 Host virthost
     Hostname {{ hostvars['localhost'].ansible_default_ipv4.address }}
-    IdentityFile {{ local_working_dir }}/id_rsa_virt_power
+    IdentityFile {{ hostvars['localhost'].ansible_private_key_file }}
     User {{ ansible_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
@@ -31,7 +31,7 @@ Host undercloud-root
 {% else %}
     Hostname {{ undercloud_ip }}
 {% endif %}
-    IdentityFile {{ local_working_dir }}/id_rsa_undercloud
+    IdentityFile {{ hostvars['undercloud'].ansible_private_key_file }}
     User root
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
@@ -42,7 +42,7 @@ Host undercloud
 {% else %}
     Hostname {{ undercloud_ip }}
 {% endif %}
-    IdentityFile {{ local_working_dir }}/id_rsa_undercloud
+    IdentityFile {{ hostvars['undercloud'].ansible_private_key_file }}
     User stack
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
@@ -52,7 +52,7 @@ Host undercloud
 
 Host {{ host }}
     ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ local_working_dir }}/ssh.config.ansible undercloud -W {{ hostvars[host].ansible_fqdn }}:22
-    IdentityFile {{ local_working_dir }}/id_rsa_overcloud
+    IdentityFile {{ hostvars[host].ansible_private_key_file }}
     User heat-admin
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null

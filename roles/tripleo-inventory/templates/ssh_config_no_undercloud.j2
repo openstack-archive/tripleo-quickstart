@@ -9,8 +9,8 @@
 
 Host virthost
     Hostname {{ hostvars[groups['virthost'][0]].ansible_host }}
-{% if id_rsa_virt_power_exists is defined %}
-    IdentityFile {{ local_working_dir }}/id_rsa_virt_power
+{% if hostvars[groups['virthost'][0]].ansible_private_key_file is defined %}
+    IdentityFile {{ hostvars[groups['virthost'][0]].ansible_private_key_file }}
 {% endif %}
     User {{ ansible_user }}
     StrictHostKeyChecking no
