@@ -19,6 +19,10 @@ extra_args: >-
 
 network_isolation: true
 
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: True
+
 # If `test_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 prepare_tempest: true
