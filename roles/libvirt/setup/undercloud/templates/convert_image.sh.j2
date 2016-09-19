@@ -1,5 +1,18 @@
 #!/bin/bash
 
+set -eux
+
+FS_TYPE=`findmnt -o FSTYPE -fn /`
+
+if [ "$FS_TYPE" = "xfs" ]; then
+    xfs_growfs /
+elif [ "$FS_TYPE" = "ext4" ]; then
+    resize2fs /dev/sda
+else
+    echo "ERROR: Unknown filesystem, cannot resize."
+    exit 1
+fi
+
 yum remove -y cloud-init
 yum install -y python-tripleoclient openstack-tempest python-aodh-tests python-ceilometer-tests \
 python-heat-tests python-ironic-tests python-keystone-tests python-manila-tests \

@@ -12,20 +12,6 @@
   command: >
     qemu-img resize {{ working_dir }}/undercloud.qcow2 {{ flavors[undercloud_node.name].disk }}G
 
-- name: Resize the filesystem in the undercloud image
-  command: >
-    virt-customize --run-command "resize2fs /dev/sda" -a {{ working_dir }}/undercloud.qcow2
-  environment:
-    LIBGUESTFS_BACKEND: direct
-  ignore_errors: true
-
-- name: Resize the filesystem in the undercloud image
-  command: >
-    virt-customize --run-command "xfs_growfs /" -a {{ working_dir }}/undercloud.qcow2
-  environment:
-    LIBGUESTFS_BACKEND: direct
-  ignore_errors: true
-
 - name: convert image
   command: >
     virt-customize -v --smp 2 -m 4096 -a {{ working_dir }}/undercloud.qcow2
