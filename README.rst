@@ -86,7 +86,7 @@ If you are working on TripleO upstream development, and need to reproduce what
 runs in tripleo-ci, you will want to use developer mode.
 
 This will fetch the images produced by tripleo-ci instead of the ones produced
-by RDO. The incanation for a job using the quickstart defaults other than
+by RDO. The incantation for a job using the quickstart defaults other than
 developer mode would be::
 
     bash quickstart.sh \
