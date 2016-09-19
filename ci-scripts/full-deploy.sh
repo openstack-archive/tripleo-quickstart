@@ -62,8 +62,6 @@ fi
 
 # we need to run differently (and twice) when gating upstream changes
 if [ "$JOB_TYPE" = "dlrn-gate" ]; then
-    # ask questions if not every gating var is defined
-    source $(dirname ${BASH_SOURCE[0]:-$0})/interactive-gate.bash
     # provison the virthost and build the gated DLRN packages
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
