@@ -21,7 +21,7 @@ bash quickstart.sh \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --working-dir $WORKSPACE/ \
     --no-clone \
-    --release master-tripleo-ci
+    --release master-tripleo-ci \
     --extra-vars test_ping=False \
     --playbook quickstart-extras.yml \
     $VIRTHOST
