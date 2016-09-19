@@ -21,6 +21,7 @@
     virsh vol-info --pool '{{ libvirt_volume_pool }}'
     '{{ undercloud_node.name }}.qcow2'
   ignore_errors: true
+  changed_when: false
   register: undercloud_vol_check
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"

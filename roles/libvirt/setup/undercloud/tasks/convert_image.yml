@@ -6,16 +6,19 @@
 - name: copy overcloud-full.qcow2 to undercloud.qcow2
   command: >
     cp {{ working_dir}}/overcloud-full.qcow2 {{ working_dir}}/undercloud.qcow2
+  changed_when: true
 
 # Resize the undercloud image using qemu-img resize
 - name: Resize the undercloud image using qemu-image resize
   command: >
     qemu-img resize {{ working_dir }}/undercloud.qcow2 {{ flavors[undercloud_node.name].disk }}G
+  changed_when: true
 
 - name: convert image
   command: >
     virt-customize -v --smp 2 -m 4096 -a {{ working_dir }}/undercloud.qcow2
     --run convert_image.sh
+  changed_when: true
   args:
     chdir: "{{ working_dir }}"
   environment:
@@ -28,6 +31,7 @@
     virt-customize -a {{ working_dir }}/undercloud.qcow2
     --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }}
     --run-command 'chown stack:stack /home/stack/{{ item }}'
+  changed_when: true
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"

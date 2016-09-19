@@ -8,7 +8,10 @@
 # the network location for resultant images.  For now this role uses the local ansible machine (jenkins slave)
 # as a staging area, which is removed after images are moved via rsync --> {{ publish_dest_base }}
 - name: create local dir to store images
-  local_action: "command mkdir -p {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/{{ artib_image_stage_location }}"
+  delegate_to: localhost
+  file:
+    path: "{{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/{{ artib_image_stage_location }}"
+    state: directory
 
 - name: create delorean_hash files
   local_action: "command echo {{ delorean_hash }} {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/{{ artib_image_stage_location }}/delorean_hash"
@@ -46,6 +49,10 @@
     {% else %}
     {{ publish_dest_user }}@{{ publish_dest_host }}::{{ publish_dest_basepath }}/{{ release }}/{{ build_system }}/{{ artib_image_stage_location }}/
     {% endif %}
+  changed_when: true
 
 - name: remove the images from the workspace
-  local_action: "command rm -rf {{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/{{ artib_image_stage_location }}"
+  delegate_to: localhost
+  file:
+    path: "{{ lookup('env', 'WORKSPACE') }}/images/{{ release }}/{{ build_system }}/{{ artib_image_stage_location }}"
+    state: absent

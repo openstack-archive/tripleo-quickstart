@@ -71,3 +71,4 @@
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   with_items: "{{ qcow_images.files }}"
+  changed_when: true

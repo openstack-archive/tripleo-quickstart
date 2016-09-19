@@ -4,6 +4,7 @@
   command: >
     awk -F: '/^flags/ {print $2; exit}' /proc/cpuinfo
   register: cpu_flags_cmd
+  changed_when: false
 
 # Extract the flags into a list variable named `cpu_flags`.
 - name: set cpu flags fact
@@ -16,11 +17,13 @@
   command: grep -q Intel /proc/cpuinfo
   ignore_errors: true
   register: is_intel
+  changed_when: false
 
 - name: check if AMD processor
   command: grep -q AMD /proc/cpuinfo
   ignore_errors: true
   register: is_amd
+  changed_when: false
 
 # Enable [nested virtualization][nested]. Set the `nested_virt` fact
 # to `true` if we have Intel processors and the `vmx` flag or we have

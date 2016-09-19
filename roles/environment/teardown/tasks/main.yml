@@ -10,6 +10,7 @@
     virsh uri
   ignore_errors: true
   register: libvirt_check
+  changed_when: false
 
 # If libvirt is not available, we can skip the rest of the tasks.
 - when: libvirt_check|success

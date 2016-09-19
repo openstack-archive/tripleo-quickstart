@@ -15,6 +15,7 @@
     virsh pool-uuid "{{ libvirt_volume_pool }}"
   register: pool_check
   ignore_errors: true
+  changed_when: false
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 

@@ -2,7 +2,8 @@
 - name: Add the virthost to the inventory
   hosts: localhost
   tasks:
-    - add_host:
+    - name: Add virthost
+      add_host:
         name: "{{ virthost }}"
         groups: "virthost"
         ansible_fqdn: "{{ virthost }}"

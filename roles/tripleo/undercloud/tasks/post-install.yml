@@ -5,6 +5,7 @@
     awk -F= '$1 == "undercloud_admin_password" {print $2}'
     {{ working_dir }}/undercloud-passwords.conf
   register: undercloud_admin_password
+  changed_when: false
 
 - name: Copy stackrc to ansible host
   tags:
@@ -23,4 +24,3 @@
     dest: "{{ local_working_dir }}/stackrc"
     line: "export OS_PASSWORD={{ undercloud_admin_password.stdout }}"
     regexp: "OS_PASSWORD"
-

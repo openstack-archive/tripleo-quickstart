@@ -2,12 +2,13 @@
 # that a virthost has a later valid version of ipxe-roms-qemu that will work.  At this time, let's only
 # remove the known bad version of ipxe-roms if it's found
 - name: Check for older iPXE rpm
-  shell: |
-    ipxe_rpm=ipxe-roms-qemu-20130517
-    if rpm -q $ipxe_rpm; then
-       rpm -e --nodeps $ipxe_rpm
-    fi
+  shell: >
+    if rpm -q ipxe-roms-qemu-20130517; then
+       rpm -e --nodeps ipxe-roms-qemu-20130517 && echo "rpm removed";
+    fi;
   become: true
+  register: old_ipxe
+  changed_when: '"rpm removed" in old_ipxe.stdout'
 
 # WORKAROUND for CentOS and RHEL virthosts.
 # Note, this is *only* installed on the virthost.

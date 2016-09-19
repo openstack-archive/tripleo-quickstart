@@ -97,3 +97,4 @@
   async: 7200
   poll: 0
   become: true
+  changed_when: false

@@ -6,6 +6,7 @@
   command: >
     virsh uri
   ignore_errors: true
+  changed_when: false
   register: libvirt_check
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
@@ -131,10 +132,14 @@
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-    - name: destroy /run/user/$uuid/libvirt/storage/run/{{ libvirt_volume_pool }}
-      shell: >
-        uuid=`cat /etc/passwd | grep "{{ ansible_user_id }}" | awk -F ':' '{ print $3 }' | head -n 1`;
-        rm -Rf "/run/user/$uuid/libvirt/storage/run/{{ libvirt_volume_pool }}"
+    - name: Get UID for volume pool
+      command: id -u "{{ ansible_user_id }}"
+      register: pool_uid
+      changed_when: false
       when: pool_check|success
-      ignore_errors: true
 
+    - name: Destroy volume pool
+      file:
+        path: "/run/user/{{ pool_uid.stdout }}/libvirt/storage/run/{{ libvirt_volume_pool }}"
+        state: absent
+      when: pool_check|success
