@@ -16,6 +16,7 @@ extra_args: >-
   --ntp-server pool.ntp.org
 
 network_isolation: true
-test_tempest: false
 test_ping: true
 enable_pacemaker: true
+tempest_config: false
+run_tempest: false
