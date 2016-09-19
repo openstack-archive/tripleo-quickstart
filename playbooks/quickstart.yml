@@ -11,6 +11,8 @@
         ansible_fqdn: "{{ virthost }}"
         ansible_user: "root"
         ansible_host: "{{ virthost }}"
+  tags:
+    - provision
 
 - include: teardown-provision.yml
 
