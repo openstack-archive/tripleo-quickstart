@@ -11,12 +11,24 @@ BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
-if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
+if [ "$JOB_TYPE" = "gate" ] || \
+   [ "$JOB_TYPE" = "periodic" ] || \
+   [ "$JOB_TYPE" = "roles-gate" ] || \
+   [ "$JOB_TYPE" = "dlrn-gate" ]; then
     unset REL_TYPE
+    if [ "$RELEASE" = "master-tripleo-ci" ]; then
+        # we don't have a local mirror for the tripleo-ci images
+        unset CI_ENV
+    fi
 elif [ "$JOB_TYPE" = "promote" ]; then
     REL_TYPE=$LOCATION
 else
-    echo "Job type must be one of gate, periodic, or promote"
+    echo "Job type must be one of the following:"
+    echo " * gate - for gating changes on tripleo-quickstart"
+    echo " * promote - for running promotion jobs"
+    echo " * periodic - for running periodic jobs"
+    echo " * roles-gate - for gating changes to the extra roles"
+    echo " * dlrn-gate - for gating upstream changes"
     exit 1
 fi
 
@@ -26,13 +38,66 @@ fi
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-bash quickstart.sh \
-    --tags all \
-    --config $WORKSPACE/config/general_config/$CONFIG.yml \
-    --working-dir $WORKSPACE/ \
-    --no-clone \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-    --bootstrap \
-    --requirements quickstart-extras-requirements.txt \
-    --playbook quickstart-extras.yml \
-    $VIRTHOST
+# preparation steps to run with the gated roles
+if [ "$JOB_TYPE" = "roles-gate" ]; then
+    # set up the gated repos and modify the requirements file to use them
+    bash quickstart.sh \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --bootstrap \
+        --requirements quickstart-extras-requirements.txt \
+        --playbook gate-roles.yml \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $VIRTHOST
+    # once more to let the gating role be gated as well
+    bash quickstart.sh \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --bootstrap \
+        --requirements quickstart-extras-requirements.txt \
+        --playbook gate-roles.yml \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $VIRTHOST
+fi
+
+# we need to run differently (and twice) when gating upstream changes
+if [ "$JOB_TYPE" = "dlrn-gate" ]; then
+    # ask questions if not every gating var is defined
+    source $(dirname ${BASH_SOURCE[0]:-$0})/interactive-gate.bash
+    # provison the virthost and build the gated DLRN packages
+    bash quickstart.sh \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --bootstrap \
+        --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+        --requirements quickstart-extras-requirements.txt \
+        --playbook dlrn-gate.yml \
+        --tags all \
+        --teardown all \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $VIRTHOST
+    # skip provisioning and run the gate using the previously built RPMs
+    bash quickstart.sh \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --retain-inventory \
+        --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+        --config $WORKSPACE/config/general_config/$CONFIG.yml \
+        --playbook quickstart-extras.yml \
+        --skip-tags provision \
+        --tags all \
+        --teardown none \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $VIRTHOST
+else
+    bash quickstart.sh \
+        --tags all \
+        --config $WORKSPACE/config/general_config/$CONFIG.yml \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        --bootstrap \
+        --requirements quickstart-extras-requirements.txt \
+        --playbook quickstart-extras.yml \
+        $VIRTHOST
+fi
