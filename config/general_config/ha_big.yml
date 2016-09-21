@@ -43,6 +43,9 @@ extra_args: >-
   --neutron-network-type vxlan
   --neutron-tunnel-types vxlan
   --ntp-server pool.ntp.org
-test_tempest: false
 test_ping: true
 enable_pacemaker: true
+
+tempest_config: false
+run_tempest: false
+
