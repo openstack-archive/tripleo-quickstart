@@ -17,6 +17,7 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 pushd $WORKSPACE/tripleo-quickstart
 
 bash quickstart.sh \
+    --bootstrap \
     --tags all \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --working-dir $WORKSPACE/ \
@@ -24,19 +25,19 @@ bash quickstart.sh \
     --release master-tripleo-ci \
     --extra-vars test_ping=False \
     --playbook quickstart-extras.yml \
+    --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
     $VIRTHOST
 
 bash quickstart.sh \
     --tags all \
+    --teardown none \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
     --retain-inventory \
-    --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
     --playbook tempest.yml \
     --extra-vars tempest_source=rdo \
     --extra-vars tempest_format=venv \
-    --playbook quickstart-extras.yml \
     $VIRTHOST
 
 popd
