@@ -132,14 +132,14 @@
       environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-    - name: Get UID for volume pool
+    - name: Get UID of pool user
       command: id -u "{{ ansible_user_id }}"
       register: pool_uid
       changed_when: false
       when: pool_check|success
 
-    - name: Destroy volume pool
+    - name: Destroy pool definition file
       file:
-        path: "/run/user/{{ pool_uid.stdout }}/libvirt/storage/run/{{ libvirt_volume_pool }}"
+        path: "/run/user/{{ pool_uid.stdout }}/libvirt/storage/run/{{ libvirt_volume_pool }}.xml"
         state: absent
       when: pool_check|success
