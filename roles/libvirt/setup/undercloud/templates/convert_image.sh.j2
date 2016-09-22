@@ -30,4 +30,11 @@ echo "undercloud" > /etc/hostname
 
 chown -R stack:stack /home/stack/
 
+# Add a 4GB swap file to the Undercloud
+dd if=/dev/zero of=/swapfile bs=1024 count=4194304
+mkswap /swapfile
+chmod 600 /swapfile
+# Enable it on start
+echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
