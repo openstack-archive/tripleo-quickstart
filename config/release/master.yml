@@ -1,4 +1,4 @@
 release: master
-undercloud_image_url: http://images.rdoproject.org/master/delorean/current-tripleo/stable/undercloud.qcow2
-overcloud_image_url: http://images.rdoproject.org/master/delorean/current-tripleo/stable/overcloud-full.tar
-ipa_image_url: http://images.rdoproject.org/master/delorean/current-tripleo/stable/ironic-python-agent.tar
+undercloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/master/delorean/undercloud.qcow2
+overcloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/master/delorean/overcloud-full.tar
+ipa_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/master/delorean/ironic-python-agent.tar
