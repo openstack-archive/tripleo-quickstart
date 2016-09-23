@@ -24,10 +24,4 @@
     {% endif %}
   {% endfor %}
   ],
-  "arch": "{{ libvirt_arch }}",
-  "host-ip": "{{ host_ip }}",
-  "power_manager": "{{ nova_power_manager }}",
-  "seed-ip": "",
-  "ssh-key": {{ virt_power_key_pvt | to_nice_json }},
-  "ssh-user": "{{ ansible_user_id }}"
 }

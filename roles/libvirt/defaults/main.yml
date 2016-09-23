@@ -19,9 +19,6 @@ images:
       url: "{{ undercloud_image_url }}"
       type: qcow2
 
-# Which power manager should we use?
-nova_power_manager: 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
-
 # These are keys that we generate; `virt_power_key` is used *by the
 # undercloud* to start/stop virtual machines on the virthost.
 # `undercloud_key` is used to log in to the undercloud.
