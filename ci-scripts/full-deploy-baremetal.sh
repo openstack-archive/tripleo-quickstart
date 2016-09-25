@@ -10,12 +10,13 @@
 
 set -eux
 
+: ${OPT_ADDITIONAL_PARAMETERS:=""}
+
 RELEASE=$1
 HW_ENV_DIR=$2
 NETWORK_ISOLATION=$3
 CONFIG_FILE=$4
 PLAYBOOK=$5
-
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
@@ -34,4 +35,5 @@ bash quickstart.sh \
     --extra-vars network_environment_file=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/${NETWORK_ISOLATION}.yml \
     --extra-vars nic_configs_dir=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/nic_configs/ \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    $OPT_ADDITIONAL_PARAMETERS \
     $VIRTHOST

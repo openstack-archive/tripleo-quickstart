@@ -5,6 +5,8 @@
 # Usage: full-deploy.sh <release> <build_system> <config> <job_type>
 set -eux
 
+: ${OPT_ADDITIONAL_PARAMETERS:=""}
+
 RELEASE=$1
 # unused variable in script, kept for consistency
 BUILD_SYS=$2
@@ -48,6 +50,7 @@ if [ "$JOB_TYPE" = "roles-gate" ]; then
         --requirements quickstart-extras-requirements.txt \
         --playbook gate-roles.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
     # once more to let the gating role be gated as well
     bash quickstart.sh \
@@ -57,6 +60,7 @@ if [ "$JOB_TYPE" = "roles-gate" ]; then
         --requirements quickstart-extras-requirements.txt \
         --playbook gate-roles.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
 fi
 
@@ -73,6 +77,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ]; then
         --tags all \
         --teardown all \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
     # skip provisioning and run the gate using the previously built RPMs
     bash quickstart.sh \
@@ -86,6 +91,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ]; then
         --tags all \
         --teardown none \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
 else
     bash quickstart.sh \
@@ -97,5 +103,6 @@ else
         --bootstrap \
         --requirements quickstart-extras-requirements.txt \
         --playbook quickstart-extras.yml \
+        $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
 fi
