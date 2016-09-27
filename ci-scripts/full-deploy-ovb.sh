@@ -12,6 +12,8 @@
 
 set -eux
 
+: ${OPT_ADDITIONAL_PARAMETERS:=""}
+
 RELEASE=$1
 HW_ENV_DIR=$2
 NETWORK_ISOLATION=$3
@@ -36,4 +38,5 @@ bash quickstart.sh \
     --extra-vars @$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/env_settings.yml \
     --playbook $PLAYBOOK \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    $OPT_ADDITIONAL_PARAMETERS \
     localhost
