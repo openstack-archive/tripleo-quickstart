@@ -18,7 +18,7 @@ Host virthost
 
 Host virthost
     Hostname {{ hostvars['localhost'].ansible_default_ipv4.address }}
-    IdentityFile {{ hostvars['localhost'].ansible_private_key_file }}
+    IdentityFile {{ local_working_dir }}/id_rsa_virt_power
     User {{ ansible_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
