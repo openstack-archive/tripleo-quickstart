@@ -41,7 +41,7 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 # preparation steps to run with the gated roles
-if [ "$JOB_TYPE" = "roles-gate" ]; then
+if [ "$JOB_TYPE" = "roles-gate" ] || [ "$JOB_TYPE" = "gate" ]; then
     # set up the gated repos and modify the requirements file to use them
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
