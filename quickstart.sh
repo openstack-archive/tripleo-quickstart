@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# With LANG set to everything else than C completely undercipherable errors
+# like "file not found" and decoding errors will start to appear during scripts
+# or even ansible modules
+LANG=C
+
 DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-scripts,undercloud-install,undercloud-post-install"
 
 : ${OPT_BOOTSTRAP:=0}
