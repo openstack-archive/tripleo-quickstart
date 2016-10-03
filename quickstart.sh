@@ -317,7 +317,9 @@ fi
 
 
 if [ "$OPT_NO_CLONE" = 1 ]; then
-    OOOQ_DIR=.
+    SCRIPT=$( readlink -f "${BASH_SOURCE[0]}" )
+    THIS_DIR=$( dirname $SCRIPT )
+    OOOQ_DIR=$THIS_DIR
 else
     OOOQ_DIR=$OPT_WORKDIR/tripleo-quickstart
 fi
