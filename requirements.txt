@@ -2,3 +2,7 @@ ansible==2.1.0
 netaddr>=0.7.18
 pbr>=1.6
 setuptools>=11.3
+
+# 2016-10-30 YOLANDA: TEMPORARILY PIN PYCPARSER DUE TO https://github.com/eliben/pycparser/issues/147
+pycparser==2.13
+
