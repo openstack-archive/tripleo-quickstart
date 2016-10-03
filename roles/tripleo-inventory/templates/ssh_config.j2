@@ -5,6 +5,9 @@
 {% set ssh_host = ansible_host %}
 {% endif %}
 
+Host *
+    IdentitiesOnly yes
+
 {% if hostvars[groups['virthost'][0]].ansible_host is defined %}
 
 Host virthost
