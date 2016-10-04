@@ -1,0 +1,38 @@
+- name: Create overcloud customize script
+  template:
+    src: "{{ overcloud_customize_script }}"
+    dest: "{{ working_dir }}/overcloud-customize.sh"
+    mode: 0755
+
+- environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  block:
+  # We need to extract the overcloud image, if it's not already extracted.
+  # so we can inject the gating repo into it.
+  - name: check if overcloud image is already extracted
+    stat:
+      path: '{{ working_dir }}/overcloud-full.qcow2'
+    register: overcloud_image_stat_for_customize
+
+  - name: Extract overcloud-full image
+    command: >
+      virt-copy-out -a {{ working_dir }}/undercloud.qcow2
+      /home/stack/overcloud-full.qcow2 {{ working_dir }}
+    register: overcloud_image_extracted_for_customize
+    when: not overcloud_image_stat_for_customize.stat.exists
+
+  # only customize overcloud-full image if that is not going to be
+  # used as undercloud
+  - name: Perform extra overcloud customizations
+    command: >
+      virt-customize -a {{ working_dir}}/overcloud-full.qcow2
+      --run '{{ working_dir}}/overcloud-customize.sh'
+
+  - name: Copy updated overcloud-full image back to undercloud
+    command: >
+      virt-copy-in -a {{ working_dir }}/undercloud.qcow2
+      {{ working_dir }}/overcloud-full.qcow2 /home/stack/
+    when: overcloud_image_extracted_for_customize is defined and
+          overcloud_image_extracted_for_customize|changed
+

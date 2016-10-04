@@ -87,6 +87,27 @@
         owner: stack
         group: stack
 
+  - name: Create undercloud customize script
+    template:
+      src: "{{ undercloud_customize_script }}"
+      dest: "{{ working_dir}}/undercloud-customize.sh"
+      mode: 0755
+    when: undercloud_customize_script is defined
+
+  # This allows to run a customization script on the
+  # undercloud image, to cover any extra needs.
+  - name: Perform extra undercloud customizations
+    command: >
+      virt-customize -a {{ working_dir }}/undercloud.qcow2
+      --run '{{ working_dir }}/undercloud-customize.sh'
+    when: undercloud_customize_script is defined
+
+  # This allows to run a customization script on the
+  # overcloud image, to cover any extra needs.
+  - name: Perform extra overcloud customizations
+    include: customize_overcloud.yml
+    when: overcloud_customize_script is defined
+
   # Perform an SELinux relabel on the undercloud image to avoid problems
   # caused by bad labelling, since by default the undercloud runs in
   # enforcing mode.
