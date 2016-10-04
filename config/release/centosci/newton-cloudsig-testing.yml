@@ -1,0 +1,4 @@
+release: newton
+undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/cbs/cloudsig-testing/testing/undercloud.qcow2
+overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/cbs/cloudsig-testing/testing/overcloud-full.tar
+ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/newton/cbs/cloudsig-testing/testing/ironic-python-agent.tar
