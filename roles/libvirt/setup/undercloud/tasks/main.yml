@@ -125,7 +125,7 @@
     command: >
       qemu-img create -f qcow2 -o preallocation=off
       '{{ working_dir }}/undercloud-resized.qcow2'
-      '{{ flavors[undercloud_node.name].disk }}G'
+      '{{ flavors[undercloud_node.flavor].disk }}G'
     when: not overcloud_as_undercloud|bool
 
   - name: Resize undercloud image (call virt-resize)
@@ -149,7 +149,7 @@
     command: >
       virsh vol-create-as {{ libvirt_volume_pool}}
       {{ undercloud_node.name }}.qcow2
-      {{ flavors[undercloud_node.name].disk }}G --format qcow2
+      {{ flavors[undercloud_node.flavor].disk }}G --format qcow2
     environment:
       LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
