@@ -33,7 +33,7 @@
 # Deploy the overcloud
 - name:  Deploy the overcloud
   hosts: undercloud
-  gather_facts: no
+  gather_facts: yes
   roles:
     - tripleo-overcloud
 
