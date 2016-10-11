@@ -3,6 +3,12 @@
 # key files, etc)
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 
+# this will define the user that ansible will connect with
+ansible_user: stack
+# This is where we store generated artifacts (like ssh config files,
+# keys, etc).
+working_dir: "/home/{{ ansible_user }}/.quickstart"
+
 # This is a directory no the virthost in which we store the downloaded
 # undercloud image.
 image_cache_dir: "/var/cache/tripleo-quickstart/images"
@@ -156,3 +162,6 @@ tuned_profile: 'virtual-host'
 # This is the name of the user the `provision` role will create on the
 # remote host.
 non_root_user: stack
+
+# Path for volume storage
+libvirt_volume_path: "{{ working_dir }}/pool"

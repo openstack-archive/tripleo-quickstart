@@ -1,7 +1,3 @@
-# This is where we store generated artifacts (like ssh config files,
-# keys, etc).
-working_dir: "{{ ansible_user_dir }}/.quickstart"
-
 # Which image should we download?
 release: mitaka
 undercloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/undercloud.qcow2
@@ -29,7 +25,6 @@ undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
 # not require privileged access (but does require the setup performed by the
 # `environment/setup` role).
 libvirt_uri: qemu:///session
-libvirt_volume_path: "{{ working_dir }}/pool"
 libvirt_volume_pool: oooq_pool
 libvirt_domain_type: kvm
 libvirt_diskdev: vda

@@ -114,6 +114,17 @@
     path: "{{ image_cache_dir }}"
     state: directory
     owner: "{{ non_root_user }}"
+    group: "{{ non_root_group }}"
     mode: "ug+rwx"
   become: true
 
+# Create the volume pool directory if it doesn't already exist.  This
+# will be the target of the libvirt volume pool we create in the next
+# task.
+- name: Ensure volume pool directory exists
+  file:
+    path: "{{ libvirt_volume_path }}"
+    state: directory
+    owner: "{{ non_root_user }}"
+    group: "{{ non_root_group }}"
+  become: true

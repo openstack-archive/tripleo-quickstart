@@ -1,6 +1,6 @@
 # This playbooks is responsible for preparing a target host.
 #
-# We start by creating an inventory entry for the target host.
+# Create an inventory entry for the target host
 - name: Add virthost to inventory
   hosts: localhost
   roles:
@@ -8,7 +8,14 @@
   tags:
     - provision
 
-# Next, we create a non-root user on the remote system.
+# Create non root user on the virthost
+- name: Create non root user on the virthost
+  hosts: virthost
+  roles:
+    - provision/user
+  tags:
+    - provision
+
 - name: Create target user on virt host
   hosts: virthost
   roles:
