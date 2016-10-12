@@ -1,4 +1,1 @@
-release: mitaka
-undercloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/mitaka/delorean/undercloud.qcow2
-overcloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/mitaka/delorean/overcloud-full.tar
-ipa_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/mitaka/delorean/ironic-python-agent.tar
+trunk/mitaka.yml
