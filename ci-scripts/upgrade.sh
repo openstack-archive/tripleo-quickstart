@@ -13,7 +13,6 @@ MAJOR_UPGRADE=$6
 PACEMAKER=$7
 TARGET_VERSION=$8
 
-SKIP_TAGS="undercloud-post-install"
 
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     unset REL_TYPE
@@ -37,12 +36,11 @@ bash quickstart.sh \
     --extra-vars enable_pacemaker=$PACEMAKER \
     --extra-vars target_upgrade_version=$TARGET_VERSION \
     --working-dir $WORKSPACE/ \
-    --skip-tags $SKIP_TAGS \
     --no-clone \
     --bootstrap \
     --tags all \
     --teardown all \
-    --requirements quickstart-role-requirements.txt \
+    --requirements quickstart-extras-requirements.txt \
     --playbook upgrade.yml \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
