@@ -11,3 +11,8 @@ overcloud_nodes:
     flavor: compute
 
 network_isolation: false
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: True
+
