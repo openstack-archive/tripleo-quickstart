@@ -12,6 +12,10 @@ undercloud_memory: 8192
 # performance (and result in a shorter deploy time).
 undercloud_vcpu: 4
 
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: True
+
 # Create three controller nodes and one compute node.
 overcloud_nodes:
   - name: control_0
