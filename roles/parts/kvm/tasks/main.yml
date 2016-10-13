@@ -1,84 +1,81 @@
-# Grab CPU flags from `/proc/cpuinfo` and put the result into the
-# `cpu_flags_cmd` variable.
-- name: get cpu flags
-  command: >
+# Grab CPU flags from "/proc/cpuinfo" and put the result into the
+# "cpu_flags_cmd" variable.
+- name: Get cpu flags
+  command: |
     awk -F: '/^flags/ {print $2; exit}' /proc/cpuinfo
   register: cpu_flags_cmd
   changed_when: false
 
-# Extract the flags into a list variable named `cpu_flags`.
-- name: set cpu flags fact
+# Extract the flags into a list variable named "cpu_flags".
+- name: Set cpu flags fact
   set_fact:
     cpu_flags: "{{ cpu_flags_cmd.stdout.split() }}"
 
-# Identify the processor manufacturer by looking for "Intel" or "AMD"
-# in `/proc/cpuinfo`.
-- name: check if Intel processor
-  command: grep -q Intel /proc/cpuinfo
-  ignore_errors: true
-  register: is_intel
-  changed_when: false
+- block:
+    - name: Unload kvm_intel module
+      modprobe:
+        name: "kvm_intel"
+        state: "absent"
+      become: true
 
-- name: check if AMD processor
-  command: grep -q AMD /proc/cpuinfo
-  ignore_errors: true
-  register: is_amd
-  changed_when: false
+    - name: Configure KVM module with Intel nested virtualization support
+      copy:
+        dest: "/etc/modprobe.d/kvm_intel.conf"
+        content: |
+          options kvm_intel nested=1
+      become: true
 
-# Enable [nested virtualization][nested]. Set the `nested_virt` fact
-# to `true` if we have Intel processors and the `vmx` flag or we have
-# AMD processors and the `svm` flag.
-#
-# [nested]: https://www.kernel.org/doc/Documentation/virtual/kvm/nested-vmx.txt
-- name: set nested_virt fact
-  set_fact:
-    nested_virt: >-
-      {{ ((is_intel and 'vmx' in cpu_flags)
-      or (is_amd and 'svm' in cpu_flags))|bool }}
+    - name: Re-load kvm_intel module
+      modprobe:
+        name: "kvm_intel"
+        state: "present"
+      become: true
 
-# Configure appropriate options for the vendor-specific kvm module
-# in `/etc/modprobe.d/kvm.conf`.  This will result in either:
-#
-#     options kvm_intel nested=1
-#
-# Or:
-#
-#     options kvm_adm nested=1
-#
-# (Depending on the processor vendor)
-- name: configure kvm module
-  copy:
-    dest: /etc/modprobe.d/kvm.conf
-    content: |
-      options kvm_intel nested=1 {{kvm_intel_options}}
-      options kvm_amd nested=1 {{kvm_amd_options}}
-  when: "{{ nested_virt }}"
-  become: true
+    - name: Ensure nested virtualization is enabled
+      command: cat /sys/module/kvm_intel/parameters/nested
+      register: nested_virtualization
+      failed_when: ('FAILED' in nested_virtualization.stderr) or
+                   ('N' in nested_virtualization.stdout)
+  always:
+    - debug:
+        msg: >
+          /sys/module/kvm_intel/parameters/nested:
+          {{ nested_virtualization.stdout }}
+  when:
+    - "{{ 'Intel' in ansible_processor |join('') }}"
+    - "{{ 'vmx' in cpu_flags }}"
 
-# Immediately load the appropriate kvm vendor module.
-- name: load kvm module [intel]
-  command: modprobe kvm_intel
-  when: is_intel|success
-  become: true
+- block:
+    - name: Unload kvm_amd module
+      modprobe:
+        name: "kvm_amd"
+        state: "absent"
+      become: true
 
-- name: load kvm module [amd]
-  command: modprobe kvm_amd
-  when: is_amd|success
-  become: true
+    - name: Configure KVM module with AMD nested virtualization support
+      copy:
+        dest: "/etc/modprobe.d/kvm_amd.conf"
+        content: |
+          options kvm_amd nested=1
+      become: true
 
-# List the appropriate kvm vendor module in
-# `/etc/modules-load.d/ooo_kvm.conf`.  This will cause the module
-# to be loaded automatically next time the system boots.
-- name: arrange for kvm module to load at boot [intel]
-  copy:
-    content: kvm_intel
-    dest: /etc/modules-load.d/ooo_kvm.conf
-  when: is_intel|success
-  become: true
+    - name: Re-load kvm_amd module
+      modprobe:
+        name: "kvm_amd"
+        state: "present"
+      register: nested_virtualization
+      become: true
 
-- name: arrange for kvm module to load at boot [amd]
-  copy:
-    content: kvm_amd
-    dest: /etc/modules-load.d/ooo_kvm.conf
-  when: is_amd|success
-  become: true
+    - name: Ensure nested virtualization is enabled
+      command: cat /sys/module/kvm_amd/parameters/nested
+      register: nested_virtualization
+      failed_when: ('FAILED' in nested_virtualization.stderr) or
+                   ('0' in nested_virtualization.stdout)
+  always:
+    - debug:
+        msg: >
+          /sys/module/kvm_amd/parameters/nested:
+          {{ nested_virtualization.stdout }}
+  when:
+    - "{{ 'AMD' in ansible_processor |join('') }}"
+    - "{{ 'svm' in cpu_flags }}"
