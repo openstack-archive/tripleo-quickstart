@@ -68,7 +68,7 @@
     - overcloud-validate
   gather_facts: no
   roles:
-    - { role: tripleo-overcloud-validate, when: test_ping == true }
+    - { role: tripleo-overcloud-validate, when: test_ping|bool }
 
 # Execute tempest against the overcloud deployment
 - name:  Execute tempest against the overcloud
@@ -77,4 +77,4 @@
     - overcloud-validate
   gather_facts: no
   roles:
-    - { role: tripleo-tempest, when: run_tempest == true }
+    - { role: tripleo-tempest, when: run_tempest|bool }
