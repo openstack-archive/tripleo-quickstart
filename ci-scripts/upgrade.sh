@@ -35,6 +35,7 @@ bash quickstart.sh \
     --extra-vars major_upgrade=$MAJOR_UPGRADE \
     --extra-vars enable_pacemaker=$PACEMAKER \
     --extra-vars target_upgrade_version=$TARGET_VERSION \
+    --extra-vars set_overcloud_workers=false \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
