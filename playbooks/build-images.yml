@@ -24,8 +24,3 @@
     # in a config file or extra-vars passed to ansible.
     - { role: "image-build", working_dir: "/var/lib/oooq-images" }
 
-- name: Publish Images
-  hosts: virthost
-  gather_facts: no
-  roles:
-    - { role: "images/publish", when: "publish" }
