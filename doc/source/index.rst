@@ -13,3 +13,4 @@ Contents:
    accessing-overcloud
    unprivileged
    contributing
+   working-with-extras
