@@ -46,6 +46,5 @@ extra_args: >-
 test_ping: true
 enable_pacemaker: true
 
-tempest_config: false
 run_tempest: false
 

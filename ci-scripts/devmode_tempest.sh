@@ -23,21 +23,10 @@ bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --release master-tripleo-ci \
-    --extra-vars test_ping=False \
     --playbook quickstart-extras.yml \
+    --extra-vars test_ping=False \
+    --extra-vars run_tempest=True  \
     --requirements $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt \
-    $VIRTHOST
-
-bash quickstart.sh \
-    --tags all \
-    --teardown none \
-    --working-dir $WORKSPACE/ \
-    --no-clone \
-    --bootstrap \
-    --retain-inventory \
-    --playbook tempest.yml \
-    --extra-vars tempest_source=rdo \
-    --extra-vars tempest_format=venv \
     $VIRTHOST
 
 popd

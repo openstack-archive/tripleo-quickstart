@@ -42,7 +42,6 @@ extra_args: >-
 test_ping: true
 enable_pacemaker: true
 
-tempest_config: false
 run_tempest: false
 
 # options below direct automatic doc generation by tripleo-collect-logs
