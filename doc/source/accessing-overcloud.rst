@@ -11,14 +11,37 @@ desktop.
 Logging in to overcloud hosts
 -----------------------------
 
-If you need to log in to an overcloud host directly, first log in to the
-``undercloud`` host. From there, you can access the overcloud hosts by
-name::
+The easiest way to reach the overcloud nodes is to login using the ssh config
+file generated during the quickstart run::
 
-    [stack@undercloud ~]$ ssh overcloud-controller-0
-    Warning: Permanently added 'overcloud-controller-0,192.168.30.9' (ECDSA) to the list of known hosts.
-    Last login: Wed Mar 23 21:59:24 2016 from 192.168.30.1
-    [heat-admin@overcloud-controller-0 ~]$
+    ssh -F $HOME/.quickstart/ssh.config.ansible overcloud-controller-0
+
+It's a good idea to look into the `ssh.config.ansible` file to see all the
+hostnames and to understand how ssh logs in to the overcloud nodes though the
+undercloud.
+
+An alternative way to reach the overcloud nodes is to log in to the undercloud
+host and figure out the ctlplane address of the deployed node::
+
+    [stack@undercloud ~]$ source stackrc
+    [stack@undercloud ~]$ nova list
+    +--------------------------------------+-------------------------+--------+------------+-------------+------------------------+
+    | ID                                   | Name                    | Status | Task State | Power State | Networks               |
+    +--------------------------------------+-------------------------+--------+------------+-------------+------------------------+
+    | 3d4a79d1-53ea-4f32-b496-fbdcbbb6a5a3 | overcloud-controller-0  | ACTIVE | -          | Running     | ctlplane=192.168.24.16 |
+    | 4f8acb6d-6394-4193-a6c6-50d8731fad7d | overcloud-novacompute-0 | ACTIVE | -          | Running     | ctlplane=192.168.24.8  |
+    +--------------------------------------+-------------------------+--------+------------+-------------+------------------------+
+
+The address is randomly assigned and depends on the deployment environment. In
+this case the compute node has the address `192.168.24.8`. Logging in to any of
+the nodes is possible with the `heat-admin` user. This user has full sudo
+rights on all the overcloud nodes and the undercloud is set up to login with
+public key authentication::
+
+    ssh heat-admin@192.168.24.8
+
+The node can be also accessed by a static hostname of
+`overcloud-novacompute-0.ctlplane` in newer versions of OpenStack.
 
 SSH Port Forwarding
 -------------------
