@@ -29,6 +29,11 @@ issue <https://www.redhat.com/archives/libvirt-users/2016-March/msg00056.html>`_
 the quickstart ensures that the ``XDG_RUNTIME_DIR`` variable is set
 correctly.
 
+To console into the guests you'll have to add -c qemu:///session.
+For example::
+
+    $ virsh -c qemu:///session console undercloud
+
 Where are my networks?
 ----------------------
 
