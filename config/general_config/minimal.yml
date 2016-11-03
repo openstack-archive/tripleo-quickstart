@@ -25,7 +25,6 @@ undercloud_generate_service_certificate: True
 
 # If `test_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
-tempest_config: false
 test_ping: true
 run_tempest: false
 tempest_workers: 4
