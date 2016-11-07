@@ -30,6 +30,12 @@
   roles:
     - overcloud-prep-network
 
+- name: Prepare the SSL Configuration for the overcloud deployment
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - { role: tripleo-ssl, when: ssl_overcloud|bool }
+
 # Deploy the overcloud
 - name:  Deploy the overcloud
   hosts: undercloud

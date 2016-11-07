@@ -23,6 +23,9 @@ network_isolation: true
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: True
 
+# This enables the deployment of the overcloud with SSL.
+ssl_overcloud: True
+
 # If `test_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: true

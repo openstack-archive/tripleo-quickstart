@@ -16,6 +16,7 @@ git+https://github.com/redhat-openstack/ansible-role-tripleo-baremetal-prep-virt
 git+https://github.com/redhat-openstack/ansible-role-tripleo-overcloud-prep-baremetal.git#egg=ansible-role-tripleo-overcloud-prep-baremetal
 git+https://github.com/redhat-openstack/ansible-role-tripleo-provision-heat.git#egg=ansible-role-tripleo-provision-heat
 git+https://github.com/redhat-openstack/ansible-role-tripleo-validate-ipmi.git#egg=ansible-role-tripleo-validate-ipmi
+git+https://github.com/redhat-openstack/ansible-role-tripleo-ssl.git#egg=ansible-role-tripleo-ssl
 
 
 # To pull in local development changes

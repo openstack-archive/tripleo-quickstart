@@ -114,6 +114,13 @@ network_isolation: true
 enable_pacemaker: false
 ipv6: false
 
+# This enables the deployment of the overcloud with SSL.
+ssl_overcloud: false
+# If ssl_overcloud is True, then the overcloud public vip must be explicitly
+# specified as part of the deployment configuration. Note that the VIP used has
+# to be set accordingly with the `undercloud_external_network_cidr`.
+overcloud_public_vip: 10.0.0.5
+
 # Set this to `true` if you want your undercloud and overcloud vms to
 # have a VNC console available.
 enable_vnc_console: false
