@@ -11,6 +11,26 @@
   args:
     creates: "{{ virt_host_key }}"
 
+- name: Ensure tuned is installed
+  package:
+    name: "tuned"
+    state: "present"
+
+- name: Ensure tuned is enabled and started
+  service:
+    name: "tuned"
+    enabled: "yes"
+    state: "started"
+
+- name: Retrieve current tuned profile
+  command: tuned-adm active
+  register: tuned
+  changed_when: False
+
+- name: Set tuned profile if not already set
+  command: tuned-adm profile "{{ tuned_profile }}"
+  when: tuned.stdout.find("{{ tuned_profile }}") != 1
+
 # Create a non-root user on the target host.  This is the user that
 # will own the virtual infrastructure on which we deploy openstack.
 - name: Create non-root user

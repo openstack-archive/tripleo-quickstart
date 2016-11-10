@@ -136,3 +136,6 @@ release: mitaka
 # it is best to specify release master-tripleo-ci rather than
 # just flipping this to true.
 devmode: false
+
+# Tuned profile set while provisioning remote hosts to optimize for deployment
+tuned_profile: 'virtual-host'
