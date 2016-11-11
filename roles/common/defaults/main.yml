@@ -44,6 +44,11 @@ flavors:
     disk: '{{ceph_disk|default(default_disk)}}'
     vcpu: '{{ceph_vcpu|default(default_vcpu)}}'
 
+  blockstorage:
+    memory: '{{block_memory|default(default_memory)}}'
+    disk: '{{block_disk|default(default_disk)}}'
+    vcpu: '{{block_vcpu|default(default_vcpu)}}'
+
   objectstorage:
     memory: '{{objectstorage_memory|default(default_memory)}}'
     disk: '{{objectstorage_disk|default(default_disk)}}'
