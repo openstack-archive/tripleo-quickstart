@@ -16,16 +16,7 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 : ${OPT_TEARDOWN:=nodes}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
-: ${OPT_PYTHON:=python}
 
-check_python_version () {
-    if $OPT_PYTHON -c 'import sys; sys.exit(1 if sys.version[:3] == "2.7" else 0)'
-    then
-        echo "ERROR: $0 Python version 2.7 required!" >&2
-        echo "Please use the --python parameter to point to the correct version of the python interpreter" >&2
-        exit 1
-    fi
-}
 
 clean_virtualenv() {
     if [ -d $OPT_WORKDIR ]; then
@@ -107,7 +98,7 @@ bootstrap () {
 
     set -e
 
-    virtualenv -p $PYTHON_FULL_PATH \
+    virtualenv\
         $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
         $OPT_WORKDIR
     . $OPT_WORKDIR/bin/activate
@@ -134,7 +125,7 @@ bootstrap () {
         # want to be writing files to the usbkey itself, and I can not find a
         # way to make setuptools not try to write the .eggs dir.
         sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
-        $PYTHON setup.py install egg_info --egg-base $OPT_WORKDIR
+        python setup.py install egg_info --egg-base $OPT_WORKDIR
         # Handle the case that pip is too old to use a cache-dir
         pip install --no-cache-dir "${OPT_REQARGS[@]}"
     popd
@@ -195,10 +186,6 @@ usage () {
     echo "                      parts of a previous deployment to tear down before"
     echo "                      starting a new one, see the docs for full description"
     echo "                      (default=$OPT_TEARDOWN)"
-    echo "  -P, --python <python interpreter>"
-    echo "                      The python interpreter to use. Currently, only Python 2.7"
-    echo "                      is supported."
-    echo "                      (default=$OPT_PYTHON)"
     echo "  -S, --skip-tags <tag1>[,<tag2>,...]"
     echo "                      only run plays and tasks whose tags do"
     echo "                      not match these values"
@@ -280,11 +267,6 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
-        --python|-P)
-            OPT_PYTHON=$2
-            shift
-            ;;
-
         --help|-h)
             usage
             exit
@@ -333,12 +315,6 @@ if [ "$PRINT_LOGO" = 1 ]; then
     exit
 fi
 
-# Find the version 2 of Python and Pip because we (and Ansible)
-# require it
-check_python_version
-
-PYTHON_FULL_PATH=`command -v $OPT_PYTHON`
-PYTHON=`basename $PYTHON_FULL_PATH`
 
 if [ "$OPT_NO_CLONE" = 1 ]; then
     SCRIPT=$( readlink -f "${BASH_SOURCE[0]}" )
@@ -439,7 +415,7 @@ fi
 
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
-    -e ansible_python_interpreter=$PYTHON_FULL_PATH \
+    -e ansible_python_interpreter=/usr/bin/python \
     -e @$OPT_WORKDIR/config/release/$OPT_RELEASE.yml \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
