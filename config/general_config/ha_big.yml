@@ -13,6 +13,9 @@ undercloud_memory: 12288
 # Using a total of 10 vcpus (1 is the default for overcloud nodes)
 undercloud_vcpu: 4
 
+# Since HA has more machines, doesn't we can set the cpu for controllers and
+# compute nodes to 1
+default_vcpu: 1
 
 # Create three controller nodes and three compute nodes.
 overcloud_nodes:
@@ -47,4 +50,3 @@ test_ping: true
 enable_pacemaker: true
 
 run_tempest: false
-

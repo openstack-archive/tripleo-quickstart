@@ -12,6 +12,10 @@ undercloud_memory: 8192
 # performance (and result in a shorter deploy time).
 undercloud_vcpu: 4
 
+# Since HA has more machines, we set the cpu for controllers and
+# compute nodes to 1
+default_vcpu: 1
+
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: True
@@ -68,4 +72,3 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-
