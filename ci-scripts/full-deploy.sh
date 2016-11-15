@@ -15,7 +15,6 @@ JOB_TYPE=$4
 
 if [ "$JOB_TYPE" = "gate" ] || \
    [ "$JOB_TYPE" = "periodic" ] || \
-   [ "$JOB_TYPE" = "roles-gate" ] || \
    [ "$JOB_TYPE" = "dlrn-gate" ]; then
     unset REL_TYPE
     if [ "$RELEASE" = "master-tripleo-ci" ]; then
@@ -26,10 +25,9 @@ elif [ "$JOB_TYPE" = "promote" ]; then
     REL_TYPE=$LOCATION
 else
     echo "Job type must be one of the following:"
-    echo " * gate - for gating changes on tripleo-quickstart"
+    echo " * gate - for gating changes on tripleo-quickstart or -extras"
     echo " * promote - for running promotion jobs"
     echo " * periodic - for running periodic jobs"
-    echo " * roles-gate - for gating changes to the extra roles"
     echo " * dlrn-gate - for gating upstream changes"
     exit 1
 fi
@@ -41,24 +39,13 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 # preparation steps to run with the gated roles
-if [ "$JOB_TYPE" = "roles-gate" ] || [ "$JOB_TYPE" = "gate" ]; then
-    # set up the gated repos and modify the requirements file to use them
+if [ "$JOB_TYPE" = "gate" ]; then
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
         --requirements quickstart-extras-requirements.txt \
-        --playbook gate-roles.yml \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        $VIRTHOST
-    # once more to let the gating role be gated as well
-    bash quickstart.sh \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --bootstrap \
-        --requirements quickstart-extras-requirements.txt \
-        --playbook gate-roles.yml \
+        --playbook gate-quickstart.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
