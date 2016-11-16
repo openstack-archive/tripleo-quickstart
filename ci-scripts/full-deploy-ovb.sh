@@ -1,6 +1,7 @@
 #!/bin/bash
 # CI test that does a full deploy on Openstack Virtual Baremetal.
 # $HW_ENV_DIR is the directory where environment-specific files are kept.
+# $JOB_TYPE used are 'periodic' and 'gate'
 # Usage: full-deploy-ovb.sh \
 #        <release> \
 #        <hw-env-dir> \
@@ -28,24 +29,13 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 # preparation steps to run with the gated roles
-if [ "$JOB_TYPE" = "roles-gate" ] || [ "$JOB_TYPE" = "gate" ]; then
-    # set up the gated repos and modify the requirements file to use them
+if [ "$JOB_TYPE" = "gate" ]; then
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
         --requirements quickstart-extras-requirements.txt \
-        --playbook gate-roles.yml \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        localhost
-    # once more to let the gating role be gated as well
-    bash quickstart.sh \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --bootstrap \
-        --requirements quickstart-extras-requirements.txt \
-        --playbook gate-roles.yml \
+        --playbook gate-quickstart.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $OPT_ADDITIONAL_PARAMETERS \
         localhost
