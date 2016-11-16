@@ -72,3 +72,15 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   with_items: "{{ qcow_images.files }}"
   changed_when: true
+
+# Copy the overcloud and ipa images into the converted undercloud.qcow2
+- name: Inject additional images
+  command: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }}
+    --run-command 'chown stack:stack /home/stack/{{ item }}'
+  changed_when: true
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  with_items: "{{ inject_images }}"
