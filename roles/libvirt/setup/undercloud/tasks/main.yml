@@ -66,7 +66,7 @@
     environment:
       LIBGUESTFS_BACKEND: direct
       LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-    with_items: "{{ inject_images }}"
+    with_items: "{{ inject_images | default('') }}"
     when: overcloud_as_undercloud|bool
 
   # This copies the `instackenv.json` configuration file that we
@@ -273,7 +273,7 @@
 # works by getting the MAC address of the first undercloud interface,
 # and then looking that up in the kernel ARP table.
 - name: Get undercloud vm ip address
-  script: "scripts/get-undercloud-ip.sh {{ undercloud_node.name }}"
+  script: "get-undercloud-ip.sh {{ undercloud_node.name }}"
   register: undercloud_vm_ip_result
   until: undercloud_vm_ip_result|success
   retries: "{{ undercloud_ip_retries }}"

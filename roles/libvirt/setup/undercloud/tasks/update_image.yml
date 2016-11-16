@@ -9,7 +9,7 @@
   template:
     src: update_image.sh.j2
     dest: "{{ working_dir}}/update_image-{{ item.inode }}.sh"
-  with_items: "{{ qcow_images.files }}"
+  with_items: "{{ qcow_images.files | default([]) }}"
 
 - name: run update
   command: >
@@ -20,6 +20,6 @@
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-  with_items: "{{ qcow_images.files }}"
+  with_items: "{{ qcow_images.files | default([]) }}"
   changed_when: true
 
