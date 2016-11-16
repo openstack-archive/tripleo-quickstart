@@ -43,6 +43,8 @@ bash quickstart.sh \
     --extra-vars artib_delorean_hash=$delorean_current_hash \
     --extra-vars publish=$PUBLISH \
     --extra-vars artib_image_stage_location="$REL_TYPE" \
+    --bootstrap \
+    --requirements quickstart-extras-requirements.txt \
     --no-clone \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE \
     $VIRTHOST
