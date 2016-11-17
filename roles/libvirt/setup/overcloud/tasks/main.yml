@@ -28,6 +28,8 @@
 - name: Define volume pool
   command: "virsh pool-define {{ working_dir }}/volume_pool.xml"
   when: pool_check|failed
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
 - name: Start volume pool
   virt_pool:
