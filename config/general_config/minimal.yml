@@ -7,9 +7,11 @@ step_introspect: true
 overcloud_nodes:
   - name: control_0
     flavor: control
+    virtualbmc_port: 6230
 
   - name: compute_0
     flavor: compute
+    virtualbmc_port: 6231
 
 # Tell tripleo how we want things done.
 extra_args: >-

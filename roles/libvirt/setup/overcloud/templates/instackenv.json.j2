@@ -6,8 +6,18 @@
   {% for node in overcloud_nodes %}
     {
       "name": "{{ node.name|replace('_', '-') }}",
-      "pm_password": {{ virt_power_key_pvt | to_nice_json }},
-      "pm_type": "pxe_ssh",
+      {% if release in ['liberty', 'mitaka', 'newton' ] %}
+        "pm_password": {{ virt_power_key_pvt | to_nice_json }},
+        "pm_type": "pxe_ssh",
+        "pm_user": "{{ ansible_user_id }}",
+        "pm_addr": "{{ host_ip }}",
+      {% else %}
+        "pm_password": "password",
+        "pm_type": "pxe_ipmitool",
+        "pm_user": "admin",
+        "pm_addr": "127.0.0.1",
+        "pm_port": "{{ node.virtualbmc_port }}",
+      {% endif %}
       "mac": [
         "{{ node_mac_map.get(node.name).get('overcloud') }}"
       ],
@@ -15,8 +25,6 @@
       "memory": "{{ flavors[node.flavor].memory }}",
       "disk": "{{ flavors[node.flavor].disk }}",
       "arch": "{{ libvirt_arch }}",
-      "pm_user": "{{ ansible_user_id }}",
-      "pm_addr": "{{ host_ip }}",
       "capabilities": "profile:{{ node.flavor }},boot_option:local"
     }
     {% if not loop.last %}

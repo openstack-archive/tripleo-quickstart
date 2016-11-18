@@ -152,3 +152,7 @@ devmode: false
 
 # Tuned profile set while provisioning remote hosts to optimize for deployment
 tuned_profile: 'virtual-host'
+
+# This is the name of the user the `provision` role will create on the
+# remote host.
+non_root_user: stack
