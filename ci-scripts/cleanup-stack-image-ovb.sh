@@ -1,18 +1,13 @@
 #!/bin/bash
 # CI test that cleans up a deploy and image on Openstack Virtual Baremetal.
-# $HW_ENV_DIR is the directory where environment-specific files are kept.
 # Usage: cleanup-stack-image-ovb.sh \
-#        <hw-env-dir> \
-#        <network-isolation> \
 #        <ovb-creds-file>  \
 #        <playbook>
 
 set -eux
 
-HW_ENV_DIR=$1
-NETWORK_ISOLATION=$2
-OVB_CREDS_FILE=$3
-PLAYBOOK=$4
+OVB_CREDS_FILE=$1
+PLAYBOOK=$2
 
 # env file is named <prefix>env.yaml
 # prefix is built from:
@@ -28,7 +23,6 @@ echo $RELEASE
 pushd $WORKSPACE/tripleo-quickstart
 
 bash quickstart.sh \
---ansible-debug \
 --bootstrap \
 --working-dir $WORKSPACE/ \
 --requirements quickstart-extras-requirements.txt \
