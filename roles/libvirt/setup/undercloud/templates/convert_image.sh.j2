@@ -13,10 +13,19 @@ else
     exit 1
 fi
 
+yum update -y
+
 yum remove -y cloud-init python-django-horizon openstack-dashboard
-yum install -y python-tripleoclient openstack-tempest python-aodh-tests python-ceilometer-tests \
+yum install -y python-tripleoclient
+# NOTE(trown) Install tempest and test packages in a seperate yum transaction
+# so that we do not fail the conversion if this install fails. There is a period
+# after TripleO uploads a new image, but before the buildlogs repo gets synced,
+# where this will fail because we try to install older test packages than the
+# service packages already installed in the image.
+yum install -y openstack-tempest python-aodh-tests python-ceilometer-tests \
 python-heat-tests python-ironic-tests python-keystone-tests python-manila-tests \
-python-mistral-tests python-neutron-tests python-sahara-tests python-zaqar-tests
+python-mistral-tests python-neutron-tests python-sahara-tests python-zaqar-tests \
+|| /bin/true
 
 useradd stack
 echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
