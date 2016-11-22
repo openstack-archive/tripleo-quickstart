@@ -13,7 +13,7 @@ else
     exit 1
 fi
 
-yum remove -y cloud-init
+yum remove -y cloud-init python-django-horizon
 yum install -y python-tripleoclient openstack-tempest python-aodh-tests python-ceilometer-tests \
 python-heat-tests python-ironic-tests python-keystone-tests python-manila-tests \
 python-mistral-tests python-neutron-tests python-sahara-tests python-zaqar-tests
