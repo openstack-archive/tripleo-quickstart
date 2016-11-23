@@ -1,7 +1,0 @@
----
-# This playbooks is responsible for gating all the auxiliary
-# roles that quickstart uses
-- name: Clone the gated repos and modify the requirements
-  hosts: localhost
-  roles:
-    - { role: tripleo-gate, artg_mode: 'roles' }

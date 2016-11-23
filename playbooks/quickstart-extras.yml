@@ -34,14 +34,14 @@
   hosts: undercloud
   gather_facts: no
   roles:
-    - { role: tripleo-ssl, when: ssl_overcloud|bool }
+    - { role: overcloud-ssl, when: ssl_overcloud|bool }
 
 # Deploy the overcloud
 - name:  Deploy the overcloud
   hosts: undercloud
   gather_facts: yes
   roles:
-    - tripleo-overcloud
+    - overcloud-deploy
 
 - name: Add the overcloud nodes to the generated inventory
   hosts: undercloud
@@ -74,7 +74,7 @@
     - overcloud-validate
   gather_facts: no
   roles:
-    - { role: tripleo-overcloud-validate, when: test_ping|bool }
+    - { role: validate-simple, when: test_ping|bool }
 
 # Execute tempest against the overcloud deployment
 - name:  Execute tempest against the overcloud
@@ -83,4 +83,4 @@
     - overcloud-validate
   gather_facts: no
   roles:
-    - { role: tripleo-tempest, when: run_tempest|bool }
+    - { role: validate-tempest, when: run_tempest|bool }
