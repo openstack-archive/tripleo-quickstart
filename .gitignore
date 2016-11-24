@@ -63,3 +63,7 @@ playbooks/debug.yml
 
 # Files created by releasenotes build
 releasenotes/build
+
+# Editors
+.*.sw[klmnop]
+*~
