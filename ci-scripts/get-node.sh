@@ -18,8 +18,8 @@ popd
 $WORKSPACE/bin/cico node get --arch x86_64 \
               --release 7 \
               --count 1 \
-              --retry-count 2 \
-              --retry-interval 30 \
+              --retry-count 6 \
+              --retry-interval 60 \
               -f csv > $WORKSPACE/provisioned.csv
 
 $WORKSPACE/bin/cico inventory
