@@ -127,6 +127,7 @@ ssl_overcloud: false
 # specified as part of the deployment configuration. Note that the VIP used has
 # to be set accordingly with the `undercloud_external_network_cidr`.
 overcloud_public_vip: 10.0.0.5
+overcloud_public_vip6: 2001:db8:fd00:1000::14
 
 # Set this to `true` if you want your undercloud and overcloud vms to
 # have a VNC console available.
