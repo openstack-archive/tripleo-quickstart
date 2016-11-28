@@ -2,6 +2,14 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 test_ping: true
 
+# This enables the run of several tripleo-validations tests through Mistral
+run_tripleo_validations: True
+# This enables the run of tripleo-validations negative tests through shell
+# scripts
+run_tripleo_validations_negative_tests: True
+# Exit tripleo-quickstart on validations failure
+exit_on_validations_failure: False
+
 deploy_composable_scenario: false
 composable_services: true
 composable_scenario: multinode.yaml

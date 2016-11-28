@@ -19,6 +19,7 @@ Contents:
    devmode
    devmode-ovb
    design
+   validations
    contributing
    working-with-extras
    rhosp

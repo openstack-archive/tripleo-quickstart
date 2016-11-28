@@ -209,3 +209,12 @@ non_root_chown: false
 # It is safe to mark this as default true as it only runs on a virthost
 # This variable is set to true in config/environments/default_libvirt.yml
 enable_port_forward_for_tripleo_ui: false
+
+# This enables the run of several tripleo-validations tests through Mistral
+run_tripleo_validations: False
+# This enables the run of tripleo-validations negative tests through shell
+# scripts
+run_tripleo_validations_negative_tests: False
+# Exit tripleo-quickstart on validations failures
+exit_on_validations_failure: False
+

@@ -31,6 +31,14 @@ test_ping: true
 run_tempest: false
 tempest_workers: 4
 
+# This enables the run of several tripleo-validations tests through Mistral
+run_tripleo_validations: True
+# This enables the run of tripleo-validations negative tests through shell
+# scripts
+run_tripleo_validations_negative_tests: True
+# Exit tripleo-quickstart on validations failure
+exit_on_validations_failure: False
+
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
 artcl_create_docs_payload:
