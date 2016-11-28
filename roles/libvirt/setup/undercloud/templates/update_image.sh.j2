@@ -12,7 +12,6 @@ timeout -s 15 -k 1200 900 bash << EOS
     yum update -y
 
     {% if "undercloud" in item.path %}
-    yum install -y python-tripleoclient
     mkdir -p /opt/stack/new/tripleo-ci
     git clone https://git.openstack.org/openstack-infra/tripleo-ci /opt/stack/new/tripleo-ci
     {% endif  %}
