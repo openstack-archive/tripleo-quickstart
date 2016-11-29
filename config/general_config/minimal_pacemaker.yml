@@ -11,8 +11,6 @@ overcloud_nodes:
 
 # Tell tripleo how we want things done.
 extra_args: >-
-  --neutron-network-type vxlan
-  --neutron-tunnel-types vxlan
   --ntp-server pool.ntp.org
 
 network_isolation: true
