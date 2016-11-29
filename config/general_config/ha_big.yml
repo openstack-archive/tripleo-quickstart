@@ -40,8 +40,6 @@ network_isolation: true
 extra_args: >-
   --compute-scale 3
   --control-scale 3
-  --neutron-network-type vxlan
-  --neutron-tunnel-types vxlan
   --ntp-server pool.ntp.org
 test_ping: true
 enable_pacemaker: true

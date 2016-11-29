@@ -32,8 +32,7 @@ step_introspect: false
 # Tell tripleo about our environment.
 network_isolation: true
 extra_args: >-
-  --control-scale 3 --neutron-network-type vxlan
-  --neutron-tunnel-types vxlan
+  --control-scale 3
   --ntp-server pool.ntp.org
 test_ping: true
 enable_pacemaker: true
