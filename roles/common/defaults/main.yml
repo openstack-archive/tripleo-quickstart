@@ -16,13 +16,18 @@ overcloud_as_undercloud: false
 # overrides configured.
 default_disk: 50
 default_memory: 8192
-default_vcpu: 1
+
+# Setting controller and compute nodes to 2 vcpus, so we have more processing
+# power to run the tests
+default_vcpu: 2
 
 # The undercloud needs more than the default amount of memory
 # and disk.
 undercloud_memory: 12288
 undercloud_disk: 50
-undercloud_vcpu: 8
+# Setting undercloud to 6 cpus, so we continue to have around 10 vcpus
+# by default
+undercloud_vcpu: 6
 
 # The default deployment has flavors for compute, controllers, ceph
 # nodes, and undercloud nodes.  All flavors defined in the `flavors`
