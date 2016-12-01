@@ -6,6 +6,7 @@ set -eux
 # Note(hrybacki): Config used by collect-logs should be the same used by
 # TripleO Quickstart during deployment
 CONFIG=$1
+LOG_ENV=${2:-centosci}
 
 export ANSIBLE_INVENTORY=$WORKSPACE/hosts
 export ANSIBLE_CONFIG=$WORKSPACE/tripleo-quickstart/ansible.cfg
@@ -26,5 +27,5 @@ bash quickstart.sh \
     --requirements quickstart-extras-requirements.txt \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --playbook collect-logs.yml \
-    --extra-vars @$WORKSPACE/config/general_config/centosci-logs.yml \
+    --extra-vars @$WORKSPACE/config/general_config/${LOG_ENV}-logs.yml \
     localhost
