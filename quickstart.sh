@@ -126,7 +126,7 @@ bootstrap () {
         # way to make setuptools not try to write the .eggs dir.
         sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
         python setup.py install egg_info --egg-base $OPT_WORKDIR
-        if [ -x "$ZUUL_CLONER" && ! -z "$ZUUL_BRANCH" ]; then
+        if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
             mkdir -p .tmp
             EXTRAS_DIR=$(/bin/mktemp -d -p $(pwd)/.tmp)
             pushd $EXTRAS_DIR
