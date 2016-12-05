@@ -12,5 +12,6 @@ Contents:
    accessing-undercloud
    accessing-overcloud
    unprivileged
+   devmode
    contributing
    working-with-extras

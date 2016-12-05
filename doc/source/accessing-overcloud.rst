@@ -1,3 +1,5 @@
+.. _accessing-overcloud:
+
 Accessing the Overcloud
 =======================
 
