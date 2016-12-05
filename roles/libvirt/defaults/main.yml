@@ -1,5 +1,5 @@
 # Which image should we download?
-release: mitaka
+release: newton
 undercloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/undercloud.qcow2
 overcloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/overcloud-full.tar
 ipa_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/ironic-python-agent.tar
