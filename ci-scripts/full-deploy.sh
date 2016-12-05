@@ -60,7 +60,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ]; then
         --bootstrap \
         --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
         --requirements quickstart-extras-requirements.txt \
-        --playbook dlrn-gate.yml \
+        --playbook build-test-packages.yml \
         --tags all \
         --teardown all \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
