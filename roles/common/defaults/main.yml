@@ -48,6 +48,7 @@ flavors:
     memory: '{{ceph_memory|default(default_memory)}}'
     disk: '{{ceph_disk|default(default_disk)}}'
     vcpu: '{{ceph_vcpu|default(default_vcpu)}}'
+    extradisks: true
 
   blockstorage:
     memory: '{{block_memory|default(default_memory)}}'
