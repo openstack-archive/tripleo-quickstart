@@ -9,7 +9,7 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 
 : ${OPT_BOOTSTRAP:=0}
 : ${OPT_CLEAN:=0}
-: ${OPT_PLAYBOOK:=quickstart.yml}
+: ${OPT_PLAYBOOK:=quickstart-extras.yml}
 : ${OPT_RELEASE:=mitaka}
 : ${OPT_RETAIN_INVENTORY_FILE:=0}
 : ${OPT_SYSTEM_PACKAGES:=0}

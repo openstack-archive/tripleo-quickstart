@@ -71,7 +71,6 @@ if [ "$JOB_TYPE" = "dlrn-gate" ]; then
         --retain-inventory \
         --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \
-        --playbook quickstart-extras.yml \
         --skip-tags provision \
         --tags all \
         --teardown none \
@@ -86,7 +85,6 @@ else
         --no-clone \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         --bootstrap \
-        --playbook quickstart-extras.yml \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
 fi
