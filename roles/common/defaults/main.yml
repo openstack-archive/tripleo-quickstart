@@ -142,6 +142,7 @@ networks:
     bridge:  brovc
 
 #Enable network isolation with single-nic-vlans for virtualized deployments
+undercloud_network_cidr: 192.168.24.0/24
 undercloud_external_network_cidr: 10.0.0.1/24
 undercloud_external_network_cidr6: 2001:db8:fd00:1000::1/64
 undercloud_networks:
@@ -204,3 +205,7 @@ libvirt_uri: qemu:///session
 # that they have sufficient privileges to connect to ovs bridges.
 non_root_chown: false
 
+# Enable port forwarding for tripleo-ui access
+# It is safe to mark this as default true as it only runs on a virthost
+# This variable is set to true in config/environments/default_libvirt.yml
+enable_port_forward_for_tripleo_ui: false

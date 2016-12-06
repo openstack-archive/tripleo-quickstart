@@ -23,6 +23,15 @@
     - path: "{{ undercloud_key }}"
       comment: "ansible_generated_undercloud"
 
+# Copy the undercloud key to the virthost in the ssh_user directory
+- name: copy ssh keys to virthost
+  copy:
+    src: "{{ undercloud_key }}"
+    dest: "{{ working_dir }}"
+    owner: "{{ ssh_user }}"
+    group: "{{ ssh_user }}"
+    mode: 0600
+
 - name: Read virt_power private key
   no_log: True
   set_fact:

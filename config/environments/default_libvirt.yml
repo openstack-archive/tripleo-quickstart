@@ -1,1 +1,8 @@
 environment_type: libvirt
+
+# This allows one to browse to the tripleo-ui on the undercloud
+# This is only required in libvirt based deployments
+enable_port_forward_for_tripleo_ui: true
+# Setup for SSL access to the tripleo-ui.
+# Please consult the tripleo-quickstart documentation prior to enabling this option
+tripleo_ui_secure_access: false

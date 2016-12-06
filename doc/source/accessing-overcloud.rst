@@ -85,6 +85,27 @@ that would look something like this::
     $ curl --socks5-hostname localhost:1080 http://overcloud.localdomain:5000/
     {"versions": {"values": [{"status": "stable", "updated": "2016-04-04T00:00:00Z",...
 
+Access to the overclouds horizon web interface
+----------------------------------------------
+
+With baremetal and ovb based deployments you can access horizon via the
+overclouds's controller public ip address http://<controller_ip>:80
+
+Deploying TripleO in a libvirt based environment presents an additional
+challenge of access the isolated ovs networks on the undercloud. By default
+an ssh-tunnel service has been setup on the virthost with the tripleo-quickstart
+for libvirt deployments.  Access horizon with the following.
+
+From the localhost::
+
+    http://<virthost>:8181
+
+Overcloud with SSL enabled
+
+    http://<virthost>:8443
+
+
+
 Using Firefox
 ^^^^^^^^^^^^^
 

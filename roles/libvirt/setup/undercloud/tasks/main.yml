@@ -335,3 +335,50 @@
   template:
     src: ssh.config.j2
     dest: "{{ local_working_dir }}/ssh.config.ansible"
+
+- when: enable_port_forward_for_tripleo_ui|bool
+  block:
+
+# TO-DO weshayutin
+# In the upcoming release of ansible 2.4 this should be moved to
+# iptables_raw
+#  - name: ensure the required tcp ports are open on the virthost
+  - iptables:
+      table: filter
+      chain: IN_public_allow
+      protocol: tcp
+      match: tcp
+      ctstate: NEW
+      jump: ACCEPT
+      destination_port: "{{ item }}"
+    become: true
+    with_items:
+      - 6385
+      - 5000
+      - 8004
+      - 8080
+      - 9000
+      - 8989
+      - 8774
+      - 3000
+      - 8181
+      - 8443
+      - 443
+
+  - name: Create ssh tunnel systemd service
+    template:
+      src: "{{ ssh_tunnel_service_file }}"
+      dest: "/etc/systemd/system/ssh-tunnel.service"
+      mode: 0755
+    become: true
+
+  - name: reload the systemctl daemon after file update
+    shell: systemctl daemon-reload
+    become: true
+
+  - name: Enable ssh tunnel service
+    service:
+      name: ssh-tunnel
+      enabled: true
+      state: restarted
+    become: true
