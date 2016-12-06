@@ -55,3 +55,10 @@
   file: dest=/var/log/extra/dstat-csv.log state=absent
   become: true
 
+- name: Delete OVS Bridges
+  openvswitch_bridge:
+    bridge: "{{ item.bridge }}"
+    state: absent
+  when: item.virtualport_type is defined and item.virtualport_type == "openvswitch"
+  with_items: "{{ networks }}"
+  become: true

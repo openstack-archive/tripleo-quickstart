@@ -14,6 +14,9 @@
 {% endif %}
   </forward>
 {% endif %}
+{% if item.virtualport_type is defined %}
+      <virtualport type='{{ item.virtualport_type }}'/>
+{% endif %}
 {% if item.address is defined %}
   <ip address='{{ item.address }}' netmask='{{ netmask }}'>
 {% if item.dhcp_range is defined %}
