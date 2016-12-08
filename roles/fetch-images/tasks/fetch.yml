@@ -1,20 +1,3 @@
-# Fetching the undercloud images can take a long time.  This
-# tasklist caches images in `{{ image_cache_dir }}` if an image is
-# (a) downloaded successfully and (b) successfully verifies against
-# the checksum.  Images are cached using the checksum as the filename,
-# and subsequent playbook runs will use the cached copy rather than
-# trying to fetch the remote copy.
-
-# This checks that the image_cache_dir directory exists.  When running
-# the full quickstart, this is created by the provision/remote role.
-# If you are running this role by itself, you will need to ensure that
-# either the directory exists ahead of time or that ansible has the
-# permissions to create the directory.
-- name: Ensure image cache directory exists
-  file:
-    path: "{{ image_cache_dir }}"
-    state: directory
-
 # Set some convenience variables here to avoid boilerplate code
 # elsewhere in this file.  These are all set unconditionally to avoid
 # any cruft leftover from a previous call to this file.
