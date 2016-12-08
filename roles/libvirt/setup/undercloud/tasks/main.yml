@@ -203,28 +203,17 @@
     environment:
       LIBGUESTFS_BACKEND: direct
 
+  # NOTE(trown) We use the overcloud-full initramfs and kernel as DIB
+  # seems a bit smarter about extracting them than virt-get-kernel and
+  # the partition image is simply a converted overcloud-full
   - name: Extract the kernel and initramfs from the undercloud image
     command: >
-      virt-get-kernel -a '{{ working_dir }}/undercloud.qcow2' --unversioned-names
-      --output '{{ working_dir }}'
+      virt-copy-out -a '{{ working_dir }}/undercloud.qcow2'
+      /home/stack/overcloud-full.vmlinuz
+      /home/stack/overcloud-full.initrd
+      '{{ working_dir }}'
     environment:
       LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-
-  # NOTE(trown) The undercloudvm template expects this to be
-  # named overcloud-full.vmlinuz. We can update the devmode case
-  # to not require this step
-  - name: rename undercloud kernel
-    command: >
-      mv '{{ working_dir }}/vmlinuz'
-      '{{ working_dir }}/overcloud-full.vmlinuz'
-
-  # NOTE(trown) The undercloudvm template expects this to be
-  # named overcloud-full.initrd. We can update the devmode case
-  # to not require this step
-  - name: rename undercloud initramfs
-    command: >
-      mv '{{ working_dir }}/initramfs'
-      '{{ working_dir }}/overcloud-full.initrd'
 
   # NOTE(trown): This is a bit of a hack to get the undercloud vm
   # template to use the external kernel and initrd. We should
