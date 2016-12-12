@@ -290,7 +290,7 @@
     host: "{{ undercloud_ip }}"
     state: started
     port: 22
-    timeout: 300
+    timeout: 600
 
 # Add the undercloud to the in-memory inventory.
 - name: Add undercloud vm to inventory
