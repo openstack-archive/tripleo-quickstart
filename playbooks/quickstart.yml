@@ -54,10 +54,3 @@
     - undercloud-scripts
   roles:
     - tripleo-inventory
-
-# Deploy the undercloud
-- name:  Install undercloud
-  hosts: undercloud
-  gather_facts: no
-  roles:
-    - tripleo/undercloud

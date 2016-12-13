@@ -2,6 +2,13 @@
 
 - include: quickstart.yml
 
+# Deploy the undercloud
+- name:  Deploy the undercloud
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - undercloud-deploy
+
 # Prepare any additional configuration files required by the overcloud
 - name:  Prepare configuration files for the overcloud deployment
   hosts: undercloud
