@@ -25,7 +25,6 @@ pushd $WORKSPACE/tripleo-quickstart
 bash quickstart.sh \
 --bootstrap \
 --working-dir $WORKSPACE/ \
---requirements quickstart-extras-requirements.txt \
 --release $RELEASE \
 --extra-vars prefix=$PREFIX \
 --extra-vars @$OVB_CREDS_FILE \

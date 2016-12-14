@@ -26,6 +26,7 @@ clean_virtualenv() {
 }
 
 : ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
+: ${OOOQ_EXTRA_REQUIREMENTS:=quickstart-extras-requirements.txt}
 
 install_deps () {
     sudo yum -y install \
@@ -206,7 +207,7 @@ usage () {
 
 }
 
-OPT_REQARGS=("-r"  "$OOOQ_BASE_REQUIREMENTS")
+OPT_REQARGS=("-r"  "$OOOQ_BASE_REQUIREMENTS" "-r" "$OOOQ_EXTRA_REQUIREMENTS")
 OPT_VARS=()
 
 while [ "x$1" != "x" ]; do

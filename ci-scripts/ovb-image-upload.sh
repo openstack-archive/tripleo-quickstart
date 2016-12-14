@@ -22,7 +22,6 @@ bash quickstart.sh \
 --ansible-debug \
 --bootstrap \
 --working-dir $WORKSPACE/ \
---requirements quickstart-extras-requirements.txt \
 --release $RELEASE \
 --extra-vars @$OVB_CREDS_FILE \
 --extra-vars get_latest_image='upload' \

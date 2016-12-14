@@ -32,7 +32,6 @@ bash quickstart.sh \
     --bootstrap \
     --tags all \
     --teardown all \
-    --requirements quickstart-extras-requirements.txt \
     --config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG \
     --extra-vars @$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/env_settings.yml \
     --playbook upgrade-baremetal.yml \

@@ -21,7 +21,7 @@ pulling in additional dependencies using ``pip install`` and the
 To run a full end-to-end deployment including verification, add these command
 line options when running ``quickstart.sh``::
 
-    --requirements quickstart-extras-requirements.txt --playbook quickstart-extras.yml
+    --playbook quickstart-extras.yml
 
 See ``quickstart.sh --help`` for a full list of options, but here is a full
 example using some common developer settings::

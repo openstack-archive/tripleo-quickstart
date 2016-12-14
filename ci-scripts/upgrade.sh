@@ -41,7 +41,6 @@ bash quickstart.sh \
     --bootstrap \
     --tags all \
     --teardown all \
-    --requirements quickstart-extras-requirements.txt \
     --playbook upgrade.yml \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST

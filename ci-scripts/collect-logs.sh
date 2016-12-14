@@ -24,7 +24,6 @@ bash quickstart.sh \
     --no-clone \
     --bootstrap \
     --retain-inventory \
-    --requirements quickstart-extras-requirements.txt \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --playbook collect-logs.yml \
     --extra-vars @$WORKSPACE/config/general_config/${LOG_ENV}-logs.yml \

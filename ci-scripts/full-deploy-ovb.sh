@@ -34,7 +34,6 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements quickstart-extras-requirements.txt \
         --playbook gate-quickstart.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $OPT_ADDITIONAL_PARAMETERS \
@@ -46,7 +45,6 @@ bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --tags all \
     --no-clone \
-    --requirements quickstart-extras-requirements.txt \
     --config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG \
     --extra-vars @$OVB_SETTINGS_FILE \
     --extra-vars @$OVB_CREDS_FILE \

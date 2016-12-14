@@ -44,7 +44,6 @@ if [ "$JOB_TYPE" = "gate" ]; then
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --requirements quickstart-extras-requirements.txt \
         --playbook gate-quickstart.yml \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $OPT_ADDITIONAL_PARAMETERS \
@@ -59,7 +58,6 @@ if [ "$JOB_TYPE" = "dlrn-gate" ]; then
         --no-clone \
         --bootstrap \
         --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --requirements quickstart-extras-requirements.txt \
         --playbook build-test-packages.yml \
         --tags all \
         --teardown all \
@@ -88,7 +86,6 @@ else
         --no-clone \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         --bootstrap \
-        --requirements quickstart-extras-requirements.txt \
         --playbook quickstart-extras.yml \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
