@@ -1,6 +1,6 @@
 hacking<0.11,>=0.10
 
-ansible-lint
+ansible-lint<=3.4.7
 jenkins-job-builder
 docutils>=0.11,!=0.13.1
 sphinx>=1.2.1,!=1.3b1,<1.3  # BSD
