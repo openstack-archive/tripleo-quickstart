@@ -24,13 +24,19 @@ undercloud_generate_service_certificate: True
 overcloud_nodes:
   - name: control_0
     flavor: control
+    virtualbmc_port: 6230
+
   - name: control_1
     flavor: control
+    virtualbmc_port: 6231
+
   - name: control_2
     flavor: control
+    virtualbmc_port: 6232
 
   - name: compute_0
     flavor: compute
+    virtualbmc_port: 6233
 
 # We don't need introspection in a virtual environment (because we are
 # creating all the "hardware" we really know the necessary

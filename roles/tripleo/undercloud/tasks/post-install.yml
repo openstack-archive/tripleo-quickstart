@@ -24,3 +24,50 @@
     dest: "{{ local_working_dir }}/stackrc"
     line: "export OS_PASSWORD={{ undercloud_admin_password.stdout }}"
     regexp: "OS_PASSWORD"
+
+- name: Install VirtualBMC package
+  when: release not in ['liberty', 'mitaka', 'newton']
+  package:
+    name: "python2-virtualbmc"
+    state: present
+    use: yum
+  become: true
+
+- name: Create the Virtual BMCs
+  when: release not in ['liberty', 'mitaka', 'newton']
+  command: >
+    vbmc add {{item.name}} --port {{item.virtualbmc_port}} --libvirt-uri "qemu+ssh://{{ non_root_user }}@{{ networks[0].address }}/session?socket=/run/user/{{ hostvars[groups['virthost'][0]].non_root_user_uid }}/libvirt/libvirt-sock&keyfile=/root/.ssh/id_rsa_virt_power&no_verify=1&no_tty=1"
+  with_items: "{{ overcloud_nodes }}"
+  become: true
+  become_user: root
+  changed_when: false
+
+# TODO(lucasagomes): The service file should be included in the
+#                    virtualbmc RPM package.
+- name: Create the VirtualBMC systemd service
+  when: release not in ['liberty', 'mitaka', 'newton']
+  copy:
+    mode: 0664
+    dest: "/usr/lib/systemd/system/virtualbmc.service"
+    content: |
+      [Unit]
+      Description=VirtualBMC service
+      After=network.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/bash -c 'for bmc in $(ls /root/.vbmc/); do vbmc start $bmc; done'
+      ExecStop=/bin/bash -c 'for bmc in $(ls /root/.vbmc/); do vbmc stop $bmc; done'
+      RemainAfterExit=yes
+
+      [Install]
+      WantedBy=multi-user.target
+  become: true
+
+- name: Start the Virtual BMCs
+  when: release not in ['liberty', 'mitaka', 'newton']
+  service:
+    name: virtualbmc
+    state: started
+    enabled: true
+  become: true
