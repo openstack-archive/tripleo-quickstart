@@ -56,6 +56,16 @@ undercloud_public_vip = {{undercloud_undercloud_public_vip|default(
 undercloud_admin_vip = {{undercloud_undercloud_admin_vip|default(
     undercloud_network_cidr|nthhost(3))}}
 
+# Nameserver for the Undercloud node.
+# (string value)
+{% if undercloud_undercloud_nameservers is string %}
+undercloud_nameservers = {{ undercloud_undercloud_nameservers }}
+{% elif undercloud_undercloud_nameservers is sequence %}
+undercloud_nameservers = {{ undercloud_undercloud_nameservers|join(',') }}
+{% else %}
+# undercloud_nameservers = <None>
+{% endif %}
+
 # Certificate file to use for OpenStack service SSL connections.
 # Setting this enables SSL for the OpenStack API endpoints, leaving it
 # unset disables SSL. (string value)
