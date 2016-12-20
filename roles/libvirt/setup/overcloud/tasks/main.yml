@@ -1,11 +1,3 @@
-# Create the volume pool directory if it doesn't already exist.  This
-# will be the target of the libvirt volume pool we create in the next
-# task.
-- name: Ensure volume pool directory exists
-  file:
-    path: "{{ libvirt_volume_path }}"
-    state: directory
-
 # Create a libvirt volume pool.  This is where we'll be creating
 # images for the undercloud and overcloud.
 # Note: the virt_pool module is not working properly on rhel-7.2

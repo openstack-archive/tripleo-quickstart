@@ -98,3 +98,11 @@
   poll: 0
   become: true
   changed_when: false
+
+# We're going to want to store things in `working_dir` so ensure it
+# exists first.  `working_dir` is a directory on the target host.
+- name: Ensure remote working dir exists
+  file:
+    path: "{{ working_dir }}"
+    state: directory
+  become: true
