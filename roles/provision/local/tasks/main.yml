@@ -14,13 +14,21 @@
   tags:
     - provision
 
-- name: Ensure local working dir exists
-  file:
-    path: "{{ local_working_dir }}"
-    state: directory
-    owner: "{{ ansible_env.USER }}"
-    group: "{{ current_group_local }}"
-  become: true
+- block:
+  - name: Ensure local working dir exists
+    file:
+      path: "{{ local_working_dir }}"
+      state: directory
+      owner: "{{ ansible_env.USER }}"
+      group: "{{ current_group_local }}"
+    become: true
+  rescue:
+  - name: Ensure local working dir exists
+    file:
+      path: "{{ local_working_dir }}"
+      state: directory
+      owner: "{{ ansible_env.USER }}"
+      group: "{{ current_group_local }}"
 
 # This file needs to exist because it will later be referenced in some
 # ssh command lines.
