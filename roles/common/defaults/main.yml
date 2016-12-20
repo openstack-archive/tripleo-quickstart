@@ -7,7 +7,7 @@ local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 ansible_user: stack
 # This is where we store generated artifacts (like ssh config files,
 # keys, etc).
-working_dir: "/home/{{ ansible_user }}/.quickstart"
+working_dir: "/home/{{ ansible_user }}"
 
 # This is a directory no the virthost in which we store the downloaded
 # undercloud image.
