@@ -10,6 +10,7 @@ pushd $WORKSPACE/tripleo-quickstart
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
+    --requirements requirements.txt \
     --requirements ci-scripts/ci-base-requirements.txt \
     --playbook noop.yml \
     localhost
