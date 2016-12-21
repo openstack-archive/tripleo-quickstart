@@ -16,6 +16,13 @@
   roles:
     - overcloud-prep-config
 
+# Prepare the overcloud for a containerized deployment
+- name:  Prepare overcloud containers
+  hosts: undercloud
+  gather_facts: no
+  roles:
+    - overcloud-prep-containers
+
 # Prepare the overcloud images for deployment
 - name:  Prepare the overcloud images for deployment
   hosts: undercloud
