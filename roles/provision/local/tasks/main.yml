@@ -2,7 +2,7 @@
 - name: Check that virthost is set
   fail:
     msg: "You need to set virthost before running these playbooks."
-  when: virthost is not defined
+  when: virthost|default("") == ""
 
 - name: Get current user group for localhost
   command: "id -gn"
