@@ -17,7 +17,6 @@ DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-sc
 : ${OPT_TEARDOWN:=nodes}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
 
-
 clean_virtualenv() {
     if [ -d $OPT_WORKDIR ]; then
         echo "WARNING: Removing $OPT_WORKDIR. Triggering virtualenv bootstrap."
@@ -161,7 +160,9 @@ usage () {
     echo "                      (default=$OPT_PLAYBOOK)"
     echo "  -r, --requirements <file>"
     echo "                      install requirements with pip, can be used"
-    echo "                      multiple times (default=$OOOQ_BASE_REQUIREMENTS)"
+    echo "                      multiple times. By using this flag you override "
+    echo "                      both requirements.txt and quickstart-extras-requirements.txt."
+    echo "                      The user assumes responsibility for the requirements. "
     echo "  -R, --release       OpenStack release to deploy (default=$OPT_RELEASE)"
     echo "  -c, --config <file>"
     echo "                      specify the config file that contains the node"
@@ -207,7 +208,6 @@ usage () {
 
 }
 
-OPT_REQARGS=("-r"  "$OOOQ_BASE_REQUIREMENTS" "-r" "$OOOQ_EXTRA_REQUIREMENTS")
 OPT_VARS=()
 
 while [ "x$1" != "x" ]; do
@@ -320,6 +320,10 @@ while [ "x$1" != "x" ]; do
 
     shift
 done
+
+if [ -z "$OPT_REQARGS" ]; then
+    OPT_REQARGS=("-r"  "$OOOQ_BASE_REQUIREMENTS" "-r" "$OOOQ_EXTRA_REQUIREMENTS")
+fi
 
 if [ "$PRINT_LOGO" = 1 ]; then
     print_logo
