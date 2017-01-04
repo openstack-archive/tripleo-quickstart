@@ -21,15 +21,17 @@ pulling in additional dependencies using ``pip install`` and the
 To run a full end-to-end deployment including verification, add these command
 line options when running ``quickstart.sh``::
 
-    --playbook quickstart-extras.yml
+    --tags all
 
 See ``quickstart.sh --help`` for a full list of options, but here is a full
 example using some common developer settings::
 
     ./quickstart.sh --requirements quickstart-extras-requirements.txt \
-                    --playbook quickstart-extras.yml \
-                    --tags all --teardown all \
-                    --release master --no-clone --clean \
+                    --tags all \
+                    --teardown all \
+                    --release master \
+                    --no-clone \
+                    --clean \
                     --config config/general_config/minimal_pacemaker.yml \
                     virthost.example.com
 

@@ -23,7 +23,6 @@ bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --release master-tripleo-ci \
-    --playbook quickstart-extras.yml \
     --extra-vars test_ping=False \
     --extra-vars run_tempest=True  \
     $VIRTHOST
