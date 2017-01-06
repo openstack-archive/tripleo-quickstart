@@ -15,7 +15,7 @@ usage () {
     echo ""
     echo "Options:"
     echo "  -c, --config <type>"
-    echo "                      specify the node configuration (default=$OPT_CONFIG)"
+    echo "                      specify the node configuration (default=$CONFIG)"
     echo "  -n, --no-gate       do not ask for gating a commit when gating"
     echo "                      variables are missing (default is gating)"
     echo "  -w, --working-dir <dir>"
