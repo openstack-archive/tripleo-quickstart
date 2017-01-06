@@ -11,6 +11,7 @@ pushd $WORKSPACE/tripleo-quickstart
     --no-clone \
     --bootstrap \
     --requirements requirements.txt \
+    --requirements quickstart-extras-requirements.txt \
     --requirements ci-scripts/ci-base-requirements.txt \
     --playbook noop.yml \
     localhost
