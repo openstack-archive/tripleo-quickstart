@@ -81,7 +81,7 @@
   become: true
 
 - name: install the latest version of dstat on virthost
-  yum:
+  package:
     name: dstat
     state: present
   become: true
