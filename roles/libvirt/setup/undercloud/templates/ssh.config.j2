@@ -24,7 +24,7 @@ Host undercloud-root
 Host undercloud
     ProxyCommand {{proxycommand}}
     IdentityFile {{ local_working_dir }}/id_rsa_undercloud
-    User stack
+    User {{ undercloud_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 

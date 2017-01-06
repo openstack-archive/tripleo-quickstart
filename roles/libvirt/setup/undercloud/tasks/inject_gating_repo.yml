@@ -18,7 +18,7 @@
   - name: Extract overcloud-full image
     command: >
       virt-copy-out -a {{ working_dir }}/undercloud.qcow2
-      /home/stack/overcloud-full.qcow2 {{ working_dir }}
+      /home/{{ undercloud_user }}/overcloud-full.qcow2 {{ working_dir }}
     register: overcloud_image_extracted
     when: not overcloud_image_stat.stat.exists
 
@@ -31,7 +31,7 @@
   - name: Copy updated overcloud-full image back to undercloud
     command: >
       virt-copy-in -a {{ working_dir }}/undercloud.qcow2
-      {{ working_dir }}/overcloud-full.qcow2 /home/stack/
+      {{ working_dir }}/overcloud-full.qcow2 /home/{{ undercloud_user }}/
     when: overcloud_image_extracted is defined and overcloud_image_extracted|changed
 
   - name: Inject the gating repo (undercloud)

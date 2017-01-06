@@ -5,9 +5,13 @@ local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 
 # this will define the user that ansible will connect with
 ansible_user: stack
+
+# This defines the user that deploys the overcloud from the undercloud
+undercloud_user: "stack"
+
 # This is where we store generated artifacts (like ssh config files,
-# keys, etc).
-working_dir: "/home/{{ ansible_user }}"
+# keys, deployment scripts, etc) on the undercloud.
+working_dir: "/home/{{ undercloud_user }}"
 
 # This is a directory no the virthost in which we store the downloaded
 # undercloud image.

@@ -18,7 +18,7 @@
   - name: Extract overcloud-full image
     command: >
       virt-copy-out -a {{ working_dir }}/undercloud.qcow2
-      /home/stack/overcloud-full.qcow2 {{ working_dir }}
+      /home/{{ undercloud_user }}/overcloud-full.qcow2 {{ working_dir }}
     when: not overcloud_image_stat_for_customize.stat.exists
 
   # only customize overcloud-full image if that is not going to be
@@ -31,5 +31,5 @@
   - name: Copy updated overcloud-full image back to undercloud
     command: >
       virt-copy-in -a {{ working_dir }}/undercloud.qcow2
-      {{ working_dir }}/overcloud-full.qcow2 /home/stack/
+      {{ working_dir }}/overcloud-full.qcow2 /home/{{ undercloud_user }}/
 

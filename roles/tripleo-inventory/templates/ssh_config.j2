@@ -46,7 +46,7 @@ Host undercloud
     Hostname {{ undercloud_ip }}
 {% endif %}
     IdentityFile {{ hostvars['undercloud'].ansible_private_key_file }}
-    User stack
+    User {{ undercloud_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 

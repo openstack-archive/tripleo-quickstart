@@ -17,7 +17,7 @@ Host undercloud
     Hostname {{ undercloud_ip }}
     IdentityFile {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/id_rsa_undercloud
     IdentitiesOnly yes
-    User stack
+    User {{ undercloud_user }}
     StrictHostKeyChecking no
 
 

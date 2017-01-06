@@ -27,17 +27,17 @@ python-heat-tests python-ironic-tests python-keystone-tests python-manila-tests 
 python-mistral-tests python-neutron-tests python-sahara-tests python-zaqar-tests \
 || /bin/true
 
-useradd stack
-echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
-chmod 0440 /etc/sudoers.d/stack
+useradd {{ undercloud_user }}
+echo "{{ undercloud_user }} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/{{ undercloud_user }}
+chmod 0440 /etc/sudoers.d/{{ undercloud_user }}
 
-mkdir /home/stack/.ssh
+mkdir /home/{{ undercloud_user }}/.ssh
 
 echo "127.0.0.1  localhost undercloud" > /etc/hosts
 echo "HOSTNAME=undercloud" >> /etc/sysconfig/network
 echo "undercloud" > /etc/hostname
 
-chown -R stack:stack /home/stack/
+chown -R {{ undercloud_user }}:{{ undercloud_user }} /home/{{ undercloud_user }}/
 
 # Add a 4GB swap file to the Undercloud
 dd if=/dev/zero of=/swapfile bs=1024 count=4194304

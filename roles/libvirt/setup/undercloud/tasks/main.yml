@@ -59,8 +59,8 @@
   - name: Inject additional images
     command: >
       virt-customize -a {{ working_dir }}/undercloud.qcow2
-      --upload {{ working_dir }}/{{ item }}:/home/stack/{{ item }}
-      --run-command 'chown stack:stack /home/stack/{{ item }}'
+      --upload {{ working_dir }}/{{ item }}:/home/{{ undercloud_user }}/{{ item }}
+      --run-command 'chown {{ undercloud_user }}:{{ undercloud_user }} /home/{{ undercloud_user }}/{{ item }}'
     changed_when: true
     environment:
       LIBGUESTFS_BACKEND: direct
@@ -73,8 +73,8 @@
   - name: Copy instackenv.json to appliance
     command: >
       virt-customize -a {{ working_dir }}/undercloud.qcow2
-      --upload {{ working_dir }}/instackenv.json:/home/stack/instackenv.json
-      --run-command 'chown stack:stack /home/stack/instackenv.json'
+      --upload {{ working_dir }}/instackenv.json:/home/{{ undercloud_user }}/instackenv.json
+      --run-command 'chown {{ undercloud_user }}:{{ undercloud_user }} /home/{{ undercloud_user }}/instackenv.json'
     environment:
       LIBGUESTFS_BACKEND: direct
       LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
@@ -95,7 +95,7 @@
       dest: "{{ working_dir }}/id_rsa_virt_power"
 
   # Copy the public key to `$HOME/.ssh/authorized_keys` for the `root`
-  # and `stack` user on the undercloud.
+  # and `undercloud_user` user on the undercloud.
   - name: Inject undercloud ssh public key to appliance
     command: >
       virt-customize -a {{ working_dir }}/undercloud.qcow2
@@ -110,9 +110,9 @@
       - homedir: /root
         owner: root
         group: root
-      - homedir: /home/stack
-        owner: stack
-        group: stack
+      - homedir: '/home/{{ undercloud_user }}'
+        owner: '{{ undercloud_user }}'
+        group: '{{ undercloud_user }}'
 
   # This copies the `id_rsa_virt_power` private key that we generated
   # in the overcloud setup role to the undercloud host to be used by
@@ -229,8 +229,8 @@
   - name: Extract the kernel and initramfs from the undercloud image
     command: >
       virt-copy-out -a '{{ working_dir }}/undercloud.qcow2'
-      /home/stack/overcloud-full.vmlinuz
-      /home/stack/overcloud-full.initrd
+      '/home/{{ undercloud_user }}/overcloud-full.vmlinuz'
+      '/home/{{ undercloud_user }}/overcloud-full.initrd'
       '{{ working_dir }}'
     environment:
       LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
@@ -319,7 +319,7 @@
     groups: undercloud
     ansible_host: undercloud
     ansible_fqdn: undercloud
-    ansible_user: stack
+    ansible_user: '{{ undercloud_user }}'
     ansible_private_key_file: "{{ undercloud_key }}"
     ansible_ssh_extra_args: '-F "{{local_working_dir}}/ssh.config.ansible"'
     undercloud_ip: "{{ undercloud_ip }}"
