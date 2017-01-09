@@ -1,7 +1,9 @@
 # We run tempest in this topology instead of ping test.
 # We set introspection to true and use only the minimal amount of nodes
 # for this job, but test all defaults otherwise.
-step_introspect: true
+# TODO: Enable introspection once https://bugs.launchpad.net/tripleo/+bug/1651719
+# is fixed (amoralej)
+step_introspect: false
 
 # Define a single controller node and a single compute node.
 overcloud_nodes:
