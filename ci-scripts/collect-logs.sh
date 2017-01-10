@@ -19,6 +19,9 @@ export ANSIBLE_SSH_ARGS="-F ${SSH_CONFIG}"
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
+export ARA_DATABASE="sqlite:///${WORKSPACE}/ara.sqlite"
+$WORKSPACE/bin/ara generate $WORKSPACE/ara
+
 bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \

@@ -399,6 +399,7 @@ set -ex
 
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
+export ARA_DATABASE="sqlite:///${OPT_WORKDIR}/ara.sqlite"
 
 #set the ansible ssh.config options if not already set.
 source $OOOQ_DIR/ansible_ssh_env.sh
