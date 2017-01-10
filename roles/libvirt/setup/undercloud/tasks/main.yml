@@ -273,6 +273,16 @@
     xml: "{{ lookup('template', 'undercloudvm.xml.j2') }}"
     uri: "{{ libvirt_uri }}"
 
+- name: Ensure file permissions if root used as task runner
+  file:
+    path: "{{ working_dir }}"
+    owner: "{{ non_root_user }}"
+    group: "{{ non_root_user }}"
+    mode: "a+x"
+    recurse: yes
+    state: 'directory'
+  when: non_root_chown|bool
+
 # Start the undercloud virtual machine.
 - name: Start undercloud vm
   virt:
