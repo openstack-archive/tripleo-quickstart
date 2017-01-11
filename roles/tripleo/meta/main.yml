@@ -1,3 +1,0 @@
-# Include the `common` role as a dependency.
-dependencies:
-  - common
