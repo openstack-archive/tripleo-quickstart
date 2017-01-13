@@ -1,10 +1,5 @@
 ---
-# Working directory on the slave running the playbook,
-local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
-# Ansible user name.
-ansible_user: stack
-# Working directory on the virthost.
-working_dir: "/home/{{ ansible_user }}"
+
 # SSH key used to access the undercloud machine.
 undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
 # Default to 'undercloud' if the overcloud has not been deployed yet, or 'all'
