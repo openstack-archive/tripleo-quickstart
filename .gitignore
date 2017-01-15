@@ -60,3 +60,6 @@ target/
 # jenkins config
 jenkins/config.ini
 playbooks/debug.yml
+
+# Files created by releasenotes build
+releasenotes/build
