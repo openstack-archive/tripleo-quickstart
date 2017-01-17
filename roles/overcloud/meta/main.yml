@@ -1,3 +1,0 @@
-dependencies:
-  - tripleo/undercloud
-  - tripleo/overcloud
