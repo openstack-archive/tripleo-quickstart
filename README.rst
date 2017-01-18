@@ -102,12 +102,29 @@ developer mode would be::
 The full set of developer mode instructions are available in :ref:`devmode`
 
 Working With Quickstart Extras
-------------------------
+------------------------------
 
 TripleO Quickstart is more than just a tool for quickly deploying a single machine
 TripleO instance; it is an easily extensible framework for deploying OpenStack.
 
 For a how-to please see :ref:`working-with-extras`
+
+Setting up libvirt guests only
+------------------------------
+
+At times it is useful to only setup or provision libvirt guests without installing any
+TripleO code or rpms.  The tripleo-quickstart git repository is designed to provision
+libvirt guest environments.  Some may be familiar with an older TripleO tool called
+instack-virt-setup, these steps would replace that function.
+
+To deploy the undercloud node uninstalled and empty or blank overcloud nodes
+do the following.::
+
+    bash quickstart.sh --tags all --playbook quickstart.yml $VIRTHOST
+
+To only deploy one node, the undercloud node do the following.::
+
+    bash quickstart.sh --tags all --playbook quickstart.yml -e overcloud_nodes="" $VIRTHOST
 
 Documentation
 -------------
