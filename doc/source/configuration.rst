@@ -156,3 +156,17 @@ var, that needs to point to an script living on your filesystem.
 That script will be copied to working directory, and applied on the
 overcloud. The script can be in Jinja template format, so you can benefit
 from ansible var substitutions.
+
+Consuming external images
+-------------------------
+
+In the usual workflow, tripleo-quickstart relies on the overcloud
+and agent images that are shipped in the undercloud. But for certain
+types of tests, it is useful to provide your own images.
+To achieve that, set the ``use_external_images`` to True. This will
+cause to inject all the images listed in the ``inject_images`` list
+into the undercloud, so the system can use it.
+Please note that you also need to define all the images you want to
+fetch, using the ``images`` setting. You will need to define the name
+of the image, the url where to get it, and the image type (qcow2, tar).
+As a reference, please look at `http://git.openstack.org/cgit/openstack/tripleo-quickstart/tree/config/release/master-tripleo-ci.yml`
