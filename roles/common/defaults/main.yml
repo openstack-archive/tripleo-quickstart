@@ -4,7 +4,7 @@
 local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 
 # this will define the user that ansible will connect with
-ansible_user: stack
+ssh_user: stack
 
 # This defines the user that deploys the overcloud from the undercloud
 undercloud_user: "stack"
