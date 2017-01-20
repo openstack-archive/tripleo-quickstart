@@ -36,3 +36,8 @@ libvirt_arch: x86_64
 undercloud_ip_retries: 20
 
 undercloud_instackenv_template: instackenv.json.j2
+
+# set to true if you want to inject additional overcloud
+# and ipa images. You will need to define the images and
+# mapping, and inject_images list as well
+use_external_images: false
