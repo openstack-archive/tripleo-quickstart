@@ -22,6 +22,9 @@ Currently the virthost machine must be running a recent Red Hat-based Linux
 distribution (CentOS 7, RHEL 7, Fedora 22 - only CentOS 7 is currently tested),
 but we hope to add support for non-Red Hat distributions too.
 
+..  note::
+    Running quickstart.sh commands as root is not suggested or supported.
+
 A quick way to test that your virthost machine is ready to rock is::
 
     ssh root@$VIRTHOST uname -a
