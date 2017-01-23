@@ -170,3 +170,5 @@ non_root_user: stack
 
 # Path for volume storage
 libvirt_volume_path: "{{ working_dir }}/pool"
+
+libvirt_uri: qemu:///session

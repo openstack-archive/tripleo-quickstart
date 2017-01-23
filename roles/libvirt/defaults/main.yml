@@ -24,7 +24,6 @@ undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
 # Which libvirt session should we use?  Using `qemu://session` does
 # not require privileged access (but does require the setup performed by the
 # `environment/setup` role).
-libvirt_uri: qemu:///session
 libvirt_volume_pool: oooq_pool
 libvirt_domain_type: kvm
 libvirt_diskdev: vda
