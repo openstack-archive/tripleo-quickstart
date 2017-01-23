@@ -45,6 +45,23 @@
         ansible_private_key_file: "{{ local_working_dir }}/id_rsa_overcloud"
         ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.ansible"'
 
+- when: inventory == 'multinode'
+  block:
+    - name: Get subnodes
+      shell: >-
+        cat /etc/nodepool/sub_nodes_private
+      register: nodes
+
+    - name: Add subnode to ansible inventory
+      with_indexed_items: '{{ nodes.stdout | default([]) }}'
+      add_host:
+        name: 'subnode-{{ item.0 + 1 }}'
+        groups: "overcloud"
+        ansible_host: '{{ item.1 }}'
+        ansible_fqdn: '{{ item.1 }}'
+        ansible_user: 'jenkins'
+        ansible_private_key_file: "/etc/nodepool/id_rsa"
+
 #required for regeneration of ssh.config.ansible
 - name: set_fact for undercloud ip
   set_fact: undercloud_ip={{ hostvars['undercloud'].undercloud_ip }}
