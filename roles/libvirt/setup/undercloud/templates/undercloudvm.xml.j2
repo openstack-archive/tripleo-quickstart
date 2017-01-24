@@ -17,7 +17,11 @@
     <apic/>
     <pae/>
   </features>
-  <cpu mode='host-model'/>
+  <cpu mode='host-model'>
+    <!-- temporary workaround for RHBZ#1415831 -->
+    <feature policy='disable' name='avx'/>
+    <feature policy='disable' name='avx2'/>
+  </cpu>
   <clock offset='utc'>
     <timer name='rtc' tickpolicy='catchup'/>
     <timer name='pit' tickpolicy='delay'/>
