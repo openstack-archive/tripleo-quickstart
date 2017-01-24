@@ -21,6 +21,15 @@ if [ "$JOB_TYPE" = "gate" ] || \
         # we don't have a local mirror for the tripleo-ci images
         unset CI_ENV
     fi
+elif [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
+    # setup a test patch to be built
+    export ZUUL_HOST=review.openstack.org
+    export ZUUL_CHANGES=openstack/tripleo-ui:master:refs/changes/25/422025/1
+    unset REL_TYPE
+    if [ "$RELEASE" = "master-tripleo-ci" ]; then
+        # we don't have a local mirror for the tripleo-ci images
+        unset CI_ENV
+    fi
 elif [ "$JOB_TYPE" = "promote" ]; then
     REL_TYPE=$LOCATION
 else
@@ -29,6 +38,7 @@ else
     echo " * promote - for running promotion jobs"
     echo " * periodic - for running periodic jobs"
     echo " * dlrn-gate - for gating upstream changes"
+    echo " * dlrn-gate-check - for gating upstream changes"
     exit 1
 fi
 
@@ -39,7 +49,7 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 # preparation steps to run with the gated roles
-if [ "$JOB_TYPE" = "gate" ]; then
+if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
@@ -51,7 +61,7 @@ if [ "$JOB_TYPE" = "gate" ]; then
 fi
 
 # we need to run differently (and twice) when gating upstream changes
-if [ "$JOB_TYPE" = "dlrn-gate" ]; then
+if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     # provison the virthost and build the gated DLRN packages
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
