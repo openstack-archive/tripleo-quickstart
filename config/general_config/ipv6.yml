@@ -1,28 +1,4 @@
-# Deploy an HA openstack environment.
-#
-# This will require (6144 * 4) == approx. 24GB for the overcloud
-# nodes, plus another 8GB for the undercloud, for a total of around
-# 32GB.
-control_memory: 6144
-compute_memory: 6144
-
-undercloud_memory: 8192
-
-# Giving the undercloud additional CPUs can greatly improve heat's
-# performance (and result in a shorter deploy time).
-undercloud_vcpu: 4
-
-# Create three controller nodes and one compute node.
-overcloud_nodes:
-  - name: control_0
-    flavor: control
-  - name: control_1
-    flavor: control
-  - name: control_2
-    flavor: control
-
-  - name: compute_0
-    flavor: compute
+# Deploy an HA openstack environment with IPV6.
 
 # We don't need introspection in a virtual environment (because we are
 # creating all the "hardware" we really know the necessary
@@ -33,7 +9,6 @@ step_introspect: false
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
 extra_args: >-
-  --control-scale 3
   --ntp-server pool.ntp.org
 test_ping: true
 enable_pacemaker: true

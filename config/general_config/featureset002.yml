@@ -1,0 +1,114 @@
+
+# Summary of the feature set.
+# Deploy an HA openstack environment with IPV6, SSL enabled Overcloud
+
+# We don't need introspection in a virtual environment (because we are
+# creating all the "hardware" we really know the necessary
+# information).
+step_introspect: false
+
+# Tell tripleo about our environment.
+network_isolation: true
+
+extra_args: >-
+  --ntp-server pool.ntp.org
+test_ping: true
+enable_pacemaker: true
+
+tempest_config: false
+run_tempest: false
+
+overcloud_ipv6: true
+ssl_overcloud: true
+
+
+# TO-DO's
+undercloud_ui: true # TODO
+undercloud_validation: true # TODO
+
+floating_ip_cidr: 10.0.0.0/24
+external_network_cidr: 192.168.23.0/24
+undercloud_networks:
+  external:
+    address: "{{ undercloud_external_network_cidr|nthhost(1) }}"
+    netmask: "{{ undercloud_external_network_cidr|ipaddr('netmask') }}"
+    address6: "{{ undercloud_external_network_cidr6|nthhost(1) }}"
+    device_type: ovs
+    type: OVSIntPort
+    ovs_bridge: br-ctlplane
+
+
+network_environment_args:
+  ControlPlaneSubnetCidr: "{{ undercloud_network_cidr|ipaddr('prefix') }}"
+  ControlPlaneDefaultRoute: "{{ undercloud_network_cidr|nthhost(1) }}"
+  EC2MetadataIp: "{{ undercloud_network_cidr|nthhost(1) }}"
+  ExternalNetCidr: 2001:db8:fd00:1000::/64
+  ExternalAllocationPools: [{"start": "2001:db8:fd00:1000::10", "end": "2001:db8:fd00:1000:ffff:ffff:ffff:fffe"}]
+  ExternalInterfaceDefaultRoute: 2001:db8:fd00:1000::1
+  NeutronExternalNetworkBridge: "''"
+  InternalApiNetCidr: fd00:fd00:fd00:2000::/64
+  InternalApiAllocationPools: [{"start": "fd00:fd00:fd00:2000::10", "end": "fd00:fd00:fd00:2000:ffff:ffff:ffff:fffe"}]
+  StorageNetCidr: fd00:fd00:fd00:3000::/64
+  StorageAllocationPools: [{"start": "fd00:fd00:fd00:3000::10", "end": "fd00:fd00:fd00:3000:ffff:ffff:ffff:fffe"}]
+  StorageMgmtNetCidr: fd00:fd00:fd00:4000::/64
+  StorageMgmtAllocationPools: [{"start": "fd00:fd00:fd00:4000::10", "end": "fd00:fd00:fd00:4000:ffff:ffff:ffff:fffe"}]
+  TenantNetCidr: 172.16.0.0/24
+  TenantAllocationPools: [{"start": "172.16.0.10", "end": "172.16.0.250"}]
+  DnsServers: [ '{{ external_network_cidr6|nthhost(1) }}' ]
+
+networks:
+  - name: external
+    bridge: brext
+    forward_mode: nat
+    address: "{{ external_network_cidr|nthhost(1) }}"
+    netmask: "{{ external_network_cidr|ipaddr('netmask') }}"
+    dhcp_range:
+      - "{{ external_network_cidr|nthhost(10) }}"
+      - "{{ external_network_cidr|nthhost(50) }}"
+    nat_port_range:
+      - 1024
+      - 65535
+
+  - name: overcloud
+    bridge: brovc
+
+  - name: overcloud2
+    bridge: brovc2
+
+  - name: overcloud3
+    bridge: brovc3
+
+  - name: overcloud4
+    bridge: brovc4
+
+  - name: overcloud5
+    bridge: brovc5
+
+  - name: overcloud6
+    bridge: brovc6
+
+# keep the doc gen settings at the bottom of the config file.
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate

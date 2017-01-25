@@ -1,0 +1,6 @@
+# Define a single controller node
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+
+node_count: 1

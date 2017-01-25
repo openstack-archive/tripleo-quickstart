@@ -1,0 +1,5 @@
+undercloud_generate_service_certificate: false
+test_ping: true
+
+composable_scenario: scenario005-multinode.yaml
+validate_template: scenario005-multinode.yaml

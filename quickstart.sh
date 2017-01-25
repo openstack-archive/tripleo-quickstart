@@ -172,6 +172,9 @@ usage () {
     echo "                      specify the config file that contains the node"
     echo "                      configuration, can be used only once"
     echo "                      (default=config/general_config/minimal.yml)"
+    echo "  -N, --nodes <file>"
+    echo "                      specify the number of nodes that should be created by"
+    echo "                      the provisioner. "
     echo "  -e, --extra-vars <key>=<value>"
     echo "                      additional ansible variables, can be used multiple times"
     echo "  -w, --working-dir <dir>"
@@ -260,6 +263,11 @@ while [ "x$1" != "x" ]; do
 
         --config|-c)
             OPT_CONFIG=$2
+            shift
+            ;;
+
+        --nodes|-N)
+            OPT_NODES=$2
             shift
             ;;
 
@@ -360,7 +368,45 @@ fi
 
 # Set this default after option processing, because the default depends
 # on another option.
-: ${OPT_CONFIG:=$OOOQ_DIR/config/general_config/minimal.yml}
+# Default general configuration
+: ${OPT_CONFIG:=$OPT_WORKDIR/config/general_config/minimal.yml}
+# Default Nodes
+: ${OPT_NODES:=$OPT_WORKDIR/config/nodes/1ctlr_1comp.yml}
+
+# allow the deprecated config files to work
+OLD_CONFIG=""
+if [[ "$OPT_CONFIG" =~ .*ha.yml ]]; then
+    OLD_CONFIG=$OPT_CONFIG
+    OPT_CONFIG=$OPT_WORKDIR/config/general_config/pacemaker.yml;
+    OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_1comp.yml;
+elif [[ "$OPT_CONFIG" =~ .*ceph.yml ]]; then
+    OLD_CONFIG=$OPT_CONFIG
+    OPT_CONFIG=$OPT_WORKDIR/config/general_config/minimal.yml;
+    OPT_NODES=$OPT_WORKDIR/config/nodes/1ctlr_1comp_1ceph.yml;
+elif [[ "$OPT_CONFIG" =~ .*ha_big.yml ]]; then
+    OLD_CONFIG=$OPT_CONFIG
+    OPT_CONFIG=$OPT_WORKDIR/config/general_config/pacemaker.yml;
+    OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_3comp.yml;
+elif [[ "$OPT_CONFIG" =~ .*ha_ipa.yml ]]; then
+    OLD_CONFIG=$OPT_CONFIG
+    OPT_CONFIG=$OPT_WORKDIR/config/general_config/ipa.yml;
+    OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_1comp.yml;
+elif [[ "$OPT_CONFIG" =~ .*ha_ipv6.yml ]]; then
+    OLD_CONFIG=$OPT_CONFIG
+    OPT_CONFIG=$OPT_WORKDIR/config/general_config/ipv6.yml;
+    OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_1comp.yml;
+elif [[ "$OPT_CONFIG" =~ .*minimal_pacemaker.yml ]]; then
+    OLD_CONFIG=$OPT_CONFIG
+    OPT_CONFIG=$OPT_WORKDIR/config/general_config/pacemaker.yml;
+fi
+
+if [ "$OLD_CONFIG" != "" ]; then
+    echo "******************** PLEASE READ ****************************"
+    echo ""
+    echo "DEPRECATION NOTICE: $OLD_CONFIG has been deprecated"
+    echo ""
+    sleep 3;
+fi
 
 if [ "$OPT_INSTALL_DEPS" = 1 ]; then
     echo "NOTICE: installing dependencies"
@@ -436,6 +482,7 @@ fi
 
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
+    -e @$OPT_NODES \
     -e ansible_python_interpreter=/usr/bin/python \
     -e @$OPT_WORKDIR/config/release/$OPT_RELEASE.yml \
     -e local_working_dir=$OPT_WORKDIR \

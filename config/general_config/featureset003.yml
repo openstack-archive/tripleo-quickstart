@@ -1,0 +1,5 @@
+undercloud_generate_service_certificate: false
+ssl_overcloud: false
+undercloud_check_idempotency: true
+undercloud_check_sanity: true
+

@@ -110,6 +110,27 @@ developer mode would be::
 
 The full set of developer mode instructions are available in :ref:`devmode`
 
+Feature Configuration and Nodes
+-------------------------------
+
+In previous versions of triple-quickstart a config file was used to determine
+not only the features that would be enabled in tripleo and openstack but also
+the number of nodes to be used. For instance "config/general_config/ha.yml" would
+configure pacemaker and ensure three controller nodes were provisioned.  This type
+of configuration is now deprecated but will still work through the Queens release.
+
+The feature and node configuration have been seperated into two distinct
+configuration files to allow users to explicity select the configuration known as
+"feature sets" and the nodes to be provisioned.  The feature set configuration
+can be found under tripleo-quickstart/config/general_config/ and the node
+configuration can be found under tripleo-quickstart/config/nodes/
+
+A more in depth description of the feature sets can be found in the documentation
+under :ref:`feature-configuration`
+
+A more in depth description of how to configure nodes can be found in the
+documentation under :ref:`node-configuration`
+
 Working With Quickstart Extras
 ------------------------------
 

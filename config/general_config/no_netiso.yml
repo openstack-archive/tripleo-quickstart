@@ -1,17 +1,7 @@
+# TO DO, REMOVE THIS CONFIG IN FAVOR OF OVERRIDING THE ONE VARIABLE
 # We set introspection to true and use only the minimal amount of nodes
 # for this job, but test all defaults otherwise
 step_introspect: true
-
-# Define a single controller node and a single compute node.
-overcloud_nodes:
-  - name: control_0
-    flavor: control
-    virtualbmc_port: 6230
-
-  - name: compute_0
-    flavor: compute
-    virtualbmc_port: 6231
-
 network_isolation: false
 
 # This enables TLS for the undercloud which will also make haproxy bind to the

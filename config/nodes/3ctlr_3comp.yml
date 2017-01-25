@@ -43,19 +43,8 @@ overcloud_nodes:
     flavor: compute
     virtualbmc_port: 6235
 
-# We don't need introspection in a virtual environment (because we are
-# creating all the "hardware" we really know the necessary
-# information).
-step_introspect: false
-
-# Tell tripleo about our environment.
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
-extra_args: >-
+topology: >-
   --compute-scale 3
   --control-scale 3
-  --ntp-server pool.ntp.org
-test_ping: true
-enable_pacemaker: true
-
-run_tempest: false

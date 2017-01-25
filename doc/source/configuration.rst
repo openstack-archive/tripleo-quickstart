@@ -11,79 +11,7 @@ You configure tripleo-quickstart by placing variable definitions in a
 YAML file and passing that to ansible using the ``-e`` command line
 option, like this::
 
-    ansible-playbook playbook.yml -e @myconfigfile.yml
-
-Controlling resources
----------------------
-
-These variables set the resources that will be assigned to a node by
-default, unless overridden by a more specific variable:
-
--  ``default_disk``
--  ``default_memory``
--  ``default_vcpu``
-
-These variables set the resources assigned to the undercloud node:
-
--  ``undercloud_disk``
--  ``undercloud_memory`` (defaults to **12288**)
--  ``undercloud_vcpu`` (defaults to **4**)
-
-These variables set the resources assigned to controller nodes:
-
--  ``control_disk``
--  ``control_memory``
--  ``control_vcpu``
-
-These variables control the resources assigned to compute nodes:
-
--  ``compute_disk``
--  ``compute_memory``
--  ``compute_vcpu``
-
-These variables control the resources assigned to ceph storage nodes:
-
--  ``ceph_disk``
--  ``ceph_memory``
--  ``ceph_vcpu``
-
-There is another option ``extradevices`` that can be used to create three
-additional blockdevices ``vdb``, ``vdc`` and ``vdd`` per node. By default it
-is only enabled on the objectstorage node flavor.
-
-Setting number and type of overcloud nodes
-------------------------------------------
-
-The ``overcloud_nodes`` variable can be used to change the number and
-type of nodes deployed in your overcloud. The default
-(``config/general_config/minimal.yml``) looks like this::
-
-    overcloud_nodes:
-      - name: control_0
-        flavor: control
-
-      - name: compute_0
-        flavor: compute
-
-You can use your own config if you want to test a different setup. For
-example::
-
-    overcloud_nodes:
-      - name: control_0
-        flavor: control
-      - name: control_1
-        flavor: control
-      - name: control_2
-        flavor: control
-
-      - name: compute_0
-        flavor: compute
-
-      - name: ceph_0
-        flavor: ceph
-
-      - name: swift_0
-        flavor: objectstorage
+    ansible-playbook playbook.yml -e @/path/myconfigfile.yml
 
 Specifying custom heat templates
 --------------------------------
@@ -101,27 +29,6 @@ and these will be used in overcloud deployment.
 The ``overcloud_templates_branch`` variable can be used to specify the
 branch that needs to be cloned from a specific repository. When this
 variable is set, git will clone only the branch specified.
-
-An example
-----------
-
-To create a minimal environment that would be unsuitable for deploying
-anything real nova instances, you could place something like the
-following in ``myconfigfile.yml``::
-
-    undercloud_memory: 8192
-    control_memory: 6000
-    compute_memory: 2048
-
-    overcloud_nodes:
-      - name: control_0
-        flavor: control
-
-      - name: compute_0
-        flavor: compute
-
-And then pass that to the ``ansible-playbook`` command as described at
-the beginning of this document.
 
 Explicit Teardown
 -----------------
@@ -169,4 +76,4 @@ into the undercloud, so the system can use it.
 Please note that you also need to define all the images you want to
 fetch, using the ``images`` setting. You will need to define the name
 of the image, the url where to get it, and the image type (qcow2, tar).
-As a reference, please look at `http://git.openstack.org/cgit/openstack/tripleo-quickstart/tree/config/release/master-tripleo-ci.yml`
+As a reference, please look at the `config <http://git.openstack.org/cgit/openstack/tripleo-quickstart/tree/config/release/master-tripleo-ci.yml>`_

@@ -1,28 +1,32 @@
-# We run tempest in this topology instead of ping test.
-# We set introspection to true and use only the minimal amount of nodes
-# for this job, but test all defaults otherwise.
-step_introspect: true
-
-# Tell tripleo how we want things done.
-extra_args: >-
-  --ntp-server pool.ntp.org
-
-network_isolation: true
-network_isolation_type: 'single-nic-vlans'
+# Summary of the feature set.
+# Deploy an Openstack environment with ssl undercloud, introspect, and use network isolation
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: True
 
-# This enables the deployment of the overcloud with SSL.
-ssl_overcloud: True
+overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+# We don't need introspection in a virtual environment (because we are
+# creating all the "hardware" we really know the necessary
+# information).
+step_introspect: true
 
-# If `test_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
+# Tell tripleo about our environment.
+network_isolation: true
+network_isolation_type: "multiple-nics"
+network_isolation_args: >-
+   -e {{ overcloud_templates_path }}/environments/network-isolation.yaml
+   -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-environment.yaml
+
+
+extra_args: >-
+  --ntp-server pool.ntp.org
 test_ping: true
-run_tempest: false
-tempest_workers: 4
+enable_pacemaker: true
 
+run_tempest: false
+
+# keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
 artcl_create_docs_payload:

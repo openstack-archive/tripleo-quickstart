@@ -14,9 +14,8 @@ overcloud_nodes:
     flavor: ceph
     virtualbmc_port: 6232
 
-# Tell tripleo how we want things done.
-extra_args: >-
-  --ntp-server pool.ntp.org
+# Tell tripleo which nodes to deploy.
+topology: >-
   --ceph-storage-scale 1
   -e {{overcloud_templates_path}}/environments/storage-environment.yaml
 

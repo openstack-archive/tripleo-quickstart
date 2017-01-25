@@ -1,0 +1,9 @@
+undercloud_generate_service_certificate: false
+ssl_overcloud: false
+test_ping: true
+
+deploy_composable_scenario: false
+composable_services: true
+composable_scenario: multinode.yaml
+# Use default test template
+# validate_template: tenantvm-floatingip.yaml

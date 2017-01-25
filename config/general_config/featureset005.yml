@@ -1,0 +1,6 @@
+undercloud_generate_service_certificate: false
+enable_opstools_repo: true
+test_ping: true
+
+composable_scenario: scenario001-multinode.yaml
+validate_template: scenario001-multinode.yaml
