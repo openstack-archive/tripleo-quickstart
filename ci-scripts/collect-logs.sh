@@ -7,6 +7,7 @@ set -eux
 # TripleO Quickstart during deployment
 CONFIG=$1
 LOG_ENV=${2:-centosci}
+JOB_TYPE=${3:-default}
 
 export ANSIBLE_INVENTORY=$WORKSPACE/hosts
 export ANSIBLE_CONFIG=$WORKSPACE/tripleo-quickstart/ansible.cfg
@@ -22,6 +23,8 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 export ARA_DATABASE="sqlite:///${WORKSPACE}/ara.sqlite"
 $WORKSPACE/bin/ara generate $WORKSPACE/ara
 
+if [ "$JOB_TYPE" = "gate" ]; then VERIFY_SPHINX=true; else VERIFY_SPHINX=false; fi
+
 bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
@@ -30,4 +33,5 @@ bash quickstart.sh \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --playbook collect-logs.yml \
     --extra-vars @$WORKSPACE/config/general_config/${LOG_ENV}-logs.yml \
+    --extra-vars artcl_verify_sphinx_build=$VERIFY_SPHINX \
     localhost
