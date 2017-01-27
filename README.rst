@@ -15,12 +15,21 @@ been the relative difficulty in getting an environment up quickly.
 
 This set of ansible roles is meant to help.
 
-You will need a host machine (referred to as ``$VIRTHOST``) with at least
-**16G** of RAM, preferably **32G**, and you must be able to ``ssh`` to the
-virthost machine as root without a password from the machine running ansible.
-Currently the virthost machine must be running a recent Red Hat-based Linux
-distribution (CentOS 7, RHEL 7, Fedora 22 - only CentOS 7 is currently tested),
-but we hope to add support for non-Red Hat distributions too.
+Quickstart's default deployment method uses a physical machine, which is
+referred to as ``$VIRTHOST`` throughout this documentation. On this physical
+machine Quickstart sets up multiple virtual machines (VMs) and virtual networks
+using libvirt.
+
+One of the VMs is set up as **undercloud**, an all-in-one OpenStack cloud used
+by system administrators to deploy the **overcloud**, the end-user facing
+OpenStack installation, usually consisting of multiple VMs.
+
+You will need a ``$VIRTHOST`` with at least **16 GB** of RAM, preferably **32
+GB**, and you must be able to ``ssh`` to the virthost machine as root without a
+password from the machine running ansible.  Currently the virthost machine must
+be running a recent Red Hat-based Linux distribution (CentOS 7, RHEL 7, Fedora
+22 - only CentOS 7 is currently tested), but we hope to add support for non-Red
+Hat distributions too.
 
 A quick way to test that your virthost machine is ready to rock is::
 
