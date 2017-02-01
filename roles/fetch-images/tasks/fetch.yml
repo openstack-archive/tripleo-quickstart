@@ -117,7 +117,7 @@
     # Compute the md5 checksum of the image we just downloaded
     - name: Get actual md5 checksum of image
       command: >
-        md5sum _{{ image.name }}.{{ image.type}}
+        md5sum -b _{{ image.name }}.{{ image.type}}
       args:
         chdir: "{{ image_cache_dir }}"
       register: md5_actual
