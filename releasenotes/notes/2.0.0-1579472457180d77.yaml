@@ -1,0 +1,42 @@
+---
+prelude: >
+    2.0.0 is the final release for Ocata.
+    It's the first release where release notes are added.
+features:
+  - Added ability to use an overcloud-full.qcow2 as an undercloud image, doing
+    the conversion at runtime.
+  - Added ability to deploy an overcloud with ssl
+  - Added support for using a partition image undercloud.qcow2.
+  - Added support for Ironic's VirtualBMC driver instead of the deprecated
+    pxe_ssh driver.
+  - Added support for using novajoin on the undercloud.
+upgrade:
+  - Each entry in the overcloud_nodes dict needs to be updated with a
+    virtualbmc_port entry. See `c8c6e57ca2aad70c859505e02213ddfe40223e19
+    <https://git.openstack.org/cgit/openstack/tripleo-quickstart/commit/
+    ?id=c8c6e57ca2aad70c859505e02213ddfe40223e19>`__
+deprecations:
+  - roles/tripleo/undercloud redirects to the undercloud-deploy role in
+    tripleo-quickstart-extras, but that redirect will be removed in the Queens
+    release.
+fixes:
+  - Fixes `bug 1626707
+    <https://bugs.launchpad.net/tripleo-quickstart/+bug/1626707>`__ SSH can
+    fail wehn the user has many SSH keys
+  - Fixes `bug 1649272
+    <https://bugs.launchpad.net/tripleo-quickstart/+bug/1649272>`__ Undercloud
+    ssh check timeout might be too short
+  - Fixes `bug 1657232
+    <https://bugs.launchpad.net/tripleo-quickstart/+bug/1657232>`__ tq libvirt
+    role fails to mark ooo_pool autostart
+other:
+  - Cleaned up instackenv.json template.
+  - Started using tripleo-quickstart-extras repo for roles outside of the scope
+    of setting up a libvirt developer environment.
+  - Updated to Ansible 2.2.0
+  - Converted fetch-images and convert-image to roles to allow for easier
+    reuse.
+  - Undercloud deploy role moved to tripleo-quickstart-extras
+  - Added repo configuration to the release configs for usage by the repo-setup
+    role in tripleo-quickstart-extras
+
