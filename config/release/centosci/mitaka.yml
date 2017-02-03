@@ -1,4 +1,26 @@
 release: mitaka
+dlrn_hash: consistent
 undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/consistent/stable/undercloud.qcow2
 overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/consistent/stable/overcloud-full.tar
 ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/delorean/consistent/stable/ironic-python-agent.tar
+repos:
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    baseurl: https://trunk.rdoproject.org/centos7-mitaka/{{ dlrn_hash }}/
+    hash_url: https://trunk.rdoproject.org/centos7-mitaka/{{ dlrn_hash }}/delorean.repo
+    priority: 20
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: http://trunk.rdoproject.org/centos7-mitaka/delorean-deps.repo
+
+  - type: package
+    pkg_name: centos-release-ceph-hammer
+    custom_cmd: 'sudo yum install -y --enablerepo=extras'
+
+repo_cmd_after: |
+  sudo yum-config-manager --save --setopt centos-ceph-hammer.gpgcheck=0
+  sudo yum repolist;
+  sudo yum update -y
+
