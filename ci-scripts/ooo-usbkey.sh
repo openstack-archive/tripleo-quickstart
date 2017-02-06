@@ -18,29 +18,29 @@ scpcmd='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 # Create a non-root user with passwordless sudo permissions on the virthost
 # This is a requirement of the usbkey script, but the CI nodes do not have it
 $sshcmd root@$VIRTHOST <<-EOF
-  useradd stack
-  mkdir /home/stack/.ssh
-  cp /root/.ssh/authorized_keys /home/stack/.ssh/
-  chown -R stack:stack /home/stack
-  echo "Defaults:stack !requiretty" > /etc/sudoers.d/stack
-  echo "stack ALL=(root) NOPASSWD:ALL" >> /etc/sudoers.d/stack
-  chmod 0440 /etc/sudoers.d/stack
+useradd stack
+mkdir /home/stack/.ssh
+cp /root/.ssh/authorized_keys /home/stack/.ssh/
+chown -R stack:stack /home/stack
+echo "Defaults:stack !requiretty" > /etc/sudoers.d/stack
+echo "stack ALL=(root) NOPASSWD:ALL" >> /etc/sudoers.d/stack
+chmod 0440 /etc/sudoers.d/stack
 EOF
 
 # Copy artifacts to the CI provided virthost to simulate USB key
 $sshcmd stack@$VIRTHOST <<-EOF
-  if [[ ! -f /tmp/usb/undercloud.qcow2 ]]; then
+if [[ ! -f /tmp/usb/undercloud.qcow2 ]]; then
     mkdir -p /tmp/usb
     curl -o /tmp/usb/undercloud.qcow2 $UNDERCLOUD
     curl -o /tmp/usb/undercloud.qcow2.md5 $UNDERCLOUD.md5
-  else
+else
     echo "undercloud.qcow2 file was found, skipping download"
-  fi
+fi
 EOF
 
 #Ensure rsync is installed on target, required w/ ssh as the protocol
 $sshcmd root@$VIRTHOST <<-EOF
-  yum -y install rsync
+yum -y install rsync
 EOF
 
 #$scpcmd -r $WORKSPACE/tripleo-quickstart stack@$VIRTHOST:/tmp/usb/
