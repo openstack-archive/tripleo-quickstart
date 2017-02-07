@@ -1,0 +1,2 @@
+# By default do image conversion in the global working_dir
+convert_image_working_dir: "{{ working_dir }}"
