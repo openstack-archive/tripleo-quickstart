@@ -51,6 +51,10 @@ repos:
       - puppet-*
 
   - type: file
+    filename: centos-opstools.repo
+    down_url: https://raw.githubusercontent.com/centos-opstools/opstools-repo/master/opstools.repo
+
+  - type: file
     filename: delorean-deps.repo
     down_url: http://trunk.rdoproject.org/centos7-master/delorean-deps.repo
 
