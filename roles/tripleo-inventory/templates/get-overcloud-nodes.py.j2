@@ -6,8 +6,8 @@ import os
 from novaclient import client
 from novaclient import __version__ as nc_version
 
-# TODO remove this check with support of novaclient 6.0.0
-if nc_version[0] == "6":
+# We can remove this logic when newton (novaclient 6) is EOL
+if nc_version[0] <= "6":
     nova = client.Client(2,
                          os.environ.get("OS_USERNAME"),
                          os.environ.get("OS_PASSWORD"),
