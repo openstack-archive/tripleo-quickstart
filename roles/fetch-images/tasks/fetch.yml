@@ -123,17 +123,17 @@
       when: image_fetch_failed|default(false)
 
 # Use `image_cache_path`, which was set by one of the above tasks, and
-# copy it to `undercloud.qcow2 in our `{{ working_dir }}`.
+# copy it to `undercloud.qcow2 in our `{{ image_fetch_dir }}`.
 - name: Get qcow2 image from cache
   command: >
-    cp {{ image_cache_path }} {{ working_dir }}/{{ image.name }}.{{ image.type }}
+    cp {{ image_cache_path }} {{ image_fetch_dir }}/{{ image.name }}.{{ image.type }}
   when: image.type  == "qcow2"
 
 - name: Get tar images from cache
   unarchive:
     src: "{{ image_cache_path }}"
     copy: no
-    dest: "{{ working_dir }}"
+    dest: "{{ image_fetch_dir }}"
     list_files: yes
   when: image.type == "tar"
 
