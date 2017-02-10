@@ -31,24 +31,12 @@
     uri: "{{ libvirt_uri }}"
 
 # In some cases the pool_check can pass and the pool xml config is absent
-# In this case it is required to dump the xml and redefine the pool
-# I believe this is the case when {{ working_dir }}/volume_pool.xml is not present.
-# https://bugs.launchpad.net/tripleo-quickstart/+bug/1657232
-
-- name: check for the existence of {{ working_dir }}/volume_pool.xml
-  stat:
-    path: "{{ working_dir }}/volume_pool.xml"
-  register: volume_pool
-
-- name: dump the running virsh pool's xml file to the system
-  shell: "virsh pool-dumpxml {{ libvirt_volume_pool }} > {{ working_dir }}/volume_pool.xml"
-  when: volume_pool.stat.exists == False
-  environment:
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-
-- name: re-define the volume pool
-  command: "virsh pool-define {{ working_dir }}/volume_pool.xml"
-  when: volume_pool.stat.exists == False
+# In this case it is required to dump the xml and redefine the pool.
+- name: ensure tripleo-quickstart volume pool is defined
+  shell: >
+    virsh pool-dumpxml {{ libvirt_volume_pool }} |
+    virsh pool-define /dev/stdin
+  changed_when: true
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
