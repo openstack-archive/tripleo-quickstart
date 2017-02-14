@@ -33,11 +33,18 @@
   command: cat /sys/module/kvm_{{ cpu_vendor }}/parameters/nested
   register: kvm_nested_info
   changed_when: false
+  when: nested|bool
+
+- name: Set fact for nested to false if virtualization is not enabled
+  set_fact:
+    cpu_nested_enabled: false
+  when: not nested|bool
 
 - name: Check if nested is enabled currently
   set_fact:
     cpu_nested_enabled: "{{ true if 'Y' in kvm_nested_info.stdout else
                             true if '1' in kvm_nested_info.stdout else false }}"
+  when: nested|bool
 
 - when: nested|bool != cpu_nested_enabled|bool
   block:
