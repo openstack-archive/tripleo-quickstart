@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import argparse
 import logging
+import os
 import sys
 import yaml
 
@@ -54,13 +54,13 @@ def validate_directory(path):
 
     for dirpath, dirnames, filenames in os.walk(path):
         for filename in filenames:
-            if not (filename.endswith('.yml')
-                    or filename.endswith('.yaml')):
+            if not (filename.endswith('.yml') or
+                    filename.endswith('.yaml')):
                 continue
 
             filename = os.path.join(dirpath, filename)
             all_valid = validate_file(filename) and all_valid
-            if not all_valid and args.fail_fast:
+            if not all_valid and args.fail_fast:  # noqa : F821
                 break
         else:
             continue
@@ -89,6 +89,7 @@ def main():
             break
 
     return 0 if all_valid else 1
+
 
 if __name__ == '__main__':
     sys.exit(main())
