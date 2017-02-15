@@ -30,7 +30,7 @@
         pgrep -c -u {{ non_root_user }}
       register: proc_kill
       retries: 5
-      delay: 1
+      delay: 3
       until: proc_kill.stdout == '0'
       ignore_errors: true
       when: proc_exist|success
