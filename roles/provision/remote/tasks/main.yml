@@ -15,12 +15,14 @@
   package:
     name: "tuned"
     state: "present"
+  become: true
 
 - name: Ensure tuned is enabled and started
   service:
     name: "tuned"
     enabled: "yes"
     state: "started"
+  become: true
 
 - name: Retrieve current tuned profile
   command: tuned-adm active
@@ -29,6 +31,7 @@
 
 - name: Set tuned profile if not already set
   command: tuned-adm profile "{{ tuned_profile }}"
+  become: true
   when: tuned.stdout.find("{{ tuned_profile }}") != 1
 
 # Create a non-root user on the target host.  This is the user that
