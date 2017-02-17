@@ -21,7 +21,7 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 export ARA_DATABASE="sqlite:///${WORKSPACE}/ara.sqlite"
-$WORKSPACE/bin/ara generate $WORKSPACE/ara
+$WORKSPACE/bin/ara generate html $WORKSPACE/ara
 
 if [ "$JOB_TYPE" = "gate" ]; then VERIFY_SPHINX=true; else VERIFY_SPHINX=false; fi
 
