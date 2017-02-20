@@ -54,6 +54,8 @@
 - name:  Deploy the overcloud
   hosts: undercloud
   gather_facts: yes
+  tags:
+    - overcloud-deploy
   roles:
     - overcloud-deploy
 
