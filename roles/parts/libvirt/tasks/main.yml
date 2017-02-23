@@ -10,35 +10,6 @@
   register: old_ipxe
   changed_when: '"rpm removed" in old_ipxe.stdout'
 
-# WORKAROUND for CentOS and RHEL virthosts.
-# Note, this is *only* installed on the virthost.
-# The iPXE ROMs shipped with CentOS/RHEL are too old to work with Ironic.
-# RHEL BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1267030
-
-- name: Check if iPXE RPM is already installed
-  command: rpm -q ipxe-roms-qemu
-  register: ipxe_rom_check
-  ignore_errors: true
-  changed_when: false
-
-# package/yum state: latest does not work with urls
-# We don't want to force install the package because there may already be an appropriate package installed locally.
-- name: If ipxe-roms-qemu is not installed, install a known good version
-  package:
-    name: "http://buildlogs.centos.org/centos/7/cloud/x86_64/openstack-newton/common/ipxe-roms-qemu-20160127-1.git6366fa7a.el7.noarch.rpm"
-    state: present
-  retries: 3
-  delay: 30
-  become: true
-  when: ipxe_rom_check.rc == 1 and not ansible_distribution == "Fedora"
-
-- name: If ipxe-roms-qemu is not installed, and Fedora, install from repositories
-  package:
-    name: ipxe-roms-qemu
-    state: present
-  become: true
-  when: ipxe_rom_check.rc == 1 and ansible_distribution == "Fedora"
-
 # Install the packages required for our desired libvirt environment.
 # We store the list of packages in `libvirt_packages` so that in
 # theory we can support multiple distributions simply by passing in a
