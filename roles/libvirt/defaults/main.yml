@@ -40,3 +40,9 @@ undercloud_instackenv_template: instackenv.json.j2
 # and ipa images. You will need to define the images and
 # mapping, and inject_images list as well
 use_external_images: false
+
+# how many disks should be created when using extradisks
+extradisks_list:
+  - vdb
+  - vdc
+  - vdd
