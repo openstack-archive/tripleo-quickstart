@@ -56,7 +56,7 @@
 # `.ssh/authorized_keys` file for the non-root user.
 - name: Configure non-root user authorized_keys
   authorized_key:
-    user: "{{ non_root_user }}"
+    user: "{{ ssh_user }}"
     key: "{{ item }}"
   with_file:
     - "{{ virt_host_key }}.pub"
@@ -107,7 +107,7 @@
     name: "{{ virthost }}"
     groups: "virthost"
     ansible_fqdn: "{{ virthost }}"
-    ansible_user: "{{ non_root_user }}"
+    ansible_user: "{{ ssh_user }}"
     ansible_host: "{{ virthost }}"
     ansible_private_key_file: "{{ virt_host_key }}"
 

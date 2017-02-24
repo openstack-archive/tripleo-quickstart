@@ -1,4 +1,3 @@
-{% set ssh_user = ansible_user|default(ansible_user_id, True) %}
 {% if ansible_host is not defined or ansible_host == 'localhost' %}
 {% set ssh_host = inventory_hostname %}
 {% else %}

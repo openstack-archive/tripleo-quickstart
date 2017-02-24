@@ -1,10 +1,3 @@
-{% set ssh_user = ansible_user|default(ansible_user_id, True) %}
-{% if ansible_host is not defined or ansible_host == 'localhost' %}
-{% set ssh_host = inventory_hostname %}
-{% else %}
-{% set ssh_host = ansible_host %}
-{% endif %}
-
 Host *
     IdentitiesOnly yes
 
@@ -13,7 +6,7 @@ Host *
 Host virthost
     Hostname {{ hostvars[groups['virthost'][0]].ansible_host }}
     IdentityFile {{ hostvars[groups['virthost'][0]].ansible_private_key_file }}
-    User {{ ansible_user }}
+    User {{ ssh_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
@@ -22,7 +15,7 @@ Host virthost
 Host virthost
     Hostname {{ hostvars['localhost'].ansible_default_ipv4.address }}
     IdentityFile {{ local_working_dir }}/id_rsa_virt_power
-    User {{ ansible_user }}
+    User {{ ssh_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
