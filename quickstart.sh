@@ -448,7 +448,7 @@ ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
 
 set +x
 
-if ! [[ "overcloud-deploy" =~ .*$OPT_TAGS.* ]] && [[ $OPT_PLAYBOOK == quickstart.yml ]]; then
+if ! [[ "overcloud-deploy" =~ .*$OPT_TAGS.* ]] && [[ $OPT_PLAYBOOK == quickstart-extras.yml ]]; then
 
 cat <<EOF
 ##################################
