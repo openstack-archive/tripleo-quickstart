@@ -45,6 +45,7 @@ step_introspect: false
 
 # Tell tripleo about our environment.
 network_isolation: true
+network_isolation_type: 'single-nic-vlans'
 extra_args: >-
   --control-scale 3
   --ntp-server pool.ntp.org

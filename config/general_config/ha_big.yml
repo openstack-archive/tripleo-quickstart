@@ -50,6 +50,7 @@ step_introspect: false
 
 # Tell tripleo about our environment.
 network_isolation: true
+network_isolation_type: 'single-nic-vlans'
 extra_args: >-
   --compute-scale 3
   --control-scale 3

@@ -136,6 +136,7 @@ undercloud_networks:
     tag: 10
 
 network_isolation: true
+network_isolation_type: 'single-nic-vlans'
 enable_pacemaker: false
 ipv6: false
 

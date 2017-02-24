@@ -21,3 +21,4 @@ extra_args: >-
   -e {{overcloud_templates_path}}/environments/storage-environment.yaml
 
 network_isolation: true
+network_isolation_type: 'single-nic-vlans'

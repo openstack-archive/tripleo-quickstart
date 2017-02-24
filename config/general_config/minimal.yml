@@ -18,6 +18,7 @@ extra_args: >-
   --ntp-server pool.ntp.org
 
 network_isolation: true
+network_isolation_type: 'single-nic-vlans'
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.

@@ -16,6 +16,7 @@ extra_args: >-
   --ntp-server pool.ntp.org
 
 network_isolation: true
+network_isolation_type: 'single-nic-vlans'
 test_ping: true
 enable_pacemaker: true
 run_tempest: false
