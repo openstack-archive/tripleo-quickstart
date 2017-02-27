@@ -97,7 +97,7 @@
       when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
       with_nested:
         - "{{ overcloud_nodes }}"
-        - ["vdb", "vdc", "vdd"]
+        - "{{ extradisks_list }}"
 
     - name: Attach additional blockdevices to overcloud objectstorage VMs
       command: >
@@ -105,7 +105,7 @@
       when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
       with_nested:
         - "{{ overcloud_nodes }}"
-        - ["vdb", "vdc", "vdd"]
+        - "{{ extradisks_list }}"
 
 # Generate the `instackenv.json` configuration file.  Note that this
 # task *must* occur after the above overcloud tasks, because if
