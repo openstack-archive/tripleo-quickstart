@@ -137,3 +137,9 @@
     list_files: yes
   when: image.type == "tar"
 
+- name: Clean image cache directory
+  shell: >-
+    find {{ image_cache_dir }} -type f
+    {% if not image_cache_dir_cleanup|bool %}
+    -mtime +{{ image_cache_expire_days - 1 }} {% endif %}|
+    xargs --no-run-if-empty -t rm -rf

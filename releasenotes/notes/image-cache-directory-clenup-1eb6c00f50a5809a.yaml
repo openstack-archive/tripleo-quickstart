@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Added conditional removing of all files in image cache directory
+    'image_cache_dir_cleanup' or removing files older more than N days
+    (by default 14) 'image_cache_expire_days'.
