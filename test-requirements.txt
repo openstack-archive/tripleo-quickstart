@@ -1,5 +1,6 @@
 hacking<0.11,>=0.10
 
+bashate>=0.2 # Apache-2.0
 ansible-lint<=3.4.7
 jenkins-job-builder
 docutils>=0.11,!=0.13.1
