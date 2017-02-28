@@ -53,16 +53,21 @@ overcloud network. For example, to access the overcloud Horizon
 interface, you could run::
 
     ssh -F $HOME/.quickstart/ssh.config.ansible \
-      -L 8080:overcloud-public-vip:80 undercloud
+      -L 8080:overcloud.localdomain:80 undercloud
 
 This uses the ssh ``-L`` command line option to forward port ``8080`` on
-your local host to port ``80`` on the ``overcloud-public-vip`` host
+your local host to port ``80`` on the ``overcloud.localdomain`` host
 (which is defined in ``/etc/hosts`` on the undercloud). Once you have
 connected to the undercloud like this, you can then point your browser
 at ``http://localhost:8080`` to access Horizon.
 
 You can add multiple ``-L`` arguments to the ssh command line to expose
 multiple services.
+
+.. NOTE::
+   If you are deploying mitaka release, you will need to use the
+   ``overcloud-public-vip`` host (which will be defined in ``/etc/hosts``
+   on the undercloud).
 
 SSH Dynamic Proxy
 -----------------
@@ -77,7 +82,7 @@ command line option. For example, to start a proxy on port 1080::
 You can now use this proxy to access any overcloud resources. With curl,
 that would look something like this::
 
-    $ curl --socks5-hostname localhost:1080 http://overcloud-public-vip:5000/
+    $ curl --socks5-hostname localhost:1080 http://overcloud.localdomain:5000/
     {"versions": {"values": [{"status": "stable", "updated": "2016-04-04T00:00:00Z",...
 
 Using Firefox
@@ -100,7 +105,7 @@ for this so that you don't impact your normal browsing.
 #. Select the "SOCKS5" radio button, and check the "Remote DNS"
    checkbox.
 
-Now, if you enter http://overcloud-public-vip/ in your browser, you will
+Now, if you enter http://overcloud.localdomain/ in your browser, you will
 be able to access the overcloud Horizon instance. Note that you will
 probably need to enter the full URL; entering an unqualified hostname
 into the location bar will redirect to a search engine rather than
