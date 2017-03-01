@@ -1,0 +1,5 @@
+---
+other:
+  - Enable the VNC console by default for the undercloud
+    and overcloud VMs. In previous versions the VNC console
+    was disabled by default.
