@@ -1,0 +1,45 @@
+devmode: true
+overcloud_as_undercloud: true
+images:
+    - name: overcloud-full
+      url: "{{ overcloud_image_url }}"
+      type: tar
+    - name: ipa_images
+      url: "{{ ipa_image_url }}"
+      type: tar
+inject_images:
+    - "ironic-python-agent.initramfs"
+    - "ironic-python-agent.vmlinuz"
+    - "ironic-python-agent.kernel"
+    - "overcloud-full.qcow2"
+    - "overcloud-full.initrd"
+    - "overcloud-full.vmlinuz"
+release: ocata
+overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo-ocata/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds-ocata/current-tripleo-ocata/ipa_images.tar
+repos:
+  - type: file
+    filename: delorean.repo
+    down_url: https://trunk.rdoproject.org/centos7-ocata/current/delorean.repo
+    hash_url: https://trunk.rdoproject.org/centos7-ocata/current/delorean.repo
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: http://trunk.rdoproject.org/centos7-ocata/delorean-deps.repo
+
+  - type: package
+    pkg_name: centos-release-ceph-jewel
+    custom_cmd: 'sudo yum install -y --enablerepo=extras'
+
+  - type: file
+    filename: centos-opstools.repo
+    down_url: https://raw.githubusercontent.com/centos-opstools/opstools-repo/master/opstools.repo
+
+repo_cmd_after: |
+  {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
+  {%endif %}
+  sudo rpm -e epel-release || true;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0;
+  sudo yum repolist;
+  sudo yum update -y
