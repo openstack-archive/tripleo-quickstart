@@ -6,6 +6,7 @@
 LANG=C
 
 DEFAULT_OPT_TAGS="untagged,provision,environment,undercloud-scripts,overcloud-scripts,undercloud-install,undercloud-post-install"
+ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 
 : ${OPT_BOOTSTRAP:=0}
 : ${OPT_CLEAN:=0}
