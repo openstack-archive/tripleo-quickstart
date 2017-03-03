@@ -62,6 +62,12 @@
     - "{{ virt_host_key }}.pub"
   become: true
 
+- name: Ensure polkit packages are installed
+  package:
+    name: "polkit"
+    state: "present"
+  become: true
+
 # This lets the non-root user access the `qemu://system` endpoint.  We
 # don't need this with the default configuration (which uses
 # `qemu://session`), but this permits things to work if someone
