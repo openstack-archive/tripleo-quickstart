@@ -14,6 +14,11 @@ BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
+# Default to using a user other than "stack" as the virthost user.
+# This will flush out code that makes assumptions about
+# usernames or working directories.
+: ${VIRTHOST_USER:=cistack}
+
 # (trown) This is so that we ensure separate ssh sockets for
 # concurrent jobs. Without this, two jobs running in parallel
 # would try to use the same undercloud-stack socket.
@@ -32,6 +37,7 @@ bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
+    -e virthost_user=$VIRTHOST_USER \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
 
