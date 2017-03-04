@@ -28,6 +28,7 @@ source $CI_SCRIPT_DIR/include-gate-changes.sh
 # REL_TYPE can be specific release type like 'testing'
 
 bash quickstart.sh \
+    --playbook quickstart.yml \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
