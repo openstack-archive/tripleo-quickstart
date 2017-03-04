@@ -130,7 +130,7 @@
   template:
     src: 'ssh_config.j2'
     dest: '{{ local_working_dir }}/ssh.config.ansible'
-    mode: 0755
+    mode: 0644
   when: undercloud_ip is defined
 
 - name: regenerate ssh config for ssh connections from the virthost
@@ -138,7 +138,7 @@
   template:
     src: 'ssh_config_localhost.j2'
     dest: '{{ local_working_dir }}/ssh.config.local.ansible'
-    mode: 0755
+    mode: 0644
   when: undercloud_ip is defined
 
 # just setup the ssh.config.ansible and hosts file for the virthost
@@ -158,6 +158,6 @@
   template:
     src: 'ssh_config_no_undercloud.j2'
     dest: '{{ local_working_dir }}/ssh.config.ansible'
-    mode: 0755
+    mode: 0644
   when: undercloud_ip is not defined
 
