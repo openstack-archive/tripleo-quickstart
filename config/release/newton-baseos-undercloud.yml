@@ -1,0 +1,53 @@
+release: newton
+undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1701.qcow2
+overcloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/overcloud-full.tar
+ipa_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/ironic-python-agent.tar
+
+images:
+    - name: centos
+      url: "{{ undercloud_image_url }}"
+      type: qcow2
+      md5sum: "bc62ad193b085680952edfa7face0f23 *CentOS-7-x86_64-GenericCloud-1701.qcow2"
+    - name: overcloud-full
+      url: "{{ overcloud_image_url }}"
+      type: tar
+    - name: ipa_images
+      url: "{{ ipa_image_url }}"
+      type: tar
+
+baseos_as_undercloud: true
+undercloud_setup: true
+use_external_images: true
+inject_images:
+    - "ironic-python-agent.initramfs"
+    - "ironic-python-agent.vmlinuz"
+    - "ironic-python-agent.kernel"
+    - "overcloud-full.qcow2"
+    - "overcloud-full.initrd"
+    - "overcloud-full.vmlinuz"
+
+repos:
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    baseurl: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-newton-tested/
+    hash_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-newton-tested/delorean.repo
+    priority: 20
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: http://trunk.rdoproject.org/centos7-newton/delorean-deps.repo
+
+  - type: package
+    pkg_name: centos-release-ceph-jewel
+    custom_cmd: 'sudo yum install -y --enablerepo=extras'
+
+repo_cmd_after: |
+  sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0
+  sudo yum repolist
+  sudo yum update -y
+
+ovb_setup_connectivity: false
+non_root_user_setup: true
+package_installs: true
+hostname_correction: true

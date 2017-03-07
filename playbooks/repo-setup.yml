@@ -1,0 +1,6 @@
+---
+- name:  Setup yum repositories on the virthost
+  hosts: virthost
+  gather_facts: yes
+  roles:
+    - repo-setup

@@ -2,6 +2,15 @@
 
 - include: quickstart.yml
 
+# setup for the undercloud
+- name: Setup the undercloud
+  hosts: undercloud
+  gather_facts: no
+  vars:
+    ansible_user: root
+  roles:
+    - { role: undercloud-setup, when: undercloud_setup|bool }
+
 # Deploy the undercloud
 - name:  Deploy the undercloud
   hosts: undercloud
@@ -80,7 +89,8 @@
 
     # overcloud_deploy_result = ["failed", "passed"]
     - name: did the deployment pass or fail?
-      debug: var=overcloud_deploy_result
+      debug:
+        var: overcloud_deploy_result
       failed_when: overcloud_deploy_result == "failed"
 
 # Validate the deployment
