@@ -8,6 +8,8 @@ Contents:
 
    readme
    configuration
+   feature-configuration
+   node-configuration
    accessing-libvirt
    accessing-undercloud
    accessing-overcloud
