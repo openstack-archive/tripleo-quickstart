@@ -58,9 +58,10 @@ repos:
     pkg_name: centos-release-ceph-jewel
     custom_cmd: 'sudo yum install -y --enablerepo=extras'
 
-  - type: file
+  - type: generic
+    reponame: centos-opstools
     filename: centos-opstools.repo
-    down_url: https://raw.githubusercontent.com/centos-opstools/opstools-repo/master/opstools.repo
+    baseurl: https://buildlogs.centos.org/centos/7/opstools/x86_64/
 
 repo_cmd_after: |
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
