@@ -1,16 +1,14 @@
 # Create a non-root user on the target host.  This is the user that
 # will own the virtual infrastructure on which we deploy openstack.
+- name: Create non-root group
+  group:
+    name: "{{ non_root_group }}"
+    state: present
+
 - name: Create non-root user
   user:
     name: "{{ non_root_user }}"
+    group: "{{ non_root_group }}"
     state: present
     shell: /bin/bash
   become: true
-
-- name: Get current user group for virthost
-  command: "id -gn {{ non_root_user }}"
-  register: virthost_user_group
-  changed_when: false
-
-- name: Register fact for current user group
-  set_fact: non_root_group="{{ virthost_user_group.stdout }}"

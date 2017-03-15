@@ -170,6 +170,7 @@ tuned_profile: 'virtual-host'
 # This is the name of the user the `provision` role will create on the
 # remote host.
 non_root_user: stack
+non_root_group: "{{ non_root_user }}"
 
 # Path for volume storage
 libvirt_volume_path: "{{ working_dir }}/pool"
