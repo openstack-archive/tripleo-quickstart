@@ -48,8 +48,7 @@
 - when: inventory == 'multinode'
   block:
     - name: Get subnodes
-      shell: >-
-        cat /etc/nodepool/sub_nodes_private
+      command: cat /etc/nodepool/sub_nodes_private
       register: nodes
 
     - name: Add subnode to ansible inventory
