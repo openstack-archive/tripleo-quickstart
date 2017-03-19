@@ -4,7 +4,9 @@
 #   we have a few use cases where we need to use curl and rsync
 # ANSIBLE0016: Tasks that run when changed should likely be handlers
 #   this requires refactoring roles, skipping for now
-SKIPLIST="ANSIBLE0006,ANSIBLE0016"
+# ANSIBLE0012: Commands should not change things if nothing needs doing
+#   this requires refactoring roles, skipping for now
+SKIPLIST="ANSIBLE0006,ANSIBLE0016,ANSIBLE0012"
 
 # lint the playbooks separately to avoid linting the roles multiple times
 pushd playbooks
