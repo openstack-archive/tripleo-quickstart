@@ -44,9 +44,9 @@ and running the ``quickstart.sh`` script.
 Getting the script
 ------------------
 
-You can download the ``quickstart.sh`` script with ``wget``::
+You can download the ``quickstart.sh`` script with ``curl``::
 
-    wget https://raw.githubusercontent.com/openstack/tripleo-quickstart/master/quickstart.sh
+    curl -O https://raw.githubusercontent.com/openstack/tripleo-quickstart/master/quickstart.sh
 
 Alternatively, you can clone this repository and run the script from there.
 

@@ -75,7 +75,7 @@ The following is a list of design decisions made to solve the problem.
 
       Example:::
 
-        wget https://raw.githubusercontent.com/openstack/tripleo-quickstart/master/quickstart.sh
+        curl -O https://raw.githubusercontent.com/openstack/tripleo-quickstart/master/quickstart.sh
         bash quickstart.sh <host>
 
   Solve for Scenario #2
