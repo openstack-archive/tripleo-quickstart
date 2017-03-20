@@ -4,6 +4,7 @@
   group:
     name: "{{ non_root_group }}"
     state: present
+  become: true
 
 - name: Create non-root user
   user:
