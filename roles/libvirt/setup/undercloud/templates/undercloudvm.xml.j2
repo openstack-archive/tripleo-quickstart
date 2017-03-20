@@ -6,9 +6,9 @@
     <type arch='{{ libvirt_arch }}'>hvm</type>
     <boot dev='hd'/>
     <bootmenu enable='no'/>
-{% if overcloud_as_undercloud|bool %}
-    <kernel>{{ working_dir }}/overcloud-full.vmlinuz</kernel>
-    <initrd>{{ working_dir }}/overcloud-full.initrd</initrd>
+{% if overcloud_as_undercloud|bool or undercloud_use_custom_boot_images|bool %}
+    <kernel>{{ undercloud_custom_vmlinuz }}</kernel>
+    <initrd>{{ undercloud_custom_initrd }}</initrd>
     <cmdline>console=ttyS0 root=/dev/vda</cmdline>
 {% endif %}
   </os>
