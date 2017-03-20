@@ -49,7 +49,16 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 # preparation steps to run with the gated roles
-source $WORKSPACE/tripleo-quickstart/ci-scripts/include-gate-changes.sh
+if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
+    bash quickstart.sh \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --bootstrap \
+        --playbook gate-quickstart.yml \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
+        $VIRTHOST
+fi
 
 # we need to run differently (and twice) when gating upstream changes
 if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
