@@ -1,18 +1,18 @@
 release: newton
-undercloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/undercloud.qcow2
-overcloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/overcloud-full.tar
-ipa_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/ironic-python-agent.tar
+undercloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/undercloud.qcow2
+overcloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/overcloud-full.tar
+ipa_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/ironic-python-agent.tar
 repos:
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-newton-tested/
-    hash_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-newton-tested/delorean.repo
+    baseurl: https://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-newton-tested/
+    hash_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-newton-tested/delorean.repo
     priority: 20
 
   - type: file
     filename: delorean-deps.repo
-    down_url: http://trunk.rdoproject.org/centos7-newton/delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-newton/delorean-deps.repo
 
   - type: package
     pkg_name: centos-release-ceph-jewel

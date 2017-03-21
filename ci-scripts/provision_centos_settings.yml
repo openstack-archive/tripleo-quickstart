@@ -10,7 +10,7 @@ tmp:
   hostname_prefix: '{{ hostname.prefix | reject("none") | join("-") }}-'
   anchors:
   - http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
-  - http://trunk.rdoproject.org/centos7-liberty/
+  - https://trunk.rdoproject.org/centos7-liberty/
 product:
   rpmrepo:
     CentOS: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
@@ -25,19 +25,19 @@ product:
     delorean:
       repo_file: delorean.repo
       CentOS:
-        '7': http://trunk.rdoproject.org/centos7-liberty/
+        '7': https://trunk.rdoproject.org/centos7-liberty/
       RedHat:
-        '7.2': http://trunk.rdoproject.org/centos7-liberty/
-        '7.0': http://trunk.rdoproject.org/centos7-liberty/
-        '7.1': http://trunk.rdoproject.org/centos7-liberty/
+        '7.2': https://trunk.rdoproject.org/centos7-liberty/
+        '7.0': https://trunk.rdoproject.org/centos7-liberty/
+        '7.1': https://trunk.rdoproject.org/centos7-liberty/
     delorean_deps:
       repo_file: delorean-deps.repo
       CentOS:
-        '7': http://trunk.rdoproject.org/centos7-liberty/
+        '7': https://trunk.rdoproject.org/centos7-liberty/
       RedHat:
-        '7.2': http://trunk.rdoproject.org/centos7-liberty/
-        '7.0': http://trunk.rdoproject.org/centos7-liberty/
-        '7.1': http://trunk.rdoproject.org/centos7-liberty/
+        '7.2': https://trunk.rdoproject.org/centos7-liberty/
+        '7.0': https://trunk.rdoproject.org/centos7-liberty/
+        '7.1': https://trunk.rdoproject.org/centos7-liberty/
     delorean_pin_version: current-passed-ci
   version:
     major: 8

@@ -25,7 +25,7 @@ repos:
 
   - type: file
     filename: delorean-deps.repo
-    down_url: http://trunk.rdoproject.org/centos7-mitaka/delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-mitaka/delorean-deps.repo
 
   - type: package
     pkg_name: centos-release-ceph-hammer

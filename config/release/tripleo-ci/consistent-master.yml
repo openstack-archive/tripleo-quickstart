@@ -21,13 +21,13 @@ repos:
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: http://trunk.rdoproject.org/centos7/consistent
-    hash_url: http://trunk.rdoproject.org/centos7/consistent/delorean.repo
+    baseurl: https://trunk.rdoproject.org/centos7/consistent
+    hash_url: https://trunk.rdoproject.org/centos7/consistent/delorean.repo
     priority: 20
 
   - type: file
     filename: delorean-deps.repo
-    down_url: http://trunk.rdoproject.org/centos7-master/delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-master/delorean-deps.repo
 
   - type: package
     pkg_name: centos-release-ceph-jewel

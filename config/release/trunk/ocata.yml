@@ -1,8 +1,8 @@
 release: ocata
 dlrn_hash: rdo-trunk-ocata-tested
-undercloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/undercloud.qcow2
-overcloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/overcloud-full.tar
-ipa_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/ironic-python-agent.tar
+undercloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/undercloud.qcow2
+overcloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/overcloud-full.tar
+ipa_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/ironic-python-agent.tar
 repos:
   - type: generic
     reponame: delorean
@@ -12,7 +12,7 @@ repos:
 
   - type: file
     filename: delorean-deps.repo
-    down_url: http://trunk.rdoproject.org/centos7-ocata/delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-ocata/delorean-deps.repo
 
   - type: package
     pkg_name: centos-release-ceph-jewel
