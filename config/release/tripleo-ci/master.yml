@@ -25,11 +25,10 @@ repos:
     hash_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-master-tripleo/delorean.repo
     priority: 20
 
-  - type: generic
+  - type: file
     reponame: delorean-current
     filename: delorean-current.repo
-    baseurl: https://trunk.rdoproject.org/centos7/current
-    hash_url: https://trunk.rdoproject.org/centos7/current/delorean.repo
+    down_url: https://trunk.rdoproject.org/centos7/current/delorean.repo
     priority: 10
     includepkgs:
       - diskimage-builder
