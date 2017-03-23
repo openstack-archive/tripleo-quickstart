@@ -1,8 +1,8 @@
 release: ocata
 overcloud_release: newton
 undercloud_image_url: https://images.rdoproject.org/ocata/delorean/current-tripleo/stable/undercloud.qcow2
-overcloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/overcloud-full.tar
-ipa_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/ironic-python-agent.tar
+overcloud_image_url: https://images.rdoproject.org/newton/delorean/consistent/stable/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/newton/delorean/consistent/stable/ironic-python-agent.tar
 
 repos:
   - type: generic
