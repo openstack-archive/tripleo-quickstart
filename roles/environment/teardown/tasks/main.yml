@@ -50,3 +50,7 @@
         state: absent
       with_items: "{{ networks }}"
       become: true
+
+- name: Delete any existing dstat log file
+  file: dest=/var/log/extra/dstat-csv.log state=absent
+  become: true
