@@ -26,3 +26,4 @@ bash quickstart.sh \
 --playbook $PLAYBOOK \
 localhost
 popd
+

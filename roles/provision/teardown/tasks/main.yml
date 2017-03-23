@@ -63,3 +63,4 @@
       with_fileglob:
         - /run/user/{{ non_root_uid.stdout }}/*
       become: true
+

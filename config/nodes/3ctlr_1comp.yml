@@ -39,3 +39,4 @@ overcloud_nodes:
 # Tell tripleo which nodes to deploy.
 topology: >-
   --control-scale 3
+

@@ -136,3 +136,4 @@
     dest: '{{ local_working_dir }}/ssh.config.ansible'
     mode: 0755
   when: undercloud_ip is not defined
+

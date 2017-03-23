@@ -45,3 +45,4 @@ repo_cmd_after: |
   sudo yum-config-manager --save --setopt centos-ceph-hammer.gpgcheck=0;
   sudo yum repolist;
   sudo yum update -y
+

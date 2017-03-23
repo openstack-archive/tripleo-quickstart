@@ -73,3 +73,4 @@
       fail:
         msg: "Cannot change the state of nested virtualization. Please shut down any running VMs."
       when: nested|bool != cpu_nested_enabled|bool
+

@@ -7,3 +7,4 @@ composable_services: true
 composable_scenario: multinode.yaml
 # Use default test template
 # validate_template: tenantvm-floatingip.yaml
+

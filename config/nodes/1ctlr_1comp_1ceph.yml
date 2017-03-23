@@ -21,3 +21,4 @@ topology: >-
 
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
+

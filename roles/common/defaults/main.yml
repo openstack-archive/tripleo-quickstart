@@ -176,3 +176,4 @@ non_root_group: "{{ non_root_user }}"
 libvirt_volume_path: "{{ working_dir }}/pool"
 
 libvirt_uri: qemu:///session
+

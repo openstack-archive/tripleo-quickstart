@@ -32,3 +32,4 @@ export VIRTHOST=`cat provisioned.csv | tail -1 | cut -d "," -f 3| sed -e 's/"//g
 export VIRTHOST_KEY=`cat provisioned.csv | tail -1 | cut -d "," -f 7| sed -e 's/"//g'`
 echo $VIRTHOST > $WORKSPACE/virthost
 echo $VIRTHOST_KEY > $WORKSPACE/cico_key.txt
+

@@ -7,3 +7,4 @@ undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
 inventory: undercloud
 # Type of undercloud.
 undercloud_type: virtual
+

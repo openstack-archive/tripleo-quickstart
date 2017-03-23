@@ -39,3 +39,4 @@ bash quickstart.sh \
     --extra-vars @$WORKSPACE/config/general_config/${LOG_ENV}-logs.yml \
     --extra-vars artcl_verify_sphinx_build=$VERIFY_SPHINX \
     localhost
+

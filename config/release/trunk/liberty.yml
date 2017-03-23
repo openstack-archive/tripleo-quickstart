@@ -2,3 +2,4 @@ release: liberty
 undercloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/liberty/delorean/undercloud.qcow2
 overcloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/liberty/delorean/overcloud-full.tar
 ipa_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/liberty/delorean/ironic-python-agent.tar
+

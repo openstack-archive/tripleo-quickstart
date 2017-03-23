@@ -46,3 +46,4 @@
     ansible_fqdn: "{{ virthost }}"
     ansible_user: "root"
     ansible_host: "{{ virthost }}"
+

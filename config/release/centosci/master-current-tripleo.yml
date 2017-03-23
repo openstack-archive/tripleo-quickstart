@@ -2,3 +2,4 @@ release: master
 undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/current-tripleo/testing/undercloud.qcow2
 overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/current-tripleo/testing/overcloud-full.tar
 ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/master/delorean/current-tripleo/testing/ironic-python-agent.tar
+

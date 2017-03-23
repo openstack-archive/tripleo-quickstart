@@ -22,3 +22,4 @@ repo_cmd_after: |
   sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0
   sudo yum repolist;
   sudo yum update -y
+

@@ -4,3 +4,4 @@ overcloud_nodes:
     flavor: control
 
 node_count: 1
+

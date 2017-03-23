@@ -40,3 +40,4 @@
       --upload {{ compressed_gating_repo }}:/tmp/gating_repo.tar.gz
       --run '{{ working_dir }}/inject_gating_repo.sh'
     when: not overcloud_as_undercloud|bool
+

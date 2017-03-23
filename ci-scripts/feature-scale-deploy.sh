@@ -53,3 +53,4 @@ bash quickstart.sh \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     --playbook scale_nodes_verify.yml \
     $VIRTHOST
+

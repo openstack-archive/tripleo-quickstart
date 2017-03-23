@@ -53,3 +53,4 @@ undercloud_undercloud_hostname: 'undercloud.example.com'
 
 # set dns on the undercloud to the ipa server IP
 undercloud_undercloud_nameservers: ['192.168.0.1']
+

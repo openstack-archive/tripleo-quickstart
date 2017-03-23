@@ -143,3 +143,4 @@
         path: "/run/user/{{ pool_uid.stdout }}/libvirt/storage/run/{{ libvirt_volume_pool }}.xml"
         state: absent
       when: pool_check|success
+

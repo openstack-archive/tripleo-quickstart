@@ -65,3 +65,4 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   with_items: "{{ qcow_images.files | default([]) }}"
   changed_when: true
+

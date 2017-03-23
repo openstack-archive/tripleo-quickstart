@@ -73,3 +73,4 @@ $scpcmd stack@$VIRTHOST:~/.quickstart/ssh.config* $WORKSPACE/
 $scpcmd stack@$VIRTHOST:~/.quickstart/hosts* $WORKSPACE/
 $scpcmd stack@$VIRTHOST:~/.quickstart/id_* $WORKSPACE/
 sed -i 's,\/home\/stack\/\.quickstart,'"$WORKSPACE"',g' $WORKSPACE/ssh.config.ansible
+

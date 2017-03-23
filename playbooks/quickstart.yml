@@ -54,3 +54,4 @@
     - undercloud-scripts
   roles:
     - tripleo-inventory
+

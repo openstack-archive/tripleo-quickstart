@@ -36,3 +36,4 @@
     manage_dir: true
   with_file:
     - "{{ virt_power_key }}.pub"
+

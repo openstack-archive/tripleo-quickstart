@@ -10,3 +10,4 @@
   gather_facts: yes
   roles:
     - tripleo-inventory
+

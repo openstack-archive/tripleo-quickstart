@@ -22,3 +22,4 @@ EOF
 {% if gating_repo_enabled|bool %}
 yum --disablerepo="*" --enablerepo="gating-repo" update -y
 {% endif %}
+
