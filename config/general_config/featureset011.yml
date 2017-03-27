@@ -1,0 +1,61 @@
+# Summary of the feature set.
+# Deploy an Openstack environment with a non-containerized overcloud,
+# and upgrade it to a containerized overcloud.
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+
+# we're upgrading from non-containers to containers, so first we
+# deploy non-containerized overcloud
+containerized_overcloud: false
+containerized_overcloud_upgrade: true
+major_upgrade_script: major-upgrade-overcloud-containers.sh.j2
+upgrade_undercloud_repo_script: upgrade-repo-tripleo-ci.sh.j2
+upgrade_overcloud_repo_template: overcloud-repo-tripleo-ci.yaml.j2
+
+# save time by not upgrading undercloud in CI
+step_pre_undercloud_upgrade: false
+step_upgrade_undercloud: false
+
+undercloud_generate_service_certificate: false
+
+ssl_overcloud: false
+
+tempest_config: false
+# TODO: enable pingtest when the job passes with some time left
+# before the time limit
+test_ping: false
+run_tempest: false
+step_introspect: false
+
+composable_scenario: multinode-container-upgrade.yaml
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
