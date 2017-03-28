@@ -54,7 +54,7 @@
     - name: Add subnode to ansible inventory
       with_indexed_items: '{{ nodes.stdout | default([]) }}'
       add_host:
-        name: 'subnode-{{ item.0 + 1 }}'
+        name: 'subnode-{{ item.0 + 2 }}'
         groups: "overcloud"
         ansible_host: '{{ item.1 }}'
         ansible_fqdn: '{{ item.1 }}'
