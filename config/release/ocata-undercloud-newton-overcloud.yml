@@ -1,0 +1,26 @@
+release: ocata
+overcloud_release: newton
+undercloud_image_url: https://images.rdoproject.org/ocata/delorean/current-tripleo/stable/undercloud.qcow2
+overcloud_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/overcloud-full.tar
+ipa_image_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean/ironic-python-agent.tar
+
+repos:
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    baseurl: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-ocata-tested/
+    hash_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-ocata-tested/delorean.repo
+    priority: 20
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: http://trunk.rdoproject.org/centos7-ocata/delorean-deps.repo
+
+  - type: package
+    pkg_name: centos-release-ceph-jewel
+    custom_cmd: 'sudo yum install -y --enablerepo=extras'
+
+repo_cmd_after: |
+  sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0
+  sudo yum repolist;
+  sudo yum update -y
