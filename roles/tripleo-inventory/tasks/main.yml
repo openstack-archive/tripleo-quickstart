@@ -58,7 +58,7 @@
         groups: "overcloud"
         ansible_host: '{{ item.1 }}'
         ansible_fqdn: '{{ item.1 }}'
-        ansible_user: 'jenkins'
+        ansible_user: "{{ lookup('env','USER') }}"
         ansible_private_key_file: "/etc/nodepool/id_rsa"
 
 #required for regeneration of ssh.config.ansible
