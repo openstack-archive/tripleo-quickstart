@@ -1,0 +1,111 @@
+---
+
+# We're going to try putting files in `local_working_dir`, so make
+# sure it exists first.
+- name: Ensure local working dir exists
+  delegate_to: localhost
+  file:
+    path: '{{ local_working_dir }}'
+    state: directory
+
+- name: Generate ssh keys
+  delegate_to: localhost
+  command: >
+    ssh-keygen -f '{{ supplemental_node_key }}' -N ''
+    -C ansible_generated_supplemental
+    -t rsa -b 4096
+  args:
+    creates: '{{ supplemental_node_key }}'
+
+- name: Ensure working dir exists on virthost
+  file:
+    path: '{{ working_dir }}'
+    state: directory
+
+- name: Copy ssh pub key to the virthost
+  copy:
+    src: '{{ supplemental_node_key }}.pub'
+    dest: '{{ working_dir }}'
+    owner: '{{ undercloud_user }}'
+    group: '{{ undercloud_user }}'
+    mode: 0600
+  become: true
+
+# Check if the supplemental volume exists. If not, we call out to
+# [fetch_image.yml](fetch_image.yml.html) to download the image.
+- name: Check if the supplemental node volume already exists
+  command: >
+    virsh vol-info --pool '{{ libvirt_volume_pool }}'
+    '{{ supplemental_node.name }}.qcow2'
+  ignore_errors: true
+  changed_when: false
+  register: supplemental_vol_check
+  environment:
+    LIBVIRT_DEFAULT_URI: '{{ libvirt_uri }}'
+
+- when: supplemental_vol_check|failed
+  block:
+  # TODO(hrybacki): Update fetch-images role to handle supplemental images
+  - name: Fetch centos image for ipa
+    get_url:
+      url: '{{ supplemental_base_image_url }}'
+      dest: '{{ image_cache_dir }}/supplemental_base.qcow2'
+
+  - name: Ensure virt-manager in installed on virthost
+    package:
+      name: 'virt-install'
+      state: 'present'
+    become: true
+
+  - name: Prepare TLS everywhere provisoner script
+    template:
+      src: tls_everywhere_provisioner.sh.j2
+      dest: '~/tls_everywhere_provisioner.sh'
+      mode: 0700
+    when: enable_tls_everywhere|bool
+
+  - name: Execute tls everywhere provisioner script
+    shell: 'bash ~/tls_everywhere_provisioner.sh &> ~/tls_everywhere_provisioner.log'
+    when: enable_tls_everywhere|bool
+
+- when: supplemental_provisioning_script is defined and not enable_tls_everywhere|bool
+  block:
+  - name: Move scripts to virthost
+    copy:
+      src: '{{ supplemental_provisioning_script }}'
+      dest: '~/supplemental_node_provisioner.sh'
+      mode: 0744
+  - name: Provision script execution
+    shell: >
+      'bash ~/supplemental_node_provisioner.sh'
+
+# Start the supplemental node virtual machine.
+- name: Start supplemental node vm
+  virt:
+    name: '{{ supplemental_node.name }}'
+    command: start
+    state: running
+    uri: '{{ libvirt_uri }}'
+
+# Configure the supplemental vm to be automatically started at boot.
+- name: Configure supplemental node vm to start at virthost boot
+  virt:
+    name: '{{ supplemental_node.name }}'
+    command: autostart
+    uri: '{{ libvirt_uri }}'
+
+- name: Wait for VM to come online
+  pause:
+    seconds: 30
+
+# Add the supplemental to the in-memory inventory.
+- name: Add supplemental node vm to inventory
+  add_host:
+    name: supplemental
+    groups: supplemental
+    ansible_host: supplemental
+    ansible_fqdn: supplemental
+    ansible_user: '{{ supplemental_user }}'
+    ansible_private_key_file: '{{ supplemental_node_key }}'
+    ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.ansible"'
+    supplemental_node_ip: '{{ supplemental_node_ip }}'

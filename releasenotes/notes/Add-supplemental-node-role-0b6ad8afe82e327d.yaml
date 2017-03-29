@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add ability to deploy supplmental node alongside the undercloud.
+    Add ability to deploy FreeIPA on supplemental node and enable TLS
+    Everywhere.

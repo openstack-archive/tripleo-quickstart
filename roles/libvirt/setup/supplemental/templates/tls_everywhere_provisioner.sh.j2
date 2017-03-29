@@ -1,0 +1,79 @@
+#!/bin/bash
+
+set -eux
+
+CLONEFROM={{ image_cache_dir }}/supplemental_base.qcow2
+VMSSHKEY={{ working_dir }}/id_rsa_supplemental.pub
+VMDISKADD=30G
+WORKDIR=/tmp/virt-undercloud-$(date +%s)
+
+VMIMGIPA={{ working_dir }}/ipa.qcow2
+VMIMGIPACOPY={{ working_dir }}/ORIG-ipa.qcow2
+
+# Copy qcow2 base image
+cp -v $CLONEFROM $VMIMGIPA
+
+# Resize the FreeIPA image
+echo "$(date) - Adding $VMDISKADD to $VMIMGIPA: "
+qemu-img resize $VMIMGIPA +$VMDISKADD
+
+echo "$(date) - Resizing filesystem of $VMIMGIPA: "
+cp -v $VMIMGIPA $VMIMGIPACOPY
+virt-resize --expand /dev/sda1 $VMIMGIPACOPY $VMIMGIPA
+rm -fv $VMIMGIPACOPY
+
+echo "$(date) - Checking status of $VMIMGIPA: "
+qemu-img info $VMIMGIPA
+virt-filesystems --long -h --all -a $VMIMGIPA
+
+cat > ifcfg-eth0 <<EOF
+NAME=eth0
+DEVICE=eth0
+ONBOOT=yes
+BOOTPROTO=static
+IPADDR={{ freeipa_internal_ip }}
+NETMASK=255.255.255.0
+GATEWAY=192.168.23.1
+PEERDNS=yes
+DNS1=10.11.5.19
+TYPE=Ethernet
+EOF
+
+cat > ifcfg-eth1 <<EOF
+NAME=eth1
+DEVICE=eth1
+ONBOOT=yes
+BOOTPROTO=none
+TYPE=Ethernet
+EOF
+
+# NOTE(hrybacki): The ugly is formed as such because Ansible <2.3 lacks the ability to control
+#                 whitespace trimming in jinja templates. This results in the inability to form
+#                 a proper newline. http://docs.ansible.com/ansible/template_module.html#options
+virt-customize -a ~{{ ssh_user }}/ipa.qcow2 \
+    --root-password password:redhat \
+    --install openssh-server \
+    --run-command "xfs_growfs /" \
+    --run-command "echo 'GRUB_CMDLINE_LINUX=\"console=tty0 crashkernel=auto no_timer_check net.ifnames=0 console=ttyS0,115200n8\"' >> /etc/default/grub" \
+    --run-command "grubby --update-kernel=ALL --args=net.ifnames=0" \
+    --run-command "systemctl enable sshd" \
+    {{ "--run-command \"useradd " + supplemental_user + " -m -p ''\" \\" if supplemental_user != 'root' else "\\" }}
+    {{ "--run-command \"echo " + supplemental_user + " ALL=\\(ALL\\) NOPASSWD:ALL >> /etc/sudoers\" \\" if supplemental_user != 'root' else "\\" }}
+    --mkdir /root/.ssh \
+    --copy-in ifcfg-eth0:/etc/sysconfig/network-scripts/ \
+    --copy-in ifcfg-eth1:/etc/sysconfig/network-scripts/ \
+    --ssh-inject {{ supplemental_user }}:file:$VMSSHKEY \
+    --selinux-relabel
+
+# Deploy the ipa vm
+virt-install \
+    --import \
+    --name ipa \
+    --ram 8086 \
+    --disk path=$VMIMGIPA \
+    --vcpus 4 \
+    --os-type linux \
+    --os-variant generic \
+    --network bridge=brext \
+    --graphics none \
+    --noautoconsole

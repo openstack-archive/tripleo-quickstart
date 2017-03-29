@@ -55,6 +55,28 @@
         with_items: "{{ overcloud_nodes }}"
         ignore_errors: true
 
+    # Do the same thing to the supplemental node.
+    - environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+      block:
+      - name: Check undercloud vm
+        command: >
+          virsh domid "{{ supplemental_node }}"
+        ignore_errors: true
+        register: supplemental_check
+
+      - name: Destroy supplemental vm
+        command: >
+          virsh destroy "{{ supplemental_node.name }}"
+        when: supplemental_check|success
+        ignore_errors: true
+
+      - name: Undefine supplemental vm
+        command: >
+          virsh undefine "{{ supplemental_node.name }}" --remove-all-storage
+        when: supplemental_check|success
+        ignore_errors: true
+
     # Do the same thing to the undercloud node.
     - name: Check undercloud vm
       command: >

@@ -43,6 +43,15 @@ Host undercloud
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
+{% if deploy_supplemental_node %}
+Host supplemental
+    ProxyCommand {{ supplemental_ssh_proxy_command }}
+    IdentityFile {{ local_working_dir }}/id_rsa_supplemental
+    User {{ supplemental_user }}
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+{% endif %}
+
 {% if groups["overcloud"] is defined %}
 {% for host in groups["overcloud"] %}
 

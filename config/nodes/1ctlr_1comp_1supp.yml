@@ -1,0 +1,17 @@
+# This config file is used to deploy a dedicated node on the virthost for TLS everywhere.
+
+# Define the controller node and compute nodes.
+# Create three controller nodes and one compute node.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    virtualbmc_port: 6230
+
+  - name: compute_0
+    flavor: compute
+    virtualbmc_port: 6233
+
+# Define the supplmental node to be used for the FreeIPA server.
+supplemental_node:
+  name: ipa
+  flavor: undercloud

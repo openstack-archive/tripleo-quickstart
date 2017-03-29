@@ -97,6 +97,12 @@ undercloud_node:
   name: undercloud
   flavor: undercloud
 
+# Do not deploy supplemental nodes by default.
+deploy_supplemental_node: false
+
+# Do not deploy FreeIPA server by default.
+enable_tls_everywhere: false
+
 # The overcloud will have three controllers, one compute node,
 # and a ceph storage node.
 overcloud_nodes:

@@ -40,7 +40,7 @@
 
 # The `libvirt/setup` role creates the undercloud and overcloud
 # virtual machines.
-- name:  Setup undercloud and overcloud vms
+- name:  Setup undercloud, overcloud, and supplemental vms
   hosts: virthost
   gather_facts: yes
   roles:
