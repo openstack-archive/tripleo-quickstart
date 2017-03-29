@@ -23,6 +23,17 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 export ARA_DATABASE="sqlite:///${WORKSPACE}/ara.sqlite"
 $WORKSPACE/bin/ara generate html $WORKSPACE/ara
 
+# Check for existence of the config file in the default
+# directory or as a full path
+if [ -f $WORKSPACE/config/general_config/$CONFIG.yml ]; then
+    CONFIG_PATH=$WORKSPACE/config/general_config/$CONFIG.yml
+elif [ -f $CONFIG ]; then
+    CONFIG_PATH=$CONFIG
+else
+    echo "ERROR: Config file $CONFIG is not found." >&2
+    exit 1
+fi
+
 if [ "$JOB_TYPE" = "gate" ]; then
     VERIFY_SPHINX=true
 else
@@ -34,7 +45,7 @@ bash quickstart.sh \
     --no-clone \
     --bootstrap \
     --retain-inventory \
-    --config $WORKSPACE/config/general_config/$CONFIG.yml \
+    --config $CONFIG_PATH \
     --playbook collect-logs.yml \
     --extra-vars @$WORKSPACE/config/general_config/${LOG_ENV}-logs.yml \
     --extra-vars artcl_verify_sphinx_build=$VERIFY_SPHINX \
