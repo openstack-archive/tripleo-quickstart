@@ -22,22 +22,28 @@ repo_cmd_before: |
   sudo yum clean all;
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  export CURRENT_RDO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7/current/delorean.repo | grep baseurl | cut -d= -f2`
+  export CURRENT_TRIPLEO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo | grep baseurl | cut -d= -f2`
+  # If running tripleo-quickstart in OpenStack Infra, let's try to use AFS mirrors
   if [[ -e /etc/nodepool/provider ]]; then
   source /etc/nodepool/provider;
-  export NODEPOOL_MIRROR_HOST=$(echo "mirror.$NODEPOOL_REGION.$NODEPOOL_CLOUD.openstack.org" | tr '[:upper:]' '[:lower:]');
+  export NODEPOOL_MIRROR_HOST=$(echo "http://mirror.$NODEPOOL_REGION.$NODEPOOL_CLOUD.openstack.org" | tr '[:upper:]' '[:lower:]');
+  export CURRENT_RDO_MIRROR=${CURRENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
+  export CURRENT_TRIPLEO_MIRROR=${CURRENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
   fi
+  # Otherwise, fallback to official mirrors provided by CentOS.
+  export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
 repos:
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: https://trunk.rdoproject.org/centos7-master/current-tripleo/
+    baseurl: $CURRENT_TRIPLEO_MIRROR
     hash_url: https://trunk.rdoproject.org/centos7-master/current-tripleo/delorean.repo
-    priority: 20
 
-  - type: file
+  - type: generic
     reponame: delorean-current
     filename: delorean-current.repo
-    down_url: https://trunk.rdoproject.org/centos7/current/delorean.repo
+    baseurl: $CURRENT_RDO_MIRROR
     priority: 10
     includepkgs:
       - diskimage-builder
@@ -61,25 +67,25 @@ repos:
     filename: delorean-deps.repo
     down_url: https://trunk.rdoproject.org/centos7-master/delorean-deps.repo
 
-  - type: package
-    pkg_name: centos-release-ceph-jewel
-    custom_cmd: 'sudo yum install -y --enablerepo=extras'
+  - type: generic
+    reponame: centos-qemu
+    filename: centos-qemu.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/virt/x86_64/kvm-common/
+
+  - type: generic
+    reponame: centos-ceph-jewel
+    filename: centos-ceph-jewel.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/storage/x86_64/ceph-jewel/
 
   - type: generic
     reponame: centos-opstools
     filename: centos-opstools.repo
-    baseurl: https://buildlogs.centos.org/centos/7/opstools/x86_64/
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/opstools/x86_64/
 
 repo_cmd_after: |
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
   {%endif %}
-  sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0;
-  if [[ -n "${NODEPOOL_MIRROR_HOST:-}" ]]; then
-  sudo yum remove -y centos-release-ceph-jewel;
-  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
-  sudo yum-config-manager --add-repo "http://${NODEPOOL_MIRROR_HOST}/centos/7/storage/x86_64/ceph-jewel/";
-  echo "gpgcheck=0" >> /etc/yum.repos.d/${NODEPOOL_MIRROR_HOST}*;
-  fi
+  sudo yum-config-manager --disable rdo-qemu-ev;
   sudo rpm -e epel-release || true;
   sudo yum remove -y rdo-release || true;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
