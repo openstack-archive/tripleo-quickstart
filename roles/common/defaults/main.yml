@@ -24,6 +24,17 @@ image_fetch_dir: "{{ working_dir}}"
 # the fly. The default is to use a pre-built undercloud.qcow2.
 overcloud_as_undercloud: false
 
+# This determines whether or not to treat the undercloud.qcow2 as a
+# stock CentOS or RHEL image.  The default is a pre-built undercloud.qcow2
+baseos_as_undercloud: false
+
+# When a base os image is used in lieu of a quickstart prepared image
+# additional setup steps are required for the undercloud install.
+undercloud_setup: false
+
+# Set selinux, by default RDO builds are always set to selinux permissive
+selinux_enforcing: false
+
 # These defaults are used if there are no flavor-specific
 # overrides configured.
 default_disk: 50

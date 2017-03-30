@@ -46,7 +46,7 @@
 
   # Converts an overcloud-full.qcow2 into a undercloud.qcow2
   - include: convert_image.yml
-    when: overcloud_as_undercloud|bool
+    when: overcloud_as_undercloud|bool or baseos_as_undercloud|bool
 
   # Update images after we have converted the overcloud-full to an
   # undercloud image when using devmode. This also clones tripleo-ci

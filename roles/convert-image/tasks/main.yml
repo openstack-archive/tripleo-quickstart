@@ -1,6 +1,6 @@
 - name: generate convert script
   template:
-    src: convert_image.sh.j2
+    src: "{{ convert_image_template }}"
     dest: "{{ convert_image_working_dir}}/convert_image.sh"
 
 - name: copy overcloud-full.qcow2 to undercloud.qcow2
@@ -8,6 +8,7 @@
     cp {{ convert_image_working_dir}}/overcloud-full.qcow2
        {{ convert_image_working_dir}}/undercloud.qcow2
   changed_when: true
+  when: overcloud_as_undercloud|bool
 
 # Resize the undercloud image using qemu-img resize
 - name: Resize the undercloud image using qemu-image resize

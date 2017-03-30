@@ -1,3 +1,7 @@
+- name: image name
+  debug:
+    msg: "checking for image {{ image.name }}"
+
 # Set some convenience variables here to avoid boilerplate code
 # elsewhere in this file.  These are all set unconditionally to avoid
 # any cruft leftover from a previous call to this file.
@@ -28,8 +32,34 @@
     image_cache_path: "{{ _latest }}"
   when: latest_exists|success and _force_cached_image
 
+# The md5sum for base OS images are not hosted, they are defined in a configuration file.
+# Handle base os images slightly differently
+- when: image.md5sum is defined
+  block:
+
+    # Get the expected checksum from settings vs. pulling the md5sum.
+    - name: Get image expected checksum for base OS images
+      set_fact:
+        md5_expected: "{{ image.md5sum.split()[0] }}"
+
+    - name: Set path to cached image
+      set_fact:
+        image_cache_path: "{{ image_cache_dir }}/{{ md5_expected }}.{{ image.type }}"
+
+    # See if a matching image exists locally.
+    - name: Check for base OS image in cache
+      command: >
+        test -f {{ image_cache_path }}
+      args:
+        chdir: "{{ image_cache_dir }}"
+      ignore_errors: true
+      register: base_image_exists
+      changed_when: false
+
 # Otherwise, check if there's a new image available.
-- when: not _force_cached_image or latest_exists|failed
+- when:
+    - image.md5sum is not defined
+    - not _force_cached_image or latest_exists|failed
   block:
 
     # Get the expected checksum for the remote image.
@@ -38,9 +68,13 @@
         curl -sfL {{ image.url }}.md5
       register: md5_expected
 
+    - name: sanitize the md5sum
+      set_fact:
+        md5_expected: "{{ md5_expected.stdout.split()[0] }}"
+
     - name: Set path to cached image [upstream]
       set_fact:
-        image_cache_path: "{{ image_cache_dir }}/{{ md5_expected.stdout.split()[0] }}.{{ image.type }}"
+        image_cache_path: "{{ image_cache_dir }}/{{ md5_expected }}.{{ image.type }}"
 
     # See if a matching image exists locally.
     - name: Check for image in cache
@@ -53,7 +87,10 @@
       changed_when: false
 
 # Looks like we're going to have to download the image after all.
-- when: image_exists is defined and image_exists|failed
+
+# Note.. image_exists and base_image_exists are required variables because
+# even unused variables will overwrite each other.
+- when: image_exists is defined and (image_exists|failed or base_image_exists|failed)
   block:
 
     # This task will download the image.  We're using `curl` here
@@ -79,14 +116,17 @@
         chdir: "{{ image_cache_dir }}"
       register: md5_actual
 
+    - name: sanitize the md5sum for the downloaded image
+      set_fact:
+        md5_actual: "{{ md5_actual.stdout.split()[0] }}"
+
     # Verify that what we have is what we wanted.
     - name: Verify image checksum
       fail:
         msg: image checksum does not match
       when: >
-        image_exists|failed and (
-        md5_expected.stdout.split()[0] !=
-        md5_actual.stdout.split()[0])
+        image_exists|failed and
+        (md5_expected != md5_actual)
 
     - name: Cache image by checksum
       command: >
@@ -127,7 +167,13 @@
 - name: Get qcow2 image from cache
   command: >
     cp {{ image_cache_path }} {{ image_fetch_dir }}/{{ image.name }}.{{ image.type }}
-  when: image.type  == "qcow2"
+  when: image.type  == "qcow2" and image.md5sum is not defined
+
+# Same as the above just copy the base os image to the fetch_dir as undercloud
+- name: Get base OS qcow2 image from cache
+  command: >
+    cp {{ image_cache_path }} {{ image_fetch_dir }}/undercloud.{{ image.type }}
+  when: image.type  == "qcow2" and image.md5sum is defined
 
 - name: Get tar images from cache
   unarchive:
