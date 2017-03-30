@@ -3,12 +3,17 @@
     src: "{{ convert_image_template }}"
     dest: "{{ convert_image_working_dir}}/convert_image.sh"
 
+- name: check if we have an overcloud-full.qcow2 to start from
+  stat:
+    path: "{{ convert_image_working_dir}}/overcloud-full.qcow2"
+  register: overcloud_full_qcow2
+
 - name: copy overcloud-full.qcow2 to undercloud.qcow2
   command: >
     cp {{ convert_image_working_dir}}/overcloud-full.qcow2
        {{ convert_image_working_dir}}/undercloud.qcow2
   changed_when: true
-  when: overcloud_as_undercloud|bool
+  when: overcloud_full_qcow2.stat.exists
 
 # Resize the undercloud image using qemu-img resize
 - name: Resize the undercloud image using qemu-image resize
