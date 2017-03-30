@@ -1,8 +1,8 @@
 release: ocata
 dlrn_hash: rdo-trunk-ocata-tested
-undercloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/undercloud.qcow2
-overcloud_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/overcloud-full.tar
-ipa_image_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/ocata/rdo_trunk/ironic-python-agent.tar
+undercloud_image_url: http://images.rdoproject.org/ocata/rdo_trunk/current-tripleo/stable/undercloud.qcow2
+overcloud_image_url: http://images.rdoproject.org/ocata/rdo_trunk/current-tripleo/stable/overcloud-full.tar
+ipa_image_url: http://images.rdoproject.org/ocata/rdo_trunk/current-tripleo/stable/ironic-python-agent.tar
 repos:
   - type: generic
     reponame: delorean
