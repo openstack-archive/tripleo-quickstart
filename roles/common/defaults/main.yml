@@ -28,6 +28,9 @@ overcloud_as_undercloud: false
 # stock CentOS or RHEL image.  The default is a pre-built undercloud.qcow2
 baseos_as_undercloud: false
 
+# optionally setup the yum repos on the virthost
+virthost_repo_setup: false
+
 # When a base os image is used in lieu of a quickstart prepared image
 # additional setup steps are required for the undercloud install.
 undercloud_setup: false

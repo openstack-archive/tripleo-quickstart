@@ -15,6 +15,11 @@
   tags:
     - provision
 
+# Allow the user to optionally perform a yum repo setup
+# the virthost_repo_setup variable by default is set to false
+- include: repo-setup-virthost.yml
+  when: virthost_repo_setup|bool
+
 - include: teardown-provision.yml
 
 # The `provision.yml` playbook is responsible for

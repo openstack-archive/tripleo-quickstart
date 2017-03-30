@@ -31,12 +31,6 @@
   tags:
     - provision
 
-# Allow the user to optionally perform a yum repo setup
-# Default is set to false as the quickstart images will provide the
-# correct yum repos.
-- include: repo-setup.yml
-  when: virthost_repo_setup|default(false)
-
 - name: Check if the target virthost distro is supported (RHEL or CentOS)
   hosts: virthost
   roles:
