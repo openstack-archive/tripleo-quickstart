@@ -21,8 +21,8 @@ repos:
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: https://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-master-tripleo/
-    hash_url: https://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-master-tripleo/delorean.repo
+    baseurl: https://trunk.rdoproject.org/centos7-master/current-tripleo/
+    hash_url: https://trunk.rdoproject.org/centos7-master/current-tripleo/delorean.repo
     priority: 20
 
   - type: file
