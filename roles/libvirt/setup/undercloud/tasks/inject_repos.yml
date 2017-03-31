@@ -8,7 +8,7 @@
   with_items:
     - url: "https://trunk.rdoproject.org/centos7/current/delorean.repo"
       dest: "{{working_dir}}/delorean-current.repo"
-    - url: "https://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-master-tripleo/delorean.repo"
+    - url: "https://trunk.rdoproject.org/centos7-master/current-tripleo/delorean.repo"
       dest: "{{working_dir}}/delorean.repo"
     - url: "https://trunk.rdoproject.org/centos7/delorean-deps.repo"
       dest: "{{working_dir}}/delorean-deps.repo"
