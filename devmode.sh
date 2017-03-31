@@ -5,6 +5,10 @@
 : ${RELEASE:=master-tripleo-ci}
 : ${CONFIG:=minimal}
 : ${BUILD_SYS:=delorean}
+: ${DEPLOY_TYPE:=libvirt}
+: ${ENVIRONMENT:=rdocloud}
+: ${CUSTOM_REQUIREMENTS_INSTALL:=none}
+: ${DELETE_ALL_STACKS:=false}
 
 interactive=0
 reproducer_type=gerrit
@@ -21,6 +25,10 @@ usage () {
     echo "  -w, --working-dir <dir>"
     echo "                      directory where the virtualenv, inventory files, etc."
     echo "                      are created (default=$WORKSPACE)"
+    echo "  -o, --ovb           deploy using OVB"
+    echo "  -d, --delete-all-stacks"
+    echo "                      delete all stacks in the tenant before deployment."
+    echo "                      will also delete associated keypairs if they exist."
     echo "  -h, --help          print this help and exit"
     echo "  virthost            target machine used for deployment, required argument"
 }
@@ -74,6 +82,28 @@ gerrit-gate () {
         echo ""
     fi
     export GERRIT_{HOST,BRANCH,CHANGE_ID,PATCHSET_REVISION}
+}
+
+ovb-deploy() {
+    if [[ -z $OS_AUTH_URL || -z $OS_USERNAME ]]; then
+        interactive=1
+        echo "What is the path to the OpenStack RC file for the OVB system?"
+        echo "This can be downloaded from the OpenStack Web interface through"
+        echo "Access & Security - API Access - Download OpenStack RC File"
+        read -p "OPENRC_PATH=" OPENRC_PATH
+        source $OPENRC_PATH
+    fi
+
+    if [[ $ENVIRONMENT != "rdocloud" ]] && [[ $CUSTOM_REQUIREMENTS_INSTALL == "none" ]]; then
+        interactive=1
+        echo "What is the line to be added to the requirements file?"
+        echo "This line should include the path to the repo that"
+        echo "will be pip installed."
+        read -p "CUSTOM_REQUIREMENTS_INSTALL=" CUSTOM_REQUIREMENTS_INSTALL
+        echo ""
+    fi
+    export CUSTOM_REQUIREMENTS_INSTALL
+
 }
 
 interactive-gate () {
@@ -131,8 +161,17 @@ while [ "x$1" != "x" ]; do
             shift
             ;;
 
+        --delete-all-stacks|-d)
+            DELETE_ALL_STACKS=true
+            ;;
+
         --no-gate|-n)
             GATE=0
+            ;;
+
+        --ovb|-o)
+            DEPLOY_TYPE=ovb
+            VIRTHOST=localhost
             ;;
 
         --help|-h)
@@ -162,7 +201,7 @@ pushd $(dirname ${BASH_SOURCE[0]:-$0})
 export VIRTHOST=$1
 export WORKSPACE
 
-if [[ -z $VIRTHOST ]]; then
+if [[ -z $VIRTHOST ]] && [[ $DEPLOY_TYPE != "ovb" ]]; then
     usage
     echo ""
     echo "Specify the virthost to use. You need to be able to ssh as root without"
@@ -177,7 +216,19 @@ else
     JOB_TYPE=periodic
 fi
 
-bash ci-scripts/full-deploy.sh $RELEASE $BUILD_SYS $CONFIG $JOB_TYPE
+
+BASE_QUICKSTART_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+if [[ "$DEPLOY_TYPE" == "ovb" ]]; then
+    ovb-deploy
+    if [[ "$CONFIG" == "minimal" ]]; then
+        CONFIG=ovb-minimal-pacemaker-public-bond
+    fi
+
+    bash $BASE_QUICKSTART_DIR/ci-scripts/full-deploy-ovb.sh $RELEASE $CONFIG $JOB_TYPE $ENVIRONMENT $CUSTOM_REQUIREMENTS_INSTALL $DELETE_ALL_STACKS
+else
+    bash $BASE_QUICKSTART_DIR/ci-scripts/full-deploy.sh $RELEASE $BUILD_SYS $CONFIG $JOB_TYPE
+fi
 
 popd
 

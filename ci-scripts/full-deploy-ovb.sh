@@ -4,26 +4,22 @@
 # $JOB_TYPE used are 'periodic' and 'gate'
 # Usage: full-deploy-ovb.sh \
 #        <release> \
-#        <hw-env-dir> \
-#        <network-isolation> \
 #        <config> \
-#        <ovb-settings-file> \
-#        <ovb-creds-file>  \
-#        <playbook> \
-#        <job-type>
+#        <job-type> \
+#        <environment-file> \
+#        <custom-requirements-install> \
+#        <delete-all-stacks>
 
 set -eux
 
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
 
 RELEASE=$1
-HW_ENV_DIR=$2
-NETWORK_ISOLATION=$3
-CONFIG=$4
-OVB_SETTINGS_FILE=$5
-OVB_CREDS_FILE=$6
-PLAYBOOK=$7
-JOB_TYPE=$8
+CONFIG=$2
+JOB_TYPE=$3
+ENVIRONMENT=$4
+CUSTOM_REQUIREMENTS_INSTALL=$5
+DELETE_ALL_STACKS=$6
 VIRTHOST=localhost
 
 if [ "$JOB_TYPE" = "gate" ] || \
@@ -37,7 +33,7 @@ if [ "$JOB_TYPE" = "gate" ] || \
 elif [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     # setup a test patch to be built
     export ZUUL_HOST=review.openstack.org
-    export ZUUL_CHANGES=openstack/tripleo-ui:master:refs/changes/25/422025/3
+    export ZUUL_CHANGES=openstack/tripleo-ui:master:refs/changes/25/422025/4
     unset REL_TYPE
     if [ "$RELEASE" = "master-tripleo-ci" ]; then
         # we don't have a local mirror for the tripleo-ci images
@@ -61,25 +57,48 @@ fi
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
-# preparation steps to run with the gated roles
+# Preparation steps to run with the gated roles
 CI_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CI_SCRIPT_DIR/include-gate-changes.sh
 
-# we need to run differently (and twice) when gating upstream changes
+# Add custom repository
+if [[ $CUSTOM_REQUIREMENTS_INSTALL != "none" ]] && [[ ! $(grep "$CUSTOM_REQUIREMENTS_INSTALL" quickstart-extras-requirements.txt) ]]; then
+    echo "$CUSTOM_REQUIREMENTS_INSTALL" >> $CI_SCRIPT_DIR/../quickstart-extras-requirements.txt
+fi
+
+# FIXME (rlandy) - We are not able to use the topology files
+# in config/nodes/ for OVB due to the definition of the
+# overcloud nodes. As a workaround, pass the $CONFIG file,
+# which also contains the overcloud nodes settings, to $OPT_NODES
+export OPT_NODES="$WORKSPACE/config/general_config/${CONFIG}.yml"
+
+# We need to run differently when gating upstream changes
 if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
-    echo "TODO: Add dlrn-gate section in upcoming review"
+        bash quickstart.sh \
+        --bootstrap \
+        --working-dir $WORKSPACE/ \
+        --tags all \
+        --no-clone \
+        --extra-vars build_test_packages="true" \
+        --extra-vars ib_repo_image_inject="true" \
+        --config $WORKSPACE/config/general_config/${CONFIG}.yml \
+        --extra-vars @$WORKSPACE/config/environments/${ENVIRONMENT}.yml \
+        --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
+        --playbook baremetal-full-deploy.yml \
+        --release $RELEASE \
+        $OPT_ADDITIONAL_PARAMETERS \
+        $VIRTHOST
 else
     bash quickstart.sh \
         --bootstrap \
         --working-dir $WORKSPACE/ \
         --tags all \
         --no-clone \
-        --config $WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/config_files/$CONFIG \
-        --extra-vars @$OVB_SETTINGS_FILE \
-        --extra-vars @$OVB_CREDS_FILE \
-        --extra-vars @$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/env_settings.yml \
-        --playbook $PLAYBOOK \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        --config $WORKSPACE/config/general_config/${CONFIG}.yml \
+        --extra-vars @$WORKSPACE/config/environments/${ENVIRONMENT}.yml \
+        --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
+        --playbook baremetal-full-deploy.yml \
+        --release $RELEASE \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
 fi

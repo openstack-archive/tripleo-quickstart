@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    Added functionality to run OVB deployments from
+    devmode.sh - including options to remove old stacks
+    and keypairs from the host cloud environment, include
+    DLRN changes, and deploy in custom host cloud
+    environments.
+    Added two new switches to devmode.sh,
+    --ovb (runs devmode through the OVB workflow)
+    --delete-all-stacks (removes stacks and key pairs in the
+    host cloud environment)

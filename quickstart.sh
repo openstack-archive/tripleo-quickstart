@@ -470,21 +470,6 @@ if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 ]; then
     rm -f $ANSIBLE_INVENTORY
 fi
 
-if [ "$VIRTHOST" = "localhost" ]; then
-    echo "$0: WARNING: VIRTHOST == localhost; skipping provisioning" >&2
-    OPT_SKIP_TAGS="${OPT_SKIP_TAGS:+$OPT_SKIP_TAGS,}provision"
-
-    if [ ${EUID:-${UID}} = 0 ]; then
-        echo "ERROR: $0 should be run by non-root user." >&2
-        exit 1
-    fi
-
-    if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 ]; then
-        echo "[virthost]" > $ANSIBLE_INVENTORY
-        echo "localhost ansible_connection=local" >> $ANSIBLE_INVENTORY
-    fi
-fi
-
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
     VERBOSITY=vvvv
 else
