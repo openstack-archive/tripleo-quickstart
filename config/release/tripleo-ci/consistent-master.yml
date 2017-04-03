@@ -51,8 +51,9 @@ repo_cmd_after: |
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
   {%endif %}
   sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0;
-  if [[ -n "${NODEPOOL_MIRROR_HOST:-''}" ]]; then
+  if [[ -n "${NODEPOOL_MIRROR_HOST:-}" ]]; then
   sudo yum remove -y centos-release-ceph-jewel;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum-config-manager --add-repo "http://${NODEPOOL_MIRROR_HOST}/centos/7/storage/x86_64/ceph-jewel/";
   echo "gpgcheck=0" >> /etc/yum.repos.d/${NODEPOOL_MIRROR_HOST}*;
   fi
