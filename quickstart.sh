@@ -140,7 +140,7 @@ bootstrap () {
             popd
         fi
         # Handle the case that pip is too old to use a cache-dir
-        pip install --no-cache-dir "${OPT_REQARGS[@]}"
+        pip install -U --no-cache-dir "${OPT_REQARGS[@]}"
     popd
     )
 }
