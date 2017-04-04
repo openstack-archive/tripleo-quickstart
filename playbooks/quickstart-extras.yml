@@ -2,6 +2,13 @@
 
 - include: quickstart.yml
 
+# Deploy the FreeIPA server
+- name: Deploy the FreeIPA server
+  hosts: supplemental
+  gather_facts: no
+  roles:
+    - { role: freeipa-setup, when: deploy_supplemental_node|bool and enable_tls_everywhere|bool }
+
 # setup for the undercloud
 - name: Setup the undercloud
   hosts: undercloud
