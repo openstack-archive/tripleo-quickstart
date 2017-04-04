@@ -107,7 +107,12 @@
         - "{{ overcloud_nodes }}"
         - "{{ extradisks_list }}"
 
-    - name: Write instackenv script
-      template:
-        src: "{{ undercloud_instackenv_template }}"
-        dest: "{{ working_dir }}/instackenv.json"
+# Generate the `instackenv.json` configuration file.  Note that this
+# task *must* occur after the above overcloud tasks, because if
+# `overcloud_nodes` is defined the template depends on the
+# `node_mac_map` variable.
+- name: Write instackenv script
+  template:
+    src: "{{ undercloud_instackenv_template }}"
+    dest: "{{ working_dir }}/instackenv.json"
+
