@@ -6,7 +6,7 @@
     <type arch='{{ libvirt_arch }}'>hvm</type>
     <boot dev='hd'/>
     <bootmenu enable='no'/>
-{% if overcloud_as_undercloud %}
+{% if overcloud_as_undercloud|bool %}
     <kernel>{{ working_dir }}/overcloud-full.vmlinuz</kernel>
     <initrd>{{ working_dir }}/overcloud-full.initrd</initrd>
     <cmdline>console=ttyS0 root=/dev/vda</cmdline>
@@ -46,7 +46,7 @@
     <serial type='pty'/>
     <console type='pty'/>
 
-{% if enable_vnc_console %}
+{% if enable_vnc_console|bool %}
     <input type='mouse' bus='ps2'/>
     <graphics type='vnc' port='-1' autoport='yes'/>
     <video>

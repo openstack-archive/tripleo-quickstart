@@ -36,7 +36,7 @@
     <serial type='pty'/>
     <console type='pty'/>
 
-{% if enable_vnc_console %}
+{% if enable_vnc_console|bool %}
     <input type='mouse' bus='ps2'/>
     <graphics type='vnc' port='-1' autoport='yes'/>
     <video>
