@@ -13,7 +13,7 @@
     cp {{ convert_image_working_dir}}/overcloud-full.qcow2
        {{ convert_image_working_dir}}/undercloud.qcow2
   changed_when: true
-  when: overcloud_full_qcow2.stat.exists
+  when: overcloud_full_qcow2.stat.exists and overcloud_as_undercloud|bool
 
 # Resize the undercloud image using qemu-img resize
 - name: Resize the undercloud image using qemu-image resize
