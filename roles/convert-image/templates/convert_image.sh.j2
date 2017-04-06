@@ -13,7 +13,7 @@ else
     exit 1
 fi
 
-{% if not undercloud_setup %}
+{% if not undercloud_setup|bool %}
 
 yum update -y
 
@@ -50,7 +50,7 @@ chmod 600 /swapfile
 # Enable it on start
 echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 
-{% if not selinux_enforcing %}
+{% if not selinux_enforcing|bool %}
 
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
