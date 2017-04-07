@@ -1,0 +1,6 @@
+- name: Inject the repositories into the image
+  include_role:
+    name: modify-image
+  vars:
+    image_to_modify: "{{ repo_inject_image_path }}"
+    modify_script: "{{ repo_setup_dir }}/repo_setup.sh"

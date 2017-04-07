@@ -1,0 +1,29 @@
+---
+repo_setup_dir: "{{ working_dir }}"
+repo_setup_script: repo_setup.sh.j2
+repo_setup_log: "{{ repo_setup_dir }}/repo_setup.log"
+repo_run_live: true
+# Releases shortcuts
+stable:
+  - newton
+  - mitaka
+  - liberty
+repo_cmd_before: |
+  sudo yum install -y yum-plugin-priorities;
+  sudo yum clean all;
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+repo_cmd_after: |
+  sudo yum repolist;
+  sudo yum update -y
+
+# Repositories definitions
+repos:
+
+  - type: file
+    filename: delorean.repo
+    down_url: https://trunk.rdoproject.org/centos7-{{ release }}/current/delorean.repo
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
