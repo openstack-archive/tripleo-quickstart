@@ -1,0 +1,37 @@
+
+# this is required for image builds
+# Reference: https://github.com/openstack/tripleo-quickstart-extras/blob/master/roles/build-images/defaults/main.yml#L15
+# use an overcloud image as the undercloud after removing a few key rpms
+overcloud_as_undercloud: true
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: false
+
+artcl_collect: true
+artcl_collect_list:
+  - /var/lib/oooq-images/*.log
+  - /var/lib/oooq-images/*.sh
+  - /var/log/
+  - /var/tmp/sosreport*
+  - /etc/
+  - /home/*/*.log
+  - /home/*/*.json
+  - /home/*/*.conf
+  - /home/*/*.yml
+  - /home/*/*.yaml
+  - /home/*/*.sh
+  - /home/*/*.rst
+  - /home/*/*.pem
+  - /home/*/gating_repo.tar.gz
+artcl_exclude_list:
+  - /etc/udev/hwdb.bin
+  - /etc/puppet/modules
+  - /etc/project-config
+  - /etc/services
+  - /etc/selinux/targeted
+  - /etc/pki/ca-trust/extracted
+  - /etc/alternatives
+  - /var/log/journal
+artcl_collect_dir: "{{ local_working_dir }}/collected_files"
+artcl_gzip_only: true
+artcl_tar_gz: false
