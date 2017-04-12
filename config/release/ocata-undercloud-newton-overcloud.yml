@@ -8,8 +8,8 @@ repos:
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-ocata-tested/
-    hash_url: http://buildlogs.centos.org/centos/7/cloud/x86_64/rdo-trunk-ocata-tested/delorean.repo
+    baseurl: https://trunk.rdoproject.org/centos7-ocata/current-passed-ci/
+    hash_url: https://trunk.rdoproject.org/centos7-ocata/current-passed-ci/delorean.repo
     priority: 20
 
   - type: file
