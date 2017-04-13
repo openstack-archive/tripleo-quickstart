@@ -24,7 +24,7 @@ if [ "$JOB_TYPE" = "gate" ] || \
 elif [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     # setup a test patch to be built
     export ZUUL_HOST=review.openstack.org
-    export ZUUL_CHANGES=openstack/tripleo-ui:master:refs/changes/25/422025/2
+    export ZUUL_CHANGES=openstack/tripleo-ui:master:refs/changes/25/422025/3
     unset REL_TYPE
     if [ "$RELEASE" = "master-tripleo-ci" ]; then
         # we don't have a local mirror for the tripleo-ci images
