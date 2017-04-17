@@ -29,7 +29,7 @@ repo_cmd_before: |
   source /etc/nodepool/provider;
   export NODEPOOL_MIRROR_HOST=$(echo "http://mirror.$NODEPOOL_REGION.$NODEPOOL_CLOUD.openstack.org" | tr '[:upper:]' '[:lower:]');
   export CURRENT_RDO_MIRROR=${CURRENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
-  export CURRENT_TRIPLEO_MIRROR=${CURRENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
+  export CURRENT_TRIPLEO_MIRROR=${CURRENT_TRIPLEO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
   fi
   # Otherwise, fallback to official mirrors provided by CentOS.
   export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
