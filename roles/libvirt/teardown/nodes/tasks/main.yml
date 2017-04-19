@@ -116,6 +116,8 @@
         virsh pool-dumpxml "{{ libvirt_volume_pool }}" |
         virsh pool-define /dev/stdin
       when: pool_check|success
+      environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Destroy volume pool
       command: >
