@@ -10,3 +10,5 @@ libvirt_packages:
 # The name of the libvirt service.
 libvirtd_service: libvirtd
 
+# If running in chroot-like environments (containers)
+chrooted: false
