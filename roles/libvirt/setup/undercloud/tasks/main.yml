@@ -278,20 +278,14 @@
     state: 'directory'
   when: non_root_chown|bool
 
-# Start the undercloud virtual machine.
-- name: Start undercloud vm
+# Start the undercloud virtual machine and configure it to be
+# automatically started at boot.
+- name: Start undercloud vm and configure it to be autostarted at boot
   virt:
     name: "{{ undercloud_node.name }}"
+    autostart: True
     command: start
     state: running
-    uri: "{{ libvirt_uri }}"
-
-# Configure the undercloud virtual machine to be
-# automatically started at boot.
-- name: Configure undercloud vm to start at virthost boot
-  virt:
-    name: "{{ undercloud_node.name }}"
-    command: autostart
     uri: "{{ libvirt_uri }}"
 
 # Get the ip address of the undercloud.  This will retry several times
