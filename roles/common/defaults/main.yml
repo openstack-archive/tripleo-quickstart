@@ -191,3 +191,10 @@ libvirt_volume_path: "{{ working_dir }}/pool"
 
 libvirt_uri: qemu:///session
 
+# Whether to give permissive access to files owned by the non_root_user.
+# This is required if the non_root_user is not used to run libvirt tasks.
+# The most common case for this is when openvswitch is used for networks
+# on the virthost. This requires running libvirt tasks as the root user so
+# that they have sufficient privileges to connect to ovs bridges.
+non_root_chown: false
+
