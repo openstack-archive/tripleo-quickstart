@@ -2,6 +2,7 @@
 # Deploy an Openstack environment with a non-containerized overcloud,
 # and upgrade it to a containerized overcloud.
 
+undercloud_setup: true
 network_isolation: false
 enable_pacemaker: false
 overcloud_ipv6: false
@@ -14,9 +15,13 @@ major_upgrade_script: major-upgrade-overcloud-containers.sh.j2
 upgrade_undercloud_repo_script: upgrade-repo-tripleo-ci.sh.j2
 upgrade_overcloud_repo_template: overcloud-repo-tripleo-ci.yaml.j2
 
-# save time by not upgrading undercloud in CI
-step_pre_undercloud_upgrade: false
+# save time by doing a mixed upgrade
+step_pre_undercloud_upgrade: true
 step_upgrade_undercloud: false
+mixed_upgrade: true
+overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
+overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
+overcloud_templates_branch: stable/{{ overcloud_release }}
 
 undercloud_generate_service_certificate: false
 
