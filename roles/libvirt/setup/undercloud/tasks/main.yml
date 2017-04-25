@@ -234,6 +234,7 @@
       '{{ working_dir }}'
     environment:
       LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+    when: not undercloud_use_custom_boot_images|bool
 
   # NOTE(trown): This is a bit of a hack to get the undercloud vm
   # template to use the external kernel and initrd. We should
