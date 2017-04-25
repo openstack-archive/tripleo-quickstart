@@ -67,4 +67,3 @@
   template:
     src: "{{ undercloud_instackenv_template }}"
     dest: "{{ working_dir }}/instackenv.json"
-
