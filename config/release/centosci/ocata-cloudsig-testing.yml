@@ -11,6 +11,7 @@ repo_cmd_after: |
   sudo yum install -y centos-release-ceph-jewel
   sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0
   sudo yum-config-manager --save --setopt rdo-qemu-ev.gpgcheck=0
+  sudo yum-config-manager --save --setopt openstack-ocata.gpgcheck=0
   sudo yum-config-manager --disable "rdo-trunk*"
   sudo yum-config-manager --enable openstack-ocata-testing
   sudo yum repolist;
