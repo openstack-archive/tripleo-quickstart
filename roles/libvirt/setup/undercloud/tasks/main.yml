@@ -78,7 +78,7 @@
     environment:
       LIBGUESTFS_BACKEND: direct
       LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-    when: overcloud_nodes
+    when: inject_instackenv|bool
 
   # Copy the undercloud public key to the virthost, because we're going
   # to inject it into the undercloud image in the next task.

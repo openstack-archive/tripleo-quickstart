@@ -34,7 +34,11 @@ libvirt_arch: x86_64
 # address before giving up.
 undercloud_ip_retries: 20
 
+# controls either to inject instackenv.json or omit it, which may be the case
+# for virtual undercloud deployments w/o overcloud nodes (neither virtual,
+# nor BM, nor OVB hosted).
 undercloud_instackenv_template: instackenv.json.j2
+inject_instackenv: true
 
 # set to true if you want to inject additional overcloud
 # and ipa images. You will need to define the images and
