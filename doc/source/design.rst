@@ -71,11 +71,11 @@ The following is a list of design decisions made to solve the problem.
     * Focus on virtualization tools available in CentOS and Red Hat Enterprise
       Linux, use libvirt
     * Create a easy to use script to execute tripleo-quickstart e.g.
-      quickstart.sh that Jake can just download and execute::
+      quickstart.sh that Jake can just download and execute
 
-      Example:
+      Example:::
+
         wget https://raw.githubusercontent.com/openstack/tripleo-quickstart/master/quickstart.sh
-
         bash quickstart.sh <host>
 
   Solve for Scenario #2
@@ -83,7 +83,7 @@ The following is a list of design decisions made to solve the problem.
       baremetal/>`_, or `OpenStack host clouds <https://images.rdoproject.org/
       docs/ovb/>`_ as test/development environments
     * Allow Joan to pull changes from OpenStack gerrit and build and install the
-      patches into the deployment workflow see the following for details.   :ref:`devmode`
+      patches into the deployment workflow see the following for details :ref:`devmode`.
       the patch(es) into her deployment
     * Allow Joan to test her patch with testing tools like `tempest
       <https://github.com/openstack/tripleo-quickstart-extras/tree/master/
@@ -122,7 +122,7 @@ to give each command meaning.
       documentation.
 
   Solve for Scenario #2
-    * Again, allow developers to `integrate their patches, reference :ref:`devmode`,
+    * Again, allow developers to integrate their patches, reference :ref:`devmode`,
       but also allow experienced developers to update the commands, turn on
       debug, hand edit code by `providing the scripts <https://github.com/
       openstack/tripleo-quickstart-extras/blob/master/roles/overcloud-deploy/
@@ -153,7 +153,7 @@ could provide both scripts and documentation to users,
 playbooks_templating.html>`_ was chosen.
 
 Make a tool that is attractive to OpenStack developers
-=====================================================
+======================================================
 It is critical that OpenStack developers can develop and test their patches
 **outside** of the OpenStack CI system in the same way that they are tested
 **inside** the CI system, developers need to be able to recreate CI results.
