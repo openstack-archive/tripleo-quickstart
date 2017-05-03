@@ -54,7 +54,7 @@ repos:
       - os-net-config
       - os-refresh-config
       - python-tripleoclient
-      - openstack-tripleo-common
+      - openstack-tripleo-common*
       - openstack-tripleo-heat-templates
       - openstack-tripleo-image-elements
       - openstack-tripleo
