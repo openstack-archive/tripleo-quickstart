@@ -13,8 +13,10 @@ enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
 network_isolation_args: >-
-   -e {{ overcloud_templates_path }}/environments/network-isolation.yaml
+   -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-isolation-absolute.yaml
    -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-environment.yaml
+   -e {{ tripleo_root }}/tripleo-ci/test-environments/net-iso.yaml
+
 # Network settings
 external_interface: eth2
 external_interface_ip: 10.0.0.1
