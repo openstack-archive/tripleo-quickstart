@@ -1,23 +1,15 @@
-# We set introspection to true and use only the minimal amount of nodes
-# for this job, but test all defaults otherwise.
-step_introspect: true
+enable_pacemaker: false
+set_overcloud_workers: false
 
-# Define a single controller node
+node_count: 2
 overcloud_nodes:
-  - name: control_0
-    flavor: control
-    virtualbmc_port: 6230
 
-  - name: compute_0
-    flavor: compute
-    virtualbmc_port: 6233
+# Remove when https://review.openstack.org/#/c/414167/ is merged
+validation_args: " "
 
-# Tell tripleo how we want things done.
-extra_args: >-
-  --compute-scale 1
-  --ntp-server pool.ntp.org
-
-network_isolation: true
+extra_args: " --control-flavor baremetal --compute-flavor baremetal \
+-e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml \
+-e ~/network-environment.yaml --ntp-server {{ ntp_server }} "
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
@@ -26,11 +18,16 @@ undercloud_generate_service_certificate: True
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false
 
-# If `test_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
-test_ping: false
 run_tempest: false
-enable_pacemaker: false
+tempest_config: false
+test_ping: false
+
+# overcloud network config
+floating_ip_cidr: 10.0.0.0/24
+public_net_pool_start: 10.0.0.50
+public_net_pool_end: 10.0.0.100
+public_net_gateway: 10.0.0.1
+
 deploy_composable_scenario: true
 composable_scenario: multinode_major_upgrade.yaml
 overcloud_release: newton
