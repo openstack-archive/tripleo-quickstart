@@ -143,6 +143,17 @@ bootstrap () {
         pip install --no-cache-dir "${OPT_REQARGS[@]}"
     popd
     )
+    # In order to do any filesystem operations on the system running ansible (if it has SELinux intalled)
+    # we need the python bindings in the venv. Unfortunately, it is not available on pypi, so we need to
+    # pull it from the system site packages.
+    copy_selinux_to_venv
+}
+
+copy_selinux_to_venv() {
+    : ${LIBSELINUX_PYTHON_PATH:=lib64/python2.7/site-packages}
+    cp -R /usr/$LIBSELINUX_PYTHON_PATH/selinux $OPT_WORKDIR/$LIBSELINUX_PYTHON_PATH/ || true
+    # on Fedora the _selinux.so is one dir up for some reason
+    cp /usr/$LIBSELINUX_PYTHON_PATH/_selinux.so $OPT_WORKDIR/$LIBSELINUX_PYTHON_PATH/ || true
 }
 
 activate_venv() {
@@ -483,7 +494,6 @@ fi
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
     -e @$OPT_NODES \
-    -e ansible_python_interpreter=/usr/bin/python \
     -e @$OPT_WORKDIR/config/release/$OPT_RELEASE.yml \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
