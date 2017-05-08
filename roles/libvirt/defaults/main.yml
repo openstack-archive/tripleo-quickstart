@@ -29,6 +29,7 @@ libvirt_domain_type: kvm
 libvirt_diskdev: vda
 libvirt_diskbus: virtio
 libvirt_arch: x86_64
+libvirt_cpu_mode: host-model
 
 # how many times to try getting the undercloud ip
 # address before giving up.
