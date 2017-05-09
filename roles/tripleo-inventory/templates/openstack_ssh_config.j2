@@ -1,7 +1,7 @@
 Host *
     IdentitiesOnly yes
 
-{% if hostvars[groups['virthost'][0]].ansible_private_key_file is defined %}
+{% if hostvars[groups['virthost'][0]].ansible_host is defined %}
 
 Host virthost
     Hostname {{ hostvars[groups['virthost'][0]].ansible_host }}
@@ -21,42 +21,19 @@ Host virthost
 
 {% endif %}
 
-Host undercloud-root
-{% if undercloud_type == 'virtual' %}
-    ProxyCommand {{ undercloud_ssh_proxy_command }}
-{% else %}
-    Hostname {{ undercloud_ip }}
-{% endif %}
-    IdentityFile {{ hostvars['undercloud'].ansible_private_key_file }}
-    User root
-    StrictHostKeyChecking no
-    UserKnownHostsFile=/dev/null
-
 Host undercloud
-{% if undercloud_type == 'virtual' %}
-    ProxyCommand {{ undercloud_ssh_proxy_command }}
-{% else %}
-    Hostname {{ undercloud_ip }}
-{% endif %}
+    Hostname {{ hostvars['undercloud'].ansible_host }}
     IdentityFile {{ hostvars['undercloud'].ansible_private_key_file }}
     User {{ undercloud_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
-{% if deploy_supplemental_node %}
-Host supplemental
-    ProxyCommand {{ supplemental_ssh_proxy_command }}
-    IdentityFile {{ local_working_dir }}/id_rsa_supplemental
-    User {{ supplemental_user }}
-    StrictHostKeyChecking no
-    UserKnownHostsFile=/dev/null
-{% endif %}
-
 {% if groups["overcloud"] is defined %}
 {% for host in groups["overcloud"] %}
 
 Host {{ host }}
-    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ local_working_dir }}/ssh.config.ansible undercloud -W {{ hostvars[host].ansible_fqdn }}:22
+    Hostname {{ hostvars[host].ansible_host }}
+    ProxyCommand {{ ssh_proxy_command  }} -W {{ hostvars[host].private_v4 }}:22
     IdentityFile {{ hostvars[host].ansible_private_key_file }}
     User {{ overcloud_user | default ('heat-admin') }}
     StrictHostKeyChecking no

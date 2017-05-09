@@ -10,6 +10,12 @@ host as documented in :ref:`accessing-undercloud` is sufficient, but there are
 situations when you may want direct access to overcloud services from your
 desktop.
 
+Note, when overcloud nodes are hosted on an OpenStack cloud instead, the ssh
+access user name may be 'centos' or the like. And you may not be able to login
+as the root. Node names may be also prefixed with a given heat stack name, like
+`foo-overcloud-controller-0`. The undercloud node should be given a floating IP
+and will be serving as a bastion host proxying ansible/ssh to overcloud nodes.
+
 Logging in to overcloud hosts
 -----------------------------
 

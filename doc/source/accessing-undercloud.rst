@@ -44,6 +44,12 @@ the overcloud::
     | 7  | nova-compute     | overcloud-novacompute-0.localdomain | nova     | ...
     +----+------------------+-------------------------------------+----------+-...
 
+Note, when an undercloud node is hosted on an OpenStack cloud instead, the ssh
+access user name may be 'centos' or the like. And you may not be able to login
+as the root. The UC node name may be also prefixed with a given heat stack name,
+like `foo-undercloud`. The node also should be given a floating IP to serve as a
+bastion host proxying ansible/ssh to overcloud nodes.
+
 Access via the TripleO-UI
 -------------------------
 
