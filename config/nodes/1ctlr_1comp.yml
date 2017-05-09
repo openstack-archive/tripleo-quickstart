@@ -7,3 +7,5 @@ overcloud_nodes:
   - name: compute_0
     flavor: compute
     virtualbmc_port: 6231
+
+node_count: 2

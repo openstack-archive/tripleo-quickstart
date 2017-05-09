@@ -43,6 +43,8 @@ overcloud_nodes:
     flavor: compute
     virtualbmc_port: 6235
 
+node_count: 6
+
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
 topology: >-
