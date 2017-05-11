@@ -1,0 +1,38 @@
+# This environment can be used to use a base RHEL qcow2 image for the undercloud
+# instead of the default pre-built undercloud qcow2
+
+# baseos undercloud settings
+undercloud_image_url: http://uri to a RHEL 7.3. qcow2 file
+
+images:
+    - name: centos
+      url: "{{ undercloud_image_url }}"
+      type: qcow2
+      md5sum: A md5sum of the rhel 7.3 qcow2 file e.g. "0bfff47b55a9428c83d2235da9d470de  rhel-guest-image-7.3.x86_64.qcow2"
+    - name: overcloud-full
+      url: "{{ overcloud_image_url }}"
+      type: tar
+    - name: ipa_images
+      url: "{{ ipa_image_url }}"
+      type: tar
+
+inject_images:
+    - "ironic-python-agent.initramfs"
+    - "ironic-python-agent.kernel"
+    - "overcloud-full.qcow2"
+    - "overcloud-full.initrd"
+    - "overcloud-full.vmlinuz"
+
+# SELINUX Configuration
+#selinux_enforcing: true
+
+undercloud_setup: true
+virthost_repo_setup: true
+baseos_as_undercloud: true
+use_external_images: true
+download_overcloud_images: false
+ovb_setup_connectivity: false
+non_root_user_setup: true
+package_installs: true
+hostname_correction: true
+
