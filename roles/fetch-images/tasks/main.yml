@@ -14,6 +14,10 @@
   file:
     path: "{{ image_cache_dir }}"
     state: directory
+    owner: "{{ non_root_user }}"
+    group: "{{ non_root_group }}"
+    mode: "ug+rwx"
+  become: true
 
 - include: fetch.yml
   vars:

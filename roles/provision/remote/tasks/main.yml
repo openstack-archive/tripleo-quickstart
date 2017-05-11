@@ -117,16 +117,6 @@
     ansible_host: "{{ virthost }}"
     ansible_private_key_file: "{{ virt_host_key }}"
 
-# Create the image_cache_dir
-- name: Ensure image cache directory exists
-  file:
-    path: "{{ image_cache_dir }}"
-    state: directory
-    owner: "{{ non_root_user }}"
-    group: "{{ non_root_group }}"
-    mode: "ug+rwx"
-  become: true
-
 # Create the volume pool directory if it doesn't already exist.  This
 # will be the target of the libvirt volume pool we create in the next
 # task.
