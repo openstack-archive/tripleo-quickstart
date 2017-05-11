@@ -15,6 +15,7 @@ Contents:
    accessing-overcloud
    unprivileged
    devmode
+   devmode-ovb
    design
    contributing
    working-with-extras
