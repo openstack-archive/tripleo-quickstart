@@ -13,6 +13,8 @@
 
 # If libvirt isn't available we can skip everything else.
 - when: libvirt_check|success
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
 
     - when: overcloud_nodes
@@ -25,8 +27,6 @@
         with_items: "{{ overcloud_nodes }}"
         ignore_errors: true
         register: overcloud_check
-        environment:
-          LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
       # Destroy and undefine the overcloud nodes.
       - name: Destroy overcloud vms
@@ -35,16 +35,12 @@
         when: item|success
         with_items: "{{ overcloud_check.results }}"
         ignore_errors: true
-        environment:
-          LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
       - name: Undefine overcloud vms
         command:
           virsh undefine "{{ item.item.name }}"
         when: item|success
         with_items: "{{ overcloud_check.results }}"
-        environment:
-          LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
       # The `virsh vol-dumpxml ... > /dev/null` is here (and elsewhere) due to
       # [1293804].
@@ -58,8 +54,6 @@
             '{{ item.name }}'.qcow2
         with_items: "{{ overcloud_nodes }}"
         ignore_errors: true
-        environment:
-          LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     # Do the same thing to the undercloud node.
     - name: Check undercloud vm
@@ -67,23 +61,17 @@
         virsh domid "{{ undercloud_node.name }}"
       ignore_errors: true
       register: undercloud_check
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Destroy undercloud vm
       command: >
         virsh destroy "{{ undercloud_node.name }}"
       when: undercloud_check|success
       ignore_errors: true
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Undefine undercloud vm
       command: >
         virsh undefine "{{ undercloud_node.name }}"
       when: undercloud_check|success
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Delete undercloud vm storage
       shell: |
@@ -92,8 +80,6 @@
         virsh vol-delete --pool '{{ libvirt_volume_pool }}' \
           '{{ undercloud_node.name }}'.qcow2
       ignore_errors: true
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Destroy intermediate disk image
       file:
@@ -105,8 +91,6 @@
         virsh pool-uuid "{{ libvirt_volume_pool }}"
       register: pool_check
       ignore_errors: true
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     # See https://www.redhat.com/archives/libvirt-users/2016-March/msg00123.html
     # TL;DR: ensure that the pool really exists if the previous
@@ -116,23 +100,17 @@
         virsh pool-dumpxml "{{ libvirt_volume_pool }}" |
         virsh pool-define /dev/stdin
       when: pool_check|success
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Destroy volume pool
       command: >
         virsh pool-destroy "{{ libvirt_volume_pool }}"
       when: pool_check|success
       ignore_errors: true
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Undefine volume pool
       command: >
         virsh pool-undefine "{{ libvirt_volume_pool }}"
       when: pool_check|success
-      environment:
-        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     - name: Get UID of pool user
       command: id -u "{{ ansible_user_id }}"

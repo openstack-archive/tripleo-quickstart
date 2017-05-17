@@ -27,6 +27,9 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
 - when: undercloud_vol_check|failed
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
   # Conditionally include a playbook for all the images specified
   # in options that downloads, cache and extract if tar archived
@@ -62,9 +65,6 @@
       --upload {{ working_dir }}/{{ item }}:/home/{{ undercloud_user }}/{{ item }}
       --run-command 'chown {{ undercloud_user }}:{{ undercloud_user }} /home/{{ undercloud_user }}/{{ item }}'
     changed_when: true
-    environment:
-      LIBGUESTFS_BACKEND: direct
-      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
     with_items: "{{ inject_images | default('') }}"
     when: overcloud_as_undercloud|bool or use_external_images|bool
 
@@ -75,9 +75,6 @@
       virt-customize -a {{ working_dir }}/undercloud.qcow2
       --upload {{ working_dir }}/instackenv.json:/home/{{ undercloud_user }}/instackenv.json
       --run-command 'chown {{ undercloud_user }}:{{ undercloud_user }} /home/{{ undercloud_user }}/instackenv.json'
-    environment:
-      LIBGUESTFS_BACKEND: direct
-      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
     when: inject_instackenv|bool
 
   # Copy the undercloud public key to the virthost, because we're going
@@ -105,8 +102,6 @@
       --run-command 'chown -R {{item.owner}}:{{item.group}} {{item.homedir}}/.ssh'
       --run-command 'chmod 0700 {{item.homedir}}/.ssh'
       --run-command 'chmod 0600 {{item.homedir}}/.ssh/authorized_keys'
-    environment:
-      LIBGUESTFS_BACKEND: direct
     with_items:
       - homedir: /root
         owner: root
@@ -125,8 +120,6 @@
       --upload '{{ working_dir }}/id_rsa_virt_power:/root/.ssh/id_rsa_virt_power'
       --run-command 'chown root:root /root/.ssh/id_rsa_virt_power'
       --run-command 'chmod 0600 /root/.ssh/id_rsa_virt_power'
-    environment:
-      LIBGUESTFS_BACKEND: direct
 
   - name: Create undercloud customize script
     template:
@@ -156,8 +149,6 @@
     command: >
       virt-customize -a {{ working_dir }}/undercloud.qcow2
       --selinux-relabel
-    environment:
-      LIBGUESTFS_BACKEND: direct
 
 # NOTE(trown) Nested blocks do not seem to work as expected so instead using
 # conditionals with AND to simulate the same thing.
@@ -245,6 +236,8 @@
     set_fact: overcloud_as_undercloud=true
 
 - when: undercloud_vol_check|failed
+  environment:
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
   # Create a libvirt volume and upload the undercloud image to
   # libvirt.
@@ -253,16 +246,12 @@
       virsh vol-create-as {{ libvirt_volume_pool}}
       {{ undercloud_node.name }}.qcow2
       {{ flavors[undercloud_node.flavor].disk }}G --format qcow2
-    environment:
-      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
   - name: Upload undercloud volume to storage pool
     command: >
       virsh -k 0 vol-upload --pool '{{ libvirt_volume_pool }}'
       '{{ undercloud_node.name }}.qcow2'
       '{{ working_dir }}/undercloud.qcow2'
-    environment:
-      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
     async: 600
     poll: 10
 
@@ -341,4 +330,3 @@
   template:
     src: ssh.config.j2
     dest: "{{ local_working_dir }}/ssh.config.ansible"
-
