@@ -17,7 +17,7 @@ fi
 if [ -d $WORKSPACE/tripleo-quickstart-gate-repo ]; then
     mv $WORKSPACE/tripleo-quickstart $WORKSPACE/tripleo-quickstart-old
     mv $WORKSPACE/tripleo-quickstart-gate-repo $WORKSPACE/tripleo-quickstart
-    cp $WORKSPACE/tripleo-quickstart-old/requirements* $WORKSPACE/tripleo-quickstart/
+    cp $WORKSPACE/tripleo-quickstart-old/*requirements* $WORKSPACE/tripleo-quickstart/
     # Change into the new quickstart directory to use the new changes
     cd $WORKSPACE/tripleo-quickstart
 fi
