@@ -4,6 +4,7 @@
 # creating an inventory entry for our `virthost` and for creating an
 # unprivileged user on that host for use by our virtual environment.
 - include: provision.yml
+  static: no
   tags:
     - provision
 
