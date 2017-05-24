@@ -4,5 +4,6 @@ netaddr>=0.7.18
 pbr>=1.6
 setuptools>=11.3
 shade>=1.8.0
+python-neutronclient
 python-openstackclient
 python-heatclient
