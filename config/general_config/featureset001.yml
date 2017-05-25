@@ -17,6 +17,11 @@ network_isolation_args: >-
    -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-environment.yaml
    -e {{ tripleo_root }}/tripleo-ci/test-environments/net-iso.yaml
 
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+telemetry_args: >-
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+
 # Network settings
 external_interface: eth2
 external_interface_ip: 10.0.0.1
