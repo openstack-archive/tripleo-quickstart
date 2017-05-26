@@ -1,0 +1,94 @@
+#!/bin/bash
+set -eux
+
+### --start_docs
+## Setup repositories for the job
+## ==============================
+
+## Prepare Your Environment
+## ------------------------
+
+## * Execute commands before repositories setup
+## ::
+
+{{ repo_cmd_before|default('') }}
+
+# Make temp dir for files
+sudo rm -rf /tmp/repo_role_tmp && mkdir -p /tmp/repo_role_tmp
+
+## * Prepare repositories
+## ::
+
+{% for repo in repos %}
+{% if repo.releases is not defined or release in repo.releases %}
+
+{% if repo.type == 'file' %}
+
+## * Download and use file from {{ repo.down_url }}
+## ::
+
+curl -Lvo /tmp/repo_role_tmp/{{ repo.filename }} {{ repo.down_url }}
+{% if repo.priority is defined and repo.priority %}
+
+## * Change its priority to {{ repo.priority }}
+## ::
+
+if ! grep -q "priority" /tmp/repo_role_tmp/{{ repo.filename }}; then
+    sed -i "s/\(baseurl=.*\)/\1\npriority={{ repo.priority }}/g" /tmp/repo_role_tmp/{{ repo.filename }}
+else
+    sed -i "s/priority=.*/priority={{ repo.priority }}/g" /tmp/repo_role_tmp/{{ repo.filename }}
+fi
+{% endif %}
+{% if repo.reponame is defined %}
+sed -i "s/\[.*\]/[{{ repo.reponame }}]/" /tmp/repo_role_tmp/{{ repo.filename }}
+{% endif %}
+{% if repo.includepkgs is defined %}
+echo -e '\nincludepkgs={{ repo.includepkgs|join(",") }}' >> /tmp/repo_role_tmp/{{ repo.filename }}
+{% endif %}
+sudo cp -f /tmp/repo_role_tmp/{{ repo.filename }} /etc/yum.repos.d/
+{% endif %}
+
+{% if repo.type == 'generic' %}
+
+## * Construct repo file from arguments
+## ::
+
+{% if repo.hash_url is defined %}
+HASH=$(curl {{ repo.hash_url }} 2>/dev/null | grep baseurl | grep -Eo '[^/]*/[^/]*/[^/]*_.*' ||:)
+{% endif %}
+cat<<EOF >/tmp/repo_role_tmp/{{ repo.filename }}
+[{{ repo.reponame }}]
+name={{ repo.reponame }}
+{% if repo.baseurl is defined %}baseurl={{ repo.baseurl }}
+{% endif %}
+{% if repo.mirrorlist is defined %}mirrorlist={{ repo.mirrorlist }}
+{% endif %}
+gpgcheck={{ repo.gpgcheck|default('0') }}
+enabled={{ repo.enabled|default('1') }}
+{% if repo.priority is defined %}priority={{ repo.priority }}
+{% endif %}
+{% if repo.includepkgs is defined %}includepkgs={{ repo.includepkgs|join(",") }}
+{% endif %}
+{% if repo.down_url is defined %}# trunk_hash=${HASH:-}
+{% endif %}
+EOF
+sudo cp -f /tmp/repo_role_tmp/{{ repo.filename }} /etc/yum.repos.d/
+{% endif %}
+
+{% if repo.type == 'package' %}
+
+## * Install repo from package {{ repo.pkg_name|default(repo.pkg_url) }}
+## ::
+
+{{ repo.custom_cmd|default('sudo yum install -y') }} {{ repo.pkg_name|default(repo.pkg_url) }}
+{% endif %}
+
+{% endif %}
+{% endfor %}
+
+## * Execute commands after repositories setup
+## ::
+
+{{ repo_cmd_after|default('') }}
+
+### --stop_docs
