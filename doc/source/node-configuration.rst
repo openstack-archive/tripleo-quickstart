@@ -41,12 +41,15 @@ example::
 
       - name: compute_0
         flavor: compute
+        virtualbmc_port: 6233
 
       - name: ceph_0
         flavor: ceph
+        virtualbmc_port: 6234
 
       - name: swift_0
         flavor: objectstorage
+        virtualbmc_port: 6235
 
 
 Controlling resources
@@ -101,9 +104,11 @@ following in ``myconfigfile.yml``::
     overcloud_nodes:
       - name: control_0
         flavor: control
+        virtualbmc_port: 6230
 
       - name: compute_0
         flavor: compute
+        virtualbmc_port: 6231
 
 And then pass that to the ``ansible-playbook`` command as described at
 the beginning of this document.
