@@ -5,7 +5,9 @@
     mode: 0755
 
 - include: setup_repos.yml
+  static: no
   when: repo_run_live|bool
 
 - include: inject_repos_into_image.yml
+  static: no
   when: repo_inject_image_path is defined
