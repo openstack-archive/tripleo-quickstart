@@ -7,7 +7,7 @@ repos:
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: https://buildlogs.centos.org/centos/7/cloud/x86_64/{{ dlrn_hash }}/
+    baseurl: https://trunk.rdoproject.org/centos7-ocata/{{ dlrn_hash }}/
     priority: 20
 
   - type: file
