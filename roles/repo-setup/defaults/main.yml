@@ -19,7 +19,6 @@ repo_cmd_after: |
 
 # Repositories definitions
 repos:
-
   - type: file
     filename: delorean.repo
     down_url: https://trunk.rdoproject.org/centos7-{{ release }}/current/delorean.repo
@@ -27,3 +26,16 @@ repos:
   - type: file
     filename: delorean-deps.repo
     down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
+
+# rhsm variables
+use_rhsm: false
+use_use_rhsm_baseos_channel: true
+use_rhsm_openstack_channel: true
+use_rhsm_ceph_channel: true
+
+rhsm_username: none
+rhsm_password: none
+pool_id: none
+rhel_version_number: 7
+osp_release_version_number: 8
+rhceph_version_number: "1.3"

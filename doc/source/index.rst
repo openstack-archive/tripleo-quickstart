@@ -20,3 +20,4 @@ Contents:
    design
    contributing
    working-with-extras
+   rhosp

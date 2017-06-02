@@ -50,6 +50,18 @@ Role Variables
     * `repos.custom_cmd` - custom command to install this package (default: 'yum install -y')
     * `repos.pkg_url` - direct URL of the package to install
 
+  *RHSM*
+  -----
+  Setup the yum repositories with Red Hat Subscription Manager, https://access.redhat.com/
+    * `use_rhsm`: - boolean to turn rhsm public repos on or off, this by default is false.
+    * `rhsm_username`: - rhsm username
+    * `rhsm_password`: rhsm password
+    * `pool_id`: The subscription manager pool id with RHOSP entilements
+    * `rhel_version_number`: The major version of RHEL
+    * `osp_release_version_number`: The major version of RHOSP
+    * `rhceph_version_number`: The version of RHCeph
+    * `rhsm_repos`: a yaml list of yum repos that should be enabled via subscription manager, an example config is in config/release/rhos-11-rhn-baseos-undercloud.yml
+
 Dependencies
 ------------
 
