@@ -41,6 +41,9 @@
       <mac address='{{ undercloud_mac_map.get(undercloud_node.name).get(network.name) }}'/>
       <source bridge='{{ network.bridge }}'/>
       <model type='virtio'/>
+{% if network.virtualport_type is defined %}
+      <virtualport type='{{ network.virtualport_type }}'/>
+{% endif %}
     </interface>
 {% endfor %}
     <serial type='pty'/>

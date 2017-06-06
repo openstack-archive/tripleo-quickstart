@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Support for virtualport types, such as openvswitch, added.
+upgrade:
+  - |
+    Ansible >= 2.2 required for openvswitch virtualport customisation.
