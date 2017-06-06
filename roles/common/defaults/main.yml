@@ -15,7 +15,7 @@ working_dir: "/home/{{ undercloud_user }}"
 
 # This is a directory no the virthost in which we store the downloaded
 # undercloud image.
-image_cache_dir: "/var/cache/tripleo-quickstart/images"
+image_cache_dir: "/var/cache/tripleo-quickstart/images/{{ release }}"
 
 image_fetch_dir: "{{ working_dir}}"
 
