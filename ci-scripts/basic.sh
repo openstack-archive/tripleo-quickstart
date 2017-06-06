@@ -4,6 +4,8 @@
 # Usage: basic.sh <release> <build_system> <config> <job_type>
 set -eux
 
+: ${OPT_ADDITIONAL_PARAMETERS:=""}
+
 # CONFIG and JOB_TYPE are not used here, but kept for
 # consistency with other jobs to make JJB cleaner.
 RELEASE=$1
@@ -17,6 +19,10 @@ JOB_TYPE=$4
 # would try to use the same undercloud-stack socket.
 socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
+
+# preparation steps to run with the gated roles
+CI_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $CI_SCRIPT_DIR/include-gate-changes.sh
 
 # CI_ENV is set on the slave running the jobs
 # REL_TYPE can be specific release type like 'testing'

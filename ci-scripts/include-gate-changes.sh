@@ -1,6 +1,8 @@
 # Source this script from within other gating scripts to provide depends-on
 # functionality for quickstart and quickstart-extras
 
+: ${OPT_ADDITIONAL_PARAMETERS:=""}
+
 # preparation steps to run with the gated changes
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     bash quickstart.sh \
@@ -21,3 +23,11 @@ if [ -d $WORKSPACE/tripleo-quickstart-gate-repo ]; then
     # Change into the new quickstart directory to use the new changes
     cd $WORKSPACE/tripleo-quickstart
 fi
+export VIRTUAL_ENV=$WORKSPACE
+export PATH="$VIRTUAL_ENV/bin:$PATH"
+pushd $WORKSPACE/tripleo-quickstart
+python setup.py install
+popd
+pushd $WORKSPACE/tripleo-quickstart-extras
+python setup.py install
+popd
