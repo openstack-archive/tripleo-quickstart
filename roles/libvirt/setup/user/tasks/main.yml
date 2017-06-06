@@ -24,6 +24,7 @@
       comment: "ansible_generated_undercloud"
 
 - name: Read virt_power private key
+  no_log: True
   set_fact:
     virt_power_key_pvt: "{{ item }}"
   with_file:
