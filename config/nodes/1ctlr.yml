@@ -5,3 +5,6 @@ overcloud_nodes:
 
 node_count: 1
 
+topology: >-
+  --compute-scale 0
+
