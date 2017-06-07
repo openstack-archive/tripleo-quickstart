@@ -29,6 +29,8 @@ usage () {
     echo "  -d, --delete-all-stacks"
     echo "                      delete all stacks in the tenant before deployment."
     echo "                      will also delete associated keypairs if they exist."
+    echo "  -r, --release <release>"
+    echo "                      OpenStack release to deploy (default=$RELEASE)."
     echo "  -h, --help          print this help and exit"
     echo "  virthost            target machine used for deployment, required argument"
 }
@@ -173,7 +175,10 @@ while [ "x$1" != "x" ]; do
             DEPLOY_TYPE=ovb
             VIRTHOST=localhost
             ;;
-
+        --release|-r)
+            RELEASE=$2
+            shift
+            ;;
         --help|-h)
             usage
             exit
