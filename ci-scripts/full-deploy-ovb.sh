@@ -70,7 +70,7 @@ fi
 # in config/nodes/ for OVB due to the definition of the
 # overcloud nodes. As a workaround, pass the $CONFIG file,
 # which also contains the overcloud nodes settings, to $OPT_NODES
-export OPT_NODES="$WORKSPACE/config/general_config/${CONFIG}.yml"
+export OPT_NODES=${OPT_NODES:="$WORKSPACE/config/general_config/${CONFIG}.yml"}
 
 # We need to run differently when gating upstream changes
 if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
