@@ -30,6 +30,7 @@ source $CI_SCRIPT_DIR/include-gate-changes.sh
 bash quickstart.sh \
     --working-dir $WORKSPACE/ \
     --no-clone \
+    --bootstrap \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
 

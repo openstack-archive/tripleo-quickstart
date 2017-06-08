@@ -23,11 +23,3 @@ if [ -d $WORKSPACE/tripleo-quickstart-gate-repo ]; then
     # Change into the new quickstart directory to use the new changes
     cd $WORKSPACE/tripleo-quickstart
 fi
-export VIRTUAL_ENV=$WORKSPACE
-export PATH="$VIRTUAL_ENV/bin:$PATH"
-pushd $WORKSPACE/tripleo-quickstart
-python setup.py install
-popd
-pushd $WORKSPACE/tripleo-quickstart-extras
-python setup.py install
-popd
