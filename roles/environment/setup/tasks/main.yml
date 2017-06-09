@@ -1,5 +1,5 @@
 # If virtualport_type is defined for any networks, include OVS dependencies
-- when: "{{ networks|selectattr('virtualport_type', 'defined')|map(attribute='name')|list|length is greaterthan 0}}"
+- when: networks|selectattr('virtualport_type', 'defined')|map(attribute='name')|list|length > 0
   block:
 
   # Install OVS dependencies
@@ -124,4 +124,3 @@
     path: "{{ working_dir }}"
     state: directory
   become: true
-
