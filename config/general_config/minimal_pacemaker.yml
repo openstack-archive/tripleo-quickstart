@@ -15,6 +15,14 @@ overcloud_nodes:
 extra_args: >-
   --ntp-server pool.ntp.org
 
+# This config is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
+
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
 test_ping: true
