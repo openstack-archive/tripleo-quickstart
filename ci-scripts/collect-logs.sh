@@ -22,6 +22,7 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 export ARA_DATABASE="sqlite:///${WORKSPACE}/ara.sqlite"
 $WORKSPACE/bin/ara generate html $WORKSPACE/ara
+gzip --recursive --best $WORKSPACE/ara
 
 # Check for existence of the config file in the default
 # directory or as a full path
