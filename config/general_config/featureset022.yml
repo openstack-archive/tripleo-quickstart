@@ -1,0 +1,74 @@
+# Containers settings
+containerized_overcloud: true
+# Workaround for limited disk space on undercloud
+# https://bugs.launchpad.net/tripleo/+bug/1694709
+delete_docker_cache: true
+# Undercloud registry mirror
+undercloud_docker_registry_mirror: "{{ lookup('env','NODEPOOL_DOCKER_REGISTRY_PROXY') }}"
+# TripleO settings
+ssl_overcloud: false
+undercloud_generate_service_certificate: true
+step_introspect: true
+
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+
+# Network settings
+enable_pacemaker: false
+network_isolation: false
+overcloud_ipv6: false
+float_base: "192.168.24"
+floating_ip_cidr: "{{ float_base}}.0/24"
+public_net_pool_start: "{{ float_base}}.150"
+public_net_pool_end: "{{ float_base}}.250"
+public_net_gateway: "{{ float_base}}.1"
+step_adjust_mtu: true
+mtu: 1350
+mtu_interface:
+  - eth0
+  - eth1
+overcloud_dns_servers:
+  - 8.8.8.8
+  - 8.8.4.4
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+tempest_config: false
+test_ping: true
+run_tempest: false
+
+# Tell tripleo how we want things done.
+# Note: The order of the templates and arguments passed to heat matters.
+
+extra_args: >-
+  --ntp-server pool.ntp.org
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
