@@ -10,6 +10,7 @@ Contents:
    configuration
    feature-configuration
    node-configuration
+   environment-configuration
    accessing-libvirt
    accessing-undercloud
    accessing-overcloud

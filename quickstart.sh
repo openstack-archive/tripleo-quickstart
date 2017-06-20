@@ -186,6 +186,9 @@ usage () {
     echo "  -N, --nodes <file>"
     echo "                      specify the number of nodes that should be created by"
     echo "                      the provisioner. "
+    echo "  -E, --environment <file>"
+    echo "                      specify additional configuration that is specific to"
+    echo "                      the environment where TripleO-Quickstart is running."
     echo "  -e, --extra-vars <key>=<value>"
     echo "                      additional ansible variables, can be used multiple times"
     echo "  -w, --working-dir <dir>"
@@ -279,6 +282,11 @@ while [ "x$1" != "x" ]; do
 
         --nodes|-N)
             OPT_NODES=$2
+            shift
+            ;;
+
+        --environment|-E)
+            OPT_ENVIRONMENT=$2
             shift
             ;;
 
@@ -383,6 +391,8 @@ fi
 : ${OPT_CONFIG:=$OPT_WORKDIR/config/general_config/minimal.yml}
 # Default Nodes
 : ${OPT_NODES:=$OPT_WORKDIR/config/nodes/1ctlr_1comp.yml}
+# Default Environment
+: ${OPT_ENVIRONMENT:=$OPT_WORKDIR/config/environments/default_libvirt.yml}
 
 # allow the deprecated config files to work
 OLD_CONFIG=""
@@ -481,9 +491,10 @@ else
 fi
 
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
-    -e @$OPT_CONFIG \
-    -e @$OPT_NODES \
     -e @$OPT_WORKDIR/config/release/$OPT_RELEASE.yml \
+    -e @$OPT_NODES \
+    -e @$OPT_CONFIG \
+    -e @$OPT_ENVIRONMENT \
     -e local_working_dir=$OPT_WORKDIR \
     -e virthost=$VIRTHOST \
     ${OPT_VARS[@]} \
