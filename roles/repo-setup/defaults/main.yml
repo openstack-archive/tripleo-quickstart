@@ -41,3 +41,5 @@ pool_id: none
 rhel_version_number: 7
 osp_release_version_number: 8
 rhceph_version_number: "1.3"
+use_specific_hash: false
+delorean_hash_label: latest
