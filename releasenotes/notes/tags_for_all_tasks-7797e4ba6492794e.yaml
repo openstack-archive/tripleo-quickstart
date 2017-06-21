@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    Tags were added in all the playbooks so that it is possible to control
+    atomically the flow of the entire process.
+    The *DEFAULT_OPT_TAGS* variable used in quickstart.sh has been changed to
+    reflect all the available tags, which are *untagged*, *provision*,
+    *environment*, *libvirt*, *undercloud-inventory*, *overcloud-scripts*,
+    *undercloud-install* and *undercloud-post-install*.
+deprecations:
+  - |
+    The old tag named *undercloud-scripts* has been replaced with the more
+    self-explaining *undercloud-inventory*.

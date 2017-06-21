@@ -43,6 +43,8 @@
 - name:  Setup undercloud, overcloud, and supplemental vms
   hosts: virthost
   gather_facts: yes
+  tags:
+    - libvirt
   roles:
     - libvirt/setup
 
@@ -51,7 +53,7 @@
   hosts: localhost
   gather_facts: yes
   tags:
-    - undercloud-scripts
+    - undercloud-inventory
   roles:
     - tripleo-inventory
 
