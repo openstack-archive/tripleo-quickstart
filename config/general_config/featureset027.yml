@@ -1,0 +1,61 @@
+# EXPERIMENTAL FEATURE
+
+# Tell tripleo how we want things done.
+# Note: The order of the templates and arguments passed to heat matters.
+
+extra_args: >-
+  --ntp-server pool.ntp.org
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+
+# containers config
+containerized_overcloud: false
+containerized_undercloud: true
+undercloud_install_script: undercloud-deploy.sh.j2
+
+# turn off image prep
+step_overcloud_image: false
+step_glance_upload: false
+step_register: false
+step_root_device_size: false
+step_root_device_hints: false
+step_introspect: false
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: false
+
+# This enables the deployment of the overcloud with SSL.
+ssl_overcloud: false
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+tempest_config: false
+test_ping: false
+run_tempest: false
+
+# tripleo-ui is not working yet
+enable_port_forward_for_tripleo_ui: false
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-deploy
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-deploy
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network

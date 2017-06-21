@@ -15,7 +15,8 @@ A definition of the services can be found
 `here <https://github.com/openstack/tripleo-heat-templates/blob/master/README.rst#service-testing-matrix>`_
 
 Below is a table with various features listed in each row and the features enabled
-in each feature set configuration file in each column.
+in each feature set configuration file in each column. When adding new configurations
+please consult the following `etherpad <https://etherpad.openstack.org/p/quickstart-featuresets>`_
 
 +-----+------+--------+--------+-------+-------+---------+---------+---------+---------+---------+----------+------+---------+-------+-------+-------+-------+-------+-------+--------+------+----+
 |  FS | ipv6 | SSL UC | SSL OC | NI SN | NI MN | NI BOND | introsp | UC idem | cont UC | cont OC | cont upg | ping | tempest | sc001 | sc002 | sc003 | sc004 | sc005 | sc006 |  nonha | ceph | HC |
@@ -70,6 +71,8 @@ in each feature set configuration file in each column.
 +-----+------+--------+--------+-------+-------+---------+---------+---------+---------+---------+----------+------+---------+-------+-------+-------+-------+-------+-------+--------+------+----+
 | 026 |      |        |        |       |       |         |         |         |         | X       |          |      |         |       |       |       |       |       | X     |        |      |    |
 +-----+------+--------+--------+-------+-------+---------+---------+---------+---------+---------+----------+------+---------+-------+-------+-------+-------+----------------++------+------+----+
+| 027 |      |        |        |       |       |         |         |         | X       |         |          |      |         |       |       |       |       |       |       |        |      |    |
++-----+------+--------+--------+-------+-------+---------+---------+---------+---------+---------+----------+------+---------+-------+-------+-------+-------+-------+-------+--------+------+----+
 
 Definition of Terms:
 
