@@ -345,7 +345,8 @@
 #  - name: ensure the required tcp ports are open on the virthost
   - iptables:
       table: filter
-      chain: IN_public_allow
+      chain: INPUT
+      action: insert
       protocol: tcp
       match: tcp
       ctstate: NEW
