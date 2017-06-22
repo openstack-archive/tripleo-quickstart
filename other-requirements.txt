@@ -3,3 +3,4 @@
 
 libffi-dev [platform:dpkg]
 libffi-devel [platform:rpm]
+libselinux-python [platform:rpm]
