@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Starting with the Pike release, the ``ipmi`` hardware type is used for
+    virtual nodes instead of the old ``pxe_ipmitool`` driver.

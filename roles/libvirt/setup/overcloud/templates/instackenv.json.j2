@@ -13,7 +13,11 @@
         "pm_addr": "{{ host_ip }}",
       {% else %}
         "pm_password": "password",
-        "pm_type": "pxe_ipmitool",
+        {% if release == 'ocata' %}
+          "pm_type": "pxe_ipmitool",
+        {% else %}
+          "pm_type": "ipmi",
+        {% endif %}
         "pm_user": "admin",
         "pm_addr": "127.0.0.1",
         "pm_port": "{{ node.virtualbmc_port }}",
