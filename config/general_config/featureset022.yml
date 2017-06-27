@@ -20,20 +20,6 @@ telemetry_args: >-
 enable_pacemaker: false
 network_isolation: false
 overcloud_ipv6: false
-float_base: "192.168.24"
-floating_ip_cidr: "{{ float_base}}.0/24"
-public_net_pool_start: "{{ float_base}}.150"
-public_net_pool_end: "{{ float_base}}.250"
-public_net_gateway: "{{ float_base}}.1"
-step_adjust_mtu: true
-mtu: 1350
-mtu_interface:
-  - eth0
-  - eth1
-overcloud_dns_servers:
-  - 8.8.8.8
-  - 8.8.4.4
-
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 tempest_config: false
