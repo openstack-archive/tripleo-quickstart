@@ -11,6 +11,7 @@ ExecStart=/usr/bin/ssh -NT -o \
    /home/{{ ssh_user }}/id_rsa_undercloud {{ ssh_user }}@{{ undercloud_ip }} \
    -L 0.0.0.0:6385:{{ ssh_tunnel_target_ip }}:6385 \
    -L 0.0.0.0:5000:{{ ssh_tunnel_target_ip }}:5000 \
+   -L 0.0.0.0:5050:{{ ssh_tunnel_target_ip }}:5050 \
    -L 0.0.0.0:8004:{{ ssh_tunnel_target_ip }}:8004 \
    -L 0.0.0.0:8080:{{ ssh_tunnel_target_ip }}:8080 \
    -L 0.0.0.0:9000:{{ ssh_tunnel_target_ip }}:9000 \
