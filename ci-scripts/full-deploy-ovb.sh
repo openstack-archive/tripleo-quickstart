@@ -82,7 +82,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
         --extra-vars build_test_packages="true" \
         --extra-vars ib_repo_image_inject="true" \
         --config $WORKSPACE/config/general_config/${CONFIG}.yml \
-        --extra-vars @$WORKSPACE/config/environments/${ENVIRONMENT}.yml \
+        --environment $WORKSPACE/config/environments/${ENVIRONMENT}.yml \
         --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
         --playbook baremetal-full-deploy.yml \
         --release $RELEASE \
@@ -95,7 +95,7 @@ else
         --tags all \
         --no-clone \
         --config $WORKSPACE/config/general_config/${CONFIG}.yml \
-        --extra-vars @$WORKSPACE/config/environments/${ENVIRONMENT}.yml \
+        --environment $WORKSPACE/config/environments/${ENVIRONMENT}.yml \
         --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
         --playbook baremetal-full-deploy.yml \
         --release $RELEASE \
