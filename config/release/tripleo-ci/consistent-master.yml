@@ -23,10 +23,10 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   export CONSISTENT_RDO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7/consistent/delorean.repo | grep baseurl | cut -d= -f2`
-  # If running tripleo-quickstart in OpenStack Infra, let's try to use AFS mirrors
-  if [[ -e /etc/nodepool/provider && ! $(grep "rdo-cloud" /tmp/provider) ]]; then
-  source /etc/nodepool/provider;
-  export NODEPOOL_MIRROR_HOST=$(echo "http://mirror.$NODEPOOL_REGION.$NODEPOOL_CLOUD.openstack.org" | tr '[:upper:]' '[:lower:]');
+  # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
+  if [[ -e /etc/ci/mirror_info.sh ]]; then
+  eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST")
+  export NODEPOOL_MIRROR_HOST="http://${NODEPOOL_MIRROR_HOST}"
   export CONSISTENT_RDO_MIRROR=${CONSISTENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
   fi
   # Otherwise, fallback to official mirrors provided by CentOS.
