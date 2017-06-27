@@ -21,6 +21,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
+    'openstackdocstheme',
     'sphinx.ext.autodoc',
 ]
 
@@ -45,9 +46,6 @@ add_function_parentheses = True
 # unit titles (such as .. function::).
 add_module_names = True
 
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
-
 # -- Options for HTML output --------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
@@ -58,6 +56,7 @@ pygments_style = 'sphinx'
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = '%sdoc' % project
+html_theme = 'openstackdocs'
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass
@@ -71,3 +70,8 @@ latex_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 # intersphinx_mapping = {'http://docs.python.org/': None}
+
+# openstackdocstheme options
+repository_name = 'openstack/tripleo-quickstart'
+bug_project = 'tripleo'
+bug_tag = 'documentation'
