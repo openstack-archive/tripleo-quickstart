@@ -1,6 +1,5 @@
-# Summary of the feature set.
-# Deploy an Openstack environment with a non-containerized overcloud,
-# and upgrade it to a containerized overcloud.
+# Deploy an Openstack environment with a containerized overcloud
+# using scenario001
 
 undercloud_setup: true
 network_isolation: false
@@ -20,6 +19,7 @@ test_ping: false
 run_tempest: false
 step_introspect: false
 
+deploy_composable_scenario: true
 composable_scenario: scenario001-multinode-containers.yaml
 
 # options below direct automatic doc generation by tripleo-collect-logs
