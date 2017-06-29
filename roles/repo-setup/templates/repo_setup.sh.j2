@@ -91,7 +91,7 @@ sudo cp -f /tmp/repo_role_tmp/{{ repo.filename }} /etc/yum.repos.d/
 ## * Install repo from rhsm subscription manager
 ## ::
 
-subscription-manager register --username {{ rhsm_username }} --password {{ rhsm_password }}
+subscription-manager register --username {{ rhsm_username | quote }} --password {{ rhsm_password | quote }}
 subscription-manager attach --pool={{ pool_id }}
 subscription-manager repos --disable=*
 
