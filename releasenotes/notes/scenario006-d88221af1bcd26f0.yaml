@@ -1,0 +1,4 @@
+---
+features:
+  - Create featureset026 that will deploy COE on the overcloud instead
+    of OpenStack services (scenario006).
