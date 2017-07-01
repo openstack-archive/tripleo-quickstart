@@ -1,0 +1,62 @@
+# Summary of the feature set.
+# Deploy an Openstack environment with ssl undercloud, introspect, and use network isolation
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: true
+ssl_overcloud: false
+overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+step_introspect: true
+
+# Tell tripleo about our environment.
+#network_environment_file: ovb-multiple-nics-v6.yaml
+overcloud_ipv6: true
+enable_pacemaker: true
+network_isolation: true
+network_isolation_type: "multiple-nics"
+network_isolation_args: >-
+  -e {{ overcloud_templates_path }}/environments/network-isolation-v6.yaml
+  -e {{ tripleo_root }}/tripleo-ci/test-environments/ipv6-network-templates/network-environment.yaml
+  -e {{ tripleo_root }}/tripleo-ci/test-environments/net-iso.yaml
+
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
+
+extra_args: >-
+  {% if release not in ['newton', 'ocata'] %}-e {{ overcloud_templates_path }}/ci/environments/ceph-min-osds.yaml{% endif %}
+  --ntp-server pool.ntp.org
+test_ping: true
+
+run_tempest: false
+tempest_config: false
+# keep the doc gen settings at the bottom of the config file.
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+
