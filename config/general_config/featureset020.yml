@@ -17,20 +17,6 @@ step_introspect: true
 enable_pacemaker: false
 network_isolation: false
 
-# Network settings
-floating_ip_cidr: 192.168.24.0/24
-public_net_pool_start: 192.168.24.150
-public_net_pool_end: 192.168.24.250
-public_net_gateway: 192.168.24.1
-step_adjust_mtu: true
-mtu: 1350
-mtu_interface:
-  - eth0
-  - eth1
-overcloud_dns_servers:
-  - 8.8.8.8
-  - 8.8.4.4
-
 extra_args: >-
   --ntp-server pool.ntp.org
 
