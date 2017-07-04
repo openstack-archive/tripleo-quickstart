@@ -25,7 +25,7 @@ repo_cmd_before: |
   export CURRENT_RDO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7/current/delorean.repo | grep baseurl | cut -d= -f2`
   export CURRENT_TRIPLEO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo | grep baseurl | cut -d= -f2`
   # If running tripleo-quickstart in OpenStack Infra, let's try to use AFS mirrors
-  if [[ -e /etc/nodepool/provider ]]; then
+  if [[ -e /etc/nodepool/provider && ! $(grep "rdo-cloud" /tmp/provider) ]]; then
   source /etc/nodepool/provider;
   export NODEPOOL_MIRROR_HOST=$(echo "http://mirror.$NODEPOOL_REGION.$NODEPOOL_CLOUD.openstack.org" | tr '[:upper:]' '[:lower:]');
   export CURRENT_RDO_MIRROR=${CURRENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
