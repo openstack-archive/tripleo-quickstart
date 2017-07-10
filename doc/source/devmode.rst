@@ -22,7 +22,7 @@ Available options:
   ``tripleo-quickstart/config/general_config``
 - ``--no-gate``: by default the script tries to recreate an environment with an
   upstream change and asks interactive questions to specify it; this option
-  suppreses that function and creates the environment without any extra changes
+  suppresses that function and creates the environment without any extra changes
 - ``--working-dir <dir>``: directory where all the temporary run time files are
   stored.
 - ``virthost``: the machine to deploy the environment to

@@ -44,7 +44,7 @@ re-cloning it in the working directory, doing the following:
 * it does a thorough cleanup of the `virthost.example.com` machine,
   reinstalling libvirt, deleting networks and VMs
 * downloads the master image and creates new VMs based that
-* deploys both the underclound and the overcloud
+* deploys both the undercloud and the overcloud
 * verifies the deployed environment in a quick and simple way
 
 Developing new roles

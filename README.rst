@@ -124,7 +124,7 @@ the number of nodes to be used. For instance "config/general_config/ha.yml" woul
 configure pacemaker and ensure three controller nodes were provisioned.  This type
 of configuration is now deprecated but will still work through the Queens release.
 
-The feature and node configuration have been seperated into two distinct
+The feature and node configuration have been separated into two distinct
 configuration files to allow users to explicity select the configuration known as
 "feature sets" and the nodes to be provisioned.  The feature set configuration
 can be found under tripleo-quickstart/config/general_config/ and the node
