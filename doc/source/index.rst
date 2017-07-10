@@ -11,6 +11,7 @@ Contents:
    feature-configuration
    node-configuration
    environment-configuration
+   getting-started
    accessing-libvirt
    accessing-undercloud
    accessing-overcloud
