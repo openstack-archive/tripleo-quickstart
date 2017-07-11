@@ -15,6 +15,11 @@ ssl_overcloud: false
 
 extra_args: >-
   --ntp-server pool.ntp.org
+
+container_args: >-
+  -e {{ overcloud_templates_path }}/environments/docker.yaml
+  -e {{ overcloud_templates_path }}/environments/docker-network.yaml
+  -e {{ working_dir }}/containers-default-parameters.yaml
   -e {{ overcloud_templates_path }}/environments/kubernetes.yaml
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
