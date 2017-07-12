@@ -1,9 +1,9 @@
+openstackdocstheme>=1.11.0  # Apache-2.0
 hacking<0.11,>=0.10
 
 bashate>=0.2 # Apache-2.0
 ansible-lint
 jenkins-job-builder
 docutils>=0.11
-sphinx>=1.5.1 # BSD
-oslosphinx>=4.7.0 # Apache-2.0
+sphinx>=1.6.2 # BSD
 reno>=1.8.0  # Apache-2.0
