@@ -52,7 +52,7 @@
       register: nodes
 
     - name: Add subnode to ansible inventory
-      with_indexed_items: '{{ nodes.stdout | default([]) }}'
+      with_indexed_items: '{{ nodes.stdout_lines | default([]) }}'
       add_host:
         name: 'subnode-{{ item.0 + 2 }}'
         groups: "overcloud"
