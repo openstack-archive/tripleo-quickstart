@@ -51,3 +51,7 @@ extradisks_list:
   - vdb
   - vdc
   - vdd
+
+# size of the disks to create when using extradisks
+extradisks_size: 1G
+

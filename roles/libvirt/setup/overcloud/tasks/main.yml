@@ -43,7 +43,7 @@
     # These are sparse files, not using space if unused
     - name: Create additional blockdevice for objectstorage nodes
       command: >
-        dd if=/dev/zero of={{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img bs=1 count=0 seek=1G
+        dd if=/dev/zero of={{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img bs=1 count=0 seek={{ extradisks_size }}
       when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
       with_nested:
         - "{{ overcloud_nodes }}"
