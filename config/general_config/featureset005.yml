@@ -1,6 +1,9 @@
 undercloud_generate_service_certificate: false
 enable_opstools_repo: true
 test_ping: true
+run_tempest: true
+tempest_config: true
+test_regex: 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
 
 # This enables the run of several tripleo-validations tests through Mistral
 run_tripleo_validations: True
