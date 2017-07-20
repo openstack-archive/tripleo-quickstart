@@ -2,12 +2,16 @@
 overcloud_nodes:
   - name: control_0
     flavor: control
+  - name: control_1
+    flavor: control
 
-node_count: 1
+node_count: 2
 
 deployed_server_overcloud_roles:
+  - name: ControllerApi
+    hosts: $(sed -n 1,1p /etc/nodepool/sub_nodes)
   - name: Controller
-    hosts: "$(sed -n 1,1p /etc/nodepool/sub_nodes)"
+    hosts: "$(sed -n 2,2p /etc/nodepool/sub_nodes)"
 
 topology: >-
   --compute-scale 0
