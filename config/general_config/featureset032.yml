@@ -1,0 +1,25 @@
+# Featureset for deploying a 2 controller setup using the deployed server
+# method
+
+undercloud_generate_service_certificate: false
+ssl_overcloud: false
+test_ping: true
+
+# Note(trown): overriding the key these set, so setting them to false
+deploy_composable_scenario: false
+composable_services: false
+composable_roles: false
+
+composable_args: ""
+
+# Note(trown): The tripleo-ci repo is used here because we do not yet support
+# deployed server on libvirt. We will want to move any heat environments we
+# use from the tripleo-ci repo to the tripleo-heat-templates repo when we add
+# support for deployed server deployments on libvirt.
+multinode_args: >-
+    -e {{ overcloud_templates_path }}/environments/deployed-server-environment.yaml
+    -e {{ tripleo_root }}/tripleo-ci/test-environments/multinode-3nodes.yaml
+    -r {{ overcloud_templates_path }}/ci/environments/multinode-3nodes.yaml
+    -e {{ overcloud_templates_path }}/environments/deployed-server-bootstrap-environment-centos.yaml
+enable_pacemaker: true
+
