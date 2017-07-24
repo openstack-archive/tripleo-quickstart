@@ -1,0 +1,37 @@
+# Summary of the feature set.
+# Deploy an Openstack environment with OVN configured in the containerized overcloud
+deploy_composable_scenario: true
+composable_scenario: scenario007-multinode-containers.yaml
+validate_template: scenario007-multinode.yaml
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+containerized_overcloud: true
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: false
+
+# This enables the deployment of the overcloud with SSL.
+ssl_overcloud: false
+
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
+
+# TODO(numans) - Change to neutron-ml2-ovn-ha.yaml once OVN bundle pacemaker support
+# is ready.
+extra_args: >-
+  --ntp-server pool.ntp.org
+  -e {{ overcloud_templates_path }}/environments/services-docker/neutron-ovn.yaml
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+tempest_config: false
+test_ping: true
+run_tempest: false
