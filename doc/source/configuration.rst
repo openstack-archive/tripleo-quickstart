@@ -56,7 +56,7 @@ from ansible var substitutions.
 Overcloud customization
 -----------------------
 
-You can perform extra overclud customization steps, using a script
+You can perform extra overcloud customization steps, using a script
 that will be applied with ``virt-customize`` on the overcloud-full
 image. To allow that, you need to pass the ``overcloud_customize_script``
 var, that needs to point to an script living on your filesystem.

@@ -92,7 +92,7 @@ Example::
     export CONFIG=ovb-ha-multiple-nics
 
 This will use the alternative config file available in
-tripleo-qucikstart-extras/config/general-config to deploy HA (three controllers)
+tripleo-quickstart-extras/config/general-config to deploy HA (three controllers)
 overcloud with multiple-nics network isolation.
 
 
