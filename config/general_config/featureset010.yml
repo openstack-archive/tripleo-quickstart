@@ -22,3 +22,16 @@ tempest_config: true
 test_ping: false
 run_tempest: true
 test_regex: 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant

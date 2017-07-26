@@ -3,6 +3,19 @@
 deploy_composable_scenario: true
 composable_scenario: scenario008-multinode.yaml
 validate_template: scenario008-multinode.yaml
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
 
 network_isolation: false
 enable_pacemaker: true

@@ -4,3 +4,16 @@ test_ping: true
 deploy_composable_scenario: true
 composable_scenario: scenario005-multinode.yaml
 validate_template: scenario005-multinode.yaml
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant

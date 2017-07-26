@@ -12,3 +12,16 @@ exit_on_validations_failure: False
 deploy_composable_scenario: true
 composable_scenario: scenario003-multinode.yaml
 validate_template: scenario003-multinode.yaml
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant

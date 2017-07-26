@@ -35,3 +35,16 @@ extra_args: >-
 tempest_config: false
 test_ping: true
 run_tempest: false
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant

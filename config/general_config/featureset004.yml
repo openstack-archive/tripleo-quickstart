@@ -16,3 +16,16 @@ composable_scenario: multinode.yaml
 # Use default test template
 # validate_template: tenantvm-floatingip.yaml
 
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant

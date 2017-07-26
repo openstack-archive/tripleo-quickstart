@@ -53,3 +53,16 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-upgrade
     - overcloud-validate
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
