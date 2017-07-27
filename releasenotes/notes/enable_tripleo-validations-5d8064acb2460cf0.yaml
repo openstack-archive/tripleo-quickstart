@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    TripleO-QuickStart has now the ability to run TripleO-Validations through
+    the Mistral Framework (pre-introspection, pre-deployment and post-deployment).
+    TripleO-Quickstart will also be able to run a bunch of negative tests using Ansible
+    directly.
