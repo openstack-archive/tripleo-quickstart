@@ -1,3 +1,7 @@
+# image build playbook connects to the host as root
+# We must write the user `root` as the ssh-user
+# so collect logs also connects as root, and not the default stack
+ssh_user: root
 
 # this is required for image builds
 # Reference: https://github.com/openstack/tripleo-quickstart-extras/blob/master/roles/build-images/defaults/main.yml#L15
