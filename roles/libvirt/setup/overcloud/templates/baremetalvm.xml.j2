@@ -26,7 +26,8 @@
       <source pool='{{ libvirt_volume_pool }}' volume='{{ item.name }}.qcow2'/>
       <target dev='{{ libvirt_diskdev }}' bus='{{ libvirt_diskbus }}'/>
     </disk>
-{% for network in networks|rejectattr('name', 'equalto', 'external') %}
+{% for network in networks %}
+{% if (network.forward_mode is not defined) or (network.forward_mode is defined and network.forward_mode != 'nat') %}
     <interface type='bridge'>
       <mac address='{{ node_mac_map.get(item.name).get(network.name) }}'/>
       <source bridge='{{ network.bridge }}'/>
@@ -35,6 +36,7 @@
       <virtualport type='{{ network.virtualport_type }}'/>
 {% endif %}
     </interface>
+{% endif %}
 {% endfor %}
     <serial type='pty'/>
     <console type='pty'/>

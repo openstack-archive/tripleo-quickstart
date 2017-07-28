@@ -120,12 +120,18 @@ overcloud_nodes:
     flavor: ceph
 
 # Describe our virtual networks.  These networks will be attached to
-# the undercloud node and to the overcloud nodes (except for the
-# "external" network) in the order in which they are defined.  The
-# playbooks expect to find both an "external" network and a
-# "overcloud" network.
+# the undercloud node and to the overcloud nodes in the order in which
+# they are defined with the following caveats:
+#   *  If no networks are using forward_mode: 'nat', then the default libvirt
+#   network will be attached to the undercloud. This is required to ssh from the
+#   virt host to the undercloud
+#   *  The first bridge network defined will be used for pxe booting
+#
 external_network_cidr: 192.168.23.0/24
 networks:
+  - name: overcloud
+    bridge: brovc
+
   - name: external
     bridge: brext
     forward_mode: nat
@@ -137,9 +143,6 @@ networks:
     nat_port_range:
       - 1024
       - 65535
-
-  - name: overcloud
-    bridge:  brovc
 
 #Enable network isolation with single-nic-vlans for virtualized deployments
 undercloud_network_cidr: 192.168.24.0/24

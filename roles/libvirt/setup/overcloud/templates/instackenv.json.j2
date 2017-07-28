@@ -1,6 +1,12 @@
-{% set host_ip = (networks |
-                  selectattr('name', 'equalto', 'external') |
-                  list).0.address %}
+{% set lvars = { 'host_ip' : '192.168.122.1', 'pxe_network' : False} %}
+{% for network in networks %}
+{% if (not (network.forward_mode is defined and network.forward_mode == 'nat') and lvars['pxe_network'] == False) %}
+{% if lvars.update({'pxe_network' : network.name}) %}{% endif %}
+{% endif %}
+{% if network.address is defined and lvars['host_ip'] == '192.168.122.1' %}
+{% if lvars.update({'host_ip' : network.address}) %}{% endif %}
+{% endif %}
+{% endfor %}
 {
   "nodes": [
   {% for node in overcloud_nodes %}
@@ -10,7 +16,7 @@
         "pm_password": {{ virt_power_key_pvt | to_nice_json }},
         "pm_type": "pxe_ssh",
         "pm_user": "{{ ansible_user_id }}",
-        "pm_addr": "{{ host_ip }}",
+        "pm_addr": "{{ lvars['host_ip'] }}",
       {% else %}
         "pm_password": "password",
         {% if release == 'ocata' %}
@@ -23,7 +29,7 @@
         "pm_port": "{{ node.virtualbmc_port }}",
       {% endif %}
       "mac": [
-        "{{ node_mac_map.get(node.name).get('overcloud') }}"
+        "{{ node_mac_map.get(node.name).get(lvars['pxe_network']) }}"
       ],
       "cpu": "{{ flavors[node.flavor].vcpu }}",
       "memory": "{{ flavors[node.flavor].memory }}",

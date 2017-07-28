@@ -1,3 +1,11 @@
+{% set lvars = { 'use_default_libvirt' : true } %}
+{% for network in networks %}
+{% if network.forward_mode is defined and network.forward_mode == 'nat' %}
+{% if lvars.update({'use_default_libvirt' : false}) %}{% endif %}
+{% if lvars.update({'nat_network' : network.name}) %}{% endif %}
+{% if lvars.update({'nat_bridge' : network.bridge}) %}{% endif %}
+{% endif %}
+{% endfor %}
 <domain type='{{ libvirt_domain_type }}'>
   <name>{{ undercloud_node.name }}</name>
   <memory unit='MiB'>{{ flavors[undercloud_node.flavor].memory }}</memory>
@@ -36,7 +44,20 @@
       <source pool='{{ libvirt_volume_pool }}' volume='{{ undercloud_node.name }}.qcow2'/>
       <target dev='{{ libvirt_diskdev }}' bus='{{ libvirt_diskbus }}'/>
     </disk>
+{% if lvars['use_default_libvirt'] %}
+    <interface type='bridge'>
+      <source bridge='virbr0'/>
+      <model type='virtio'/>
+    </interface>
+{% else %}
+    <interface type='bridge'>
+      <mac address='{{ undercloud_mac_map.get(undercloud_node.name).get(lvars['nat_network']) }}'/>
+      <source bridge='{{ lvars['nat_bridge'] }}'/>
+      <model type='virtio'/>
+    </interface>
+{% endif %}
 {% for network in networks %}
+{% if not (lvars['use_default_libvirt'] == false and network.name == lvars['nat_network']) %}
     <interface type='bridge'>
       <mac address='{{ undercloud_mac_map.get(undercloud_node.name).get(network.name) }}'/>
       <source bridge='{{ network.bridge }}'/>
@@ -45,6 +66,7 @@
       <virtualport type='{{ network.virtualport_type }}'/>
 {% endif %}
     </interface>
+{% endif %}
 {% endfor %}
     <serial type='pty'/>
     <console type='pty'/>
