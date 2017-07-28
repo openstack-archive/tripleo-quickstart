@@ -96,6 +96,16 @@
       src: "{{ virt_power_key }}"
       dest: "{{ working_dir }}/id_rsa_virt_power"
 
+  # When using qemu:///system, the vbmc will need to ssh back to the virthost
+  # as the root user to perform power operations
+  - name: Add virt power key to root authorized keys if using qemu:///system
+    authorized_key:
+      user: root
+      key: "{{ item }}"
+    with_file:
+      - "{{ virt_power_key }}.pub"
+    when: libvirt_uri == "qemu:///system"
+
   # Copy the public key to `$HOME/.ssh/authorized_keys` for the `root`
   # and `undercloud_user` user on the undercloud.
   - name: Inject undercloud ssh public key to appliance
@@ -220,6 +230,19 @@
     environment:
       LIBGUESTFS_BACKEND: direct
 
+  - name: Set libvirt environment when using root to run tasks
+    set_fact:
+      libvirt_environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+        LIBGUESTFS_BACKEND: "direct"
+    when: ssh_user == "root"
+
+  - name: Set libvirt environment when not using root to run tasks
+    set_fact:
+      libvirt_environment:
+        LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+    when: ssh_user != "root"
+
   # NOTE(trown) We use the overcloud-full initramfs and kernel as DIB
   # seems a bit smarter about extracting them than virt-get-kernel and
   # the partition image is simply a converted overcloud-full
@@ -229,9 +252,8 @@
       '/home/{{ undercloud_user }}/overcloud-full.vmlinuz'
       '/home/{{ undercloud_user }}/overcloud-full.initrd'
       '{{ working_dir }}'
-    environment:
-      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
-    when: not undercloud_use_custom_boot_images|bool
+    environment: "{{ libvirt_environment }}"
+    when:  not undercloud_use_custom_boot_images|bool
 
   # NOTE(trown): This is a bit of a hack to get the undercloud vm
   # template to use the external kernel and initrd. We should
@@ -268,6 +290,7 @@
     xml: "{{ lookup('template', 'undercloudvm.xml.j2') }}"
     uri: "{{ libvirt_uri }}"
 
+# Make sure we can read the image file after the copy
 - name: Ensure file permissions if root used as task runner
   file:
     path: "{{ working_dir }}"
