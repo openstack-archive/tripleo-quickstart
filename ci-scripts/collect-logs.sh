@@ -42,6 +42,7 @@ else
 fi
 
 bash quickstart.sh \
+    --ansible-debug \
     --working-dir $WORKSPACE/ \
     --no-clone \
     --bootstrap \
