@@ -14,14 +14,16 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 
 tempest_config: false
-# TODO: enable pingtest when the job passes with some time left
-# before the time limit
+# TODO(emilien)
+# We're figuring out why Zaqar doesn't work but pingtest should
+# be enabled soon.
 test_ping: false
 run_tempest: false
 step_introspect: false
 
 deploy_composable_scenario: true
 composable_scenario: scenario002-multinode-containers.yaml
+validate_template: scenario002-multinode.yaml
 
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
