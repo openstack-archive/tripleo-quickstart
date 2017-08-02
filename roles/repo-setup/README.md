@@ -22,6 +22,7 @@ Role Variables
 * `repos.type` - file / generic / package / rpm_url
 * `repos.releases` - for which releases to set up this repo, if not defined - for all releases.
                      It supports shortcut for all stable releases - '{{ stable }}'
+* `add_repos` - dictionary of additional repositories to add, could be populated in code, by default is empty
 
   *File*
   ------

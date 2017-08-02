@@ -19,7 +19,7 @@ sudo rm -rf /tmp/repo_role_tmp && mkdir -p /tmp/repo_role_tmp
 ## * Prepare repositories
 ## ::
 
-{% for repo in repos %}
+{% for repo in repos + add_repos %}
 {% if repo.releases is not defined or release in repo.releases %}
 
 {% if repo.type == 'file' %}

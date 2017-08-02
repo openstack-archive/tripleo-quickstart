@@ -27,6 +27,8 @@ repos:
     filename: delorean-deps.repo
     down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
 
+# For adding custom repositories in featureset files
+add_repos: []
 # rhsm variables
 use_rhsm: false
 use_use_rhsm_baseos_channel: true
