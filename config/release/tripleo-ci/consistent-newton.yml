@@ -25,12 +25,13 @@ repo_cmd_before: |
   export CONSISTENT_RDO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7-newton/consistent/delorean.repo | grep baseurl | cut -d= -f2`
   # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
   if [[ -e /etc/ci/mirror_info.sh ]]; then
-  eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST")
+  eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST"; echo NODEPOOL_BUILDLOGS_CENTOS_PROXY="$NODEPOOL_BUILDLOGS_CENTOS_PROXY")
   export NODEPOOL_MIRROR_HOST="http://${NODEPOOL_MIRROR_HOST}"
-  export CONSISTENT_RDO_MIRROR=${CONSISTENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
+  export NODEPOOL_BUILDLOGS_CENTOS_PROXY=$NODEPOOL_BUILDLOGS_CENTOS_PROXY
   fi
   # Otherwise, fallback to official mirrors provided by CentOS.
   export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
+  export NODEPOOL_BUILDLOGS_CENTOS_PROXY="${NODEPOOL_BUILDLOGS_CENTOS_PROXY:-https://buildlogs.centos.org}"
 repos:
   - type: generic
     reponame: delorean
@@ -38,9 +39,10 @@ repos:
     baseurl: $CONSISTENT_RDO_MIRROR
     hash_url: https://trunk.rdoproject.org/centos7-newton//consistent/delorean.repo
 
-  - type: file
-    filename: delorean-deps.repo
-    down_url: https://trunk.rdoproject.org/centos7-newton/delorean-deps.repo
+  - type: generic
+    reponame: delorean-newton-testing
+    filename: delorean-newton-testing.repo
+    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-newton/
 
   - type: generic
     reponame: centos-qemu
