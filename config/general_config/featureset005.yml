@@ -28,11 +28,7 @@ run_tempest: >-
   true
   {%- endif -%}
 
-validate_template: scenario001-multinode.yaml
-
-# https://review.openstack.org/#/c/490376 should get us more coverage than we had before
-# with pingtest. Remove this comment once 490376 is merged.
-test_regex: 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
+test_regex: ''
 
 # This enables the run of several tripleo-validations tests through Mistral
 run_tripleo_validations: True
@@ -57,3 +53,12 @@ overcloud_roles:
       - Storage
       - StorageMgmt
       - Tenant
+validate_template: scenario001-multinode.yaml
+tempest_whitelist:
+  - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
+  - 'ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration'
+tempest_plugins:
+  - python-aodh-tests
+  - python-ceilometer-tests
+  - python-gnocchi-tests
+  - python-panko-tests
