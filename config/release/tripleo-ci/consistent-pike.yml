@@ -1,0 +1,71 @@
+devmode: true
+overcloud_as_undercloud: true
+images:
+    - name: overcloud-full
+      url: "{{ overcloud_image_url }}"
+      type: tar
+    - name: ipa_images
+      url: "{{ ipa_image_url }}"
+      type: tar
+inject_images:
+    - "ironic-python-agent.initramfs"
+    - "ironic-python-agent.vmlinuz"
+    - "ironic-python-agent.kernel"
+    - "overcloud-full.qcow2"
+    - "overcloud-full.initrd"
+    - "overcloud-full.vmlinuz"
+release: pike
+# TODO: once we have builds for pike, switch master to pike
+overcloud_image_url: http://66.187.229.139/builds-master/current-tripleo-master/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds-master/current-tripleo-master/ipa_images.tar
+repo_cmd_before: |
+  sudo yum install -y yum-plugin-priorities;
+  sudo yum clean all;
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  export CONSISTENT_RDO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7-pike/consistent/delorean.repo | grep baseurl | cut -d= -f2`
+  # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
+  if [[ -e /etc/ci/mirror_info.sh ]]; then
+  eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST")
+  export NODEPOOL_MIRROR_HOST="http://${NODEPOOL_MIRROR_HOST}"
+  export CONSISTENT_RDO_MIRROR=${CONSISTENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
+  fi
+  # Otherwise, fallback to official mirrors provided by CentOS.
+  export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
+repos:
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    baseurl: $CONSISTENT_RDO_MIRROR
+    hash_url: https://trunk.rdoproject.org/centos7-pike/consistent/delorean.repo
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-pike/delorean-deps.repo
+
+  - type: generic
+    reponame: centos-qemu
+    filename: centos-qemu.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/virt/x86_64/kvm-common/
+
+  - type: generic
+    reponame: centos-ceph-jewel
+    filename: centos-ceph-jewel.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/storage/x86_64/ceph-jewel/
+
+  - type: generic
+    reponame: centos-opstools
+    filename: centos-opstools.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/opstools/x86_64/
+
+repo_cmd_after: |
+  {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
+  {%endif %}
+  sudo yum-config-manager --disable rdo-qemu-ev;
+  sudo rpm -e epel-release || true;
+  sudo yum remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
+  sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo /etc/yum.repos.d/CentOS-QEMU-EV.repo;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo yum repolist;
+  sudo yum update -y
+
