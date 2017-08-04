@@ -1,5 +1,4 @@
 undercloud_generate_service_certificate: false
-test_ping: true
 
 # This enables the run of several tripleo-validations tests through Mistral
 run_tripleo_validations: True
@@ -25,3 +24,49 @@ overcloud_roles:
       - Storage
       - StorageMgmt
       - Tenant
+
+# Use the traditional ping test in newton and ocata
+# Run tempest in pike+
+
+test_ping: >-
+  {% if release in ['newton', 'ocata'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+tempest_config: >-
+  {% if release in ['newton', 'ocata'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+run_tempest: >-
+  {% if release in ['newton', 'ocata'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+test_regex: ''
+tempest_whitelist:
+  # Testing zaqar doesn't work yet, but it's in progress
+  # - 'zaqar.tests.tempest_plugin.tests.v2.test_queues.TestManageQueue'
+  # Testing boot from volume and server connectivity
+  - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
+  # Testing swift
+  - 'tempest.api.object_storage.test_object_services.ObjectTest'
+  # Testing cinder volumes encrypted by barbican:
+  - 'tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes'
+  # TODO(emilien) run autoscaling tests when telemetry works in python-tempestconf
+  # - 'ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration'
+  # TODO(emilien) run ec2api tests when ec2api is supported in python-tempestconf
+  # - 'ec2api.tests.functional.api.test_key_pairs.KeyPairTest'
+tempest_plugins:
+  - python-aodh-tests
+  - python-ceilometer-tests
+  - python-gnocchi-tests
+  - python-barbican-tests-tempest
+  - python-zaqar-tests
+  - python-ec2-api-tests
