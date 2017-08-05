@@ -25,13 +25,15 @@ repo_cmd_before: |
   export CURRENT_TRIPLEO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo | grep baseurl | cut -d= -f2`
   # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
   if [[ -e /etc/ci/mirror_info.sh ]]; then
-  eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST")
+  eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST"; echo NODEPOOL_BUILDLOGS_CENTOS_PROXY="$NODEPOOL_BUILDLOGS_CENTOS_PROXY")
   export NODEPOOL_MIRROR_HOST="http://${NODEPOOL_MIRROR_HOST}"
+  export NODEPOOL_BUILDLOGS_CENTOS_PROXY=$NODEPOOL_BUILDLOGS_CENTOS_PROXY
   export CURRENT_RDO_MIRROR=${CURRENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
   export CURRENT_TRIPLEO_MIRROR=${CURRENT_TRIPLEO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
   fi
   # Otherwise, fallback to official mirrors provided by CentOS.
   export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
+  export NODEPOOL_BUILDLOGS_CENTOS_PROXY="${NODEPOOL_BUILDLOGS_CENTOS_PROXY:-https://buildlogs.centos.org}"
 repos:
   - type: generic
     reponame: delorean
@@ -62,9 +64,10 @@ repos:
       - openstack-tripleo-ui
       - puppet-*
 
-  - type: file
-    filename: delorean-deps.repo
-    down_url: https://trunk.rdoproject.org/centos7-master/delorean-deps.repo
+  - type: generic
+    reponame: delorean-pike-testing
+    filename: delorean-pike-testing.repo
+    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-pike/
 
   - type: generic
     reponame: centos-qemu
