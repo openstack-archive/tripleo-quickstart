@@ -5,7 +5,8 @@ network_isolation: false
 enable_pacemaker: false
 overcloud_ipv6: false
 containerized_overcloud: true
-
+# Undercloud registry mirror
+undercloud_docker_registry_mirror: "{{ lookup('env','NODEPOOL_DOCKER_REGISTRY_PROXY') }}"
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: false
