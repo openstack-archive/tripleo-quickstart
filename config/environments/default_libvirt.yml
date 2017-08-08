@@ -7,4 +7,11 @@ enable_port_forward_for_tripleo_ui: true
 # Please consult the tripleo-quickstart documentation prior to enabling this option
 tripleo_ui_secure_access: false
 
-nameserver_from_virthost: true
+# Note this needs to be false for freeIPA
+# https://bugs.launchpad.net/tripleo/+bug/1709333
+nameserver_from_virthost: >-
+  {% if overcloud_cloud_domain is defined -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
