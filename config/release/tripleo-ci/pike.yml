@@ -15,9 +15,8 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: pike
-# TODO: once we have builds for pike, switch master to pike
-overcloud_image_url: http://66.187.229.139/builds-master/current-tripleo-master/overcloud-full.tar
-ipa_image_url: http://66.187.229.139/builds-master/current-tripleo-master/ipa_images.tar
+overcloud_image_url: http://66.187.229.139/builds-pike/current-tripleo-pike/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds-pike/current-tripleo-pike/ipa_images.tar
 repo_cmd_before: |
   sudo yum install -y yum-plugin-priorities;
   sudo yum clean all;
