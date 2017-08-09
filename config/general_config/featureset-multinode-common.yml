@@ -2,8 +2,6 @@
 enable_vbmc: false
 gating_repo_enabled: true
 deploy_multinode: true
-composable_services: false
-deploy_composable_scenario: true
 step_overcloud_image: false
 step_glance_upload: true
 step_register: false
