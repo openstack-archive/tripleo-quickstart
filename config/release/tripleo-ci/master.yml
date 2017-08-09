@@ -19,6 +19,7 @@ ipa_image_url: http://66.187.229.139/builds/current-tripleo/ipa_images.tar
 repo_cmd_before: |
   sudo yum install -y yum-plugin-priorities;
   sudo yum clean all;
+  sudo yum-config-manager --disable "*"
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   export CURRENT_RDO_MIRROR=`curl --silent https://trunk.rdoproject.org/centos7/current/delorean.repo | grep baseurl | cut -d= -f2`
@@ -35,6 +36,7 @@ repo_cmd_before: |
   export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
   export NODEPOOL_BUILDLOGS_CENTOS_PROXY="${NODEPOOL_BUILDLOGS_CENTOS_PROXY:-https://buildlogs.centos.org}"
 repos:
+  # RDO repos
   - type: generic
     reponame: delorean
     filename: delorean.repo
@@ -68,6 +70,22 @@ repos:
     reponame: delorean-pike-testing
     filename: delorean-pike-testing.repo
     baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-pike/
+
+  # CentOS related repos
+  - type: generic
+    reponame: centos-base
+    filename: centos-base.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/os/x86_64/
+
+  - type: generic
+    reponame: centos-updates
+    filename: centos-updates.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/updates/x86_64/
+
+  - type: generic
+    reponame: centos-extras
+    filename: centos-extras.repo
+    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/extras/x86_64/
 
   - type: generic
     reponame: centos-qemu
