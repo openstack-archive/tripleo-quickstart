@@ -29,11 +29,6 @@ extra_args: >-
   --ntp-server pool.ntp.org
   -e {{ overcloud_templates_path }}/environments/neutron-ml2-ovn.yaml
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
-tempest_config: false
-test_ping: true
-run_tempest: false
 composable_roles: true
 overcloud_roles:
   - name: Controller
@@ -47,3 +42,10 @@ overcloud_roles:
       - Storage
       - StorageMgmt
       - Tenant
+
+tempest_config: true
+test_ping: false
+run_tempest: true
+test_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
