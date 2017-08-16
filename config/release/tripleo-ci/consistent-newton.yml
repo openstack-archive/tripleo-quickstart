@@ -49,33 +49,33 @@ repos:
 
   # CentOS related repos
   - type: generic
-    reponame: centos-base
-    filename: centos-base.repo
+    reponame: quickstart-centos-base
+    filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/os/x86_64/
 
   - type: generic
-    reponame: centos-updates
-    filename: centos-updates.repo
+    reponame: quickstart-centos-updates
+    filename: quickstart-centos-updates.repo
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/updates/x86_64/
 
   - type: generic
-    reponame: centos-extras
-    filename: centos-extras.repo
+    reponame: quickstart-centos-extras
+    filename: quickstart-centos-extras.repo
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/extras/x86_64/
 
   - type: generic
-    reponame: centos-qemu
-    filename: centos-qemu.repo
+    reponame: quickstart-centos-qemu
+    filename: quickstart-centos-qemu.repo
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/virt/x86_64/kvm-common/
 
   - type: generic
-    reponame: centos-ceph-jewel
-    filename: centos-ceph-jewel.repo
+    reponame: quickstart-centos-ceph-jewel
+    filename: quickstart-centos-ceph-jewel.repo
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/storage/x86_64/ceph-jewel/
 
   - type: generic
-    reponame: centos-opstools
-    filename: centos-opstools.repo
+    reponame: quickstart-centos-opstools
+    filename: quickstart-centos-opstools.repo
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/opstools/x86_64/
 
 repo_cmd_after: |
