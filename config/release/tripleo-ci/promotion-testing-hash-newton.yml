@@ -2,7 +2,7 @@ devmode: true
 overcloud_as_undercloud: true
 use_specific_hash: true
 docker_registry_host: trunk.registry.rdoproject.org
-docker_registry_namespace: tripleo
+docker_registry_namespace: newton
 delorean_hash_label: &promotion-testing-tag tripleo-ci-testing
 docker_image_tag: *promotion-testing-tag
 
