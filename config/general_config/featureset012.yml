@@ -7,6 +7,8 @@ network_isolation: false
 enable_pacemaker: false
 overcloud_ipv6: false
 
+enable_opstools_repo: true
+
 # we're upgrading from non-containers to containers, so first we
 # deploy non-containerized overcloud
 containerized_overcloud: false
