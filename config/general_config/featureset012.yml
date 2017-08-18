@@ -30,14 +30,13 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 
 tempest_config: false
-# TODO: enable pingtest when the job passes with some time left
-# before the time limit
-test_ping: false
+test_ping: true
 run_tempest: false
 step_introspect: false
 
 deploy_composable_scenario: true
 composable_scenario: scenario001-multinode-containers.yaml
+validate_template: scenario001-multinode.yaml
 
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
