@@ -28,9 +28,7 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 
 tempest_config: false
-# TODO: enable pingtest when the job passes with some time left
-# before the time limit
-test_ping: false
+test_ping: true
 run_tempest: false
 step_introspect: false
 
