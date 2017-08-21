@@ -35,6 +35,8 @@ supplemental_base_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x
 * `supplemental_provisioning_script` -- Path to script which will be copied to and run from the
   virthost to provision the vm image
 * `supplemental_user` -- <stack> The user which is used to deploy the supplemental node
+* `supplemental_tls_everywhere_dns_server` -- <192.168.23.1> DNS server for eth0 on the supplemental
+  node hosting the FreeIPA server
 
 Example Playbook
 ----------------
