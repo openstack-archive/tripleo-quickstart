@@ -2,8 +2,6 @@ deploy_composable_scenario: true
 composable_scenario: multinode-containers.yaml
 composable_services: false
 
-# Undercloud registry mirror
-undercloud_docker_registry_mirror: "{{ lookup('env','NODEPOOL_DOCKER_REGISTRY_PROXY') }}"
 network_isolation: false
 enable_pacemaker: false
 overcloud_ipv6: false

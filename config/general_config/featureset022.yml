@@ -3,8 +3,6 @@ containerized_overcloud: true
 # Workaround for limited disk space on undercloud
 # https://bugs.launchpad.net/tripleo/+bug/1694709
 delete_docker_cache: true
-# Undercloud registry mirror
-undercloud_docker_registry_mirror: "{{ lookup('env','NODEPOOL_DOCKER_REGISTRY_PROXY') }}"
 # TripleO settings
 ssl_overcloud: false
 undercloud_generate_service_certificate: true

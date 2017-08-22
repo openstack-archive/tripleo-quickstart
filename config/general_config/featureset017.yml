@@ -7,8 +7,6 @@ enable_pacemaker: false
 overcloud_ipv6: false
 
 containerized_overcloud: true
-# Undercloud registry mirror
-undercloud_docker_registry_mirror: "{{ lookup('env','NODEPOOL_DOCKER_REGISTRY_PROXY') }}"
 undercloud_generate_service_certificate: false
 
 ssl_overcloud: false
