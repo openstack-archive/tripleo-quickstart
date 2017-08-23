@@ -89,3 +89,6 @@ repo_cmd_after: |
   sudo yum repolist;
   sudo yum update -y
 
+undercloud_rpm_dependencies: >-
+  python-tripleoclient
+  ceph-ansible
