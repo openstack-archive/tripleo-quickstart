@@ -109,6 +109,12 @@ repos:
     filename: quickstart-centos-opstools.repo
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/opstools/x86_64/
 
+  # TODO(aschultz): remove me after LP#1712621 is resolved
+  - type: generic
+    reponame: quickstart-centos-opstools-testing
+    filename: quickstart-centos-opstools-testing.repo
+    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/opstools/x86_64/
+
 repo_cmd_after: |
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
   {%endif %}
