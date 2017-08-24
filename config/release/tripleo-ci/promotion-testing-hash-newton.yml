@@ -36,7 +36,7 @@ repo_cmd_before: |
     # Otherwise, fallback to official mirrors provided by CentOS.
     export NODEPOOL_CENTOS_MIRROR=http://mirror.centos.org/centos
     export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
-    export NODEPOOL_RDO_PROXY=http://trunk.rdoproject.org
+    export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
   rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-newton/tripleo-ci-testing/delorean.repo | grep baseurl | cut -d= -f2`
   rdo_dlrn_deps=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-newton/delorean-deps.repo | grep baseurl | cut -d= -f2`
