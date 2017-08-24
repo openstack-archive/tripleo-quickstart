@@ -116,8 +116,8 @@ repo_cmd_after: |
   {%endif %}
   sudo yum-config-manager --disable rdo-qemu-ev;
   sudo rpm -e epel-release || true;
-  sudo yum remove -y rdo-release centos-release-openstack-* || true;
-  sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-QEMU-EV.repo;
+  sudo yum remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
+  sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo /etc/yum.repos.d/CentOS-QEMU-EV.repo;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
   sudo yum update -y
