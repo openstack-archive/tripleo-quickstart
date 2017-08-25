@@ -21,7 +21,7 @@ inject_images:
     - "overcloud-full.qcow2"
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
-release: master
+release: pike
 overcloud_image_url: https://images.rdoproject.org/pike/delorean/tripleo-upstream/testing/overcloud-full.tar
 ipa_image_url: https://images.rdoproject.org/pike/delorean/tripleo-upstream/testing/ipa_images.tar
 repo_cmd_before: |
