@@ -17,7 +17,6 @@ extra_args: >-
 
 container_args: >-
   -e {{ overcloud_templates_path }}/environments/docker.yaml
-  -e {{ overcloud_templates_path }}/environments/docker-network.yaml
   -e {{ working_dir }}/containers-default-parameters.yaml
   -e {{ overcloud_templates_path }}/environments/kubernetes.yaml
 
