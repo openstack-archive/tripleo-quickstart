@@ -1,8 +1,8 @@
 release: master
-overcloud_release: ocata
+overcloud_release: pike
 undercloud_image_url: https://images.rdoproject.org/master/delorean/current-tripleo/stable/undercloud.qcow2
 ipa_image_url: http://66.187.229.139/builds/current-tripleo/ipa_images.tar
-overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo-ocata/overcloud-full.tar
+overcloud_image_url: http://66.187.229.139/builds-pike/current-tripleo-pike/overcloud-full.tar
 images:
     - name: undercloud
       url: "{{ undercloud_image_url }}"
@@ -73,6 +73,7 @@ repos:
       - openstack-tripleo-ui
       - puppet-*
 
+# update to queens-testing when available
   - type: generic
     reponame: delorean-pike-testing
     filename: delorean-pike-testing.repo
