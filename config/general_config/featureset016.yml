@@ -13,9 +13,6 @@ undercloud_generate_service_certificate: false
 
 ssl_overcloud: false
 
-tempest_config: false
-test_ping: true
-run_tempest: false
 step_introspect: false
 
 deploy_composable_scenario: true
@@ -63,3 +60,36 @@ overcloud_roles:
       - Storage
       - StorageMgmt
       - Tenant
+
+# Use the traditional ping test in newton and ocata
+# Run tempest in pike+
+
+test_ping: >-
+  {% if release in ['newton', 'ocata'] -%}
+  true
+  {%- else -%}
+  # TODO(emilien) change it to false when:
+  # - https://review.openstack.org/#/c/490376 is merged
+  # - https://bugs.launchpad.net/tripleo/+bug/1708793 is fixed
+  true
+  {%- endif -%}
+
+tempest_config: >-
+  {% if release in ['newton', 'ocata'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+run_tempest: >-
+  {% if release in ['newton', 'ocata'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+validate_template: scenario001-multinode.yaml
+
+# https://review.openstack.org/#/c/490376 should get us more coverage than we had before
+# with pingtest. Remove this comment once 490376 is merged.
+test_regex: 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
