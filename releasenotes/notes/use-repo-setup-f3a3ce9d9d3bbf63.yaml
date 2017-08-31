@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Updated repo injection code to use the repo-setup role. This allows for
+    configuring what repos get injected to the provided images rather than
+    relying on hardcoded repo setup.

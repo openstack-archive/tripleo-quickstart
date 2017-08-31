@@ -1,49 +1,4 @@
-# we download all the repos first to make sure that undercloud and overcloud
-# are tested with the same repos
-
-- name: download delorean repos for master
-  get_url:
-    url: "{{ item.url }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - url: "https://trunk.rdoproject.org/centos7/current/delorean.repo"
-      dest: "{{working_dir}}/delorean-current.repo"
-    - url: "https://trunk.rdoproject.org/centos7-master/current-tripleo/delorean.repo"
-      dest: "{{working_dir}}/delorean.repo"
-    - url: "https://trunk.rdoproject.org/centos7/delorean-deps.repo"
-      dest: "{{working_dir}}/delorean-deps.repo"
-
-- name: alter repos name
-  replace:
-    dest: "{{ item.dest }}"
-    regexp: "\\[delorean\\]"
-    replace: "{{ item.replace }}"
-  with_items:
-    - dest: "{{working_dir}}/delorean-current.repo"
-      replace: "[delorean-current]"
-    - dest: "{{working_dir}}/delorean.repo"
-      replace: "[delorean-tripleo]"
-
-- name: alter repo priority
-  replace:
-    dest: "{{ item.dest }}"
-    regexp: "priority=.*"
-    replace: "{{ item.replace }}"
-  with_items:
-    - dest: "{{working_dir}}/delorean-current.repo"
-      replace: "priority=10"
-    - dest: "{{working_dir}}/delorean.repo"
-      replace: "priority=20"
-    - dest: "{{working_dir}}/delorean-deps.repo"
-      replace: "priority=30"
-
-- name: specify packages from delorean-current
-  lineinfile:
-    dest: "{{working_dir}}/delorean-current.repo"
-    state: present
-    insertafter: EOF
-    line: "includepkgs=diskimage-builder,instack,instack-undercloud,os-apply-config,os-collect-config,os-net-config,os-refresh-config,python-tripleoclient,openstack-tripleo-common*,openstack-tripleo-heat-templates,openstack-tripleo-image-elements,openstack-tripleo,openstack-tripleo-puppet-elements,openstack-puppet-modules,openstack-tripleo-ui,openstack-tripleo-docs,puppet-*"
-
+---
 - name: get all qcow2 images
   find:
     path: "{{ working_dir }}"
@@ -51,18 +6,12 @@
   register: qcow_images
 
 - name: upload repos on the images
-  command: >
-    virt-customize -v --smp 2 -m 4096 -a {{ item.path }}
-    --delete '/etc/yum.repos.d/delorean*'
-    --delete '/etc/yum.repos.d/epel*'
-    --upload delorean-current.repo:/etc/yum.repos.d/delorean-current.repo
-    --upload delorean.repo:/etc/yum.repos.d/delorean.repo
-    --upload delorean-deps.repo:/etc/yum.repos.d/delorean-deps.repo
-  args:
-    chdir: "{{ working_dir }}"
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  include_role:
+    name: repo-setup
+  vars:
+    repo_inject_image_path: "{{ item.path }}"
+    repo_run_live: false
+    repo_setup_dir: "{{ working_dir }}"
   with_items: "{{ qcow_images.files | default([]) }}"
   changed_when: true
 
