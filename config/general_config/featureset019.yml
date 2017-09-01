@@ -3,7 +3,7 @@
 
 undercloud_setup: true
 network_isolation: false
-enable_pacemaker: false
+enable_pacemaker: true
 overcloud_ipv6: false
 
 containerized_overcloud: true
