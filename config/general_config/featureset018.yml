@@ -11,9 +11,6 @@ undercloud_generate_service_certificate: false
 
 ssl_overcloud: false
 
-tempest_config: false
-test_ping: true
-run_tempest: false
 step_introspect: false
 
 deploy_composable_scenario: true
@@ -61,3 +58,36 @@ overcloud_roles:
       - Storage
       - StorageMgmt
       - Tenant
+
+# Use the traditional ping test in newton and ocata
+# Run tempest in pike+
+
+test_ping: >-
+  {% if release in ['newton', 'ocata'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+tempest_config: >-
+  {% if release in ['newton', 'ocata'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+run_tempest: >-
+  {% if release in ['newton', 'ocata'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+test_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+  - 'sahara_tempest_plugin.tests.api.test_data_sources.DataSourceTest'
+  - 'mistral_tempest_tests.tests.api.v2.test_actions.ActionTestsV2'
+tempest_plugins:
+  - python-sahara-tests
+  - python-mistral-tests
