@@ -49,13 +49,22 @@
         - "{{ overcloud_nodes }}"
         - "{{ extradisks_list }}"
 
-    - name: Attach additional blockdevices to overcloud objectstorage VMs
+    - name: Check if additional blockdevices are attached
       command: >
-        virsh attach-disk --config {{ item[0].name }} {{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img {{ item[1] }}
+        virsh domblkinfo {{ item[0].name }} {{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img
       when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
+      changed_when: false
+      ignore_errors: true
+      register: overcloud_extradisks_check
       with_nested:
         - "{{ overcloud_nodes }}"
         - "{{ extradisks_list }}"
+
+    - name: Attach additional blockdevices to overcloud objectstorage VMs
+      command: >
+        virsh attach-disk --config {{ item.item[0].name }} {{ libvirt_volume_path }}/{{ item.item[0].name }}_{{ item.item[1] }}.img {{ item.item[1] }}
+      when: item|failed
+      with_items: "{{ overcloud_extradisks_check.results }}"
 
 # Generate the `instackenv.json` configuration file.  Note that this
 # task *must* occur after the above overcloud tasks, because if
