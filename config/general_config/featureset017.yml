@@ -98,3 +98,7 @@ tempest_plugins:
   - python-barbican-tests-tempest
   - python-zaqar-tests
   - python-ec2-api-tests
+tempest_extra_config: >-
+  {% if release not in ['newton', 'ocata', 'pike'] -%}
+    {'compute-feature-enabled.attach_encrypted_volume': 'True', 'auth.tempest_roles': '"Member, creator"'}
+  {%- endif -%}
