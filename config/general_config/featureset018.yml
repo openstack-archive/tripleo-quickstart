@@ -15,7 +15,6 @@ ssl_overcloud: false
 
 step_introspect: false
 
-deploy_composable_scenario: true
 composable_scenario: scenario003-multinode-containers.yaml
 validate_template: scenario003-multinode.yaml
 

@@ -1,4 +1,3 @@
-deploy_composable_scenario: true
 composable_scenario: multinode-containers.yaml
 composable_services: false
 

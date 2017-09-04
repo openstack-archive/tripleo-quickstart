@@ -31,8 +31,8 @@ ssl_overcloud: false
 test_ping: false
 run_tempest: false
 enable_pacemaker: false
-deploy_composable_scenario: true
 composable_scenario: multinode_major_upgrade.yaml
+upgrade_composable_scenario: multinode_major_upgrade.yaml
 overcloud_release: newton
 overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
 download_overcloud_templates_rpm: true
@@ -40,8 +40,7 @@ download_overcloud_templates_rpm: true
 # Upgrade required templates
 upgrade_custom_templates_script_delivery:
   - overcloud-repo.yaml
-upgrade_custom_templates:
-  - "{{ overcloud_templates_path }}/ci/environments/{{ composable_scenario }}"
+upgrade_custom_templates: {}
 
 use_git_tht_repo: true
 download_overcloud_image: true

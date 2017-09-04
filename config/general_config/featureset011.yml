@@ -32,8 +32,8 @@ test_ping: true
 run_tempest: false
 step_introspect: false
 
-deploy_composable_scenario: true
-composable_scenario: multinode-containers.yaml
+composable_scenario: multinode.yaml
+upgrade_composable_scenario: multinode-containers.yaml
 
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true

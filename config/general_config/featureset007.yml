@@ -11,7 +11,6 @@ exit_on_validations_failure: False
 # pacemaker settings are configured in the scenario template
 # do not set `enable_pacemaker` in the featureset
 
-deploy_composable_scenario: true
 composable_scenario: scenario003-multinode.yaml
 validate_template: scenario003-multinode.yaml
 composable_roles: true

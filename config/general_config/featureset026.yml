@@ -1,4 +1,3 @@
-deploy_composable_scenario: true
 composable_scenario: scenario006-multinode.yaml
 
 network_isolation: false

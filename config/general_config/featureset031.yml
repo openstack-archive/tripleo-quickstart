@@ -1,6 +1,5 @@
 # Summary of the feature set.
 # Deploy an Openstack environment with opnfv configured in the overcloud
-deploy_composable_scenario: true
 composable_scenario: scenario008-multinode.yaml
 validate_template: scenario008-multinode.yaml
 composable_roles: true

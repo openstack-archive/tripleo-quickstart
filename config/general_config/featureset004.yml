@@ -10,9 +10,8 @@ run_tripleo_validations_negative_tests: True
 # Exit tripleo-quickstart on validations failure
 exit_on_validations_failure: False
 
-deploy_composable_scenario: true
-composable_services: false
 composable_scenario: multinode.yaml
+composable_services: false
 # Use default test template
 # validate_template: tenantvm-floatingip.yaml
 

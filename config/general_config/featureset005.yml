@@ -41,7 +41,6 @@ run_tripleo_validations_negative_tests: True
 # Exit tripleo-quickstart on validations failure
 exit_on_validations_failure: False
 
-deploy_composable_scenario: true
 composable_scenario: scenario001-multinode.yaml
 composable_roles: true
 overcloud_roles:

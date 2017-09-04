@@ -1,6 +1,5 @@
 # Summary of the feature set.
 # Deploy an Openstack environment with OVN configured in the containerized overcloud
-deploy_composable_scenario: true
 composable_scenario: scenario007-multinode-containers.yaml
 validate_template: scenario007-multinode.yaml
 
