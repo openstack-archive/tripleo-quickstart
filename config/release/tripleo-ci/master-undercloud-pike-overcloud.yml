@@ -26,7 +26,6 @@ inject_images:
 repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
-  sudo yum install -y yum-plugin-priorities;
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
   export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7/current/delorean.repo | grep baseurl | cut -d= -f2`
@@ -111,6 +110,7 @@ repos:
     baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/opstools/x86_64/
 
 repo_cmd_after: |
+  sudo yum install -y yum-plugin-priorities;
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
   {%endif %}
   sudo yum-config-manager --disable rdo-qemu-ev;
