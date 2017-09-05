@@ -223,4 +223,4 @@ exit_on_validations_failure: False
 
 # Update undercloud and overcloud images with the repos provided via the
 # release config.
-update_images: true
+update_images: false
