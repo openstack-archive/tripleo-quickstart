@@ -1,26 +1,13 @@
 # Summary of the feature set.
 # Deploy an Openstack environment with opnfv configured in the overcloud
-composable_scenario: scenario008-multinode.yaml
-validate_template: scenario008-multinode.yaml
+composable_scenario: scenario008-multinode-containers.yaml
+validate_template: scenario008-multinode-containers.yaml
 deployed_server: true
-composable_roles: true
-overcloud_roles:
-  - name: Controller
-    CountDefault: 1
-    tags:
-      - primary
-      - controller
-    networks:
-      - External
-      - InternalApi
-      - Storage
-      - StorageMgmt
-      - Tenant
 
 network_isolation: false
-enable_pacemaker: true
+enable_pacemaker: false
 overcloud_ipv6: false
-containerized_overcloud: false
+containerized_overcloud: true
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
@@ -36,21 +23,41 @@ telemetry_args: >-
   {% if release != 'newton' %}
   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
   {% endif %}
-  -e {{ overcloud_templates_path }}/environments/neutron-opendaylight.yaml
-  --ntp-server pool.ntp.org
 
 extra_args: >-
-  -e {{ overcloud_templates_path }}/environments/neutron-opendaylight.yaml
+  -e {{ overcloud_templates_path }}/environments/services/neutron-opendaylight.yaml
   --ntp-server pool.ntp.org
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
-test_ping: true
-run_tempest: false
+test_ping: false
+run_tempest: true
+test_white_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
 
 # Add ODL Repo
 add_repos:
   - type: generic
     filename: opendaylight.repo
     reponame: opendaylight
-    baseurl: http://cbs.centos.org/repos/nfv7-opendaylight-6-testing/\$basearch/os
+    baseurl: https://nexus.opendaylight.org/content/repositories/opendaylight-oxygen-epel-7-\$basearch-devel/
+
+deployed_server: >-
+  {% if release in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  -e {{ working_dir }}/config-download.yaml
+  --disable-validations
+  --verbose
+  {%- endif -%}
