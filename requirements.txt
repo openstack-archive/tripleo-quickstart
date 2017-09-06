@@ -1,6 +1,8 @@
 ara==0.14.0
 ansible==2.2.0.0
+jmespath
 netaddr>=0.7.18
+os-client-config
 pbr>=1.6
 setuptools>=11.3
 shade>=1.8.0

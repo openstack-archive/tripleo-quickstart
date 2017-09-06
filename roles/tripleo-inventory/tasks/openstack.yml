@@ -1,0 +1,98 @@
+---
+- name: Cloud access credentials and URL
+  assert:
+    that:
+      - os_username is defined
+      - os_password is defined
+      - os_tenant_name is defined
+      - os_auth_url is defined
+      - cloud_name is defined
+
+- name: copy clouds.yaml file
+  template:
+    src: clouds.yaml.j2
+    dest: "{{ local_working_dir }}/clouds.yaml"
+    mode: 0400
+
+- name: fetch all nodes from openstack shade dynamic inventory
+  command: shade-inventory --list
+  args:
+    chdir: '{{ local_working_dir }}'
+  register: registered_nodes_output
+  no_log: true
+
+- name: set_fact for filtered openstack inventory nodes by types
+  set_fact:
+    registered_overcloud_nodes: "{{ (registered_nodes_output.stdout | from_json) | json_query(jq_overcloud) }}"
+    registered_undercloud_nodes: "{{ (registered_nodes_output.stdout | from_json) | json_query(jq_undercloud) }}"
+  vars:
+    jq_overcloud: "[] | [?contains(name, 'overcloud')]"
+    jq_undercloud: "[] | [?contains(name, 'undercloud')]"
+
+- name: set_fact for all filtered openstack inventory nodes by cluster id
+  when: clusterid is defined
+  set_fact:
+    registered_nodes: "{{ (registered_nodes_output.stdout | from_json) | json_query(jq_cluster) }}"
+  vars:
+    jq_cluster: "[?metadata.clusterid] | [?metadata.clusterid=='{{ clusterid }}']"
+
+- name: set_fact for all filtered openstack inventory nodes
+  when: not clusterid is defined
+  set_fact:
+    registered_nodes: "{{ registered_overcloud_nodes|union(registered_undercloud_nodes) }}"
+
+- name: Add overcloud nodes to inventory, accessed via undercloud/bastion
+  with_items: "{{ registered_overcloud_nodes|intersect(registered_nodes) }}"
+  add_host:
+    name: '{{ item.name }}'
+    groups: >-
+      {{ item.metadata.group|default('overcloud') }},
+      {{ item.name|regex_replace('overcloud-(?:nova)?([a-zA-Z0-9_]+)-[0-9]+$', '\\1') }}
+    ansible_host: '{{ item.name }}'
+    ansible_fqdn: '{{ item.name }}'
+    ansible_user: "{{ overcloud_user | default('heat-admin') }}"
+    ansible_private_key_file: "{{ overcloud_key }}"
+    ansible_ssh_extra_args: "-F {{ local_working_dir }}/ssh.config.ansible"
+    private_v4: >-
+      {% set node = registered_nodes | json_query("[?name=='" + item.name + "']") -%}
+      {{ node[0].addresses[openstack_private_network_name|quote][0].addr }}
+
+- name: Add undercloud node to inventory, accessed via floating IP
+  with_items: "{{ registered_undercloud_nodes|intersect(registered_nodes) }}"
+  add_host:
+    name: undercloud
+    groups: "bastion,{{ item.metadata.group|default('undercloud') }}"
+    ansible_host: '{{ item.public_v4 }}'
+    ansible_fqdn: undercloud
+    ansible_user: '{{ undercloud_user }}'
+    ansible_private_key_file: '{{ undercloud_key }}'
+    undercloud_ip: >-
+      {% set node = registered_nodes | json_query("[?name=='" + item.name + "']") -%}
+      {{ node[0].addresses[openstack_private_network_name|quote][0].addr }}
+
+- name: Bastion accessing requirements
+  assert:
+    that:
+      - hostvars['undercloud'] is defined
+      - hostvars['undercloud'].ansible_host is defined
+
+- name: set ssh proxy command prefix for accessing nodes via bastion
+  set_fact:
+    ssh_proxy_command: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+      -o ConnectTimeout=60 -i {{ hostvars['undercloud'].ansible_private_key_file }}
+      {{ ssh_user }}@{{ hostvars['undercloud'].ansible_host }}
+
+- name: create inventory from template
+  delegate_to: localhost
+  template:
+    src: 'inventory.j2'
+    dest: '{{ local_working_dir }}/hosts'
+  run_once: true
+
+- name: regenerate ssh config
+  delegate_to: localhost
+  template:
+    src: 'openstack_ssh_config.j2'
+    dest: '{{ local_working_dir }}/ssh.config.ansible'
+    mode: 0644
+  run_once: true

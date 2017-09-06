@@ -20,7 +20,7 @@ Host {{ host }}
     Hostname {{ hostvars[host].ansible_fqdn }}
     ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/ssh.config.local.ansible undercloud -W {{ hostvars[host].ansible_fqdn }}:22
     IdentityFile {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/id_rsa_overcloud
-    User heat-admin
+    User {{ overcloud_user | default('heat-admin') }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 

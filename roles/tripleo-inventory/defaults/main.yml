@@ -1,10 +1,13 @@
 ---
 
-# SSH key used to access the undercloud machine.
+# SSH key used to access the undercloud/overcloud machines.
 undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
+overcloud_key: "{{ local_working_dir }}/id_rsa_overcloud"
 # Default to 'undercloud' if the overcloud has not been deployed yet, or 'all'
-# in case we want to inventory all the hosts.
+# in case we want to inventory all the hosts. For OpenStack provider case,
+# use the 'openstack' value.
 inventory: undercloud
 # Type of undercloud.
 undercloud_type: virtual
-
+# Admin/control network name for the openstack inventory provider
+openstack_private_network_name: private

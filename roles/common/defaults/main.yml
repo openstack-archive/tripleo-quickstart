@@ -6,8 +6,10 @@ local_working_dir: "{{ lookup('env', 'HOME') }}/.quickstart"
 # this will define the user that ansible will connect with
 ssh_user: stack
 
-# This defines the user that deploys the overcloud from the undercloud
-undercloud_user: "stack"
+# This defines the users that deploys the overcloud from the undercloud
+# and accesses overcloud as the orchestration admin user
+undercloud_user: stack
+overcloud_user: heat-admin
 
 # This is where we store generated artifacts (like ssh config files,
 # keys, deployment scripts, etc) on the undercloud.

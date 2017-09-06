@@ -85,3 +85,62 @@ By default, the kernel executable and initial rootfs for an undercloud VM
 are extracted from the overcloud image. In order to switch to custom
 ``undercloud_custom_initrd`` and ``undercloud_custom_vmlinuz`` images,
 set the ``undercloud_use_custom_boot_images`` to True.
+
+Consuming OpenStack hosted VM instances as overcloud/undercloud nodes
+---------------------------------------------------------------------
+
+Nova servers pre-provisioned on openstack clouds may be consumed by
+quickstart ansible roles by specifying ``inventory: openstack``.
+
+You should also provide a valid admin user name, like 'centos' or
+'heat-admin', and paths to ssh keys in the ``overcloud_user``,
+``overcloud_key``, ``undercloud_user``, ``undercloud_key`` variables.
+
+.. note:: The ``ssh_user`` should be refering to the same value as the
+  ``undercloud_user``.
+
+To identify and filter Nova servers by a cluster ID, define the
+`clusterid` variable. Note that the Nova servers need to have the
+`metadata.clusterid` defined for this to work as expected.
+
+Then set `openstack_private_network_name` to the private network name,
+over which ansible will be connecting the inventory nodes, via the
+undercloud/bastion node's floating IP.
+
+Finally, the host openstack cloud access URL and credentials need to be
+configured. Here is an example playbook to generate ansible inventory
+file and ssh config given an access URL and credentials:
+
+.. code-block:: yaml
+
+  ---
+  - name: Generate static inventory for openstack provider by shade
+    hosts: localhost
+    any_errors_fatal: true
+    gather_facts: true
+    become: false
+    vars:
+      undercloud_user: centos
+      ssh_user: centos
+      non_root_user: centos
+      overcloud_user: centos
+      inventory: openstack
+      os_username: fuser
+      os_password: secret
+      os_tenant_name: fuser
+      os_auth_url: 'http://cool_cloud.lc:5000/v2.0'
+      cloud_name: cool_cloud
+      clusterid: tripleo_dev
+      openstack_private_network_name: my_private_net
+      overcloud_key: '{{ working_dir }}/fuser.pem'
+      undercloud_key: '{{ working_dir }}/fuser.pem'
+    roles:
+      - tripleo-inventory
+
+Next, you may want to check if the nodes are ready to proceed with the
+overcloud deployment steps:
+
+.. code-block:: bash
+
+  ansible --ssh-common-args='-F $HOME/.quickstart/ssh.config.ansible' \
+   -i $HOME/.quickstart/hosts all -m ping
