@@ -13,8 +13,10 @@ Role Variables
 
 * `repo_setup_script` - path to repositories setup script template
 * `repo_setup_log` - path to repositories setup script log
-* `repo_run_live`: false/true - where to run repo setup script on host (live host that playbook runs on it) (default: true)
-* `repo_inject_image_path` - path to image, in case of injecting repositories into the image (default: not defined)
+* `repo_run_live`: false/true - where to run repo setup script on host (live host that playbook
+                                runs on it) (default: true)
+* `repo_inject_image_path` - path to image, in case of injecting repositories into the image
+                             (default: not defined)
 * `repo_cmd_before`:  - shell commands to run before repos setup
 * `repo_cmd_after`: - shell commands to run after repos setup
 * `libvirt_uri` - URI of libvirt in case of using virt-customize to inject repos into the image
@@ -22,7 +24,9 @@ Role Variables
 * `repos.type` - file / generic / package / rpm_url
 * `repos.releases` - for which releases to set up this repo, if not defined - for all releases.
                      It supports shortcut for all stable releases - '{{ stable }}'
-* `add_repos` - dictionary of additional repositories to add, could be populated in code, by default is empty
+* `add_repos` - dictionary of additional repositories to add, could be populated in code, by
+                default is empty. Note that this dictionary will be constructed in the same manner
+                as a typical `repos` dictionary. See examples below.
 
   *File*
   ------
@@ -40,7 +44,8 @@ Role Variables
     * `repos.baseurl` - base URL of the repository (mandatory)
     * `repos.hash_url` - URL of repo file in network, used for extracting trunk hash (optional)
     * `repos.priority` - priority of resulting repo (optional)
-    * `repos.includepkgs` - includepkgs parameter of resulting repo (use this repo only for these packages) (optional)
+    * `repos.includepkgs` - includepkgs parameter of resulting repo (use this repo only for these
+                            packages) (optional)
     * `repos.enabled` - 0/1 whether the repo is enabled or not (default: 1 - enabled)
     * `repos.gpgcheck` - whether to check GPG keys for repo (default: 0 - don't check)
 
@@ -61,7 +66,8 @@ Role Variables
     * `rhel_version_number`: The major version of RHEL
     * `osp_release_version_number`: The major version of RHOSP
     * `rhceph_version_number`: The version of RHCeph
-    * `rhsm_repos`: a yaml list of yum repos that should be enabled via subscription manager, an example config is in config/release/rhos-11-rhn-baseos-undercloud.yml
+    * `rhsm_repos`: a yaml list of yum repos that should be enabled via subscription manager, an
+                    example config is in config/release/rhos-11-rhn-baseos-undercloud.yml
 
 Dependencies
 ------------
@@ -71,7 +77,8 @@ No dependencies
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Including an example of how to use your role (for instance, with variables passed in as
+parameters) is always nice for users too:
 
     ---
     - name:  Run repo setup
