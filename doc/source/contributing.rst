@@ -6,7 +6,8 @@ Bug reports
 
 If you encounter any problems with ``tripleo-quickstart`` or if you have
 feature suggestions, please feel free to open a bug report in our `issue
-tracker <https://bugs.launchpad.net/tripleo-quickstart>`__.
+tracker <https://bugs.launchpad.net/tripleo/+filebug>`__.  Please add the tag
+"quickstart" to the bug.
 
 Code
 ----
