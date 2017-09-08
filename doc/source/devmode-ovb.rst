@@ -19,6 +19,10 @@ Requirements:
 
 Check out the tripleo-quickstart git repository and execute::
 
+    bash quickstart.sh --install-deps
+
+You are now ready to execute the deployment::
+
     source openstack_rc.sh
     bash devmode.sh --no-gate --ovb
 
