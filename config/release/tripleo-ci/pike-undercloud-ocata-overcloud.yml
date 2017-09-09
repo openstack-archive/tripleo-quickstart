@@ -47,11 +47,13 @@ repos:
     reponame: delorean
     filename: delorean.repo
     baseurl: $CURRENT_TRIPLEO_MIRROR
+    priority: 20
     hash_url: https://trunk.rdoproject.org/centos7-pike/current-tripleo/delorean.repo
 
   - type: generic
     reponame: delorean-pike-testing
     filename: delorean-pike-testing.repo
+    priority: 10
     baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-pike/
 
   # CentOS related repos

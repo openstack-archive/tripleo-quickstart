@@ -47,6 +47,7 @@ repos:
     reponame: delorean
     filename: delorean.repo
     baseurl: $CURRENT_TRIPLEO_MIRROR
+    priority: 20
     hash_url: https://trunk.rdoproject.org/centos7-master/current-tripleo/delorean.repo
 
   - type: generic
@@ -72,10 +73,11 @@ repos:
       - openstack-tripleo-ui
       - puppet-*
 
-# update to queens-testing when available
+  # update to queens-testing when available
   - type: generic
     reponame: delorean-pike-testing
     filename: delorean-pike-testing.repo
+    priority: 30
     baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-pike/
 
   # CentOS related repos
