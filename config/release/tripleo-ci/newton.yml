@@ -48,7 +48,7 @@ repos:
   - type: generic
     reponame: delorean-newton-testing
     filename: delorean-newton-testing.repo
-    priority: 10
+    priority: 30
     baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-newton/
 
   # CentOS related repos
