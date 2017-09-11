@@ -4,8 +4,10 @@
 
 undercloud_setup: true
 network_isolation: false
-enable_pacemaker: false
 overcloud_ipv6: false
+
+# pacemaker settings are configured in the scenario template
+# do not set `enable_pacemaker` in the featureset
 
 # we're upgrading from non-containers to containers, so first we
 # deploy non-containerized overcloud

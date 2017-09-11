@@ -8,6 +8,9 @@ run_tripleo_validations_negative_tests: True
 # Exit tripleo-quickstart on validations failure
 exit_on_validations_failure: False
 
+# pacemaker settings are configured in the scenario template
+# do not set `enable_pacemaker` in the featureset
+
 deploy_composable_scenario: true
 composable_scenario: scenario004-multinode.yaml
 validate_template: scenario004-multinode.yaml

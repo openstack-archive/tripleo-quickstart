@@ -1,6 +1,9 @@
 undercloud_generate_service_certificate: false
 test_ping: true
 
+# pacemaker settings are configured in the scenario template
+# do not set `enable_pacemaker` in the featureset
+
 deploy_composable_scenario: true
 composable_scenario: scenario005-multinode.yaml
 validate_template: scenario005-multinode.yaml

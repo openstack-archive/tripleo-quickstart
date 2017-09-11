@@ -4,6 +4,9 @@ enable_opstools_repo: true
 # Use the traditional ping test in newton and ocata
 # Run tempest in pike+
 
+# pacemaker settings are configured in the scenario template
+# do not set `enable_pacemaker` in the featureset
+
 test_ping: >-
   {% if release in ['newton', 'ocata'] -%}
   true
