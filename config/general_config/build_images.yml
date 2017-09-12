@@ -11,7 +11,6 @@ overcloud_as_undercloud: true
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: false
 
-artcl_collect: true
 artcl_collect_list:
   - /var/lib/oooq-images/*.log
   - /var/lib/oooq-images/*.sh
@@ -36,6 +35,3 @@ artcl_exclude_list:
   - /etc/pki/ca-trust/extracted
   - /etc/alternatives
   - /var/log/journal
-artcl_collect_dir: "{{ local_working_dir }}/collected_files"
-artcl_gzip_only: true
-artcl_tar_gz: false
