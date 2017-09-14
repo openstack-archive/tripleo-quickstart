@@ -88,8 +88,6 @@ run_tempest: >-
   true
   {%- endif -%}
 
-validate_template: scenario001-multinode.yaml
-
 test_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
