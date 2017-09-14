@@ -1,0 +1,43 @@
+# Deploy an HA openstack environment.
+#
+# This will require (10 * 4) == approx. 40 GB for the overcloud
+# nodes, plus another 18GB for the undercloud, total 58 gb
+control_memory: 10240
+compute_memory: 10240
+undercloud_memory: 18432
+
+# Giving the undercloud additional CPUs can greatly improve heat's
+# performance (and result in a shorter deploy time).
+# UC get's 4, and 2 for each OC node --> 12 total vcpu.
+# These machines are 12 core, might need to back down to 1
+undercloud_vcpu: 4
+default_vcpu: 2
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: True
+
+node_count: 4
+
+# Create three controller nodes and one compute node.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    virtualbmc_port: 6230
+
+  - name: control_1
+    flavor: control
+    virtualbmc_port: 6231
+
+  - name: control_2
+    flavor: control
+    virtualbmc_port: 6232
+
+  - name: compute_0
+    flavor: compute
+    virtualbmc_port: 6233
+
+# Tell tripleo which nodes to deploy.
+topology: >-
+  --compute-scale 1
+  --control-scale 3

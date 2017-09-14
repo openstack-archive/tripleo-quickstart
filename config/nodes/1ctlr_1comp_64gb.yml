@@ -1,0 +1,25 @@
+
+# This will require (2*16) ==  32 GB for the overcloud nodes,
+# plus another 18GB for the undercloud, total  50 gb
+control_memory: 16384
+compute_memory: 16384
+undercloud_memory: 18432
+
+# Giving the undercloud additional CPUs can greatly improve heat's
+# performance (and result in a shorter deploy time).
+# UC get's 4, and 4 for each OC node --> 12 total vcpu.
+# These machines are 12 core
+undercloud_vcpu: 4
+default_vcpu: 4
+
+# Define a single controller node and a single compute node.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    virtualbmc_port: 6230
+
+  - name: compute_0
+    flavor: compute
+    virtualbmc_port: 6231
+
+node_count: 2
