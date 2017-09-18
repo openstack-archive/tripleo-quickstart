@@ -56,7 +56,6 @@ repos:
   - type: generic
     reponame: delorean-deps
     filename: delorean-deps.repo
-    priority: 30
     baseurl: $RDO_DLRN_DEPS_REPO
 
   # CentOS related repos
