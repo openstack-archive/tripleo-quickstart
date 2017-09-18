@@ -15,7 +15,7 @@ Code
 If you *fix* a problem or implement a new feature, you may submit your
 changes via Gerrit. The ``tripleo-quickstart`` project uses the
 `OpenStack Gerrit
-workflow <http://docs.openstack.org/infra/manual/developers.html#development-workflow>`__.
+workflow <https://docs.openstack.org/infra/manual/developers.html#development-workflow>`__.
 
 You can anonymously clone the repository via
 ``git clone https://git.openstack.org/openstack/tripleo-quickstart.git``
@@ -25,7 +25,7 @@ documentation available at `How To
 Contribute <https://wiki.openstack.org/wiki/How_To_Contribute>`__.
 
 Once you've cloned the repository using your account, install the
-`git-review <http://docs.openstack.org/infra/manual/developers.html#installing-git-review>`__
+`git-review <https://docs.openstack.org/infra/manual/developers.html#installing-git-review>`__
 tool, then from the ``tripleo-quickstart`` repository run::
 
     git review -s
