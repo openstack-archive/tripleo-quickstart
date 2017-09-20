@@ -82,7 +82,7 @@
   add_host:
     name: undercloud
     groups: undercloud
-    ansible_host: undercloud
+    ansible_host: '{{ undercloud_ip }}'
     ansible_fqdn: undercloud
     ansible_user: '{{ undercloud_user }}'
     ansible_private_key_file: '{{ undercloud_key }}'
