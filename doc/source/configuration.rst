@@ -89,6 +89,11 @@ set the ``undercloud_use_custom_boot_images`` to True.
 Consuming OpenStack hosted VM instances as overcloud/undercloud nodes
 ---------------------------------------------------------------------
 
+.. note:: This is an experimental advanced feature for custom dev/QE
+  setups, like pre-provisioned (deployed-server) or a split-stack. It has
+  yet been tested by TripleO CI jobs. Eventually, we'll add a CI job and
+  switch some of the OVB jobs in order to start testing this mode as well.
+
 Nova servers pre-provisioned on openstack clouds may be consumed by
 quickstart ansible roles by specifying ``inventory: openstack``.
 

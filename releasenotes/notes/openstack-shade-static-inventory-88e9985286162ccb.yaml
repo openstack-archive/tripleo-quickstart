@@ -1,0 +1,11 @@
+---
+features:
+  - |
+    An experimental provider of an openstack static inventory and SSH config.
+    Is a feature for advanced dev/QE setups, like pre-provisioned VMs on
+    OpenStack clouds (deployed-servers) or a split-stack. It has yet been
+    tested by TripleO CI jobs. Eventually, we'll add a CI job and switch some
+    of the OVB jobs in order to start testing this mode as well.
+
+    In order to enable the feature for the 'tripleo-inventory' role, define
+    `inventory: openstack`.
