@@ -6,4 +6,3 @@ undercloud_custom_vmlinuz: "{{ working_dir }}/overcloud-full.vmlinuz"
 undercloud_custom_initrd: "{{ working_dir }}/overcloud-full.initrd"
 
 ssh_tunnel_service_file: ssh-tunnel.service.j2
-ssh_tunnel_target_ip: "{{ undercloud_network_cidr|nthhost(1) }}"
