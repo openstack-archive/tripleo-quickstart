@@ -48,7 +48,6 @@ repos:
   - type: generic
     reponame: delorean-pike-testing
     filename: delorean-pike-testing.repo
-    priority: 30
     baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-pike/
 
   # CentOS related repos
