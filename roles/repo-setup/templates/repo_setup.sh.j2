@@ -67,6 +67,8 @@ gpgcheck={{ repo.gpgcheck|default('0') }}
 enabled={{ repo.enabled|default('1') }}
 {% if repo.priority is defined %}priority={{ repo.priority }}
 {% endif %}
+{% if repo.exclude is defined %}exclude={{ repo.exclude|join(",") }}
+{% endif %}
 {% if repo.includepkgs is defined %}includepkgs={{ repo.includepkgs|join(",") }}
 {% endif %}
 {% if repo.down_url is defined %}# trunk_hash=${HASH:-}
