@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Added the ability to better control what happens when converting an
+    overcloud-full.qcow2 image into an undercloud image. It is now possible to
+    change whether an update is run (convert_image_update|bool), what packages
+    should be removed (convert_image_remove_pkgs|list), what packages should
+    be installed (convert_image_install_pkgs|list, and what tempest plugins
+    should be installed (convert_image_tempest_plugins|list).

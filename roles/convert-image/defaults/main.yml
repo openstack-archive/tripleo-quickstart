@@ -2,3 +2,32 @@
 convert_image_working_dir: "{{ working_dir }}"
 convert_image_template: convert_image.sh.j2
 
+# Do a yum update when converting overcloud to undercloud
+convert_image_update: true
+
+# List of packages that should be removed from the overcloud image
+convert_image_remove_pkgs:
+  - cloud-init
+  - python-django-horizon
+  - openstack-dashboard
+
+# List of packages that should be installed to convert overcloud to undercloud
+convert_image_install_pkgs:
+  - python-tripleoclient
+
+# List of tempest plugins to install. This is separated from the other install
+# packages list, because it is allowed to fail if there is some issue
+# installing the tempest plugins.
+convert_image_tempest_plugins:
+  - openstack-tempest
+  - python-aodh-tests
+  - python-ceilometer-tests
+  - python-heat-tests
+  - python-ironic-tests
+  - python-keystone-tests
+  - python-manila-tests
+  - python-mistral-tests
+  - python-neutron-tests
+  - python-sahara-tests
+  - python-zaqar-tests
+
