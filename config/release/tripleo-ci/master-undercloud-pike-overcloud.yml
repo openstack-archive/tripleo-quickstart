@@ -44,6 +44,7 @@ repo_cmd_before: |
   # Otherwise, fallback to official mirrors provided by CentOS.
   export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
   export NODEPOOL_BUILDLOGS_CENTOS_PROXY="${NODEPOOL_BUILDLOGS_CENTOS_PROXY:-https://buildlogs.centos.org}"
+  export NODEPOOL_RDO_PROXY="${NODEPOOL_RDO_PROXY:-https://trunk.rdoproject.org}"
 repos:
   # RDO repos
   - type: generic
@@ -76,11 +77,10 @@ repos:
       - openstack-tripleo-ui
       - puppet-*
 
-  # update to queens-testing when available
   - type: generic
-    reponame: delorean-pike-testing
-    filename: delorean-pike-testing.repo
-    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-pike/
+    reponame: delorean-queens-deps
+    filename: delorean-queens-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-queens/deps/latest/
 
   # CentOS related repos
   - type: generic

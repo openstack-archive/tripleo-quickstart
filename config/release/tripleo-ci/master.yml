@@ -66,9 +66,9 @@ repos:
       - puppet-*
 
   - type: generic
-    reponame: delorean-pike-testing
-    filename: delorean-pike-testing.repo
-    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-pike/
+    reponame: delorean-queens-deps
+    filename: delorean-queens-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-queens/deps/latest/
 
   # CentOS related repos
   - type: generic
