@@ -105,6 +105,9 @@ deploy_supplemental_node: false
 # Do not deploy FreeIPA server by default.
 enable_tls_everywhere: false
 
+# allow the nic model to be overridden by environment variable
+overcloud_libvirt_nic_model: virtio
+
 # The overcloud will have three controllers, one compute node,
 # and a ceph storage node.
 overcloud_nodes:
