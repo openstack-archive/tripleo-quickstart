@@ -14,6 +14,8 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: master
+docker_registry_namespace: tripleomaster
+docker_image_tag: passed-ci
 overcloud_image_url: http://66.187.229.139/builds/current-tripleo/overcloud-full.tar
 ipa_image_url: http://66.187.229.139/builds/current-tripleo/ipa_images.tar
 repo_cmd_before: |
