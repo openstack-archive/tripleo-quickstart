@@ -55,7 +55,7 @@ virt-customize -a ~{{ ssh_user }}/ipa.qcow2 \
     --install openssh-server \
     --run-command "xfs_growfs /" \
     --run-command "echo 'GRUB_CMDLINE_LINUX=\"console=tty0 crashkernel=auto no_timer_check net.ifnames=0 console=ttyS0,115200n8\"' >> /etc/default/grub" \
-    --run-command "grubby --update-kernel=ALL --args=net.ifnames=0" \
+    --run-command "grubby --update-kernel=ALL --args=\"net.ifnames=0 cloud-init=disabled\"" \
     --run-command "systemctl enable sshd" \
     {{ "--run-command \"useradd " + supplemental_user + " -m -p ''\" \\" if supplemental_user != 'root' else "\\" }}
     {{ "--run-command \"echo " + supplemental_user + " ALL=\\(ALL\\) NOPASSWD:ALL >> /etc/sudoers\" \\" if supplemental_user != 'root' else "\\" }}
