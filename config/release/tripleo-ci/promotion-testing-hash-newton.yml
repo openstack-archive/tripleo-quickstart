@@ -22,8 +22,8 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: newton
-overcloud_image_url: https://images.rdoproject.org/newton/delorean/tripleo-upstream/testing/overcloud-full.tar
-ipa_image_url: https://images.rdoproject.org/newton/delorean/tripleo-upstream/testing/ipa_images.tar
+overcloud_image_url: https://images.rdoproject.org/newton/rdo_trunk/tripleo-ci-testing/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/newton/rdo_trunk/tripleo-ci-testing/ipa_images.tar
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
