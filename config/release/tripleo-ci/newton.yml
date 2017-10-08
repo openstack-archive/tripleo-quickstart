@@ -15,8 +15,8 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: newton
-overcloud_image_url: http://66.187.229.139/builds-newton/current-tripleo-newton/overcloud-full.tar
-ipa_image_url: http://66.187.229.139/builds-newton/current-tripleo-newton/ipa_images.tar
+overcloud_image_url: http://66.187.229.139/builds-newton/current-tripleo/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds-newton/current-tripleo/ironic-python-agent.tar
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
