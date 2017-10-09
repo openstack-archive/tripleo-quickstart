@@ -1,8 +1,8 @@
 # Which image should we download?
 release: newton
-undercloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/undercloud.qcow2
-overcloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/overcloud-full.tar
-ipa_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/stable/ironic-python-agent.tar
+undercloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/consistent/stable/undercloud.qcow2
+overcloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/consisten/stable/overcloud-full.tar
+ipa_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/consistent/stable/ironic-python-agent.tar
 
 # If `force_cached_image` is `true`, always use the most recent image
 # available locally rather than checking for updated images.
