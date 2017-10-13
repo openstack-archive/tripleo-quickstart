@@ -1,8 +1,24 @@
 release: master
 dlrn_hash: current-tripleo
 overcloud_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash }}/overcloud-full.tar
-ipa_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash }}/ipa_images.tar
+ipa_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash }}/ironic-python-agent.tar
+
 overcloud_as_undercloud: true
+update_images: true
+images:
+    - name: overcloud-full
+      url: "{{ overcloud_image_url }}"
+      type: tar
+    - name: ipa_images
+      url: "{{ ipa_image_url }}"
+      type: tar
+inject_images:
+    - "ironic-python-agent.initramfs"
+    - "ironic-python-agent.kernel"
+    - "overcloud-full.qcow2"
+    - "overcloud-full.initrd"
+    - "overcloud-full.vmlinuz"
+
 repos:
   - type: generic
     reponame: delorean
@@ -12,7 +28,7 @@ repos:
 
   - type: file
     filename: delorean-deps.repo
-    down_url: http://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
 
   - type: package
     pkg_name: centos-release-ceph-jewel
@@ -22,3 +38,7 @@ repo_cmd_after: |
   sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0
   sudo yum repolist;
   sudo yum update -y
+
+undercloud_rpm_dependencies: >-
+  python-tripleoclient
+  ceph-ansible

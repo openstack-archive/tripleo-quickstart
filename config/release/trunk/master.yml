@@ -1,5 +1,5 @@
-release: pike
-dlrn_hash: current-tripleo
+release: master
+dlrn_hash: current-tripleo-rdo
 overcloud_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash }}/overcloud-full.tar
 ipa_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash }}/ironic-python-agent.tar
 
