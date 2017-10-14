@@ -23,8 +23,11 @@ configuration:
 * `os_username`: -- credentials to connect the OpenStack cloud hosting
   your pre-provisioned Nova servers.
 * `os_password`: -- credentials to connect the host OpenStack cloud.
+* `os_project_name`: -- credentials to connect the host OpenStack cloud.
 * `os_tenant_name`: -- credentials to connect the host OpenStack cloud.
 * `os_auth_url`: -- credentials to connect the host OpenStack cloud.
 * `cloud_name`: -- credentials to connect the host OpenStack cloud.
+* `os_identity_api_version`: -- credentials to connect to the OpenStack cloud.
+* `os_region_name`: -- credentials to connect to the OpenStack cloud.
 
 TODO(bogdando) document remaining modes 'all', 'undercloud'.
