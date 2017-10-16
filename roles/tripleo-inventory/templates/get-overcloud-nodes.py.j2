@@ -27,13 +27,18 @@ if nc_version[0] <= "6":
                          os.environ.get("OS_TENANT_NAME"),
                          auth_url=os.environ.get("OS_AUTH_URL"))
 else:
+    # TODO(aschultz): change this to keystone session or do something different
     nova = client.Client(2,
                          os.environ.get("OS_USERNAME"),
                          os.environ.get("OS_PASSWORD"),
                          project_name=os.environ.get(
                              "OS_TENANT_NAME",
                              os.environ.get("OS_PROJECT_NAME")),
-                         auth_url=os.environ.get("OS_AUTH_URL"))
+                         auth_url=os.environ.get("OS_AUTH_URL"),
+                         project_domain_name=os.environ.get(
+                             "OS_PROJECT_DOMAIN_NAME"),
+                         user_domain_name=os.environ.get(
+                             "OS_USER_DOMAIN_NAME"))
 
 oc_servers = {server.name: server.networks['ctlplane'][0]
               for server in nova.servers.list()
