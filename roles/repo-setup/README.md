@@ -128,7 +128,6 @@ Settings example for repositories:
               - openstack-tripleo-image-elements
               - openstack-tripleo
               - openstack-tripleo-puppet-elements
-              - openstack-puppet-modules
               - openstack-tripleo-ui
               - puppet-*
             releases:
