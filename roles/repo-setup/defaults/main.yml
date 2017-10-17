@@ -43,3 +43,11 @@ osp_release_version_number: 8
 rhceph_version_number: "1.3"
 use_specific_hash: false
 delorean_hash_label: latest
+known_hash_tags:
+  - current
+  - consistent
+  - tripleo-ci-testing
+  - current-tripleo
+  - current-tripleo-rdo
+  - current-tripleo-rdo-internal
+  - passed-ci

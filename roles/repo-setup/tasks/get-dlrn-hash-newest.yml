@@ -1,0 +1,33 @@
+---
+- name: Check DLRN hash newest format
+  fail:
+    msg: "The newest DLRN hash or tag is not recognized. The hash or tag should not contain path slashes."
+  when:
+    - not dlrn_hash_tag_newest | match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+    - dlrn_hash_tag_newest not in known_hash_tags
+
+- name: Check DLRN hash newest - passed ready hash
+  set_fact:
+    dlrn_hash_newest="{{ dlrn_hash_tag_newest }}"
+  when: dlrn_hash_tag_newest | match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+
+- when: dlrn_hash_tag_newest in known_hash_tags
+  block:
+
+    - name: Get DLRN hash newest - passed tag
+      shell: >
+        curl -s https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_tag_newest }}/delorean.repo \
+        | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
+      register: full_hash_newest_result
+
+    - name: Set fact for dlrn_hash_newest
+      set_fact:
+        dlrn_hash_newest="{{ full_hash_newest_result.stdout }}"
+
+- name: Set fact for dlrn_hash_path_newest
+  set_fact:
+    dlrn_hash_path_newest="{{ dlrn_hash_newest[:2] }}/{{ dlrn_hash_newest[2:4] }}/{{ dlrn_hash_newest }}"
+
+- name: Set fact for task already run
+  set_fact:
+    dlrn_task_run_newest: true

@@ -3,8 +3,10 @@ release: pike
 #     release so we avoid duplication.
 target_upgrade_version: pike
 overcloud_release: ocata
-undercloud_image_url: https://images.rdoproject.org/pike/delorean/current-tripleo/stable/undercloud.qcow2
-ipa_image_url: http://66.187.229.139/builds-pike/current-tripleo/ironic-python-agent.tar
+dlrn_hash_tag: current-tripleo
+dlrn_hash_tag_newest: consistent
+undercloud_image_url: https://images.rdoproject.org/pike/delorean/{{ dlrn_hash|(dlrn_hash_tag) }}/stable/undercloud.qcow2
+ipa_image_url: http://66.187.229.139/builds-pike/{{ dlrn_hash_path|(dlrn_hash_tag) }}/ironic-python-agent.tar
 overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo/overcloud-full.tar
 images:
     - name: undercloud
@@ -31,8 +33,8 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
-  export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-pike/consistent/delorean.repo | grep baseurl | cut -d= -f2`
-  export CURRENT_TRIPLEO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-pike/current-tripleo/delorean.repo | grep baseurl | cut -d= -f2`
+  export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-pike/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo | grep baseurl | cut -d= -f2`
+  export CURRENT_TRIPLEO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-pike/{{ dlrn_hash_path|(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
   # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
   if [[ -e /etc/ci/mirror_info.sh ]]; then
   eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST"; echo NODEPOOL_BUILDLOGS_CENTOS_PROXY="$NODEPOOL_BUILDLOGS_CENTOS_PROXY")
@@ -51,7 +53,7 @@ repos:
     filename: delorean.repo
     baseurl: $CURRENT_TRIPLEO_MIRROR
     priority: 20
-    hash_url: https://trunk.rdoproject.org/centos7-pike/current-tripleo/delorean.repo
+    hash_url: https://trunk.rdoproject.org/centos7-pike/{{ dlrn_hash_path|(dlrn_hash_tag) }}/delorean.repo
 
   - type: generic
     reponame: delorean-pike-testing

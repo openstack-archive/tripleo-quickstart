@@ -1,3 +1,10 @@
+---
+- include: get-dlrn-hash.yml
+  when: dlrn_hash_tag is defined and dlrn_task_run is not defined
+
+- include: get-dlrn-hash-newest.yml
+  when: dlrn_hash_tag_newest is defined and dlrn_task_run_newest is not defined
+
 - name: Create repo setup script
   template:
     src: "{{ repo_setup_script }}"

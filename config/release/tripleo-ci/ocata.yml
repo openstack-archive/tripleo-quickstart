@@ -15,8 +15,10 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: ocata
-overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo/overcloud-full.tar
-ipa_image_url: http://66.187.229.139/builds-ocata/current-tripleo/ironic-python-agent.tar
+dlrn_hash_tag: current-tripleo
+dlrn_hash_tag_newest: current
+overcloud_image_url: http://66.187.229.139/builds-ocata/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds-ocata/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/ironic-python-agent.tar
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
@@ -30,7 +32,7 @@ repo_cmd_before: |
     export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
-  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/current/delorean.repo | grep baseurl | cut -d= -f2`
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo | grep baseurl | cut -d= -f2`
   if [[ -z "$rdo_dlrn" ]]; then
     echo "Failed to parse dlrn hash"
     exit 1

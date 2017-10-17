@@ -1,0 +1,37 @@
+---
+- name: Check DLRN hash format
+  fail:
+    msg: "The DLRN hash or tag is not recognized. The hash or tag should not contain path slashes."
+  when:
+    - not dlrn_hash_tag | match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+    - dlrn_hash_tag not in known_hash_tags
+
+- name: Check DLRN hash - passed ready hash
+  set_fact:
+    dlrn_hash="{{ dlrn_hash_tag }}"
+  when: dlrn_hash_tag | match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+
+- when: dlrn_hash_tag in known_hash_tags
+  block:
+
+    - name: Get DLRN hash - passed tag
+      shell: >
+        curl -s https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_tag }}/delorean.repo \
+        | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
+      register: full_hash_result
+
+    - name: Set fact for dlrn_hash
+      set_fact:
+        dlrn_hash="{{ full_hash_result.stdout }}"
+
+- name: Set fact for dlrn_hash path
+  set_fact:
+    dlrn_hash_path="{{ dlrn_hash[:2] }}/{{ dlrn_hash[2:4] }}/{{ dlrn_hash }}"
+
+- name: Set fact for the Docker image tag
+  set_fact:
+    docker_image_tag="{{ dlrn_hash }}"
+
+- name: Set fact for task already run
+  set_fact:
+    dlrn_task_run: true

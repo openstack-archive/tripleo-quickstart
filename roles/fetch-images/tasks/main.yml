@@ -19,6 +19,18 @@
     mode: "ug+rwx"
   become: true
 
+- name: Get dlrn hash when fetch-images is run before repo-setup
+  include_role:
+    name: repo-setup
+    tasks_from: get-dlrn-hash
+  when: dlrn_hash_tag is defined and dlrn_task_run is not defined
+
+- name: Get dlrn hash newest when fetch-images is run before repo-setup
+  include_role:
+    name: repo-setup
+    tasks_from: get-dlrn-hash-newest
+  when: dlrn_hash_tag_newest is defined and dlrn_task_run_newest is not defined
+
 - include: fetch.yml
   vars:
     image: "{{ item }}"

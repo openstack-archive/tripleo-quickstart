@@ -3,8 +3,10 @@ release: master
 #     release so we avoid duplication.
 target_upgrade_version: queens
 overcloud_release: pike
-undercloud_image_url: https://images.rdoproject.org/master/delorean/current-tripleo/stable/undercloud.qcow2
-ipa_image_url: http://66.187.229.139/builds-master/current-tripleo/ironic-python-agent.tar
+dlrn_hash_tag: current-tripleo
+dlrn_hash_tag_newest: current
+undercloud_image_url: https://images.rdoproject.org/master/delorean/{{ dlrn_hash|default(dlrn_hash_tag) }}/stable/undercloud.qcow2
+ipa_image_url: http://66.187.229.139/builds-master/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/ironic-python-agent.tar
 overcloud_image_url: http://66.187.229.139/builds-pike/current-tripleo/overcloud-full.tar
 images:
     - name: undercloud
@@ -31,8 +33,8 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
-  export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7/current/delorean.repo | grep baseurl | cut -d= -f2`
-  export CURRENT_TRIPLEO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo | grep baseurl | cut -d= -f2`
+  export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo | grep baseurl | cut -d= -f2`
+  export CURRENT_TRIPLEO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
   # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
   if [[ -e /etc/ci/mirror_info.sh ]]; then
   eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST"; echo NODEPOOL_BUILDLOGS_CENTOS_PROXY="$NODEPOOL_BUILDLOGS_CENTOS_PROXY")
@@ -52,7 +54,7 @@ repos:
     filename: delorean.repo
     baseurl: $CURRENT_TRIPLEO_MIRROR
     priority: 20
-    hash_url: https://trunk.rdoproject.org/centos7-master/current-tripleo/delorean.repo
+    hash_url: https://trunk.rdoproject.org/centos7-master/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo
 
   - type: generic
     reponame: delorean-current
