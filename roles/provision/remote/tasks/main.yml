@@ -57,9 +57,7 @@
 - name: Configure non-root user authorized_keys
   authorized_key:
     user: "{{ ssh_user }}"
-    key: "{{ item }}"
-  with_file:
-    - "{{ virt_host_key }}.pub"
+    key: "{{ lookup('file', virt_host_key|quote + '.pub')|default('') }}"
   become: true
 
 - name: Ensure polkit packages are installed
