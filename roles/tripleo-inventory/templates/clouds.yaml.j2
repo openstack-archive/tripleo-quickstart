@@ -3,6 +3,10 @@ clouds:
     auth:
       username: {{ os_username }}
       password: {{ os_password }}
-      project_name: {{ os_tenant_name }}
+      project_name: {{ os_project_name|default(os_tenant_name) }}
+      tenant_name: {{ os_tenant_name }}
       auth_url: {{ os_auth_url }}
-    region_name: regionOne
+    region_name: {{ os_region_name|default('regionOne') }}
+{% if os_identity_api_version is defined %}
+    identity_api_version: {{ os_identity_api_version }}
+{% endif %}

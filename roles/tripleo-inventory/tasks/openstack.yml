@@ -4,7 +4,7 @@
     that:
       - os_username is defined
       - os_password is defined
-      - os_tenant_name is defined
+      - os_tenant_name is defined or os_project_name is defined
       - os_auth_url is defined
       - cloud_name is defined
 
