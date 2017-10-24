@@ -54,7 +54,7 @@ Access via the TripleO-UI
 -------------------------
 
 With baremetal and ovb based deployments you can access the TripleO-UI via the
-undercloud's public ip address http://<virthost>:3000
+undercloud's public ip address https://<virthost>
 
 Deploying TripleO in a libvirt based environment presents the additional
 challenge of accessing the isolated ovs networks on the undercloud. By default
@@ -63,13 +63,9 @@ an ssh-tunnel service has been setup on the virthost by the tripleo-quickstart
 
 From your workstation::
 
-    http://<virthost>:3000
+    https://<virthost>
 
-By default an insecure connection the undercloud services has been configured
+By default a secure connection to the undercloud services has been configured
 in the /var/www/openstack-tripleo-ui-/dist/tripleo_ui_config.js file.  To use
-ssl connections change the default variable ``tripleo_ui_secure_access`` to true.
-
-    Note:: When using ssl a user must manually allow access due to the self
-    signed ssl certificate by accepting access to https://<virthost>/keystone/v3/auth/tokens
-    in a new browser window or tab.  Then one may return to http://virthost:3000
-    and continue.
+an insucure connections change the default variable
+``tripleo_ui_secure_access`` to false.
