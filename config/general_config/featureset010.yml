@@ -33,20 +33,15 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
-step_tripleo_config_download: >-
-  {% if release not in ['newton','ocata','pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-deploy_steps_ansible: >-
-  {% if release not in ['newton','ocata','pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+step_tripleo_config_download: false
+deploy_steps_ansible: false
+deploy_steps_ansible_workflow: true
 config_download_args: >-
   {% if release not in ['newton','ocata','pike'] -%}
   -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
   -e {{ working_dir }}/config-download.yaml
+  --config-download
+  --deployed-server
+  --disable-validations
+  --verbose
   {%- endif -%}
