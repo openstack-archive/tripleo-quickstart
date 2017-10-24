@@ -63,7 +63,6 @@ repos:
       - os-refresh-config
       - python-tripleoclient
       - openstack-tripleo-*
-      - openstack-puppet-modules
       - puppet-*
 
   - type: generic
