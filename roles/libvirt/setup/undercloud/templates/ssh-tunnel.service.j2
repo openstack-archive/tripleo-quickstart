@@ -1,4 +1,4 @@
-{% set ssh_tunnel_target_ip = "https://%s" % undercloud_network_cidr|nthhost(2)  if undercloud_generate_service_certificate|bool else "http://%s:3000" % undercloud_network_cidr|nthhost(1) %}
+{% set ssh_tunnel_target_ip = undercloud_network_cidr|nthhost(2) if undercloud_generate_service_certificate|bool else undercloud_network_cidr|nthhost(1) %}
 
 [Unit]
 Description=Set up ssh tunneling for TripleO
