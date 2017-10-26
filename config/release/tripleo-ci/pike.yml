@@ -15,7 +15,7 @@ inject_images:
     - "overcloud-full.vmlinuz"
 release: pike
 docker_registry_namespace: tripleopike
-docker_image_tag: passed-ci
+docker_image_tag: current-tripleo
 overcloud_image_url: http://66.187.229.139/builds-pike/current-tripleo-pike/overcloud-full.tar
 ipa_image_url: http://66.187.229.139/builds-pike/current-tripleo-pike/ipa_images.tar
 repo_cmd_before: |
