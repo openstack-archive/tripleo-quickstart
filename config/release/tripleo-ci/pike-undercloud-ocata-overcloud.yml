@@ -4,8 +4,8 @@ release: pike
 target_upgrade_version: pike
 overcloud_release: ocata
 undercloud_image_url: https://images.rdoproject.org/pike/delorean/current-tripleo/stable/undercloud.qcow2
-ipa_image_url: http://66.187.229.139/builds-pike/current-tripleo-pike/ipa_images.tar
-overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo-ocata/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds-pike/current-tripleo/ironic-python-agent.tar
+overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo/overcloud-full.tar
 images:
     - name: undercloud
       url: "{{ undercloud_image_url }}"

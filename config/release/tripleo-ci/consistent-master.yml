@@ -15,8 +15,8 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: master
-overcloud_image_url: http://66.187.229.139/builds/current-tripleo/overcloud-full.tar
-ipa_image_url: http://66.187.229.139/builds/current-tripleo/ipa_images.tar
+overcloud_image_url: http://66.187.229.139/builds-master/current-tripleo/overcloud-full.tar
+ipa_image_url: http://66.187.229.139/builds-master/current-tripleo/ironic-python-agent.tar
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
