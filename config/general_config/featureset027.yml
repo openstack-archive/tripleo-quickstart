@@ -13,14 +13,12 @@ overcloud_ipv6: false
 # containers config
 containerized_overcloud: false
 containerized_undercloud: true
-# TODO: This should be handled by a single meta package or something LP#1730917
-undercloud_rpm_dependencies: >-
-  python-tripleoclient
-  python-openstackclient
-  openstack-heat-agents
-  docker
-  openvswitch
-undercloud_install_script: undercloud-deploy.sh.j2
+undercloud_install_cli_options: " --use-heat"
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ tripleo_root }}/tripleo-ci/undercloud-configs/net-config-multinode.yaml"
 
 # turn off image prep
 step_overcloud_image: false
