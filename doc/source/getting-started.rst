@@ -16,13 +16,13 @@ A step by step deployment with playbooks
 
 This section will walk a user through a full deployment step by step by running
 ansible playbooks for each major part of the full deployment.  The major steps
-include
+include:
 
-  * Provision a libvirt environment
-  * Install the Undercloud
-  * Prepare for the Overcloud deployment
-  * Deploy the Overcloud
-  * Validate the Overcloud is functional
+* Provision a libvirt environment
+* Install the Undercloud
+* Prepare for the Overcloud deployment
+* Deploy the Overcloud
+* Validate the Overcloud is functional
 
 Provision a libvirt guest environment
 -------------------------------------
@@ -32,7 +32,8 @@ setup and running to host the TripleO Undercloud and Overcloud
 
 Example::
 
-    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml -p quickstart.yml $VIRTHOST
+    bash quickstart.sh -R master --no-clone --tags all \
+        --nodes config/nodes/1ctlr_1comp.yml -p quickstart.yml $VIRTHOST
 
 Note the use of the option `--nodes 1ctlr_1comp.yml`.  The nodes option allows
 you to specify the topology of the deployment.  Additional topologies can be
@@ -55,32 +56,34 @@ Install the Undercloud
 Your next step is to install the TripleO Undercloud.  We will use the same
 command used in the provisioning step but we'll need to indicate to quickstart
 to reuse the ansible inventory file and not to teardown any of the nodes we just
-provisioned.
+provisioned:
 
-  * ``-I`` : retain the ansible inventory and ssh configuration
-  * ``--teardown none`` : do not shutdown any of the libvirt guests
+* ``-I`` : retain the ansible inventory and ssh configuration
+* ``--teardown none`` : do not shutdown any of the libvirt guests
 
 Example::
 
-    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml -I --teardown none -p quickstart-extras-undercloud.yml $VIRTHOST
+    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml \
+        -I --teardown none -p quickstart-extras-undercloud.yml $VIRTHOST
 
 Prepare the TripleO Overcloud for deployment
 --------------------------------------------
 
 Once the Undercloud is deployed there are a few additional steps required prior
-to deploying the Overcloud.  These steps include
+to deploying the Overcloud.  These steps include:
 
-  * configuration preparation
-  * container preparation
-  * importing Overcloud images
-  * ironic introspection of the Overcloud nodes
-  * creating OpenStack flavors for profile matching the Overcloud nodes.
-  * network configuration
-  * SSL configuration
+* configuration preparation
+* container preparation
+* importing Overcloud images
+* ironic introspection of the Overcloud nodes
+* creating OpenStack flavors for profile matching the Overcloud nodes.
+* network configuration
+* SSL configuration
 
 Example::
 
-    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml -I --teardown none -p quickstart-extras-overcloud-prep.yml $VIRTHOST
+    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml \
+        -I --teardown none -p quickstart-extras-overcloud-prep.yml $VIRTHOST
 
 Deploy the TripleO Overcloud
 ----------------------------
@@ -91,7 +94,8 @@ rerunning.
 
 Example::
 
-    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml -I --teardown none -p quickstart-extras-overcloud.yml $VIRTHOST
+    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml \
+        -I --teardown none -p quickstart-extras-overcloud.yml $VIRTHOST
 
 Validate the TripleO Overcloud is functional
 --------------------------------------------
@@ -102,7 +106,8 @@ also deploy a test heat stack on the Overcloud that includes a ping test.
 
 Example::
 
-    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml -I --teardown none -p quickstart-extras-validate.yml $VIRTHOST
+    bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml \
+        -I --teardown none -p quickstart-extras-validate.yml $VIRTHOST
 
 Using tags to atomically execute specific phases of the deployment
 ------------------------------------------------------------------
