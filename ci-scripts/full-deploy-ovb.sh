@@ -80,7 +80,6 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
         --tags all \
         --no-clone \
         --extra-vars build_test_packages="true" \
-        --extra-vars ib_repo_image_inject="true" \
         --config $WORKSPACE/config/general_config/${CONFIG}.yml \
         --environment $WORKSPACE/config/environments/${ENVIRONMENT}.yml \
         --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
