@@ -3,7 +3,7 @@ overcloud_as_undercloud: true
 use_specific_hash: true
 docker_registry_host: trunk.registry.rdoproject.org
 docker_registry_namespace: ocata
-delorean_hash_label: &promotion-testing-tag tripleo-ci-testing
+delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 docker_image_tag: *promotion-testing-tag
 
 
@@ -22,8 +22,9 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: ocata
-overcloud_image_url: https://images.rdoproject.org/ocata/rdo_trunk/tripleo-ci-testing/overcloud-full.tar
-ipa_image_url: https://images.rdoproject.org/ocata/rdo_trunk/tripleo-ci-testing/ipa_images.tar
+dlrn_hash_tag: tripleo-ci-testing
+overcloud_image_url: https://images.rdoproject.org/ocata/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/ocata/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ipa_images.tar
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
@@ -37,7 +38,7 @@ repo_cmd_before: |
     export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
-  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/tripleo-ci-testing/delorean.repo | grep baseurl | cut -d= -f2`
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
   rdo_dlrn_deps=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/delorean-deps.repo | grep baseurl | cut -d= -f2`
   if [[ -z "$rdo_dlrn" || -z "$rdo_dlrn_deps" ]]; then
     echo "Failed to parse dlrn hash"
