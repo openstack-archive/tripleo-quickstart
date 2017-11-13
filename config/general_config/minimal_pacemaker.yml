@@ -1,7 +1,7 @@
 # This config deploys a minimal configuration but with pacemaker to
 # simulate a configuration close to HA without requiring 3 controllers
 
-# Define a controller node, a compute node, and a ceph node.
+# Define a controller node and a compute node
 overcloud_nodes:
   - name: control_0
     flavor: control
