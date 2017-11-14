@@ -13,6 +13,13 @@ overcloud_ipv6: false
 # containers config
 containerized_overcloud: false
 containerized_undercloud: true
+# TODO: This should be handled by a single meta package or something LP#1730917
+undercloud_rpm_dependencies: >-
+  python-tripleoclient
+  python-openstackclient
+  openstack-heat-agents
+  docker
+  openvswitch
 undercloud_install_script: undercloud-deploy.sh.j2
 
 # turn off image prep
