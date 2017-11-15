@@ -37,3 +37,13 @@ overcloud_roles:
       - Storage
       - StorageMgmt
       - Tenant
+  - name: Compute
+    CountDefault: 0
+    tags:
+      - compute
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
