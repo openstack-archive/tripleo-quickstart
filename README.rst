@@ -72,7 +72,7 @@ run the quickstart playbook. Note, the quickstart playbook will delete the
 ``stack`` user on ``$VIRTHOST`` and recreate it.
 
 This script will output instructions at the end to access the deployed
-undercloud. If a release name is not given, ``newton`` is used.
+undercloud. If a release name is not given, ``pike`` is used.
 
 Deploying without instructions
 ------------------------------

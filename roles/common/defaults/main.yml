@@ -185,7 +185,7 @@ enable_vnc_console: true
 #
 # TODO(trown): It would be better to write a release into the image itself
 # and set this variable from there.
-release: newton
+release: pike
 
 # This option controls whether or not to use the repo setup for TripleO
 # development. Since this requires some other options to be funtional,
