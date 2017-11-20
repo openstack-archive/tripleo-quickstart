@@ -33,8 +33,6 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
-step_tripleo_config_download: false
-deploy_steps_ansible: false
 deploy_steps_ansible_workflow: true
 config_download_args: >-
   {% if release not in ['newton','ocata','pike'] -%}
