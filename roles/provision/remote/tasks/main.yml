@@ -78,6 +78,18 @@
     dest: "/etc/polkit-1/localauthority/50-local.d/50-{{ non_root_user }}-libvirt.pkla"
   become: true
 
+- name: Ensure XDG_RUNTIME_DIR is set
+  blockinfile:
+    dest: .bashrc
+    create: true
+    block: |
+      # Setting up XDG_RUNTIME_DIR for creating non-essential runtime files and other file objects in accordance with
+      # https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+      if [[ -z "${XDG_RUNTIME_DIR}" && -d "/run/user/${UID}" ]] ; then
+          export XDG_RUNTIME_DIR="/run/user/${UID}"
+      fi
+  become: true
+  become_user: "{{ non_root_user }}"
 
 # I'm not always root, but when I am it's because of `sudo`.
 - name: Grant sudo privileges to non-root user
