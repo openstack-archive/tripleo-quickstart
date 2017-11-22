@@ -85,13 +85,7 @@
     name: '{{ supplemental_node.name }}'
     command: start
     state: running
-    uri: '{{ libvirt_uri }}'
-
-# Configure the supplemental vm to be automatically started at boot.
-- name: Configure supplemental node vm to start at virthost boot
-  virt:
-    name: '{{ supplemental_node.name }}'
-    command: autostart
+    autostart: True
     uri: '{{ libvirt_uri }}'
 
 - name: Wait for VM to come online
