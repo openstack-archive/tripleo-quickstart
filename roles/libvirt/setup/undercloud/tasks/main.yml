@@ -409,7 +409,7 @@
     template:
       src: "{{ ssh_tunnel_service_file }}"
       dest: "/etc/systemd/system/ssh-tunnel.service"
-      mode: 0755
+      mode: 0644
     become: true
 
   - name: reload the systemctl daemon after file update
