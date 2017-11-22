@@ -36,9 +36,10 @@ telemetry_args: >-
 
 extra_args: >-
   --ntp-server pool.ntp.org
-test_ping: true
+   {% if release not in ['newton', 'ocata', 'pike'] %}
+  -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+  {% endif %}
 
-run_tempest: false
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
@@ -71,3 +72,25 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
 
+# Use the traditional ping test in newton, ocata and pike
+# Run tempest in queens+
+
+test_ping: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  true
+  {%- else -%}
+  # Switch to false when https://review.openstack.org/#/c/522677/ is promoted
+  true
+  {%- endif -%}
+
+run_tempest: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  # Switch to true when https://review.openstack.org/#/c/522677/ is promoted
+  false
+  {%- endif -%}
+
+test_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
