@@ -8,11 +8,14 @@
 #        <job-type> \
 #        <environment-file> \
 #        <custom-requirements-install> \
-#        <delete-all-stacks>
+#        <delete-all-stacks> \
+#        <playbook (optional)>
 
 set -eux
 
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
+
+DEFAULT_PLAYBOOK='baremetal-full-deploy.yml'
 
 RELEASE=$1
 CONFIG=$2
@@ -20,6 +23,7 @@ JOB_TYPE=$3
 ENVIRONMENT=$4
 CUSTOM_REQUIREMENTS_INSTALL=$5
 DELETE_ALL_STACKS=$6
+PLAYBOOK=${7:-$DEFAULT_PLAYBOOK}
 VIRTHOST=localhost
 
 if [ "$JOB_TYPE" = "gate" ] || \
@@ -83,7 +87,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
         --config $WORKSPACE/config/general_config/${CONFIG}.yml \
         --environment $WORKSPACE/config/environments/${ENVIRONMENT}.yml \
         --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
-        --playbook baremetal-full-deploy.yml \
+        --playbook $PLAYBOOK \
         --release $RELEASE \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
