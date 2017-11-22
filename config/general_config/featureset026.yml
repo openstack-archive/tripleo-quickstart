@@ -4,6 +4,7 @@ network_isolation: false
 enable_pacemaker: false
 overcloud_ipv6: false
 containerized_overcloud: true
+deploy_steps_ansible_workflow: true
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: false
@@ -18,6 +19,14 @@ container_args: >-
   -e {{ overcloud_templates_path }}/environments/docker.yaml
   -e {{ working_dir }}/containers-default-parameters.yaml
   -e {{ overcloud_templates_path }}/environments/kubernetes.yaml
+
+config_download_args: >-
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  -e {{ working_dir }}/config-download.yaml
+  --config-download
+  --deployed-server
+  --disable-validations
+  --verbose
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
