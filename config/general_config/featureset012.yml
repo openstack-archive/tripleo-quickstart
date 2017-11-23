@@ -31,7 +31,6 @@ undercloud_generate_service_certificate: false
 
 ssl_overcloud: false
 
-tempest_config: false
 test_ping: true
 run_tempest: false
 step_introspect: false

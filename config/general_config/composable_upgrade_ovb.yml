@@ -19,7 +19,6 @@ undercloud_generate_service_certificate: True
 ssl_overcloud: false
 
 run_tempest: false
-tempest_config: false
 test_ping: false
 
 # overcloud network config

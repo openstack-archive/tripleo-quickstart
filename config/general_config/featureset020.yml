@@ -22,7 +22,6 @@ extra_args: >-
 
 # Tempest
 run_tempest: true
-tempest_config: true
 test_regex: '.*'
 test_ping: false
 

@@ -23,7 +23,6 @@ extra_args: >-
 test_ping: false
 
 run_tempest: true
-tempest_config: true
 
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs

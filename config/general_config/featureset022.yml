@@ -20,7 +20,6 @@ network_isolation: false
 overcloud_ipv6: false
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
-tempest_config: false
 test_ping: true
 run_tempest: false
 

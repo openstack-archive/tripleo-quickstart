@@ -17,13 +17,6 @@ test_ping: >-
   true
   {%- endif -%}
 
-tempest_config: >-
-  {% if release in ['newton', 'ocata'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
 run_tempest: >-
   {% if release in ['newton', 'ocata'] -%}
   false

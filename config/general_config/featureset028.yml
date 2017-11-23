@@ -43,7 +43,6 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
-tempest_config: true
 test_ping: false
 run_tempest: true
 test_regex: ''

@@ -15,7 +15,6 @@ ssl_overcloud: false
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
-tempest_config: true
 test_ping: false
 run_tempest: true
 test_regex: 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
