@@ -40,6 +40,9 @@
         - tripleo-ci-centos-7-scenario007-multinode-oooq:
             files:
               - config/general_config/featureset028.yml
+        - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
+            files:
+              - config/general_config/featureset030.yml
     gate:
       queue: tripleo
       jobs:
@@ -58,6 +61,9 @@
         - tripleo-ci-centos-7-scenario007-multinode-oooq:
             files:
               - config/general_config/featureset028.yml
+        - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
+            files:
+              - config/general_config/featureset030.yml
     experimental:
       jobs:
         - tripleo-ci-centos-7-scenario005-multinode-oooq:
@@ -66,9 +72,6 @@
         - tripleo-ci-centos-7-scenario006-multinode-oooq:
             files:
               - config/general_config/featureset026.yml
-        - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
-            files:
-              - config/general_config/featureset030.yml
         - tripleo-ci-centos-7-scenario008-multinode-oooq:
             files:
               - config/general_config/featureset031.yml
