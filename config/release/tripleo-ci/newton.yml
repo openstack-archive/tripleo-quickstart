@@ -15,7 +15,7 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: newton
-dlrn_hash_tag: current-tripleo
+dlrn_hash_tag: current-passed-ci
 dlrn_hash_tag_newest: current
 overcloud_image_url: http://66.187.229.139/builds-newton/current-tripleo/overcloud-full.tar
 ipa_image_url: http://66.187.229.139/builds-newton/current-tripleo/ironic-python-agent.tar

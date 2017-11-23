@@ -50,4 +50,4 @@ known_hash_tags:
   - current-tripleo
   - current-tripleo-rdo
   - current-tripleo-rdo-internal
-  - passed-ci
+  - current-passed-ci
