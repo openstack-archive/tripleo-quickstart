@@ -151,8 +151,8 @@ networks:
 
 #Enable network isolation with single-nic-vlans for virtualized deployments
 undercloud_network_cidr: 192.168.24.0/24
-undercloud_external_network_cidr: 10.0.0.1/24
-undercloud_external_network_cidr6: 2001:db8:fd00:1000::1/64
+undercloud_external_network_cidr: >-
+  {%- if overcloud_ipv6|bool %}2001:db8:fd00:1000::/64{% else %}10.0.0.1/24{% endif -%}
 undercloud_networks:
   external:
     address: "{{ undercloud_external_network_cidr|nthhost(1) }}"
