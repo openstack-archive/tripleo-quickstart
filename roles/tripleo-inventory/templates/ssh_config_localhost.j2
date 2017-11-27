@@ -1,13 +1,13 @@
 Host undercloud-root
     Hostname {{ undercloud_ip }}
-    IdentityFile {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/id_rsa_undercloud
+    IdentityFile {{ local_working_dir }}/id_rsa_undercloud
     IdentitiesOnly yes
     User root
     StrictHostKeyChecking no
 
 Host undercloud
     Hostname {{ undercloud_ip }}
-    IdentityFile {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/id_rsa_undercloud
+    IdentityFile {{ local_working_dir }}/id_rsa_undercloud
     IdentitiesOnly yes
     User {{ undercloud_user }}
     StrictHostKeyChecking no
@@ -18,8 +18,8 @@ Host undercloud
 
 Host {{ host }}
     Hostname {{ hostvars[host].ansible_fqdn }}
-    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/ssh.config.local.ansible undercloud -W {{ hostvars[host].ansible_fqdn }}:22
-    IdentityFile {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/id_rsa_overcloud
+    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ local_working_dir }}/ssh.config.local.ansible undercloud -W {{ hostvars[host].ansible_fqdn }}:22
+    IdentityFile {{ local_working_dir }}/id_rsa_overcloud
     User {{ overcloud_user | default('heat-admin') }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null

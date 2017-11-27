@@ -101,7 +101,7 @@
 #required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
   set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
-      -o ConnectTimeout=60 -i {{ hostvars['localhost'].ansible_user_dir }}/.quickstart/id_rsa_virt_power
+      -o ConnectTimeout=60 -i {{ local_working_dir }}/id_rsa_virt_power
       {{ ssh_user }}@{{ hostvars['localhost'].ansible_default_ipv4.address }}
       -W {{ undercloud_ip }}:22"
   when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined and undercloud_ip is defined
