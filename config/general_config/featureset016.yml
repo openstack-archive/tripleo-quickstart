@@ -69,10 +69,7 @@ test_ping: >-
   {% if release in ['newton', 'ocata'] -%}
   true
   {%- else -%}
-  # TODO(emilien) change it to false when:
-  # - https://review.openstack.org/#/c/490376 is merged
-  # - https://bugs.launchpad.net/tripleo/+bug/1708793 is fixed
-  true
+  false
   {%- endif -%}
 
 run_tempest: >-
