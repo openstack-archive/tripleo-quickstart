@@ -102,9 +102,7 @@
   - name: Add virt power key to root authorized keys if using qemu:///system
     authorized_key:
       user: root
-      key: "{{ item }}"
-    with_file:
-      - "{{ virt_power_key }}.pub"
+      key: "{{ lookup('file', virt_power_key|quote + '.pub')|default('') }}"
     when: libvirt_uri == "qemu:///system"
 
   # Copy the public key to `$HOME/.ssh/authorized_keys` for the `root`

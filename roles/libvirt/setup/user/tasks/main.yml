@@ -35,15 +35,11 @@
 - name: Read virt_power private key
   no_log: True
   set_fact:
-    virt_power_key_pvt: "{{ item }}"
-  with_file:
-    - "{{ virt_power_key }}"
+    virt_power_key_pvt: "{{ lookup('file', virt_power_key)|default('') }}"
 
 - name: add virt_power_key to remote authorized_keys
   authorized_key:
     user: "{{ ansible_user_id }}"
-    key: "{{ item }}"
+    key: "{{ lookup('file', virt_power_key|quote + '.pub')|default('') }}"
     manage_dir: true
-  with_file:
-    - "{{ virt_power_key }}.pub"
 
