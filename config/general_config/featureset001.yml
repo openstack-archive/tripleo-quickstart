@@ -79,16 +79,14 @@ test_ping: >-
   {% if release in ['newton', 'ocata', 'pike'] -%}
   true
   {%- else -%}
-  # Switch to false when https://review.openstack.org/#/c/522677/ is promoted
-  true
+  false
   {%- endif -%}
 
 run_tempest: >-
   {% if release in ['newton', 'ocata', 'pike'] -%}
   false
   {%- else -%}
-  # Switch to true when https://review.openstack.org/#/c/522677/ is promoted
-  false
+  true
   {%- endif -%}
 
 test_regex: ''
