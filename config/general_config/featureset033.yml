@@ -1,0 +1,70 @@
+composable_scenario: scenario009-multinode.yaml
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+containerized_overcloud: true
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: false
+
+# This enables the deployment of the overcloud with SSL.
+ssl_overcloud: false
+
+# Centos OpenSihft repo
+add_repos:
+  - type: package
+    pkg_name: centos-release-openshift-origin
+
+extra_args: >-
+  --ntp-server pool.ntp.org
+
+container_args: >-
+  -e {{ overcloud_templates_path }}/environments/docker.yaml
+  -e {{ working_dir }}/containers-default-parameters.yaml
+  -e {{ overcloud_templates_path }}/environments/openshift.yaml
+
+deploy_steps_ansible_workflow: true
+config_download_args: >-
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  -e {{ working_dir }}/config-download.yaml
+  --config-download
+  --deployed-server
+  --disable-validations
+  --verbose
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+tempest_config: false
+test_ping: false
+run_tempest: false
+composable_roles: true
+
+# NOTE(flaper87): There's likely a better way to do this
+repo_cmd_after: |
+  sudo yum update -y
+  sudo yum install -y openshift-ansible-playbooks
+
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
+  - name: Compute
+    CountDefault: 0
+    tags:
+      - compute
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
