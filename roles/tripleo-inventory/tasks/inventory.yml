@@ -57,7 +57,9 @@
 
 #required for regeneration of ssh.config.ansible
 - name: set_fact for undercloud ip
-  set_fact: undercloud_ip={{ hostvars['undercloud'].undercloud_ip }}
+  set_fact:
+    undercloud_ip: "{{ hostvars['undercloud'].undercloud_ip }}"
+    cacheable: true
   when: hostvars['undercloud'] is defined and hostvars['undercloud'].undercloud_ip is defined
 
 # Add the supplemental to the in-memory inventory.
@@ -74,7 +76,9 @@
   when: supplemental_node_ip is defined
 
 - name: set_fact for supplemental ip
-  set_fact: supplemental_node_ip={{ hostvars['supplemental'].supplemental_node_ip }}
+  set_fact:
+    supplemental_node_ip: "{{ hostvars['supplemental'].supplemental_node_ip }}"
+    cacheable: true
   when: hostvars['supplemental'] is defined and hostvars['supplemental'].supplemental_node_ip is defined
 
 #readd the undercloud to reset the ansible_ssh parameters set in quickstart
@@ -92,25 +96,31 @@
 
 #required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
-  set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+  set_fact:
+    undercloud_ssh_proxy_command: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
       -o ConnectTimeout=60 -i {{ hostvars[groups['virthost'][0]].ansible_private_key_file }}
       {{ ssh_user }}@{{ hostvars[groups['virthost'][0]].ansible_host }}
       -W {{ undercloud_ip }}:22"
+    cacheable: true
   when: hostvars[groups['virthost'][0]].ansible_private_key_file is defined and undercloud_ip is defined
 
 #required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
-  set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+  set_fact:
+    undercloud_ssh_proxy_command: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
       -o ConnectTimeout=60 -i {{ local_working_dir }}/id_rsa_virt_power
       {{ ssh_user }}@{{ hostvars['localhost'].ansible_default_ipv4.address }}
       -W {{ undercloud_ip }}:22"
+    cacheable: true
   when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined and undercloud_ip is defined
 
 - name: set supplemental ssh proxy command
-  set_fact: supplemental_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+  set_fact:
+    supplemental_ssh_proxy_command: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
       -o ConnectTimeout=60 -i {{ local_working_dir }}/id_rsa_virt_power
       {{ ssh_user }}@{{ hostvars[groups['virthost'][0]].ansible_host }}
       -W {{ supplemental_node_ip }}:22"
+    cacheable: true
   when: supplemental_node_ip is defined
 
 - name: create inventory from template
@@ -145,6 +155,7 @@
 - name: set fact used in ssh_config_no_undercloud.j2 to determine if IdentityFile should be included
   set_fact:
     id_rsa_virt_power_exists: true
+    cacheable: true
   when: undercloud_ip is not defined and result_stat_id_rsa_virt_power.stat.exists == True
 
 - name: regenerate ssh config, if no undercloud has been launched.
