@@ -1,5 +1,12 @@
 devmode: true
 overcloud_as_undercloud: true
+use_specific_hash: true
+docker_registry_host: trunk.registry.rdoproject.org
+docker_registry_namespace: ocata
+delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+docker_image_tag: *promotion-testing-tag
+
+
 images:
     - name: overcloud-full
       url: "{{ overcloud_image_url }}"
@@ -15,8 +22,9 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: ocata
-overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo/overcloud-full.tar
-ipa_image_url: http://66.187.229.139/builds-ocata/current-tripleo/ironic-python-agent.tar
+dlrn_hash_tag: consistent
+overcloud_image_url: https://images.rdoproject.org/ocata/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/ocata/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ipa_images.tar
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
@@ -30,15 +38,16 @@ repo_cmd_before: |
     export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
-  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/consistent/delorean.repo | grep baseurl | cut -d= -f2`
-  if [[ -z "$rdo_dlrn" ]]; then
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
+  rdo_dlrn_deps=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/delorean-deps.repo | grep baseurl | cut -d= -f2`
+  if [[ -z "$rdo_dlrn" || -z "$rdo_dlrn_deps" ]]; then
     echo "Failed to parse dlrn hash"
     exit 1
   fi
   export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+  export RDO_DLRN_DEPS_REPO=${rdo_dlrn_deps/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
 
 repos:
-  # RDO repos
   - type: generic
     reponame: delorean
     filename: delorean.repo
@@ -46,9 +55,9 @@ repos:
     baseurl: $RDO_DLRN_REPO
 
   - type: generic
-    reponame: delorean-ocata-testing
-    filename: delorean-ocata-testing.repo
-    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/cloud/x86_64/openstack-ocata/
+    reponame: delorean-deps
+    filename: delorean-deps.repo
+    baseurl: $RDO_DLRN_DEPS_REPO
 
   # CentOS related repos
   - type: generic
@@ -80,6 +89,7 @@ repos:
     reponame: quickstart-centos-opstools
     filename: quickstart-centos-opstools.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/opstools/x86_64/
+
 
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
