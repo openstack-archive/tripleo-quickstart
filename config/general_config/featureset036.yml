@@ -1,0 +1,100 @@
+#### Summary of the feature set.
+# Deploy an Openstack environment for testing FFU upgrade from Newton
+# to Queen.  Based on featureset005 which is working on newton.
+undercloud_generate_service_certificate: false
+enable_opstools_repo: false
+
+test_ping: false
+
+run_tempest: false
+
+test_regex: ''
+
+# This enables the run of several tripleo-validations tests through Mistral
+run_tripleo_validations: false
+# This enables the run of tripleo-validations negative tests through shell
+# scripts
+run_tripleo_validations_negative_tests: false
+# Exit tripleo-quickstart on validations failure
+exit_on_validations_failure: False
+
+deployed_server: true
+composable_scenario: scenario001-multinode.yaml
+upgrade_composable_scenario: scenario001-multinode-containers.yaml
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
+
+mixed_upgrade: true
+
+# Tripleo-upgrade link
+use_tripleo_upgrade: true
+ffu_overcloud_upgrade: true
+
+# disable tripleo-upgrade container manipulation.
+create_docker_registry: false
+use_local_docker_registry: false
+create_container_images_download_script: false
+
+tripleo_ci: true
+use_oooq: true
+
+# Run prep container before upgrade.
+prep_container_upgrade_run: true
+containerized_overcloud_upgrade: true
+container_registry_file: "containers-default-parameters.yaml"
+
+# Adjust user to CI
+overcloud_ssh_user: "{{undercloud_user}}"
+
+# Workaround for deploying newton from queen.
+overcloud_prep_post_hook_script: |
+  cat > {{overcloud_templates_path}}/plan-environment.yaml<<EOF
+  version: 1.0
+
+  name: overcloud
+  description: >
+    Default Deployment plan
+  template: overcloud.yaml
+  environments:
+    - path: overcloud-resource-registry-puppet.yaml
+  EOF
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
