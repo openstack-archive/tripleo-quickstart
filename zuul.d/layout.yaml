@@ -10,8 +10,7 @@
     check-tripleo:
       jobs:
         - tripleo-ci-centos-7-ovb-ha-oooq
-        - tripleo-ci-centos-7-ovb-containers-oooq
-        - tripleo-ci-centos-7-ovb-1ctlr_1comp_1ceph-featureset024
+        - tripleo-ci-centos-7-ovb-ha-oooq-ipv6
     check:
       jobs:
         - tripleo-ci-centos-7-3nodes-multinode:
