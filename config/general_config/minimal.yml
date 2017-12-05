@@ -27,9 +27,12 @@ ssl_overcloud: True
 
 # If `test_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
-test_ping: true
-run_tempest: false
+test_ping: false
+tempest_config: true
+run_tempest: true
 tempest_workers: 4
+test_regex: smoke|test_minimum_basic|test_network_basic_ops|test_snapshot_pattern|test_volume_boot_pattern
+
 
 # This enables the run of several tripleo-validations tests through Mistral
 run_tripleo_validations: True

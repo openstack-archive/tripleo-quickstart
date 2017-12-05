@@ -15,19 +15,4 @@ convert_image_remove_pkgs:
 convert_image_install_pkgs:
   - python-tripleoclient
 
-# List of tempest plugins to install. This is separated from the other install
-# packages list, because it is allowed to fail if there is some issue
-# installing the tempest plugins.
-convert_image_tempest_plugins:
-  - openstack-tempest
-  - python-aodh-tests
-  - python-ceilometer-tests
-  - python-heat-tests
-  - python-ironic-tests
-  - python-keystone-tests
-  - python-manila-tests
-  - python-mistral-tests
-  - python-neutron-tests
-  - python-sahara-tests
-  - python-zaqar-tests
-
+convert_image_tempest_plugins: []
