@@ -34,3 +34,13 @@
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
+- name: collect diagnostic log from undercloud image
+  shell: >
+    virt-cat -a undercloud.qcow2 /tmp/builder.log > builder-undercloud.log 2>&1;
+  changed_when: true
+  args:
+    chdir: "{{ convert_image_working_dir }}"
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
