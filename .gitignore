@@ -67,3 +67,6 @@ releasenotes/build
 # Editors
 .*.sw[klmnop]
 *~
+
+# Ansible facts cache
+ansible_facts_cache/
