@@ -34,12 +34,25 @@ Hat distributions too.
 ..  note::
     Running quickstart.sh commands as root is not suggested or supported.
 
-A quick way to test that your virthost machine is ready to rock is::
+The SSH server on your ``$VIRTHOST`` must be accessible via public keys for
+both the root and stack users.
+
+A quick way to test that root to your virthost machine is ready to rock is::
 
     ssh root@$VIRTHOST uname -a
 
-The defaults are meant to "just work", so it is as easy as downloading
-and running the ``quickstart.sh`` script.
+The ``stack`` user is not added until the quickstart deploy runs, so this cannot
+be tested in advance.  However, if you lock down on a per-user basis, ensure
+``AllowUsers`` includes ``stack``.
+
+Timeouts can be an issue if the SSH server is configured to disconnect users
+after periods of inactivity.  This can be addressed for example by::
+
+    ClientAliveInterval 120
+    ClientAliveCountMax 720
+
+The quickstart defaults are meant to "just work", so it is as easy as
+downloading and running the ``quickstart.sh`` script.
 
 Getting the script
 ------------------
