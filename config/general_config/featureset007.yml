@@ -50,5 +50,5 @@ tempest_whitelist:
   - 'sahara_tempest_plugin.tests.api.test_data_sources.DataSourceTest'
   - 'mistral_tempest_tests.tests.api.v2.test_actions.ActionTestsV2'
 tempest_plugins:
-  - python-sahara-tests
+  - python-sahara-tests-tempest
   - python-mistral-tests
