@@ -234,12 +234,14 @@
       libvirt_environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
         LIBGUESTFS_BACKEND: "direct"
+      cacheable: true
     when: ssh_user == "root"
 
   - name: Set libvirt environment when not using root to run tasks
     set_fact:
       libvirt_environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+      cacheable: true
     when: ssh_user != "root"
 
   # NOTE(trown) We use the overcloud-full initramfs and kernel as DIB
@@ -259,7 +261,9 @@
   # instead use a different var for this and set it in the devmode
   # case as well.
   - name: Set overcloud_as_undercloud to true
-    set_fact: overcloud_as_undercloud=true
+    set_fact:
+        overcloud_as_undercloud: true
+        cacheable: true
 
 - when: undercloud_vol_check|failed
   environment:
@@ -346,6 +350,7 @@
 - name: Set_fact for undercloud ip
   set_fact:
     undercloud_ip: "{{ undercloud_vm_ip_result.stdout_lines[0] }}"
+    cacheable: true
 
 - name: Wait until ssh is available on undercloud node
   wait_for:

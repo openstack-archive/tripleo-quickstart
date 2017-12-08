@@ -8,7 +8,8 @@
 
 - name: Check DLRN hash - passed ready hash
   set_fact:
-    dlrn_hash="{{ dlrn_hash_tag }}"
+    dlrn_hash: "{{ dlrn_hash_tag }}"
+    cacheable: true
   when: dlrn_hash_tag | match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
 
 - when: dlrn_hash_tag in known_hash_tags
@@ -22,16 +23,20 @@
 
     - name: Set fact for dlrn_hash
       set_fact:
-        dlrn_hash="{{ full_hash_result.stdout }}"
+        dlrn_hash: "{{ full_hash_result.stdout }}"
+        cacheable: true
 
 - name: Set fact for dlrn_hash path
   set_fact:
-    dlrn_hash_path="{{ dlrn_hash[:2] }}/{{ dlrn_hash[2:4] }}/{{ dlrn_hash }}"
+    dlrn_hash_path: "{{ dlrn_hash[:2] }}/{{ dlrn_hash[2:4] }}/{{ dlrn_hash }}"
+    cacheable: true
 
 - name: Set fact for the Docker image tag
   set_fact:
-    docker_image_tag="{{ dlrn_hash }}"
+    docker_image_tag: "{{ dlrn_hash }}"
+    cacheable: true
 
 - name: Set fact for task already run
   set_fact:
     dlrn_task_run: true
+    cacheable: true

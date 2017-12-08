@@ -36,6 +36,7 @@
   no_log: True
   set_fact:
     virt_power_key_pvt: "{{ lookup('file', virt_power_key)|default('') }}"
+    cacheable: true
 
 - name: add virt_power_key to remote authorized_keys
   authorized_key:

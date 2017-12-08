@@ -25,6 +25,7 @@
   set_fact:
     registered_overcloud_nodes: "{{ (registered_nodes_output.stdout | from_json) | json_query(jq_overcloud) }}"
     registered_undercloud_nodes: "{{ (registered_nodes_output.stdout | from_json) | json_query(jq_undercloud) }}"
+    cacheable: true
   vars:
     jq_overcloud: "[] | [?contains(name, 'overcloud')]"
     jq_undercloud: "[] | [?contains(name, 'undercloud')]"
@@ -33,6 +34,7 @@
   when: clusterid is defined
   set_fact:
     registered_nodes: "{{ (registered_nodes_output.stdout | from_json) | json_query(jq_cluster) }}"
+    cacheable: true
   vars:
     jq_cluster: "[?metadata.clusterid] | [?metadata.clusterid=='{{ clusterid }}']"
 
@@ -40,6 +42,7 @@
   when: not clusterid is defined
   set_fact:
     registered_nodes: "{{ registered_overcloud_nodes|union(registered_undercloud_nodes) }}"
+    cacheable: true
 
 - name: Add overcloud nodes to inventory, accessed via undercloud/bastion
   with_items: "{{ registered_overcloud_nodes|intersect(registered_nodes) }}"
@@ -78,9 +81,10 @@
 
 - name: set ssh proxy command prefix for accessing nodes via bastion
   set_fact:
-    ssh_proxy_command: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+    ssh_proxy_command: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
       -o ConnectTimeout=60 -i {{ hostvars['undercloud'].ansible_private_key_file }}
-      {{ ssh_user }}@{{ hostvars['undercloud'].ansible_host }}
+      {{ ssh_user }}@{{ hostvars['undercloud'].ansible_host }}"
+    cacheable: true
 
 - name: create inventory from template
   delegate_to: localhost

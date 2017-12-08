@@ -12,6 +12,7 @@
       or image.force_cached|default(false)|bool }}
     _latest: >-
       {{ image_cache_dir }}/latest-{{ image.name }}.{{ image.type }}
+    cacheable: true
 
 # This looks for the latest image symlink that may have been created
 # by a previous run of this tasklist.
@@ -30,6 +31,7 @@
 - name: Set path to cached image [local]
   set_fact:
     image_cache_path: "{{ _latest }}"
+    cacheable: true
   when: latest_exists|success and _force_cached_image
 
 # The md5sum for base OS images are not hosted, they are defined in a configuration file.
@@ -41,10 +43,12 @@
     - name: Get image expected checksum for base OS images
       set_fact:
         md5_expected: "{{ image.md5sum.split()[0] }}"
+        cacheable: true
 
     - name: Set path to cached image
       set_fact:
         image_cache_path: "{{ image_cache_dir }}/{{ md5_expected }}.{{ image.type }}"
+        cacheable: true
 
     # See if a matching image exists locally.
     - name: Check for base OS image in cache
@@ -71,10 +75,12 @@
     - name: sanitize the md5sum
       set_fact:
         md5_expected: "{{ md5_expected.stdout.split()[0] }}"
+        cacheable: true
 
     - name: Set path to cached image [upstream]
       set_fact:
         image_cache_path: "{{ image_cache_dir }}/{{ md5_expected }}.{{ image.type }}"
+        cacheable: true
 
     # See if a matching image exists locally.
     - name: Check for image in cache
@@ -119,6 +125,7 @@
     - name: sanitize the md5sum for the downloaded image
       set_fact:
         md5_actual: "{{ md5_actual.stdout.split()[0] }}"
+        cacheable: true
 
     # Verify that what we have is what we wanted.
     - name: Verify image checksum
@@ -148,6 +155,7 @@
     - name: Note that there was a failure.
       set_fact:
         image_fetch_failed: true
+        cacheable: true
 
   # Ensure that even if there are failures we still clean up our
   # temporary image file.

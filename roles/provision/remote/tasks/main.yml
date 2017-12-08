@@ -51,6 +51,7 @@
 - name: Save the non-root user UID
   set_fact:
     non_root_user_uid: "{{ non_root_user_uid_output.stdout }}"
+    cacheable: true
 
 # Install the public component of `virt_host_key` in the
 # `.ssh/authorized_keys` file for the non-root user.

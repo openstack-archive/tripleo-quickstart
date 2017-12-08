@@ -10,7 +10,9 @@
   changed_when: false
 
 - name: Register fact for current user group
-  set_fact: current_group_local="{{ local_user_group.stdout }}"
+  set_fact:
+    current_group_local: "{{ local_user_group.stdout }}"
+    cacheable: true
   tags:
     - provision
 
