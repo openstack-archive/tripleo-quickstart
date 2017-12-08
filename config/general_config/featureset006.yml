@@ -53,7 +53,7 @@ tempest_whitelist:
   # Testing swift
   - 'tempest.api.object_storage.test_object_services.ObjectTest'
   # Testing cinder volumes encrypted by barbican:
-  - 'tempest.scenario.test_encrypted_cinder_volumes.TestEncryptedCinderVolumes'
+  - 'barbican_tempest_plugin.tests.scenario.test_volume_encryption.VolumeEncryptionTest'
   # TODO(emilien) run autoscaling tests when telemetry works in python-tempestconf
   # - 'ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration'
   # TODO(emilien) run ec2api tests when ec2api is supported in python-tempestconf
