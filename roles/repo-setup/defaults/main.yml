@@ -1,7 +1,8 @@
 ---
 repo_setup_dir: "{{ working_dir }}"
-repo_setup_script: repo_setup.sh.j2
-repo_setup_log: "{{ repo_setup_dir }}/repo_setup.log"
+repo_setup_script_source: repo_setup.sh.j2
+repo_setup_log: repo_setup.log
+repo_setup_script: repo_setup.sh
 repo_run_live: true
 # Releases shortcuts
 stable:
