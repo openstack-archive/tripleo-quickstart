@@ -16,7 +16,6 @@ images:
       type: tar
 inject_images:
     - "ironic-python-agent.initramfs"
-    - "ironic-python-agent.vmlinuz"
     - "ironic-python-agent.kernel"
     - "overcloud-full.qcow2"
     - "overcloud-full.initrd"
@@ -24,7 +23,7 @@ inject_images:
 release: newton
 dlrn_hash_tag: consistent
 overcloud_image_url: https://images.rdoproject.org/newton/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar
-ipa_image_url: https://images.rdoproject.org/newton/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ipa_images.tar
+ipa_image_url: https://images.rdoproject.org/newton/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"

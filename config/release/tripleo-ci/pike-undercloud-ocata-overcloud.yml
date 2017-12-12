@@ -25,7 +25,6 @@ images:
 use_external_images: true
 inject_images:
     - "ironic-python-agent.initramfs"
-    - "ironic-python-agent.vmlinuz"
     - "ironic-python-agent.kernel"
     - "overcloud-full.qcow2"
     - "overcloud-full.initrd"
