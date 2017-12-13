@@ -21,7 +21,6 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 bash quickstart.sh \
-    --ansible-debug \
     --bootstrap \
     --working-dir $WORKSPACE/ \
     --tags all \
