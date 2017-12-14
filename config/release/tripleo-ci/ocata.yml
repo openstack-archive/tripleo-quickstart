@@ -15,7 +15,6 @@ inject_images:
     - "overcloud-full.vmlinuz"
 release: ocata
 dlrn_hash_tag: current-tripleo
-dlrn_hash_tag_newest: current
 overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo/overcloud-full.tar
 ipa_image_url: http://66.187.229.139/builds-ocata/current-tripleo/ironic-python-agent.tar
 repo_cmd_before: |

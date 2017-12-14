@@ -15,7 +15,6 @@ inject_images:
     - "overcloud-full.vmlinuz"
 release: pike
 dlrn_hash_tag: current-tripleo
-dlrn_hash_tag_newest: current
 docker_registry_host: docker.io
 docker_registry_namespace: tripleopike
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
