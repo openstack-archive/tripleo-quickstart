@@ -1,0 +1,8 @@
+---
+features:
+  - Added ability to set the DNS server for eth0 as defined in the
+    tls_everywhere_provisioner.sh.j2 script. Default <192.168.23.1> can be
+    overridden by setting the `supplemental_tls_everywhere_dns_server` var.
+fixes:
+  - The `bug 1712081 <https://bugs.launchpad.net/tripleo/+bug/1712081>`__
+    SSH connection to supplemental ipa VM takes minutes; was fixed.
