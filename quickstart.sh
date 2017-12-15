@@ -467,9 +467,9 @@ print_logo
 echo "Installing OpenStack ${OPT_RELEASE:+"$OPT_RELEASE "}on host $VIRTHOST"
 echo "Using directory $OPT_WORKDIR for a local working directory"
 
-activate_venv
-
 set -ex
+
+activate_venv
 
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
