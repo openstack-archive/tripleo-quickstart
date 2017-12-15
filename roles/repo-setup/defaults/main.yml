@@ -6,6 +6,8 @@ repo_setup_script: repo_setup.sh
 repo_run_live: true
 # Releases shortcuts
 stable:
+  - pike
+  - ocata
   - newton
   - mitaka
   - liberty
