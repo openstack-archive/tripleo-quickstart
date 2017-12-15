@@ -4,9 +4,9 @@ release: pike
 target_upgrade_version: pike
 overcloud_release: ocata
 dlrn_hash_tag: current-tripleo
-dlrn_hash_tag_newest: consistent
-docker_registry_host: trunk.registry.rdoproject.org
-docker_registry_namespace: "{{ release }}"
+dlrn_hash_tag_newest: current
+docker_registry_host: docker.io
+docker_registry_namespace: tripleopike
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 undercloud_image_url: https://images.rdoproject.org/pike/delorean/{{ dlrn_hash|default(dlrn_hash_tag) }}/stable/undercloud.qcow2
 ipa_image_url: http://66.187.229.139/builds-pike/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/ironic-python-agent.tar
@@ -31,31 +31,32 @@ inject_images:
     - "overcloud-full.vmlinuz"
 
 repo_cmd_before: |
-  sudo rm -rf /etc/yum.repos.d/delorean*;
-  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
-  export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-pike/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo | grep baseurl | cut -d= -f2`
-  export CURRENT_TRIPLEO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-pike/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
-  # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
-  if [[ -e /etc/ci/mirror_info.sh ]]; then
-  eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST"; echo NODEPOOL_BUILDLOGS_CENTOS_PROXY="$NODEPOOL_BUILDLOGS_CENTOS_PROXY")
-  export NODEPOOL_MIRROR_HOST="http://${NODEPOOL_MIRROR_HOST}"
-  export NODEPOOL_BUILDLOGS_CENTOS_PROXY=$NODEPOOL_BUILDLOGS_CENTOS_PROXY
-  export CURRENT_RDO_MIRROR=${CURRENT_RDO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
-  export CURRENT_TRIPLEO_MIRROR=${CURRENT_TRIPLEO_MIRROR/https:\/\/trunk.rdoproject.org/$NODEPOOL_MIRROR_HOST:8080/rdo}
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  if [ -e /etc/ci/mirror_info.sh ]; then
+    source /etc/ci/mirror_info.sh
+  else
+    # Otherwise, fallback to official mirrors provided by CentOS.
+    export NODEPOOL_CENTOS_MIRROR=http://mirror.centos.org/centos
+    export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
+    export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
-  # Otherwise, fallback to official mirrors provided by CentOS.
-  export NODEPOOL_MIRROR_HOST="${NODEPOOL_MIRROR_HOST:-http://mirror.centos.org}"
-  export NODEPOOL_BUILDLOGS_CENTOS_PROXY="${NODEPOOL_BUILDLOGS_CENTOS_PROXY:-https://buildlogs.centos.org}"
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-pike/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo | grep baseurl | cut -d= -f2`
+  if [[ -z "$rdo_dlrn" ]]; then
+    echo "Failed to parse dlrn hash"
+    exit 1
+  fi
+  export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+
 repos:
   # RDO repos
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: $CURRENT_TRIPLEO_MIRROR
+    baseurl: $RDO_DLRN_REPO
     priority: 20
-    hash_url: https://trunk.rdoproject.org/centos7-pike/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo
 
   - type: generic
     reponame: delorean-pike-testing
@@ -66,32 +67,32 @@ repos:
   - type: generic
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
-    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/os/x86_64/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/os/x86_64/
 
   - type: generic
     reponame: quickstart-centos-updates
     filename: quickstart-centos-updates.repo
-    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/updates/x86_64/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/updates/x86_64/
 
   - type: generic
     reponame: quickstart-centos-extras
     filename: quickstart-centos-extras.repo
-    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/extras/x86_64/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/extras/x86_64/
 
   - type: generic
     reponame: quickstart-centos-qemu
     filename: quickstart-centos-qemu.repo
-    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/virt/x86_64/kvm-common/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/virt/x86_64/kvm-common/
 
   - type: generic
     reponame: quickstart-centos-ceph-jewel
     filename: quickstart-centos-ceph-jewel.repo
-    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/storage/x86_64/ceph-jewel/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/storage/x86_64/ceph-jewel/
 
   - type: generic
     reponame: quickstart-centos-opstools
     filename: quickstart-centos-opstools.repo
-    baseurl: ${NODEPOOL_MIRROR_HOST}/centos/7/opstools/x86_64/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/opstools/x86_64/
 
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
