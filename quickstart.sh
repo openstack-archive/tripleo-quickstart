@@ -17,6 +17,7 @@ ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 : ${OPT_TEARDOWN:=nodes}
 : ${OPT_WORKDIR:=$HOME/.quickstart}
+: ${OPT_LIST_TASKS_ONLY=""}
 
 clean_virtualenv() {
     if [ -d $OPT_WORKDIR ]; then
@@ -198,6 +199,8 @@ usage () {
     echo "Advanced options:"
     echo "  -v, --ansible-debug"
     echo "                      invoke ansible-playbook with -vvvv"
+    echo "  -y, --dry-run"
+    echo "                      dry run of playbook, invoke ansible with --list-tasks"
     echo "  -X, --clean         discard the working directory on start"
     echo "  -b, --bootstrap     force creation of the virtualenv and the installation"
     echo "                      of requirements without discarding the working directory"
@@ -231,7 +234,6 @@ usage () {
 OPT_VARS=()
 
 while [ "x$1" != "x" ]; do
-
     case "$1" in
         --install-deps|-i)
             OPT_INSTALL_DEPS=1
@@ -321,6 +323,10 @@ while [ "x$1" != "x" ]; do
             OPT_GERRIT=$2
             OPT_BOOTSTRAP=1
             shift
+            ;;
+
+        --dry-run|-y)
+            OPT_LIST_TASKS_ONLY=" --list-tasks"
             ;;
 
         --no-clone|-n)
@@ -496,6 +502,7 @@ ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_CONFIG \
     -e @$OPT_ENVIRONMENT \
     -e local_working_dir=$OPT_WORKDIR \
+    ${OPT_LIST_TASKS_ONLY} \
     -e virthost=$VIRTHOST \
     ${OPT_VARS[@]} \
     ${OPT_TAGS:+-t $OPT_TAGS} \
