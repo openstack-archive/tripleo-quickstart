@@ -79,9 +79,9 @@ repos:
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/virt/x86_64/kvm-common/
 
   - type: generic
-    reponame: quickstart-centos-ceph-jewel
-    filename: quickstart-centos-ceph-jewel.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/storage/x86_64/ceph-jewel/
+    reponame: quickstart-centos-ceph-luminous
+    filename: quickstart-centos-ceph-luminous.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/storage/x86_64/ceph-luminous/
 
   - type: generic
     reponame: quickstart-centos-opstools

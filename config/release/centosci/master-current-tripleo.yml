@@ -32,11 +32,11 @@ repos:
     down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
 
   - type: package
-    pkg_name: centos-release-ceph-jewel
+    pkg_name: centos-release-ceph-luminous
     custom_cmd: 'sudo yum install -y --enablerepo=extras'
 
 repo_cmd_after: |
-  sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0
+  sudo yum-config-manager --save --setopt centos-ceph-luminous.gpgcheck=0
   sudo yum repolist;
   sudo yum update -y
 
