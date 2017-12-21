@@ -396,31 +396,31 @@ fi
 
 # allow the deprecated config files to work
 OLD_CONFIG=""
-if [[ "$OPT_CONFIG" =~ .*ha.yml ]]; then
+if [[ "$OPT_CONFIG" =~ (^|.*/)ha.yml$ ]]; then
     OLD_CONFIG=$OPT_CONFIG
     OPT_CONFIG=$OPT_WORKDIR/config/general_config/pacemaker.yml;
     OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_1comp.yml;
-elif [[ "$OPT_CONFIG" =~ .*ceph.yml ]]; then
+elif [[ "$OPT_CONFIG" =~ (^|.*/)ceph.yml$ ]]; then
     OLD_CONFIG=$OPT_CONFIG
     OPT_CONFIG=$OPT_WORKDIR/config/general_config/minimal.yml;
     OPT_NODES=$OPT_WORKDIR/config/nodes/1ctlr_1comp_1ceph.yml;
-elif [[ "$OPT_CONFIG" =~ .*ha_big.yml ]]; then
+elif [[ "$OPT_CONFIG" =~ (^|.*/)ha_big.yml$ ]]; then
     OLD_CONFIG=$OPT_CONFIG
     OPT_CONFIG=$OPT_WORKDIR/config/general_config/pacemaker.yml;
     OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_3comp.yml;
-elif [[ "$OPT_CONFIG" =~ .*fake_ha_ipa.yml ]]; then
+elif [[ "$OPT_CONFIG" =~ (^|.*/)fake_ha_ipa.yml$ ]]; then
     OLD_CONFIG=$OPT_CONFIG
     OPT_CONFIG=$OPT_WORKDIR/config/general_config/ipa.yml;
     OPT_NODES=$OPT_WORKDIR/config/nodes/1ctlr_1comp_1supp.yml;
-elif [[ "$OPT_CONFIG" =~ .*ha_ipa.yml ]]; then
+elif [[ "$OPT_CONFIG" =~ (^|.*/)ha_ipa.yml$ ]]; then
     OLD_CONFIG=$OPT_CONFIG
     OPT_CONFIG=$OPT_WORKDIR/config/general_config/ipa.yml;
     OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_1comp.yml;
-elif [[ "$OPT_CONFIG" =~ .*ha_ipv6.yml ]]; then
+elif [[ "$OPT_CONFIG" =~ (^|.*/)ha_ipv6.yml$ ]]; then
     OLD_CONFIG=$OPT_CONFIG
     OPT_CONFIG=$OPT_WORKDIR/config/general_config/ipv6.yml;
     OPT_NODES=$OPT_WORKDIR/config/nodes/3ctlr_1comp.yml;
-elif [[ "$OPT_CONFIG" =~ .*minimal_pacemaker.yml ]]; then
+elif [[ "$OPT_CONFIG" =~ (^|.*/)minimal_pacemaker.yml$ ]]; then
     OLD_CONFIG=$OPT_CONFIG
     OPT_CONFIG=$OPT_WORKDIR/config/general_config/pacemaker.yml;
 fi
