@@ -28,7 +28,11 @@ telemetry_args: >-
    {% endif %}
 
 extra_args: >-
-  {% if release not in ['newton'] %}-e {{ overcloud_templates_path }}/environments/puppet-ceph.yaml{% endif %}
+  {% if release in ['newton'] %}
+  -e {{ overcloud_templates_path }}/environments/storage-environment.yaml
+  {% else %}
+  -e {{ overcloud_templates_path }}/environments/puppet-ceph.yaml
+  {% endif %}
   {% if release not in ['newton', 'ocata'] %}-e {{ overcloud_templates_path }}/ci/environments/ceph-min-osds.yaml{% endif %}
   --ntp-server pool.ntp.org
 test_ping: true
