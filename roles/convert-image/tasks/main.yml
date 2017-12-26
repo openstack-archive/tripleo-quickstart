@@ -24,7 +24,7 @@
 
 - name: convert image
   command: >
-    virt-customize -v --smp 2 -m 4096
+    virt-customize -v --smp 2 -m {{ convert_image_host_memory }}
     -a {{ convert_image_working_dir }}/undercloud.qcow2
     --run convert_image.sh
   changed_when: true

@@ -16,3 +16,4 @@ convert_image_install_pkgs:
   - python-tripleoclient
 
 convert_image_tempest_plugins: []
+convert_image_host_memory: 2048

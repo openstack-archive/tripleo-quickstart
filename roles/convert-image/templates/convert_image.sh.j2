@@ -15,6 +15,7 @@ fi
 
 {% if not undercloud_setup|bool %}
 
+yum clean all
 {% if convert_image_update|bool %}
 yum update -y
 {% endif %}
