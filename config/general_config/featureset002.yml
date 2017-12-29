@@ -14,11 +14,19 @@ to_build: true
 step_delete_overcloud: true
 undercloud_check_idempotency: true
 
+# This enables container deployements after Pike
+containerized_overcloud: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+delete_docker_cache: true
+
 # Tell tripleo about our environment.
 enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
-# TODO(gcerami) tripleo-ci specific content. This has to be moved elsewhere
 network_isolation_args: >-
    -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-isolation-absolute.yaml
    -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-environment.yaml
@@ -26,9 +34,10 @@ network_isolation_args: >-
 
 extra_args: >-
   --ntp-server pool.ntp.org
-test_ping: true
+   {% if release not in ['newton', 'ocata', 'pike'] %}
+  -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+  {% endif %}
 
-run_tempest: false
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
@@ -56,3 +65,24 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
     - overcloud-delete
+
+# Use the traditional ping test in newton, ocata and pike
+# Run tempest in queens+
+
+test_ping: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+run_tempest: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+test_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
