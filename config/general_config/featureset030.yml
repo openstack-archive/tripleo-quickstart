@@ -33,7 +33,8 @@ extra_args: >-
 # run them.
 tempest_config: true
 test_ping: false
-run_tempest: true
+# Re-enable Tempest when https://bugs.launchpad.net/tripleo/+bug/1740698 is solved
+run_tempest: false
 test_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
