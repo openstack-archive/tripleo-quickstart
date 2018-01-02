@@ -22,5 +22,6 @@ multinode_args: >-
     -e {{ tripleo_root }}/tripleo-ci/test-environments/multinode-3nodes.yaml
     -r {{ overcloud_templates_path }}/ci/environments/multinode-3nodes.yaml
     -e {{ overcloud_templates_path }}/environments/deployed-server-bootstrap-environment-centos.yaml
+    --overcloud-ssh-user {{ undercloud_user }}
 enable_pacemaker: true
 
