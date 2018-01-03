@@ -45,12 +45,10 @@ extra_args: >-
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
 artcl_create_docs_payload:
-  included_deployment_scripts: >-
+  included_deployment_scripts:
     - undercloud-install
     - overcloud-custom-tht-script
-    {% if release not in ['newton', 'ocata', 'pike'] -%}
-    - overcloud-prep-containers
-    {%- endif -%}
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
@@ -59,13 +57,11 @@ artcl_create_docs_payload:
     - overcloud-validate
   included_static_docs:
     - env-setup-virt
-  table_of_contents: >-
+  table_of_contents:
     - env-setup-virt
     - undercloud-install
     - overcloud-custom-tht-script
-    {% if release not in ['newton', 'ocata', 'pike'] -%}
-    - overcloud-prep-containers
-    {%- endif -%}
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network

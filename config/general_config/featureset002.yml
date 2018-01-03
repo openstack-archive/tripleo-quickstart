@@ -45,6 +45,7 @@ artcl_create_docs_payload:
   included_deployment_scripts:
     - undercloud-install
     - overcloud-custom-tht-script
+    - overcloud-prep-containers
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
@@ -58,6 +59,7 @@ artcl_create_docs_payload:
     - env-setup-virt
     - undercloud-install
     - overcloud-custom-tht-script
+    - overcloud-prep-containers
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
