@@ -101,5 +101,5 @@ tempest_plugins:
   - python-ec2-api-tests
 tempest_extra_config: >-
   {% if release not in ['newton', 'ocata', 'pike'] -%}
-    {'compute-feature-enabled.attach_encrypted_volume': 'True', 'auth.tempest_roles': '"Member, creator"'}
+    {'compute-feature-enabled.attach_encrypted_volume': 'True', 'auth.tempest_roles': '"Member, creator"', 'telemetry.alarm_granularity': '60'}
   {%- endif -%}
