@@ -1,4 +1,10 @@
 #!/bin/bash
+# Show colored output if running interactively
+if [ -t 1 ] ; then
+    export ANSIBLE_FORCE_COLOR=true
+fi
+# Log everything from this script into _quickstart.log
+exec &> >(tee -i _quickstart.log )
 
 # With LANG set to everything else than C completely undercipherable errors
 # like "file not found" and decoding errors will start to appear during scripts
@@ -472,6 +478,7 @@ VIRTHOST=$1
 print_logo
 echo "Installing OpenStack ${OPT_RELEASE:+"$OPT_RELEASE "}on host $VIRTHOST"
 echo "Using directory $OPT_WORKDIR for a local working directory"
+echo "Current run is logged in _quickstart.log file in current directory"
 
 set -ex
 
