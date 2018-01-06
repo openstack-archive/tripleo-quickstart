@@ -82,8 +82,7 @@ test_regex: ''
 # 'ec2api.tests.functional.api.test_key_pairs.KeyPairTest'
 tempest_whitelist: >-
     {% if release not in ['newton', 'ocata', 'pike'] -%}
-    ["tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern",
-     "tempest.api.object_storage.test_object_services.ObjectTest",
+    ["tempest.api.object_storage.test_object_services.ObjectTest",
      "barbican_tempest_plugin.tests.scenario.test_volume_encryption.VolumeEncryptionTest",
      "ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration"]
     {%- else -%}
