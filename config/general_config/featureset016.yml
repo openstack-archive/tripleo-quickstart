@@ -88,3 +88,4 @@ tempest_plugins:
   - python-ceilometer-tests
   - python-gnocchi-tests
   - python-panko-tests
+tempest_extra_config: {'telemetry.alarm_granularity': '60'}
