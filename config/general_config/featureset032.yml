@@ -1,17 +1,25 @@
 # Featureset for deploying a 2 controller setup using the deployed server
 # method
-
-undercloud_generate_service_certificate: false
-ssl_overcloud: false
-test_ping: true
-
-# Note(trown): overriding the key these set, so setting them to false
-composable_scenario: ""
-upgrade_composable_scenario: ""
 composable_services: false
-composable_roles: false
 
-composable_args: ""
+network_isolation: false
+enable_pacemaker: true
+overcloud_ipv6: false
+containerized_overcloud: true
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: false
+
+# This enables the deployment of the overcloud with SSL.
+ssl_overcloud: false
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+test_ping: false
+run_tempest: true
+test_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+composable_roles: false
 
 # Note(trown): The tripleo-ci repo is used here because we do not yet support
 # deployed server on libvirt. We will want to move any heat environments we
@@ -23,5 +31,3 @@ multinode_args: >-
     -r {{ overcloud_templates_path }}/ci/environments/multinode-3nodes.yaml
     -e {{ overcloud_templates_path }}/environments/deployed-server-bootstrap-environment-centos.yaml
     --overcloud-ssh-user {{ undercloud_user }}
-enable_pacemaker: true
-
