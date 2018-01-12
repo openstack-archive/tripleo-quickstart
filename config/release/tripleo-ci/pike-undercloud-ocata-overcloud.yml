@@ -4,7 +4,6 @@ release: pike
 target_upgrade_version: pike
 overcloud_release: ocata
 dlrn_hash_tag: current-tripleo
-dlrn_hash_tag_newest: current
 docker_registry_host: docker.io
 docker_registry_namespace: tripleopike
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
@@ -43,7 +42,7 @@ repo_cmd_before: |
     export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
-  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-pike/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo | grep baseurl | cut -d= -f2`
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-pike/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
   if [[ -z "$rdo_dlrn" ]]; then
     echo "Failed to parse dlrn hash"
     exit 1
