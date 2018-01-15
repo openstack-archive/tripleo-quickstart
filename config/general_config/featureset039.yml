@@ -1,0 +1,77 @@
+# Summary of feature set
+# Deploy an HA OpenStack environment with an IPA server.
+
+# TLS everywhere related vars. #
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: True
+enable_tls_everywhere: true
+novajoin_connect_timeout: 60
+novajoin_read_timeout: 60
+# Set the FreeIPA server IP
+freeipa_internal_ip: "{{ external_network_cidr|nthhost(10) }}"
+freeipa_admin_password: fce95318204114530f31f885c9df588f
+
+# Set node hostnames.
+tripleo_domain: tripleodomain.example.com
+freeipa_server_hostname: "ipa.{{ tripleo_domain }}"
+undercloud_undercloud_hostname: "undercloud.{{ tripleo_domain }}"
+overcloud_cloud_name: "overcloud.{{ tripleo_domain }}"
+overcloud_cloud_domain: "{{ tripleo_domain }}"
+overcloud_cloud_name_internal: "overcloud.internalapi.{{ tripleo_domain }}"
+overcloud_cloud_name_storage: "overcloud.storage.{{ tripleo_domain }}"
+overcloud_cloud_name_storage_management: "overcloud.storagemgmt.{{ tripleo_domain }}"
+overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
+
+# Define FreeIPA server as DNS server for under/overcloud.
+undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
+overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
+
+# Supplemental node related vars. #
+# Ensure that the FreeIPA server node is provisioned during deployment.
+deploy_supplemental_node: true
+supplemental_user: centos
+supplemental_node_ip: "{{ freeipa_internal_ip }}"
+supplemental_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+
+# We don't need introspection in a virtual environment (because we are
+# creating all the "hardware" we really know the necessary information).
+step_introspect: false
+
+# Tell tripleo about our environment.
+network_isolation: true
+network_isolation_type: 'multiple-nics'
+extra_args: >-
+  --ntp-server pool.ntp.org
+test_ping: true
+enable_pacemaker: true
+run_tempest: false
+
+# Options below direct automatic doc generation by tripleo-collect-logs.
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - novajoin_prep
+    - install_novajoin
+    - overcloud-custom-tht-script
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - novajoin_prep
+    - install_novajoin
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate

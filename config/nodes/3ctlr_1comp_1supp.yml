@@ -2,6 +2,8 @@
 
 # Define the controller node and compute nodes.
 # Create three controller nodes and one compute node.
+node_count: 4
+
 overcloud_nodes:
   - name: control_0
     flavor: control
@@ -23,3 +25,7 @@ overcloud_nodes:
 supplemental_node:
   name: ipa
   flavor: undercloud
+
+topology: >-
+  --compute-scale 1
+  --control-scale 3
