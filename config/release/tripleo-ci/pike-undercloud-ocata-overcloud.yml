@@ -31,10 +31,10 @@ inject_images:
     - "overcloud-full.vmlinuz"
 
 repo_cmd_before: |
-  sudo yum clean all;
-  sudo yum-config-manager --disable "*"
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo yum clean all;
+  sudo yum-config-manager --disable "*"
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else
@@ -124,4 +124,5 @@ repo_cmd_after: |
   sudo yum remove -y rdo-release || true;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
+  sudo yum clean metadata
   sudo yum update -y
