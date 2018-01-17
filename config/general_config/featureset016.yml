@@ -80,14 +80,29 @@ run_tempest: >-
   {%- endif -%}
 
 test_regex: ''
-tempest_whitelist:
+tempest_whitelist_old:
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
   - 'ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration'
-tempest_plugins:
+tempest_whitelist_new:
+  - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
+  - 'telemetry_tempest_plugin.scenario.test_telemetry_integration.TestTelemetryIntegration'
+tempest_whitelist: >-
+  {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_whitelist_new }}
+  {%- else -%}{{ tempest_whitelist_old }}
+  {%- endif -%}
+
+tempest_plugins_old:
   - python-aodh-tests
   - python-ceilometer-tests
   - python-gnocchi-tests
   - python-panko-tests
+tempest_plugins_new:
+  - python-telemetry-tests-tempest
+  - python-heat-tests-tempest
+tempest_plugins: >-
+  {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_plugins_new }}
+  {%- else -%}{{ tempest_plugins_old }}
+  {%- endif -%}
 tempest_extra_config: {'telemetry.alarm_granularity': '60'}
 
 # This is a workaround to have test_volume_boot_pattern passing, it's failing
