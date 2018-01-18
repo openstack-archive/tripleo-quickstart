@@ -34,7 +34,7 @@
         name: '{{ item.key }}'
         groups: "overcloud,{{ item.key | regex_replace('overcloud-(?:nova)?([a-zA-Z0-9_]+)-[0-9]+$', '\\1') }}"
         ansible_host: '{{ item.key }}'
-        ansible_fqdn: '{{ item.value }}'
+        inventory_ip: '{{ item.value }}'
         ansible_user: "{{ overcloud_user | default('heat-admin') }}"
         ansible_private_key_file: "{{ overcloud_key }}"
         ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.ansible"'
@@ -51,7 +51,7 @@
         name: 'subnode-{{ item.0 + 2 }}'
         groups: "overcloud"
         ansible_host: '{{ item.1 }}'
-        ansible_fqdn: '{{ item.1 }}'
+        inventory_ip: '{{ item.1 }}'
         ansible_user: "{{ lookup('env','USER') }}"
         ansible_private_key_file: "/etc/nodepool/id_rsa"
 

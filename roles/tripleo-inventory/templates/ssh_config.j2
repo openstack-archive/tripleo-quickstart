@@ -56,7 +56,7 @@ Host supplemental
 {% for host in groups["overcloud"] %}
 
 Host {{ host }}
-    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ local_working_dir }}/ssh.config.ansible undercloud -W {{ hostvars[host].ansible_fqdn }}:22
+    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ local_working_dir }}/ssh.config.ansible undercloud -W {{ hostvars[host].inventory_ip }}:22
     IdentityFile {{ hostvars[host].ansible_private_key_file }}
     User {{ overcloud_user | default ('heat-admin') }}
     StrictHostKeyChecking no
