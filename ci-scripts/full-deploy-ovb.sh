@@ -70,11 +70,8 @@ if [[ $CUSTOM_REQUIREMENTS_INSTALL != "none" ]] && [[ ! $(grep "$CUSTOM_REQUIREM
     echo "$CUSTOM_REQUIREMENTS_INSTALL" >> $CI_SCRIPT_DIR/../quickstart-extras-requirements.txt
 fi
 
-# FIXME (rlandy) - We are not able to use the topology files
-# in config/nodes/ for OVB due to the definition of the
-# overcloud nodes. As a workaround, pass the $CONFIG file,
-# which also contains the overcloud nodes settings, to $OPT_NODES
-export OPT_NODES=${OPT_NODES:="$WORKSPACE/config/general_config/${CONFIG}.yml"}
+#  Define nodes
+export OPT_NODES=${OPT_NODES:="$WORKSPACE/config/nodes/1ctlr_1comp.yml"}
 
 # We need to run differently when gating upstream changes
 if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
@@ -84,6 +81,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
         --tags all \
         --no-clone \
         --extra-vars build_test_packages="true" \
+        --extra-vars @$WORKSPACE/config/environments/ovb-common.yml \
         --config $WORKSPACE/config/general_config/${CONFIG}.yml \
         --environment $WORKSPACE/config/environments/${ENVIRONMENT}.yml \
         --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
@@ -97,6 +95,7 @@ else
         --working-dir $WORKSPACE/ \
         --tags all \
         --no-clone \
+        --extra-vars @$WORKSPACE/config/environments/ovb-common.yml \
         --config $WORKSPACE/config/general_config/${CONFIG}.yml \
         --environment $WORKSPACE/config/environments/${ENVIRONMENT}.yml \
         --extra-vars cleanup_stacks_keypairs=$DELETE_ALL_STACKS \
