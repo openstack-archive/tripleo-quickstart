@@ -102,3 +102,7 @@ tempest_extra_config: >-
   {% if release not in ['newton', 'ocata', 'pike'] -%}
     {'compute-feature-enabled.attach_encrypted_volume': 'True', 'auth.tempest_roles': '"Member, creator"', 'telemetry.alarm_granularity': '60'}
   {%- endif -%}
+
+# This is a workaround to have test_volume_boot_pattern passing, it's failing
+# due a concurrency, for more information, check lp 1744151
+tempest_workers: 1
