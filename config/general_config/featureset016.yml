@@ -89,3 +89,7 @@ tempest_plugins:
   - python-gnocchi-tests
   - python-panko-tests
 tempest_extra_config: {'telemetry.alarm_granularity': '60'}
+
+# This is a workaround to have test_volume_boot_pattern passing, it's failing
+# due a concurrency, for more information, check lp #1742936
+tempest_workers: 1
