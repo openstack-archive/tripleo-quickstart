@@ -26,6 +26,30 @@
         dlrn_hash: "{{ full_hash_result.stdout }}"
         cacheable: true
 
+- when: overcloud_release is defined and overcloud_release != ""
+  block:
+
+    - name: Get DLRN overcloud hash
+      shell: >
+        curl -s https://trunk.rdoproject.org/centos7-{{ overcloud_release }}/{{ dlrn_hash_tag }}/delorean.repo \
+        | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
+      register: full_overcloud_hash_result
+
+    - name: Set fact for overcloud dlrn_hash
+      set_fact:
+        overcloud_dlrn_hash: "{{ full_overcloud_hash_result.stdout }}"
+        cacheable: true
+
+    - name: Set fact for overcloud dlrn_hash path
+      set_fact:
+        overcloud_dlrn_hash_path: "{{ overcloud_dlrn_hash[:2] }}/{{ overcloud_dlrn_hash[2:4] }}/{{ overcloud_dlrn_hash }}"
+        cacheable: true
+
+    - name: Set fact for the overcloud Docker image tag
+      set_fact:
+        overcloud_docker_image_tag: "{{ overcloud_dlrn_hash }}"
+        cacheable: true
+
 - name: Set fact for dlrn_hash path
   set_fact:
     dlrn_hash_path: "{{ dlrn_hash[:2] }}/{{ dlrn_hash[2:4] }}/{{ dlrn_hash }}"
