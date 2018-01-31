@@ -22,10 +22,10 @@ docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 overcloud_image_url: http://66.187.229.139/builds-pike/current-tripleo/overcloud-full.tar
 ipa_image_url: http://66.187.229.139/builds-pike/current-tripleo/ironic-python-agent.tar
 repo_cmd_before: |
-  sudo yum clean all;
-  sudo yum-config-manager --disable "*"
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo yum clean all;
+  sudo yum-config-manager --disable "*"
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else
@@ -116,6 +116,7 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo /etc/yum.repos.d/CentOS-QEMU-EV.repo;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
+  sudo yum clean metadata
   sudo yum update -y
 
 undercloud_rpm_dependencies: >-

@@ -126,4 +126,5 @@ repo_cmd_after: |
   sudo yum remove -y rdo-release || true;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
+  sudo yum clean metadata
   sudo yum update -y
