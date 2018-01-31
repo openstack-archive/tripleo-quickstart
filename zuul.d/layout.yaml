@@ -1,7 +1,5 @@
----
 
 - project:
-    name: openstack/tripleo-quickstart
     templates:
       - tripleo-undercloud-jobs
       - tripleo-multinode-baremetal-minimal
