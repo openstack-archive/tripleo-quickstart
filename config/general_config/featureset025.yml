@@ -14,14 +14,8 @@ enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
 network_isolation_args: >-
-  {% if release != 'newton' %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
-  {%- else -%}
-  -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-isolation-absolute.yaml
-  -e {{ tripleo_root }}/tripleo-ci/test-environments/network-templates/network-environment.yaml
-  -e {{ tripleo_root }}/tripleo-ci/test-environments/net-iso.yaml
-  {%- endif -%}
 
 # This featureset is extremely resource intensive, so we disable telemetry
 # in order to reduce the overall memory footprint
