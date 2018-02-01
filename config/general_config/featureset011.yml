@@ -35,6 +35,19 @@ composable_scenario: multinode.yaml
 upgrade_composable_scenario: multinode-containers.yaml
 deployed_server: true
 
+# Tripleo_upgrade role parameters
+use_tripleo_upgrade: true
+undercloud_upgrade: false
+overcloud_upgrade: true
+tht_directory: "/usr/share/openstack-tripleo-heat-templates"
+upstream_container_images: true
+create_container_images_download_script: false
+container_images_download_script: '{{ working_dir }}/overcloud-prep-containers.sh'
+containers_default_parameters: "{{ working_dir }}/containers-default-parameters.yaml"
+create_docker_registry: false
+tripleo_ci: true
+use_oooq: true
+
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
 artcl_create_docs_payload:
