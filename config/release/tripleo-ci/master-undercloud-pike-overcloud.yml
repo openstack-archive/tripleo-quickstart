@@ -6,8 +6,10 @@ overcloud_release: pike
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
 docker_registry_host: docker.io
-docker_registry_namespace: tripleopike
-docker_image_tag: "{{ overcloud_docker_image_tag|default(dlrn_hash_tag) }}"
+docker_registry_namespace: tripleomaster
+docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+overcloud_docker_registry_namespace: "tripleo{{ overcloud_release }}"
+overcloud_docker_image_tag: "{{ overcloud_dlrn_hash }}"
 undercloud_image_url: https://images.rdoproject.org/master/delorean/{{ dlrn_hash|default(dlrn_hash_tag) }}/undercloud.qcow2
 ipa_image_url: https://images.rdoproject.org/pike/delorean/{{ overcloud_dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar
 overcloud_image_url: https://images.rdoproject.org/pike/delorean/{{ overcloud_dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar
@@ -134,4 +136,3 @@ repo_cmd_after: |
 undercloud_rpm_dependencies: >-
   python-tripleoclient
   ceph-ansible
-
