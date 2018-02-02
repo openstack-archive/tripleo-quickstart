@@ -81,3 +81,17 @@ the relevant domain XML ends up looking something like::
       <model type="virtio"/>
       <alias name="net1"/>
     </interface>
+
+What if I want privileged mode instead?
+---------------------------------------
+
+Unprivileged mode is sometimes inconvenient, for example as a developer
+working as a single user on local hardware, it may be preferable
+to use privileged mode so that quickstart VMs can survive a host reboot
+and also so that it's easier to access host tools such as virt-manager
+(which is particularly useful for diagnosing boot issues via the primary
+console).
+
+To enable this mode you can select the following environment::
+
+  quickstart.sh -E config/environments/dev_privileged_libvirt.yml $VIRTHOST
