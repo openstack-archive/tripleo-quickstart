@@ -12,7 +12,7 @@ Requirements:
 
 .. note:: You can download your rc file from Horizon:
    https://<OVB host cloud>/dashboard/project/access_and_security/.
-   In the ‘API Access’ tab, click the ‘Download Openstack RC File v2.0’ (not the V3.0 file).
+   In the 'API Access' tab, click the 'Download Openstack RC File v2.0' (not the V3.0 file).
    The RC file will not contain your password when you download it.
    When you source this file, you will be prompted for it.
    To run devmode without interactive prompts, edit the rc file to contain your password.
