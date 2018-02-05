@@ -80,17 +80,19 @@ run_tempest: >-
 test_regex: ''
 # TODO(emilien) run ec2api tests when ec2api is supported in python-tempestconf
 # 'ec2api.tests.functional.api.test_key_pairs.KeyPairTest'
+tempest_whitelist_new:
+  - "tempest.api.object_storage.test_object_services.ObjectTest"
+  - "barbican_tempest_plugin.tests.scenario.test_volume_encryption.VolumeEncryptionTest"
+  - "telemetry_tempest_plugin.scenario.test_telemetry_integration.TestTelemetryIntegration"
+tempest_whitelist_old:
+  - "tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern"
+  - "tempest.api.object_storage.test_object_services.ObjectTest"
 tempest_whitelist: >-
-    {% if release not in ['newton', 'ocata', 'pike'] -%}
-    ["tempest.api.object_storage.test_object_services.ObjectTest",
-     "barbican_tempest_plugin.tests.scenario.test_volume_encryption.VolumeEncryptionTest",
-     "ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration"]
-    {%- else -%}
-    ["tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern",
-     "tempest.api.object_storage.test_object_services.ObjectTest"]
-    {%- endif -%}
+  {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_whitelist_new }}
+  {%- else -%}{{ tempest_whitelist_old }}
+  {%- endif -%}
 
-tempest_plugins:
+tempest_plugins_old:
   - python-aodh-tests
   - python-ceilometer-tests
   - python-gnocchi-tests
@@ -98,6 +100,16 @@ tempest_plugins:
   - python-barbican-tests-tempest
   - python-zaqar-tests
   - python-ec2-api-tests
+tempest_plugins_new:
+  - python-telemetry-tests-tempest
+  - python-barbican-tests-tempest
+  - python-zaqar-tests
+  - python-ec2-api-tests
+  - python-heat-tests-tempest
+tempest_plugins: >-
+  {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_plugins_new }}
+  {%- else -%}{{ tempest_plugins_old }}
+  {%- endif -%}
 tempest_extra_config: >-
   {% if release not in ['newton', 'ocata', 'pike'] -%}
     {'compute-feature-enabled.attach_encrypted_volume': 'True', 'auth.tempest_roles': '"Member, creator"', 'telemetry.alarm_granularity': '60'}
