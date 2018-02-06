@@ -4,7 +4,8 @@ if [ -t 1 ] ; then
     export ANSIBLE_FORCE_COLOR=true
 fi
 # Log everything from this script into _quickstart.log
-exec &> >(tee -i _quickstart.log )
+echo "$0 $@" > _quickstart.log
+exec &> >(tee -i -a _quickstart.log )
 
 # With LANG set to everything else than C completely undercipherable errors
 # like "file not found" and decoding errors will start to appear during scripts
