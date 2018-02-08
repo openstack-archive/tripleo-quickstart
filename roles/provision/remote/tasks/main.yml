@@ -32,7 +32,7 @@
 - name: Set tuned profile if not already set
   command: tuned-adm profile "{{ tuned_profile }}"
   become: true
-  when: tuned.stdout.find("{{ tuned_profile }}") != 1
+  when: tuned.stdout.find(tuned_profile) != 1
 
 # Create a non-root user on the target host.  This is the user that
 # will own the virtual infrastructure on which we deploy openstack.

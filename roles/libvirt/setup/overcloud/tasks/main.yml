@@ -44,7 +44,7 @@
     - name: Create additional blockdevice for objectstorage nodes
       command: >
         dd if=/dev/zero of={{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img bs=1 count=0 seek={{ extradisks_size }}
-      when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
+      when: flavors[item[0].flavor].extradisks|default(false)
       with_nested:
         - "{{ overcloud_nodes }}"
         - "{{ extradisks_list }}"
@@ -52,7 +52,7 @@
     - name: Check if additional blockdevices are attached
       command: >
         virsh domblkinfo {{ item[0].name }} {{ libvirt_volume_path }}/{{ item[0].name }}_{{ item[1] }}.img
-      when: "{{ flavors[item[0].flavor].extradisks | default(false) }}"
+      when: flavors[item[0].flavor].extradisks|default(false)
       changed_when: false
       ignore_errors: true
       register: overcloud_extradisks_check
