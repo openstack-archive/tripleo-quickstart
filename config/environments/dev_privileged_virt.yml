@@ -1,9 +1,0 @@
-# If you prefer privileged VMs in order to use tools like virt-manager on the host
-# you can use these options.  This also makes VMs survive reboots \o/
-# This is particularly useful for local development environments
-non_root_chown: true
-non_root_user: stack
-undercloud_user: stack
-working_dir: "/home/{{non_root_user}}"
-ssh_user: root
-libvirt_uri: qemu:///system

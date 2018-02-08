@@ -14,6 +14,7 @@ Some known examples of different environments are:
   * local libvirt environments
   * running OVB based deployments in various clouds
   * Using a CentOS or RHEL qcow2 image without preinstalled OpenStack RPMS.
+  * Developer environments with libvirt in privileged mode
 
 Anything defined in an environment configuration file should not impact or
 overwrite a variable in a featureset, topology or release configuration file.
