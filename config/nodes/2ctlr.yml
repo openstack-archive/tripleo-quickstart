@@ -2,8 +2,12 @@
 overcloud_nodes:
   - name: control_0
     flavor: control
+    default_name: overcloud-controller-0
+    hostnamemap_override: "{{ hostvars[groups['overcloud'][0]].ansible_hostname }}"
   - name: control_1
     flavor: control
+    default_name: overcloud-controllerapi-0
+    hostnamemap_override: "{{ hostvars[groups['overcloud'][1]].ansible_hostname }}"
 
 node_count: 2
 
