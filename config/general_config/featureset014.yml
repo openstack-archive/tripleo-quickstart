@@ -36,6 +36,7 @@ step_introspect: false
 composable_scenario: scenario003-multinode.yaml
 upgrade_composable_scenario: scenario003-multinode-containers.yaml
 validate_template: scenario003-multinode.yaml
+deployed_server: true
 
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true

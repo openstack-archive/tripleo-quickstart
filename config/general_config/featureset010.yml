@@ -40,6 +40,12 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
+deployed_server: >-
+  {% if release in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
 deploy_steps_ansible_workflow: >-
   {% if release not in ['newton','ocata','pike'] -%}
   true
