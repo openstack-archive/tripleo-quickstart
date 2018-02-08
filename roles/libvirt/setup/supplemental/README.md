@@ -12,7 +12,7 @@ VM.
 
 The role expects to be provided with a `supplemental_provision_script` which
 will be copied to the virthost during execution and is responsible for
-preparing the the vm's image and adding it to the proper libvirt pool.
+preparing the vm's image and adding it to the proper libvirt pool.
 Furthermore, the `supplemental_node_ip` must be configured by this script and
 it will be used to add the host to ansible in-memory inventory as well as
 in preparation of ssh config files by the tripleo-inventory role.
