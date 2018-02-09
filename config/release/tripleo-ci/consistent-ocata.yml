@@ -1,8 +1,9 @@
 devmode: true
 overcloud_as_undercloud: true
 use_specific_hash: true
-docker_registry_host: trunk.registry.rdoproject.org
-docker_registry_namespace: ocata
+# Ocata doesn't have container support, is it necessary to have this here ?
+docker_registry_host: docker.io
+docker_registry_namespace: tripleoocata
 delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 docker_image_tag: *promotion-testing-tag
 
