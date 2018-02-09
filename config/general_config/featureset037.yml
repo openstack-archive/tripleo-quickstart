@@ -1,0 +1,49 @@
+# Deploy minimal overcloud (keystone and supporting services) and run
+# a minor version update (overcloud only).
+
+composable_scenario: scenario000-multinode-containers.yaml
+
+overcloud_update: true
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+containerized_overcloud: true
+
+undercloud_generate_service_certificate: false
+ssl_overcloud: false
+
+run_tripleo_validations: false
+run_tripleo_validations_negative_tests: false
+exit_on_validations_failure: false
+
+# extra testing disabled for now, may be enabled later depending on
+# job run time
+test_ping: false
+run_tempest: false
+# test_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
+
+deploy_steps_ansible_workflow: true
+config_download_args: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  -e {{ working_dir }}/config-download.yaml
+  --config-download
+  --deployed-server
+  --disable-validations
+  --verbose
+  {%- endif -%}
