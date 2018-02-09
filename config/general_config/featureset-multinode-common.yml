@@ -6,7 +6,6 @@ step_overcloud_image: false
 step_glance_upload: true
 step_register: false
 hypervisor_wait: false
-deployed_server: true
 network_isolation: false
 package_installs: true
 non_root_user_setup: true

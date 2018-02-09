@@ -33,6 +33,7 @@ step_introspect: false
 
 composable_scenario: multinode.yaml
 upgrade_composable_scenario: multinode-containers.yaml
+deployed_server: true
 
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true

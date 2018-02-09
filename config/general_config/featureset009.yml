@@ -4,6 +4,7 @@ test_ping: true
 # pacemaker settings are configured in the scenario template
 # do not set `enable_pacemaker` in the featureset
 
+deployed_server: true
 composable_scenario: scenario005-multinode.yaml
 validate_template: scenario005-multinode.yaml
 composable_roles: true
