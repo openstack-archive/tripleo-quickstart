@@ -32,13 +32,18 @@ multinode_args: >-
     -e {{ overcloud_templates_path }}/environments/deployed-server-bootstrap-environment-centos.yaml
     --overcloud-ssh-user {{ undercloud_user }}
 
-deploy_steps_ansible_workflow: true
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
 config_download_args: >-
   {% if release not in ['newton','ocata','pike'] -%}
   -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
   -e {{ working_dir }}/config-download.yaml
-  --deployed-server
   --config-download
+  --deployed-server
   --disable-validations
   --verbose
   {%- endif -%}
