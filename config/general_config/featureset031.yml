@@ -2,6 +2,7 @@
 # Deploy an Openstack environment with opnfv configured in the overcloud
 composable_scenario: scenario008-multinode.yaml
 validate_template: scenario008-multinode.yaml
+deployed_server: true
 composable_roles: true
 overcloud_roles:
   - name: Controller

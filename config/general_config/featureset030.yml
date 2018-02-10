@@ -2,6 +2,7 @@
 # Deploy an Openstack environment with OVN configured in the containerized overcloud
 composable_scenario: scenario007-multinode-containers.yaml
 validate_template: scenario007-multinode.yaml
+deployed_server: true
 
 network_isolation: false
 enable_pacemaker: false

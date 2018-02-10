@@ -1,4 +1,5 @@
 composable_scenario: scenario006-multinode.yaml
+deployed_server: true
 
 network_isolation: false
 enable_pacemaker: false
