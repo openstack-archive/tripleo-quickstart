@@ -27,6 +27,9 @@ Role Variables
 * `add_repos` - dictionary of additional repositories to add, could be populated in code, by
                 default is empty. Note that this dictionary will be constructed in the same manner
                 as a typical `repos` dictionary. See examples below.
+* `repo_setup_run_update` - false/true - whether to run or not yum update after setting up the repo.
+                            Default to true.
+
 
   *File*
   ------

@@ -127,4 +127,11 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
   sudo yum clean metadata
+  {% if repo_setup_run_update|default(true)|bool %}
   sudo yum update -y
+  {% endif %}
+
+undercloud_rpm_dependencies: >-
+  python-tripleoclient
+  ceph-ansible
+
