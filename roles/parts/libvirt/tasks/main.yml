@@ -24,7 +24,7 @@
 - name: Start libvirtd
   service:
     name: "{{ libvirtd_service }}"
-    state: running
+    state: started
     enabled: true
   become: true
   when: not chrooted|bool
