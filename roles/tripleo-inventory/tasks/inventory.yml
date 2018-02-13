@@ -85,7 +85,6 @@
 - name: Add undercloud vm to inventory
   add_host:
     name: undercloud
-    groups: undercloud
     ansible_host: '{{ undercloud_ip }}'
     ansible_fqdn: undercloud
     ansible_user: '{{ undercloud_user }}'
