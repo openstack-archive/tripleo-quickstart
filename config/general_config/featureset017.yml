@@ -104,8 +104,8 @@ tempest_plugins_old:
 tempest_plugins_new:
   - python-telemetry-tests-tempest
   - python-barbican-tests-tempest
-  - python-zaqar-tests
-  - python-ec2-api-tests
+  - python-zaqar-tests-tempest
+  - python-ec2api-tests-tempest
   - python-heat-tests-tempest
 tempest_plugins: >-
   {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_plugins_new }}

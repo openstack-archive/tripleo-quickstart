@@ -83,6 +83,13 @@ tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
   - 'sahara_tempest_plugin.tests.api.test_data_sources.DataSourceTest'
   - 'mistral_tempest_tests.tests.api.v2.test_actions.ActionTestsV2'
-tempest_plugins:
+tempest_plugins_old:
   - python-sahara-tests-tempest
   - python-mistral-tests
+tempest_plugins_new:
+  - python-sahara-tests-tempest
+  - python-mistral-tests-tempest
+tempest_plugins: >-
+  {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_plugins_new }}
+  {%- else -%}{{ tempest_plugins_old }}
+  {%- endif -%}
