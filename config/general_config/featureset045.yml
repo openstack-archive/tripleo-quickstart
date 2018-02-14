@@ -1,0 +1,73 @@
+# Summary of the feature set.
+# Deploy a containerized stable/pike Openstack environment and upgrade it
+
+undercloud_setup: true
+enable_pacemaker: true
+overcloud_ipv6: false
+
+containerized_overcloud: true
+
+undercloud_update: true
+
+release: master
+
+# TODO(gcerami): we need a way to deploy a previous known good dlrn hash
+# then update to the latest
+# for now, we will just start the update without changing the repository
+
+overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
+overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
+overcloud_templates_branch: stable/{{ overcloud_release }}
+
+undercloud_generate_service_certificate: false
+
+ssl_overcloud: false
+
+test_ping: true
+run_tempest: false
+step_introspect: false
+
+composable_scenario: scenario000-multinode-containers.yaml
+upgrade_composable_scenario: scenario000-multinode-containers.yaml
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
