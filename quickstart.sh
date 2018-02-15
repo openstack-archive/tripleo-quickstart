@@ -12,7 +12,7 @@ exec &> >(tee -i -a _quickstart.log )
 # or even ansible modules
 LANG=C
 
-DEFAULT_OPT_TAGS="untagged,provision,environment,libvirt,undercloud-scripts,undercloud-inventory,overcloud-scripts,undercloud-install,undercloud-post-install,tripleoui-validate"
+DEFAULT_OPT_TAGS="untagged,provision,environment,libvirt,undercloud-scripts,undercloud-inventory,overcloud-scripts,undercloud-setup,undercloud-install,undercloud-post-install,tripleoui-validate"
 ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 
 : ${OPT_BOOTSTRAP:=0}
