@@ -86,9 +86,12 @@ These variables control the resources assigned to ceph storage nodes:
 -  ``ceph_memory``
 -  ``ceph_vcpu``
 
-There is another option ``extradevices`` that can be used to create three
-additional blockdevices ``vdb``, ``vdc`` and ``vdd`` per node. By default it
-is only enabled on the objectstorage node flavor.
+There is another option ``extradisks`` that can be used to create three
+additional blockdevices ``vdb``, ``vdc`` and ``vdd`` per node. By default it is
+only enabled on the objectstorage node flavor. Note that ironic will pick the
+smallest disk available in the node when there are multiple disks attached. You
+must either set the same size to all the disks using ``extradisks_size`` or
+provide ``root_device_hints`` to set in ironic.
 
 An example
 ----------
