@@ -53,8 +53,8 @@ Platform support
   * Fedora [*]_
 
 TripleO-Quickstart deploys TripleO therefore is also subject to `TripleO's
-requirements <https://docs.openstack.org/developer/tripleo-docs/environments/
-virtual.html#minimum-system-requirements>`_.
+requirements <https://docs.openstack.org/tripleo-docs/latest/install/
+environments/baremetal.html#minimum-system-requirements>`_.
 
 Problem: Automate the setup and deployment of TripleO
 =====================================================
