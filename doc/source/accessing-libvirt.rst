@@ -34,6 +34,11 @@ For example::
 
     $ virsh -c qemu:///session console undercloud
 
+To set the password for the undercloud and overcloud root user you can set
+the `overcloud_full_root_pwd` variable.
+
+    quickstart.sh <snip> -e overcloud_full_root_pwd=password <snip> virthost
+
 Where are my networks?
 ----------------------
 
