@@ -109,3 +109,26 @@ tempest_extra_config: {'telemetry.alarm_granularity': '60'}
 # This is a workaround to have test_volume_boot_pattern passing, it's failing
 # due a concurrency, for more information, check lp #1742936
 tempest_workers: 1
+
+deployed_server: >-
+  {% if release in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  -e /usr/share/openstack-tripleo-heat-templates/environments/disable-workflow-tasks.yaml
+  -e {{ working_dir }}/config-download.yaml
+  --config-download
+  --deployed-server
+  --disable-validations
+  --verbose
+  {%- endif -%}
