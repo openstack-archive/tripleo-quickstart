@@ -86,7 +86,7 @@ if [ "$JOB_TYPE" = "promote" ]; then
 
     # for RDO on RHEL jobs, BUILD_ID ends up being a full url to a delorean repo.  For internal OSP (rhos-n), it's just a build tag
     # this is because the OSP jobs use rhos-release (which wants a date tag), and for RDO on RHEL builds, we need the actual URL.
-    if [[ $RELEASE = "master" || $RELEASE = "pike" || $RELEASE = "ocata" || $RELEASE = "newton" ]]; then
+    if [[ $RELEASE = "master" || $RELEASE = "queens" || $RELEASE = "pike" || $RELEASE = "ocata" || $RELEASE = "newton" ]]; then
         # ex: http://trunk.rdoproject.org/centos7/5b/b1/5bb13005806597e38ee504bf5a3f42b437ec0890_af9bddfb
         #                                                               ^----- $7
         OPT_DELOREAN_URI=$OPT_BUILD_ID
@@ -108,7 +108,7 @@ if [ "$JOB_TYPE" = "promote" ]; then
     OPT_VARS+=("")
 
     if [ "$OPT_SELINUX_PERMISSIVE_UC_INSTALL" = "true" ]; then
-        if [[ $RELEASE = "master" || $RELEASE = "pike" || $RELEASE = "ocata" || $RELEASE = "newton" ]]; then
+        if [[ $RELEASE = "master" || $RELEASE = "queens" || $RELEASE = "pike" || $RELEASE = "ocata" || $RELEASE = "newton" ]]; then
             OPT_VARS+=("-e")
             OPT_VARS+=("undercloud_install_script=$WORKSPACE/image-build/$RELEASE/latest/undercloud-install-selinux-permissive.sh.j2")
         fi
@@ -117,15 +117,15 @@ if [ "$JOB_TYPE" = "promote" ]; then
     if [[ $RELEASE = "rhos-12" || $RELEASE = "rhos-13" ]]; then
         export FEATURESET=featureset022
 
-    # TODO: remove when/if https://review.openstack.org/#/c/529408 lands
-    OPT_VARS+=("-e tempest_config=true")
-    OPT_VARS+=("-e run_tempest=true")
-    OPT_VARS+=("-e tempest_workers=4")
-    OPT_VARS+=("-e test_regex=smoke|test_minimum_basic|test_network_basic_ops|test_snapshot_pattern|test_volume_boot_pattern")
+        # TODO: remove when/if https://review.openstack.org/#/c/529408 lands
+        OPT_VARS+=("-e tempest_config=true")
+        OPT_VARS+=("-e run_tempest=true")
+        OPT_VARS+=("-e tempest_workers=4")
+        OPT_VARS+=("-e test_regex=smoke|test_minimum_basic|test_network_basic_ops|test_snapshot_pattern|test_volume_boot_pattern")
     fi
 
     # This passes the correct tq release config file for rdo on rhel
-    if [[ $RELEASE = "master" || $RELEASE = "pike" || $RELEASE = "ocata" || $RELEASE = "newton" ]]; then
+    if [[ $RELEASE = "master" || $RELEASE = "queens" || $RELEASE = "pike" || $RELEASE = "ocata" || $RELEASE = "newton" ]]; then
         if [[ $PLATFORM = "rhel" ]]; then
             RELEASE=$RELEASE-rhel
         fi
