@@ -10,7 +10,7 @@ ExecStart=/usr/bin/ssh -NT -o \
    UserKnownHostsFile=/dev/null -o \
    StrictHostKeyChecking=no -o \
    ExitOnForwardFailure=no -i \
-   /home/{{ ssh_user }}/id_rsa_undercloud {{ ssh_user }}@{{ undercloud_ip }} \
+   {{ working_dir }}/id_rsa_undercloud {{ ssh_user }}@{{ undercloud_ip }} \
    -L 0.0.0.0:6385:{{ ssh_tunnel_target_ip }}:6385 \
    -L 0.0.0.0:5000:{{ ssh_tunnel_target_ip }}:5000 \
    -L 0.0.0.0:5050:{{ ssh_tunnel_target_ip }}:5050 \
