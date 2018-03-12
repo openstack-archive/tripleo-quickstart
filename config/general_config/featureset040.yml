@@ -2,35 +2,53 @@
 # Deploy a containerized stable/pike Openstack environment and upgrade it
 
 undercloud_setup: true
-enable_pacemaker: true
 overcloud_ipv6: false
 
+# pacemaker settings are configured in the scenario template
+# do not set `enable_pacemaker` in the featureset
+
+# Container prep parameters.
 containerized_overcloud: true
 containerized_overcloud_upgrade: true
-major_upgrade_script: major-upgrade-overcloud-containers.sh.j2
-upgrade_undercloud_repo_script: upgrade-repo-tripleo-ci.sh.j2
-upgrade_overcloud_repo_template: overcloud-repo-tripleo-ci.yaml.j2
 
-# save time by doing a mixed upgrade
-step_pre_undercloud_upgrade: true
-step_upgrade_undercloud: false
-release: master # until we have a stable/queens
-mixed_upgrade: true
-overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
-overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
-overcloud_templates_branch: stable/{{ overcloud_release }}
+enable_opstools_repo: true
 
 undercloud_generate_service_certificate: false
 
 ssl_overcloud: false
 
-test_ping: true
-run_tempest: false
 step_introspect: false
 
-composable_scenario: multinode-containers.yaml
-upgrade_composable_scenario: multinode-containers.yaml
+composable_scenario: scenario001-multinode-containers.yaml
+upgrade_composable_scenario: scenario001-multinode-containers.yaml
 deployed_server: true
+
+test_ping: true
+run_tempest: false
+
+# save time by doing a mixed upgrade
+step_pre_undercloud_upgrade: true
+step_upgrade_undercloud: false
+mixed_upgrade: true
+
+# Tripleo-upgrade link
+use_tripleo_upgrade: true
+overcloud_upgrade: true
+
+# disable tripleo-upgrade container manipulation.
+create_docker_registry: false
+use_local_docker_registry: false
+create_container_images_download_script: false
+
+container_registry_file: "overcloud_containers.yaml"
+
+tripleo_ci: true
+use_oooq: true
+
+tripleo_upgrade_debug: true
+
+# Mandatory for deployed_servers
+tripleo_upgrade_validations_non_fatal: true
 
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
