@@ -229,3 +229,6 @@ exit_on_validations_failure: False
 # Update undercloud and overcloud images with the repos provided via the
 # release config.
 update_images: false
+
+# If running in chroot-like environments (containers)
+chrooted: false
