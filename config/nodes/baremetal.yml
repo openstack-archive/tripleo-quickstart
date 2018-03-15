@@ -1,0 +1,16 @@
+# Define a node configuration suitable for baremetal.
+
+# Baremetal deployments are unique with respect to the known preexisting
+# static network addresses and hardware configuration. Baremetal environments
+# must be configured via a separate process [1]
+
+# No virtual machine  will be created and the topology is expected
+# to be defined properly somewhere else.
+
+# Please review
+# [1] https://images.rdoproject.org/docs/baremetal/environment-settings-structure.html
+# [2] https://docs.openstack.org/tripleo-quickstart/latest/node-configuration.html
+
+# Essentially ensuring no libvirt guests are provisioned
+# by setting overcloud_nodes to null
+overcloud_nodes:
