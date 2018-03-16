@@ -1,0 +1,9 @@
+---
+features:
+  - update the config/general_config/minimal.yml and config/general_config/pacemaker.yml
+    configuration files to more closely match what is executed upstream.
+deprecations:
+  - The configurations that be default did not use containers for releases that
+    supported containers ( pike++ ) are now deprecrated.  Specifically the
+    configuration file in tripleo-quickstart-extras config/general_config/containers_minimal.yml
+    and config/general_config/containers_undercloud_minimal.yml are deprecrated.
