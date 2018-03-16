@@ -10,11 +10,9 @@ undercloud_check_sanity: true
 containerized_overcloud: false
 containerized_overcloud_upgrade: false
 
-# Force addition of overcloud-upgrade tag, although what will
-# be performed is an undercloud upgrade instead.
-mixed_upgrade: true
-
 # Tripleo-upgrade specific parameters
-use_tripleo_upgrade: true
 undercloud_upgrade: true
-target_upgrade_version: "master"
+
+# Deactivate validations as there is no overcloud
+test_ping: false
+run_tempest: false
