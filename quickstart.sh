@@ -13,6 +13,7 @@ exec &> >(tee -i -a _quickstart.log )
 LANG=C
 
 DEFAULT_OPT_TAGS="untagged,provision,environment,libvirt,undercloud-scripts,undercloud-inventory,overcloud-scripts,undercloud-setup,undercloud-install,undercloud-post-install,tripleoui-validate"
+DEFAULT_OPT_OVERCLOUD_PREP_TAGS="overcloud-prep-config,overcloud-prep-images,overcloud-prep-flavors,overcloud-prep-containers,overcloud-prep-network,overcloud-scripts,overcloud-ssl"
 ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 
 : ${OPT_BOOTSTRAP:=0}
@@ -239,6 +240,9 @@ usage () {
     echo "                      only run plays and tasks tagged with these values,"
     echo "                      specify 'all' to run everything"
     echo "                      (default=$OPT_TAGS)"
+    echo "  -o, --tags-overcloud-prep"
+    echo "                      Include the overcloud prep tags automatically in"
+    echo "                      addition to the default tags"
     echo "  -T, --teardown [ all | virthost | nodes | none ]"
     echo "                      parts of a previous deployment to tear down before"
     echo "                      starting a new one, see the docs for full description"
@@ -295,6 +299,11 @@ while [ "x$1" != "x" ]; do
 
         --skip-tags|-S)
             OPT_SKIP_TAGS=$2
+            shift
+            ;;
+
+        --tags-overcloud-prep|-o)
+            OPT_TAGS="${OPT_TAGS:+$OPT_TAGS,$DEFAULT_OPT_OVERCLOUD_PREP_TAGS}"
             shift
             ;;
 
