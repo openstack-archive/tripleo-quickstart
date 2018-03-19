@@ -22,7 +22,9 @@ extra_args: >-
   --ntp-server pool.ntp.org
 
 container_args: >-
+  {% if release in ['pike','queens'] -%}
   -e {{ overcloud_templates_path }}/environments/docker.yaml
+  {%- endif -%}
   -e {{ working_dir }}/containers-default-parameters.yaml
   -e {{ overcloud_templates_path }}/environments/openshift.yaml
 
