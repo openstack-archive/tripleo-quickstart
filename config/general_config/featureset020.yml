@@ -13,6 +13,15 @@ ssl_overcloud: false
 overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
 
+# This enables container deployements after Pike
+containerized_overcloud: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+delete_docker_cache: true
+
 # Tell tripleo about our environment
 enable_pacemaker: false
 network_isolation: false
@@ -34,6 +43,7 @@ artcl_create_docs_payload:
   included_deployment_scripts:
     - undercloud-install
     - overcloud-custom-tht-script
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
@@ -46,6 +56,7 @@ artcl_create_docs_payload:
     - env-setup-virt
     - undercloud-install
     - overcloud-custom-tht-script
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
