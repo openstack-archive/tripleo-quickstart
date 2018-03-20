@@ -2,3 +2,5 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 step_overcloud_image: true
 step_glance_upload: false
+test_ping: false
+run_tempest: false
