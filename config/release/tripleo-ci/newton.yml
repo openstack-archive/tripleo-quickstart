@@ -32,7 +32,7 @@ repo_cmd_before: |
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
   rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-newton/current/delorean.repo | grep baseurl | cut -d= -f2`
-  tripleo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-newton/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
+  tripleo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-newton/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/delorean.repo | grep baseurl | cut -d= -f2`
   if [[ -z "$rdo_dlrn" ]]; then
     echo "Failed to parse dlrn hash"
     exit 1
@@ -114,5 +114,7 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
   sudo yum clean metadata
+  {% if repo_setup_run_update|default(true)|bool %}
   sudo yum update -y
+  {% endif %}
 
