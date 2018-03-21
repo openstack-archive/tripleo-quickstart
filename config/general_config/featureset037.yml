@@ -4,6 +4,8 @@
 composable_scenario: scenario000-multinode-containers.yaml
 
 overcloud_update: true
+tripleo_upgrade_validations_non_fatal: true
+tripleo_upgrade_debug: true
 
 network_isolation: false
 enable_pacemaker: false
