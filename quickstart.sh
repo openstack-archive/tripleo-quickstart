@@ -239,6 +239,7 @@ usage () {
 }
 
 OPT_VARS=()
+OPT_ENVIRONMENT=()
 
 while [ "x$1" != "x" ]; do
     case "$1" in
@@ -295,7 +296,8 @@ while [ "x$1" != "x" ]; do
             ;;
 
         --environment|-E)
-            OPT_ENVIRONMENT=$2
+            OPT_ENVIRONMENT+=("-e")
+            OPT_ENVIRONMENT+=("@$2")
             shift
             ;;
 
@@ -405,7 +407,7 @@ fi
 # Default Nodes
 : ${OPT_NODES:=$OPT_WORKDIR/config/nodes/1ctlr_1comp.yml}
 # Default Environment
-: ${OPT_ENVIRONMENT:=$OPT_WORKDIR/config/environments/default_libvirt.yml}
+: ${OPT_ENVIRONMENT:=-e @$OPT_WORKDIR/config/environments/default_libvirt.yml}
 
 # allow the deprecated config files to work
 OLD_CONFIG=""
@@ -508,7 +510,7 @@ ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
     -e @$OPT_WORKDIR/config/release/$OPT_RELEASE.yml \
     -e @$OPT_NODES \
     -e @$OPT_CONFIG \
-    -e @$OPT_ENVIRONMENT \
+    ${OPT_ENVIRONMENT[@]} \
     -e local_working_dir=$OPT_WORKDIR \
     ${OPT_LIST_TASKS_ONLY} \
     -e virthost=$VIRTHOST \
