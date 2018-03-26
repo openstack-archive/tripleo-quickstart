@@ -3,9 +3,12 @@
 
 composable_scenario: scenario000-multinode-containers.yaml
 
+# tripleo-upgrade role variables
 overcloud_update: true
 tripleo_upgrade_validations_non_fatal: true
 tripleo_upgrade_debug: true
+tripleo_ci: true
+use_oooq: true
 
 network_isolation: false
 enable_pacemaker: false
