@@ -195,5 +195,5 @@
   shell: >-
     find {{ image_cache_dir }} -type f
     {% if not image_cache_dir_cleanup|bool %}
-    -mtime +{{ image_cache_expire_days - 1 }} {% endif %}|
+    -mtime +{{ image_cache_expire_days|int - 1 }} {% endif %}|
     xargs --no-run-if-empty -t rm -rf
