@@ -28,7 +28,11 @@ telemetry_args: >-
 # is ready.
 extra_args: >-
   --ntp-server pool.ntp.org
+  {% if release in ['pike', 'queens'] -%}
   -e {{ overcloud_templates_path }}/environments/services-docker/neutron-ovn.yaml
+  {%- else -%}
+  -e {{ overcloud_templates_path }}/environments/services/neutron-ovn.yaml
+  {%- endif -%}
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
