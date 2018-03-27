@@ -18,4 +18,8 @@ not needing to maintain/host a specific undercloud image.
 * `convert_image_tempest_plugins`: List of tempest plugins to install (This is
   separate from the install list so that it can be allowed to fail without
   failing the conversion)
+* `overcloud_full_root_pwd`: If set the defined password will
+  set for the root user on the overcloud-full image.  The
+  resulting overcloud and undercloud instances will have
+  the password set.
 
