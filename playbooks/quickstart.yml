@@ -57,3 +57,12 @@
   roles:
     - tripleo-inventory
 
+# Setup the virtual bmc
+# This must be done after inventory is run for the first time
+- name: Create the virtual BMC
+  hosts: undercloud
+  gather_facts: yes
+  tags:
+    - libvirt
+  roles:
+    - virtbmc
