@@ -177,6 +177,9 @@ ssl_overcloud: false
 overcloud_public_vip: 10.0.0.5
 overcloud_public_vip6: 2001:db8:fd00:1000::14
 
+# Enable the virt_bmc ( virtual baremetal controllers )
+enable_vbmc: true
+
 # Set this to `false` if you don't want your undercloud and overcloud vms
 # to have a VNC console available.
 enable_vnc_console: true
