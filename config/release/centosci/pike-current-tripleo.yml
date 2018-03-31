@@ -24,7 +24,7 @@ repos:
   - type: generic
     reponame: delorean
     filename: delorean.repo
-    baseurl: https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/
+    baseurl: https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/
     priority: 20
 
   - type: file
@@ -38,7 +38,9 @@ repos:
 repo_cmd_after: |
   sudo yum-config-manager --save --setopt centos-ceph-jewel.gpgcheck=0
   sudo yum repolist;
+  {% if repo_setup_run_update|default(true)|bool %}
   sudo yum update -y
+  {% endif %}
 
 undercloud_rpm_dependencies: >-
   python-tripleoclient
