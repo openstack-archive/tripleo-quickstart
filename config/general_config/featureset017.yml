@@ -119,3 +119,25 @@ tempest_extra_config: >-
 # This is a workaround to have test_volume_boot_pattern passing, it's failing
 # due a concurrency, for more information, check lp 1744151
 tempest_workers: 1
+
+deployed_server: >-
+  {% if release in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  -e {{ working_dir }}/config-download.yaml
+  --config-download
+  --deployed-server
+  --disable-validations
+  --verbose
+  {%- endif -%}
