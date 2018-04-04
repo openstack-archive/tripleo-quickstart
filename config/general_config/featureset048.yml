@@ -1,0 +1,67 @@
+# Summary of the feature set.
+# Deploy an non-ha Openstack environment, without SSL, introspect, and
+# ready to execute tempest tests.
+# Example of usage:
+# ./quickstart.sh -t all --retain-inventory -e \
+# @config/general_config/featureset048.yml -R tripleo-ci/consistent-master \
+# -T all $VIRTHOST
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: true
+ssl_overcloud: false
+overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+step_introspect: true
+
+# This enables container deployements after Pike
+containerized_overcloud: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+delete_docker_cache: true
+
+# Tell tripleo about our environment
+enable_pacemaker: false
+network_isolation: false
+
+extra_args: >-
+  --ntp-server pool.ntp.org
+
+# Tempest
+run_tempest: true
+test_regex: '.*'
+test_ping: false
+# Run tempest without skip file
+skip_file_src: ''
+# For full tempest run we need to make sure concurrency is not too high
+tempest_workers: 3
+
+# keep the doc gen settings at the bottom of the config file.
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
