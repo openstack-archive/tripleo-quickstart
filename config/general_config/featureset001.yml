@@ -18,6 +18,23 @@ containerized_overcloud: >-
   {%- endif -%}
 delete_docker_cache: true
 
+containerized_undercloud: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+undercloud_install_cli_options: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  --use-heat
+  {%- endif -%}
+
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/net-config-undercloud.yaml"
+
 # Tell tripleo about our environment.
 enable_pacemaker: true
 network_isolation: true
