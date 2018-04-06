@@ -40,7 +40,7 @@ create_docker_registry: false
 use_local_docker_registry: false
 create_container_images_download_script: false
 
-container_registry_file: "overcloud_containers.yaml"
+container_registry_file: "containers-default-parameters.yaml"
 
 tripleo_ci: true
 use_oooq: true
