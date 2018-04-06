@@ -80,7 +80,7 @@ run_tempest: >-
   true
   {%- endif -%}
 
-test_regex: ''
+test_white_regex: ''
 tempest_whitelist_old:
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
   - 'ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration'

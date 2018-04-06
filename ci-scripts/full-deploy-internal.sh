@@ -121,7 +121,7 @@ if [ "$JOB_TYPE" = "promote" ]; then
         OPT_VARS+=("-e tempest_config=true")
         OPT_VARS+=("-e run_tempest=true")
         OPT_VARS+=("-e tempest_workers=4")
-        OPT_VARS+=("-e test_regex=smoke|test_minimum_basic|test_network_basic_ops|test_snapshot_pattern|test_volume_boot_pattern")
+        OPT_VARS+=("-e test_white_regex=smoke|test_minimum_basic|test_network_basic_ops|test_snapshot_pattern|test_volume_boot_pattern")
     fi
 
     # This passes the correct tq release config file for rdo on rhel

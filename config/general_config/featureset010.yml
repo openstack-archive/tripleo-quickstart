@@ -25,7 +25,7 @@ exit_on_validations_failure: False
 # run them.
 test_ping: false
 run_tempest: true
-test_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+test_white_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
 composable_roles: true
 overcloud_roles:
   - name: Controller

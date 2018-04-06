@@ -78,7 +78,7 @@ run_tempest: >-
   true
   {%- endif -%}
 
-test_regex: ''
+test_white_regex: ''
 # TODO(emilien) run ec2api tests when ec2api is supported in python-tempestconf
 # 'ec2api.tests.functional.api.test_key_pairs.KeyPairTest'
 tempest_whitelist_new:
