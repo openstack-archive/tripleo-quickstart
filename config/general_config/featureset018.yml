@@ -93,3 +93,25 @@ tempest_plugins: >-
   {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_plugins_new }}
   {%- else -%}{{ tempest_plugins_old }}
   {%- endif -%}
+
+deployed_server: >-
+  {% if release in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  -e {{ working_dir }}/config-download.yaml
+  --config-download
+  --deployed-server
+  --disable-validations
+  --verbose
+  {%- endif -%}
