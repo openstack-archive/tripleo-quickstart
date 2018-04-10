@@ -9,6 +9,7 @@ tripleo_upgrade_validations_non_fatal: true
 tripleo_upgrade_debug: true
 tripleo_ci: true
 use_oooq: true
+overcloud_ssh_user: "tripleo-admin"
 
 network_isolation: false
 enable_pacemaker: false
