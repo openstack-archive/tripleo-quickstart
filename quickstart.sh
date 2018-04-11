@@ -37,10 +37,14 @@ clean_virtualenv() {
 : ${OOOQ_EXTRA_REQUIREMENTS:=quickstart-extras-requirements.txt}
 
 install_deps () {
+    # If sudo isn't installed assume we already are a super user
+    # install it anyways so that the install of the other deps succeeds
+    sudo true || yum install -y sudo
     sudo yum -y install \
         /usr/bin/git \
         /usr/bin/virtualenv \
         gcc \
+        iproute \
         libyaml \
         libselinux-python \
         libffi-devel \
