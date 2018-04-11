@@ -135,18 +135,26 @@ bootstrap () {
         # way to make setuptools not try to write the .eggs dir.
         sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
         python setup.py install egg_info --egg-base $OPT_WORKDIR
-        if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
-            mkdir -p .tmp
-            EXTRAS_DIR=$(/bin/mktemp -d -p $(pwd)/.tmp)
-            pushd $EXTRAS_DIR
+
+        mkdir -p .tmp
+        EXTRAS_DIR=$(/bin/mktemp -d -p $(pwd)/.tmp)
+        pushd $EXTRAS_DIR
+
+            if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
                 $ZUUL_CLONER --cache-dir \
                     /opt/git \
                     git://git.openstack.org \
                     openstack/tripleo-quickstart-extras
                 cd openstack/tripleo-quickstart-extras
-                pip install  .
-            popd
-        fi
+            else
+                git clone git://git.openstack.org/openstack/tripleo-quickstart-extras
+                cd tripleo-quickstart-extras
+            fi
+
+            pip install  .
+
+        popd
+
         # Handle the case that pip is too old to use a cache-dir
         pip install --no-cache-dir "${OPT_REQARGS[@]}"
     popd
