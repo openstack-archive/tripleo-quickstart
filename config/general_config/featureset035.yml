@@ -25,6 +25,13 @@ extra_args: >-
   --ntp-server pool.ntp.org
   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
 
+undercloud_enable_routed_networks: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
