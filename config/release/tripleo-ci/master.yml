@@ -69,9 +69,15 @@ repos:
       - puppet-*
 
   - type: generic
-    reponame: delorean-queens-deps
-    filename: delorean-queens-deps.repo
-    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-queens/deps/latest/
+    reponame: delorean-master-deps
+    filename: delorean-master-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-master/deps/latest/
+
+  - type: generic
+    reponame: delorean-master-build-deps
+    filename: delorean-master-build-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-master/build-deps/latest/
+    enabled: 0
 
   # CentOS related repos
   - type: generic
