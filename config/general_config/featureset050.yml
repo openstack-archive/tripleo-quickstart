@@ -13,6 +13,8 @@ containerized_undercloud_upgrade: true
 
 # Tripleo-upgrade specific parameters
 undercloud_upgrade: true
+tripleo_ci: true
+use_oooq: true
 
 # Deactivate validations as there is no overcloud
 test_ping: false
