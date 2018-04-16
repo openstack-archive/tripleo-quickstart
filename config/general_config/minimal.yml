@@ -71,8 +71,12 @@ artcl_create_docs_payload:
 # Use the traditional ping test in newton, ocata and pike
 # Run tempest in queens+
 
-# always run the ping test
-test_ping: true
+test_ping: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
 
 # looking for a small set of tempest tests to validate
 # tempest config and execution are working
