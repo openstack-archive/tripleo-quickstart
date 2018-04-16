@@ -1,7 +1,7 @@
 Host *
     IdentitiesOnly yes
 
-{% if hostvars[groups['virthost'][0]].ansible_private_key_file is defined %}
+{% if virthost_with_private_key %}
 
 Host virthost
     Hostname {{ hostvars[groups['virthost'][0]].ansible_host }}
