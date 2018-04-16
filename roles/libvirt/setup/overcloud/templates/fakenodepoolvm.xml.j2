@@ -1,0 +1,47 @@
+<domain type='{{ libvirt_domain_type }}'>
+  <name>{{ item.name }}</name>
+  <memory unit='MiB'>{{ flavors[item.flavor].memory }}</memory>
+  <vcpu>{{ flavors[item.flavor].vcpu }}</vcpu>
+
+  {{baremetal_vm_xml|default('')}}
+
+  <os>
+    <type arch='{{ libvirt_arch }}'>hvm</type>
+    <boot dev='hd'/>
+    <bootmenu enable='no'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='host-passthrough'/>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <disk type='volume' device='disk'>
+      <driver name='qemu' type='qcow2' cache='unsafe'/>
+      <source pool='{{ libvirt_volume_pool }}' volume='{{ item.name }}.qcow2'/>
+      <target dev='{{ libvirt_diskdev }}' bus='{{ libvirt_diskbus }}'/>
+    </disk>
+     <interface type='bridge'>                                                   
+       <source bridge='virbr0'/>                                                 
+       <model type='virtio'/>                                                    
+     </interface>
+    <serial type='pty'/>
+    <console type='pty'/>
+
+{% if enable_vnc_console|bool %}
+    <input type='mouse' bus='ps2'/>
+    <graphics type='vnc' port='-1' autoport='yes'/>
+    <video>
+      <model type='cirrus' vram='9216' heads='1'/>
+    </video>
+{% endif %}
+
+    {{baremetal_vm_device_xml|default('')}}
+
+  </devices>
+</domain>

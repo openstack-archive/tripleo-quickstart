@@ -18,6 +18,10 @@
 %} undercloud_ip={{ hostvars[host]['undercloud_ip'] }}{% endif %}
 {% if 'ansible_ssh_extra_args' in hostvars[host]
 %} ansible_ssh_extra_args={{ hostvars[host]['ansible_ssh_extra_args']|quote }}{% endif %}
+{% if 'subnode_public_ip' in hostvars[host]
+%} subnode_public_ip={{ hostvars[host]['subnode_public_ip'] }}{% endif %}
+{% if 'subnode_private_ip' in hostvars[host]
+%} subnode_private_ip={{ hostvars[host]['subnode_private_ip'] }}{% endif %}
 
 {% endif %}
 {% endfor %}
