@@ -12,6 +12,9 @@ containerized_overcloud_upgrade: false
 
 # Tripleo-upgrade specific parameters
 undercloud_upgrade: true
+overcloud_deploy_script: "{{ working_dir }}/overcloud_deploy.sh"
+tripleo_ci: true
+use_oooq: true
 
 # Deactivate validations as there is no overcloud
 test_ping: false
