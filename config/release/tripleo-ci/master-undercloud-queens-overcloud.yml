@@ -16,7 +16,7 @@ overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templ
 overcloud_templates_branch: stable/{{ overcloud_release }}
 
 undercloud_image_url: https://images.rdoproject.org/master/delorean/{{ dlrn_hash|default(dlrn_hash_tag) }}/undercloud.qcow2
-ipa_image_url: https://images.rdoproject.org/queens/delorean/{{ overcloud_dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar
+ipa_image_url: https://images.rdoproject.org/master/delorean/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar
 overcloud_image_url: https://images.rdoproject.org/queens/delorean/{{ overcloud_dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar
 images:
     - name: undercloud

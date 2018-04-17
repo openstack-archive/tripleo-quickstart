@@ -9,7 +9,7 @@ docker_registry_host: docker.io
 docker_registry_namespace: tripleopike
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 undercloud_image_url: https://images.rdoproject.org/pike/delorean/{{ dlrn_hash|default(dlrn_hash_tag) }}/undercloud.qcow2
-ipa_image_url: https://images.rdoproject.org/ocata/delorean/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/ironic-python-agent.tar
+ipa_image_url: https://images.rdoproject.org/pike/delorean/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar
 overcloud_image_url: https://images.rdoproject.org/ocata/delorean/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/overcloud-full.tar
 images:
     - name: undercloud
