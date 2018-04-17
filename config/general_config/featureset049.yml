@@ -1,0 +1,44 @@
+# Containerized overcloud
+# Enables Ceph, Pacemaker and network isolation on single nic
+undercloud_generate_service_certificate: false
+step_introspect: false
+extra_args: >-
+  --ntp-server pool.ntp.org
+  - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-ansible.yaml
+  - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-mds.yaml
+  - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-rgw.yaml
+network_isolation: true
+network_isolation_type: 'single-nic-vlans'
+containerized_overcloud: true
+test_ping: false
+run_tempest: false
+ssl_overcloud: false
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+enable_pacemaker: true
+step_root_device_size: true
+disk_root_device_size: 40000
+step_root_device_hints: true

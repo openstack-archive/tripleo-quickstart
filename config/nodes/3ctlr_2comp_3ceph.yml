@@ -1,0 +1,60 @@
+# Deploy a big HA OpenStack environment with Ceph
+#
+# This will require (8192 * 3) + (4096 * 5) == approx. 48GB for the overcloud
+# nodes, plus another 12GB for the undercloud, for a total of around
+# 60GB.
+control_memory: 8192
+compute_memory: 4096
+ceph_memory: 4096
+
+undercloud_memory: 12288
+
+# Giving the undercloud additional CPUs can greatly improve heat's
+# performance (and result in a shorter deploy time).
+# Using a total of 10 vcpus (1 is the default for overcloud nodes)
+undercloud_vcpu: 4
+
+# Since HA has more machines, we can set the cpu for controllers and
+# compute nodes to 1
+default_vcpu: 1
+
+# Create three controller, two computes and three ceph nodes.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    virtualbmc_port: 6230
+
+  - name: control_1
+    flavor: control
+    virtualbmc_port: 6231
+
+  - name: control_2
+    flavor: control
+    virtualbmc_port: 6232
+
+  - name: compute_0
+    flavor: compute
+    virtualbmc_port: 6233
+
+  - name: compute_1
+    flavor: compute
+    virtualbmc_port: 6234
+
+  - name: ceph_0
+    flavor: ceph
+    virtualbmc_port: 6235
+
+  - name: ceph_1
+    flavor: ceph
+    virtualbmc_port: 6236
+
+  - name: ceph_2
+    flavor: ceph
+    virtualbmc_port: 6237
+
+node_count: 8
+
+topology: >-
+  --compute-scale 3
+  --control-scale 2
+  --ceph-storage-scale 3
