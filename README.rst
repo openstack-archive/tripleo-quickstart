@@ -2,8 +2,8 @@
 Team and repository tags
 ========================
 
-.. image:: http://governance.openstack.org/badges/tripleo-quickstart.svg
-    :target: http://governance.openstack.org/reference/tags/index.html
+.. image:: https://governance.openstack.org/tc/badges/tripleo-quickstart.svg
+    :target: https://governance.openstack.org/tc/reference/tags/index.html
 
 .. Change things from this point on
 
@@ -184,7 +184,7 @@ using::
 
 An up-to-date HTML version is available on docs.openstack.org_.
 
-.. _docs.openstack.org: http://docs.openstack.org/developer/tripleo-quickstart/
+.. _docs.openstack.org: https://docs.openstack.org/tripleo-quickstart/latest/
 
 Copyright
 ---------

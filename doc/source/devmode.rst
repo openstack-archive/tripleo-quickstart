@@ -43,8 +43,8 @@ resolved and built. Detailed description about "Depends-On:" is in the `Adding
 a Dependency`_ and `Cross-Repository Dependencies`_ section of the OpenStack
 Developer's Guide.
 
-.. _`Adding a Dependency`: http://docs.openstack.org/infra/manual/developers.html#adding-a-dependency
-.. _`Cross-Repository Dependencies`: http://docs.openstack.org/infra/manual/developers.html#cross-repository-dependencies
+.. _`Adding a Dependency`: https://docs.openstack.org/infra/manual/developers.html#adding-a-dependency
+.. _`Cross-Repository Dependencies`: https://docs.openstack.org/infra/manual/developers.html#cross-repository-dependencies
 
 The interactive script will ask for the following variables:
 
