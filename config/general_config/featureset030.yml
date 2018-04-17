@@ -43,6 +43,14 @@ test_white_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
 
+# Run containerized tempest from master and ongoing
+tempest_format: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
 deployed_server: >-
   {% if release in ['newton','ocata','pike','queens'] -%}
   true

@@ -79,6 +79,14 @@ run_tempest: >-
   {%- endif -%}
 
 test_white_regex: ''
+# Run containerized tempest from master and ongoing
+tempest_format: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
 # TODO(emilien) run ec2api tests when ec2api is supported in python-tempestconf
 # 'ec2api.tests.functional.api.test_key_pairs.KeyPairTest'
 tempest_whitelist_new:

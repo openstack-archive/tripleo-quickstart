@@ -26,6 +26,15 @@ exit_on_validations_failure: False
 test_ping: false
 run_tempest: true
 test_white_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+# Run containerized tempest from master and ongoing
+tempest_format: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
 composable_roles: true
 overcloud_roles:
   - name: Controller
