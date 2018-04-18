@@ -71,7 +71,6 @@ repos:
     baseurl: $CURRENT_RDO_MIRROR
     priority: 10
     includepkgs:
-      - diskimage-builder
       - instack
       - instack-undercloud
       - os-apply-config

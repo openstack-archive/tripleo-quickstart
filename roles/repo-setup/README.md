@@ -125,7 +125,6 @@ Settings example for repositories:
             hash_url: https://trunk.rdoproject.org/centos7/current/delorean.repo
             priority: 10
             includepkgs:
-              - diskimage-builder
               - instack
               - instack-undercloud
               - os-apply-config

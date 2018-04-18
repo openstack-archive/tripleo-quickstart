@@ -49,7 +49,6 @@ repos:
     baseurl: $RDO_DLRN_REPO
     priority: 10
     includepkgs:
-      - diskimage-builder
       - instack
       - instack-undercloud
       - os-apply-config
