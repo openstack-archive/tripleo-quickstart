@@ -146,7 +146,9 @@
     echo "127.0.0.1  subnode-0 localhost" > /etc/hosts;
     echo "HOSTNAME=subnode-0" >> /etc/sysconfig/network;
     echo "subnode-0" > /etc/hostname;
-    hostnamectl set-hostname subnode-0
+    hostnamectl set-hostname subnode-0;
+    echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
+    echo "supersede domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
   become: true
 
 - name: Get fake nodepool IP addresses
@@ -185,7 +187,9 @@
     echo "127.0.0.1  subnode-1 localhost" > /etc/hosts;
     echo "HOSTNAME=subnode-1" >> /etc/sysconfig/network;
     echo "subnode-1" > /etc/hostname;
-    hostnamectl set-hostname subnode-1
+    hostnamectl set-hostname subnode-1;
+    echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
+    echo "supersede domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
   become: true
 
 - debug:
