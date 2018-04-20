@@ -26,7 +26,9 @@
         virsh vol-create-as '{{ libvirt_volume_pool }}'
         '{{ item.item.name }}'.qcow2 '{{ flavors[item.item.flavor].disk }}'G
         --format qcow2
-      when: item|failed
+      when:
+        - item|failed
+        - not fake_nodepool_vms|default("false")|bool
       with_items: "{{ overcloud_vol_check.results }}"
 
     # Define (but do not start) the overcloud nodes.  These will be
@@ -38,6 +40,19 @@
         xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
         uri: "{{ libvirt_uri }}"
       with_items: "{{ overcloud_nodes }}"
+      when: not fake_nodepool_vms|default("false")|bool
+
+    - name: Define overcloud vms
+      virt:
+        name: "{{ item.name }}"
+        command: define
+        xml: "{{ lookup('template', 'fakenodepoolvm.xml.j2') }}"
+        uri: "{{ libvirt_uri }}"
+      with_items: "{{ overcloud_nodes }}"
+      when: fake_nodepool_vms|default("false")|bool
+
+    - include: fake_nodepool.yml
+      when: fake_nodepool_vms|default("false")|bool
 
     # Create additional blockdevices for each objectstorage flavor node
     # These are sparse files, not using space if unused
@@ -74,3 +89,4 @@
   template:
     src: "{{ undercloud_instackenv_template }}"
     dest: "{{ working_dir }}/instackenv.json"
+  when: create_instackenv_json|default("true")|bool
