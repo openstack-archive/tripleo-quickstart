@@ -99,7 +99,6 @@ deploy_steps_ansible_workflow: >-
 config_download_args: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
   -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
-  -e /usr/share/openstack-tripleo-heat-templates/environments/disable-workflow-tasks.yaml
   -e {{ working_dir }}/config-download.yaml
   --config-download
   --deployed-server
