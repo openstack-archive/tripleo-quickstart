@@ -1,5 +1,5 @@
 # Which image should we download?
-release: pike
+release: queens
 undercloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/consistent/stable/undercloud.qcow2
 overcloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/consisten/stable/overcloud-full.tar
 ipa_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/consistent/stable/ironic-python-agent.tar
