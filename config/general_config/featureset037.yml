@@ -5,6 +5,13 @@ composable_scenario: scenario000-multinode-containers.yaml
 
 # tripleo-upgrade role variables
 overcloud_update: true
+# NOTE: right now the container images stay the same before and
+# after update. This makes the job run fast while still testing
+# the update workflow itself. For the future we may consider
+# updating the container images too. (This might have to be paired
+# with some work on the image building side to get meaningful
+# from-to combination of images.
+container_registry_file: containers-default-parameters.yaml
 tripleo_upgrade_validations_non_fatal: true
 tripleo_upgrade_debug: true
 tripleo_ci: true

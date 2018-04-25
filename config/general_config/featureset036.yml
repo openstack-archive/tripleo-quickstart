@@ -38,7 +38,6 @@ overcloud_roles:
 mixed_upgrade: true
 
 # Tripleo-upgrade link
-use_tripleo_upgrade: true
 ffu_overcloud_upgrade: true
 
 # disable tripleo-upgrade container manipulation.
