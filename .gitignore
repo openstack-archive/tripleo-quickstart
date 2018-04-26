@@ -54,8 +54,13 @@ doc/build/
 # PyBuilder
 target/
 
+# Editors
+.vs/
+.vscode/
+.idea/
+
 # virtualenv
-.venv/
+.venv*
 
 # jenkins config
 jenkins/config.ini
