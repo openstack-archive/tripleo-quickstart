@@ -63,3 +63,16 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
+
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --verbose
+  {%- endif -%}
