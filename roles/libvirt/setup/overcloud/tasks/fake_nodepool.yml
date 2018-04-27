@@ -47,6 +47,14 @@
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
+- name: Disable cloud-init
+  command: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --run-command "grubby --update-kernel=ALL --args=\"cloud-init=disabled\""
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
 - name: Inject ssh public key into the image
   command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
