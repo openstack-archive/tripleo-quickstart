@@ -14,6 +14,10 @@
         ansible_host: "{{ virthost }}"
   tags:
     - provision
+    - teardown-all
+    - teardown-nodes
+    - teardown-provision
+    - teardown-environment
 
 - include: teardown-provision.yml
 
