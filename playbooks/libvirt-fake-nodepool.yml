@@ -1,0 +1,25 @@
+---
+- name: Destroy previous setup
+  hosts: virthost
+  gather_facts: yes
+  vars:
+    - libvirt_fake_nodepool: true
+  roles:
+    - libvirt/teardown/nodes
+  become: true
+
+- name:  Setup undercloud and baremetal vms and networks in libvirt
+  hosts: virthost
+  gather_facts: yes
+  vars:
+    - libvirt_fake_nodepool: true
+  roles:
+    - libvirt/setup/overcloud
+  become: true
+
+- name: Add nodes to the generated inventory
+  hosts: localhost
+  gather_facts: yes
+  roles:
+    - tripleo-inventory
+
