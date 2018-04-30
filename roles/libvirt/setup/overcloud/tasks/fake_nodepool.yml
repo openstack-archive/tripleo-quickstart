@@ -25,19 +25,28 @@
 - name: Calculate password hash
   no_log: true
   shell: >
-    import crypt; print crypt.crypt("{{ vm_pass }}", "$1$SecretSalt$")
+    import crypt;
+    print crypt.crypt("{{ vm_pass }}", "$1$SecretSalt$")
   args:
     executable: /usr/bin/python
   register: hash
 
+- name: Copy generated password to file
+  local_action: copy content={{ hash.stdout }} dest="{{ working_dir }}/pwtemp" mode=0600
+
 - name: Inject password into the image
   command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --root-password random
+    --root-password file:"{{ working_dir }}/pwtemp"
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   register: root_password
+
+- name: Remove root password file
+  file:
+    path: "{{ working_dir }}/pwtemp"
+    state: absent
 
 - name: Resize the filesystem
   command: >
@@ -199,7 +208,3 @@
     echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
     echo "supersede domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
   become: true
-
-- debug:
-    var: root_password
-    verbosity: 2
