@@ -2,10 +2,10 @@
 # these tasks may be called before the dependencies of the `virt`
 # module are satisfied.
 
-- name: Include vars for libvirt-fake-nodepool
+- name: Include vars for libvirt-nodepool
   include_vars:
-    file:  ../roles/libvirt/setup/overcloud/tasks/vars/fake_nodepool_vars.yml
-  when: libvirt_fake_nodepool|default(false)
+    file:  ../roles/libvirt/setup/overcloud/tasks/vars/libvirt_nodepool_vars.yml
+  when: libvirt_nodepool|default(false)
 
 - name: Check if libvirt is available
   command: >

@@ -1,6 +1,6 @@
 ---
 
-- name: Fetch a CentOS image to use for fake nodepool nodes
+- name: Fetch a CentOS image to use for libvirt nodepool nodes
   include_role:
     name: fetch-images
 
@@ -100,7 +100,7 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
   # Create libvirt volumes and upload them to libvirt.
-  - name: Create fake nodepool volumes
+  - name: Create libvirt nodepool volumes
     command: >
       virsh vol-create-as {{ libvirt_volume_pool}}
       {{ item.name }}.qcow2
@@ -116,7 +116,7 @@
     poll: 10
     with_items: "{{ overcloud_nodes }}"
 
-- name: Start fake nodepool nodes
+- name: Start libvirt nodepool nodes
   virt:
     name: "{{ item.name }}"
     command: start
@@ -127,7 +127,7 @@
 
 ## need to find a way to make these next tasks generic
 
-- name: Get fake nodepool IP addresses
+- name: Get libvirt nodepool IP addresses
   script: "get-undercloud-ip.sh subnode-0"
   register: "subnode_0_ip_result"
   until: "subnode_0_ip_result|success"
@@ -165,10 +165,10 @@
     echo "subnode-0" > /etc/hostname;
     hostnamectl set-hostname subnode-0;
     echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
-    echo "supersede domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
+    echo "append domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
   become: true
 
-- name: Get fake nodepool IP addresses
+- name: Get libvirt nodepool IP addresses
   script: "get-undercloud-ip.sh subnode-1"
   register: "subnode_1_ip_result"
   until: "subnode_1_ip_result|success"
@@ -206,5 +206,5 @@
     echo "subnode-1" > /etc/hostname;
     hostnamectl set-hostname subnode-1;
     echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
-    echo "supersede domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
+    echo "append domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
   become: true

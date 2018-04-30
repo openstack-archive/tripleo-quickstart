@@ -1,7 +1,7 @@
-- name: Include vars for libvirt-fake-nodepool
+- name: Include vars for libvirt-libvirt-nodepool
   include_vars:
-    file: fake_nodepool_vars.yml
-  when: libvirt_fake_nodepool|default(false)
+    file: libvirt_nodepool_vars.yml
+  when: libvirt_nodepool|default(false)
 
 - when: overcloud_nodes
   environment:
@@ -33,7 +33,7 @@
         --format qcow2
       when:
         - item|failed
-        - not fake_nodepool_vms|default("false")|bool
+        - not libvirt_nodepool_vms|default("false")|bool
       with_items: "{{ overcloud_vol_check.results }}"
 
     # Define (but do not start) the overcloud nodes.  These will be
@@ -45,19 +45,19 @@
         xml: "{{ lookup('template', 'baremetalvm.xml.j2') }}"
         uri: "{{ libvirt_uri }}"
       with_items: "{{ overcloud_nodes }}"
-      when: not fake_nodepool_vms|default("false")|bool
+      when: not libvirt_nodepool_vms|default("false")|bool
 
     - name: Define overcloud vms
       virt:
         name: "{{ item.name }}"
         command: define
-        xml: "{{ lookup('template', 'fakenodepoolvm.xml.j2') }}"
+        xml: "{{ lookup('template', 'libvirtnodepoolvm.xml.j2') }}"
         uri: "{{ libvirt_uri }}"
       with_items: "{{ overcloud_nodes }}"
-      when: fake_nodepool_vms|default("false")|bool
+      when: libvirt_nodepool_vms|default("false")|bool
 
-    - include: fake_nodepool.yml
-      when: fake_nodepool_vms|default("false")|bool
+    - include: libvirt_nodepool.yml
+      when: libvirt_nodepool_vms|default("false")|bool
 
     # Create additional blockdevices for each objectstorage flavor node
     # These are sparse files, not using space if unused
