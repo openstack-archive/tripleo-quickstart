@@ -129,6 +129,15 @@
   # see https://www.python.org/dev/peps/pep-0394/
   # --run-command 'ln -s /usr/bin/python3 /usr/bin/python'
 
+- name: Install and enable qemu-guest-agent
+  command: >
+    virt-customize -a {{ working_dir }}/undercloud.qcow2
+    --run-command 'yum install -y qemu-guest-agent'
+    --run-command 'systemctl enable qemu-guest-agent'
+  environment:
+    LIBGUESTFS_BACKEND: direct
+    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
 - debug:
     msg: "Add basic packages we need to the image"
 

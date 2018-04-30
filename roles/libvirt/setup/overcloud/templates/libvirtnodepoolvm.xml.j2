@@ -36,6 +36,9 @@
      </interface>
     <serial type='pty'/>
     <console type='pty'/>
+    <channel type='unix'>
+        <target type='virtio' name='org.qemu.guest_agent.0'/>
+    </channel>
 
 {% if enable_vnc_console|bool %}
     <input type='mouse' bus='ps2'/>
