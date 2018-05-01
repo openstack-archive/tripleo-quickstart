@@ -2,13 +2,13 @@
 # instead of the default pre-built undercloud qcow2
 
 # baseos undercloud settings
-undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1701.qcow2
+undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1802.qcow2
 
 images:
     - name: centos
       url: "{{ undercloud_image_url }}"
       type: qcow2
-      md5sum: "bc62ad193b085680952edfa7face0f23 *CentOS-7-x86_64-GenericCloud-1701.qcow2"
+      md5sum: "b3ff9077d80b5f17bcbb7356f7982fd4 *CentOS-7-x86_64-GenericCloud-1802.qcow2"
     - name: overcloud-full
       url: "{{ overcloud_image_url }}"
       type: tar
