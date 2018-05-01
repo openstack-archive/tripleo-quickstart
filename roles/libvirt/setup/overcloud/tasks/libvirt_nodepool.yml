@@ -128,7 +128,7 @@
 ## need to find a way to make these next tasks generic
 
 - name: Get libvirt nodepool IP addresses
-  script: "get-undercloud-ip.sh subnode-0"
+  script: "get-domain-ip.sh subnode-0"
   register: "subnode_0_ip_result"
   until: "subnode_0_ip_result|success"
   retries: 20
@@ -169,7 +169,7 @@
   become: true
 
 - name: Get libvirt nodepool IP addresses
-  script: "get-undercloud-ip.sh subnode-1"
+  script: "get-domain-ip.sh subnode-1"
   register: "subnode_1_ip_result"
   until: "subnode_1_ip_result|success"
   retries: 20
