@@ -134,10 +134,6 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
-        # (trown) This is a pretty big hack, but for the usbkey case, we do not
-        # want to be writing files to the usbkey itself, and I can not find a
-        # way to make setuptools not try to write the .eggs dir.
-        sed -i "s%os.curdir%\'$OPT_WORKDIR\'%" $OPT_WORKDIR/lib/python2.7/site-packages/setuptools/dist.py
         python setup.py install egg_info --egg-base $OPT_WORKDIR || { echo 'python setup.py install failed' ; exit 1; }
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
             mkdir -p .tmp
