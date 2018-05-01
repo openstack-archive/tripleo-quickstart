@@ -62,6 +62,10 @@
     cacheable: true
   when: hostvars['undercloud'] is defined and hostvars['undercloud'].undercloud_ip is defined
 
+- name: set_fact for virthost
+  set_fact:
+    virthost_with_private_key: "{{ 'virthost' in groups and groups['virthost']|length>0 and hostvars[groups['virthost'][0]].ansible_private_key_file is defined }}"
+
 # Add the supplemental to the in-memory inventory.
 - name: Add supplemental node vm to inventory
   add_host:
@@ -91,7 +95,7 @@
     ansible_private_key_file: '{{ undercloud_key }}'
     ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.local.ansible"'
     undercloud_ip: "{{ undercloud_ip }}"
-  when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined and undercloud_ip is defined
+  when: not virthost_with_private_key and undercloud_ip is defined
 
 #required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
@@ -101,7 +105,7 @@
       {{ ssh_user }}@{{ hostvars[groups['virthost'][0]].ansible_host }}
       -W {{ undercloud_ip }}:22"
     cacheable: true
-  when: hostvars[groups['virthost'][0]].ansible_private_key_file is defined and undercloud_ip is defined
+  when: virthost_with_private_key and undercloud_ip is defined
 
 #required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
@@ -111,7 +115,7 @@
       {{ ssh_user }}@{{ hostvars['localhost'].ansible_default_ipv4.address }}
       -W {{ undercloud_ip }}:22"
     cacheable: true
-  when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined and undercloud_ip is defined
+  when: not virthost_with_private_key and undercloud_ip is defined
 
 - name: set supplemental ssh proxy command
   set_fact:
