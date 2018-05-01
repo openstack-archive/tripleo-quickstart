@@ -1,0 +1,23 @@
+# vars required to run playbooks/libvirt-fake-nodepool.yml
+
+# libvirt_volume_path uses default in roles/common/defaults/main.yml
+libvirt_volume_pool: oooq_pool
+libvirt_uri: qemu:///system
+overcloud_nodes:
+  - name: subnode-0
+    flavor: control
+
+  - name: subnode-1
+    flavor: control
+pub_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
+image_fetch_dir: "{{ local_working_dir }}"
+fake_nodepool_vms: true
+create_instackenv_json: false
+vm_pass: random
+control_vcpu: 6
+control_memory: 16384
+images:
+  - name: centos
+    url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1802.qcow2
+    type: qcow2
+    md5sum: "b3ff9077d80b5f17bcbb7356f7982fd4 *CentOS-7-x86_64-GenericCloud-1802.qcow2"
