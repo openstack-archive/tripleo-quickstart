@@ -202,8 +202,10 @@
     echo "HOSTNAME=subnode-0" >> /etc/sysconfig/network;
     echo "subnode-0" > /etc/hostname;
     hostnamectl set-hostname subnode-0;
-    echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
-    echo "append domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
+    {% if custom_nameserver is defined and custom_nameserver %}
+    echo "nameserver {{ custom_nameserver }} " >> /etc/resolv.conf;
+    echo "append domain-name-servers {{ custom_nameserver }};" >> /etc/dhcp/dhclient.conf
+    {% endif %}
   become: true
 
 - name: Get libvirt nodepool IP addresses
@@ -249,8 +251,10 @@
     echo "HOSTNAME=subnode-1" >> /etc/sysconfig/network;
     echo "subnode-1" > /etc/hostname;
     hostnamectl set-hostname subnode-1;
-    echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
-    echo "append domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
+    {% if custom_nameserver is defined and custom_nameserver %}
+    echo "nameserver {{ custom_nameserver }} " >> /etc/resolv.conf;
+    echo "append domain-name-servers {{ custom_nameserver }};" >> /etc/dhcp/dhclient.conf
+    {% endif %}
   become: true
 
 - name: Create inventory suitable for zuul-jobs/multinode
