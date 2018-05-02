@@ -26,9 +26,9 @@
       <source pool='{{ libvirt_volume_pool }}' volume='{{ item.name }}.qcow2'/>
       <target dev='{{ libvirt_diskdev }}' bus='{{ libvirt_diskbus }}'/>
     </disk>
-     <interface type='bridge'>                                                   
-       <source bridge='virbr0'/>                                                 
-       <model type='virtio'/>                                                    
+     <interface type='bridge'>
+       <source bridge='virbr0'/>
+       <model type='virtio'/>
      </interface>
     <serial type='pty'/>
     <console type='pty'/>

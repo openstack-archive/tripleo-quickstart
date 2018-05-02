@@ -1,7 +1,7 @@
-# vars required to run playbooks/libvirt-fake-nodepool.yml
+# vars required to run playbooks/libvirt-nodepool.yml
 
-# libvirt_volume_path uses default in roles/common/defaults/main.yml
 libvirt_volume_pool: oooq_pool
+libvirt_volume_path: /opt/vm_images
 libvirt_uri: qemu:///system
 overcloud_nodes:
   - name: subnode-0
@@ -11,7 +11,7 @@ overcloud_nodes:
     flavor: control
 pub_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
 image_fetch_dir: "{{ local_working_dir }}"
-fake_nodepool_vms: true
+libvirt_nodepool_vms: true
 create_instackenv_json: false
 vm_pass: random
 control_vcpu: 6

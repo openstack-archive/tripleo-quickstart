@@ -1,9 +1,12 @@
+# create 2 libvirt domains (VM's) to mimic upstream CI's nodepool instances
+# This is used for tripleo CI reproducer capability
+
 ---
 - name: Destroy previous setup
   hosts: virthost
   gather_facts: yes
   vars:
-    - libvirt_fake_nodepool: true
+    - libvirt_nodepool: true
   roles:
     - libvirt/teardown/nodes
   become: true
@@ -12,7 +15,7 @@
   hosts: virthost
   gather_facts: yes
   vars:
-    - libvirt_fake_nodepool: true
+    - libvirt_nodepool: true
   roles:
     - libvirt/setup/overcloud
   become: true
