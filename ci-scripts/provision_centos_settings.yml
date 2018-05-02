@@ -154,7 +154,7 @@ installer:
   - none
   tempest:
     skip_file: rdoci-rdo-liberty-rdo-manager
-    test_regex: .*smoke
+    test_white_regex: .*smoke
     enabled: true
     cirros_alt:
       url: http://download.cirros-cloud.net/0.3.4/

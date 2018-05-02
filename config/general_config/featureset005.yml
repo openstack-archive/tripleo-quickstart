@@ -21,7 +21,7 @@ run_tempest: >-
   true
   {%- endif -%}
 
-test_regex: ''
+test_white_regex: ''
 
 # This enables the run of several tripleo-validations tests through Mistral
 run_tripleo_validations: True

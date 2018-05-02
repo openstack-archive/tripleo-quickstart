@@ -81,7 +81,7 @@ test_ping: >-
 # looking for a small set of tempest tests to validate
 # tempest config and execution are working
 run_tempest: true
-test_regex: 'tempest.api.compute.admin'
+test_white_regex: 'tempest.api.compute.admin'
 
 deploy_steps_ansible_workflow: >-
   {% if release not in ['newton','ocata','pike'] -%}

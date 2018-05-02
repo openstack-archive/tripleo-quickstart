@@ -8,7 +8,7 @@ test_ping: false
 
 run_tempest: false
 
-test_regex: ''
+test_white_regex: ''
 
 # This enables the run of several tripleo-validations tests through Mistral
 run_tripleo_validations: false
