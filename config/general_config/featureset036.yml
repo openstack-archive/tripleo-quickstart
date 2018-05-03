@@ -41,6 +41,8 @@ mixed_upgrade: true
 use_tripleo_upgrade: true
 ffu_overcloud_upgrade: true
 tripleo_upgrade_validations_non_fatal: true
+# Reduce CI wall time
+tripleo_upgrade_converge_plan_only: true
 
 # disable tripleo-upgrade container manipulation.
 create_docker_registry: false
