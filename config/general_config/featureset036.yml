@@ -40,6 +40,7 @@ mixed_upgrade: true
 # Tripleo-upgrade link
 use_tripleo_upgrade: true
 ffu_overcloud_upgrade: true
+tripleo_upgrade_validations_non_fatal: true
 
 # disable tripleo-upgrade container manipulation.
 create_docker_registry: false
