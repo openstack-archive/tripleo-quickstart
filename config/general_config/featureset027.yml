@@ -21,6 +21,8 @@ undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 undercloud_resource_registry_args:
   "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
 
+# Enable tempest container
+undercloud_enable_tempest: true
 # turn off image prep
 step_overcloud_image: false
 step_glance_upload: false
