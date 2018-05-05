@@ -36,7 +36,6 @@ upgrade_composable_scenario: multinode-containers.yaml
 deployed_server: true
 
 # Tripleo_upgrade role parameters
-use_tripleo_upgrade: true
 undercloud_upgrade: false
 overcloud_upgrade: true
 tht_directory: "/usr/share/openstack-tripleo-heat-templates"

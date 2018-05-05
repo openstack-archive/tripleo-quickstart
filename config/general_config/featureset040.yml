@@ -32,7 +32,6 @@ step_upgrade_undercloud: false
 mixed_upgrade: true
 
 # Tripleo-upgrade link
-use_tripleo_upgrade: true
 overcloud_upgrade: true
 
 # disable tripleo-upgrade container manipulation.

@@ -38,7 +38,6 @@ overcloud_roles:
 mixed_upgrade: true
 
 # Tripleo-upgrade link
-use_tripleo_upgrade: true
 ffu_overcloud_upgrade: true
 tripleo_upgrade_validations_non_fatal: true
 
