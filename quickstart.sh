@@ -135,6 +135,7 @@ bootstrap () {
 
     pushd $OOOQ_DIR
         python setup.py install egg_info --egg-base $OPT_WORKDIR || { echo 'python setup.py install failed' ; exit 1; }
+        pip install --force-reinstall "${OPT_REQARGS[@]}" || { echo 'python setup.py install failed' ; exit 1; }
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
             mkdir -p .tmp
             EXTRAS_DIR=$(/bin/mktemp -d -p $(pwd)/.tmp)
@@ -147,8 +148,6 @@ bootstrap () {
                 pip install  .
             popd
         fi
-        # Handle the case that pip is too old to use a cache-dir
-        pip install --no-cache-dir "${OPT_REQARGS[@]}" || { echo 'python setup.py install failed' ; exit 1; }
     popd
     )
     # In order to do any filesystem operations on the system running ansible (if it has SELinux intalled)
