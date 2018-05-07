@@ -35,6 +35,8 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-upgrade
     - overcloud-validate
+    - "{% if run_tempest -%}tempest-setup{%- endif -%}"
+    - "{% if tempest_format == 'containers' -%}tempest_container{%- endif -%}"
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -49,6 +51,8 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-upgrade
     - overcloud-validate
+    - "{% if run_tempest -%}tempest-setup{%- endif -%}"
+    - "{% if tempest_format == 'containers' -%}tempest_container{%- endif -%}"
 composable_roles: true
 overcloud_roles:
   - name: Controller
