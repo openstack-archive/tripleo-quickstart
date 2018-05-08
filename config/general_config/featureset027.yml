@@ -9,6 +9,7 @@ extra_args: >-
 network_isolation: false
 enable_pacemaker: false
 overcloud_ipv6: false
+undercloud_check_sanity: true
 
 # containers config
 containerized_overcloud: false
