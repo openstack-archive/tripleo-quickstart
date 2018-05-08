@@ -27,26 +27,20 @@ test_ping: false
 run_tempest: true
 
 # save time by doing a mixed upgrade
-step_pre_undercloud_upgrade: true
-step_upgrade_undercloud: false
 mixed_upgrade: true
 
-# Tripleo-upgrade link
+# Tripleo-upgrade role parameters
+# Major Upgrade: containers -> containers
 overcloud_upgrade: true
-
 # disable tripleo-upgrade container manipulation.
 create_docker_registry: false
 use_local_docker_registry: false
 create_container_images_download_script: false
-
 container_registry_file: "containers-default-parameters.yaml"
-
 tripleo_ci: true
 use_oooq: true
-
 tripleo_upgrade_debug: true
 overcloud_ssh_user: "tripleo-admin"
-
 # Mandatory for deployed_servers
 tripleo_upgrade_validations_non_fatal: true
 # Reduce CI wall time

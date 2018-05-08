@@ -11,17 +11,9 @@ overcloud_ipv6: false
 # deploy non-containerized overcloud
 containerized_overcloud: false
 containerized_overcloud_upgrade: true
-major_upgrade_script: major-upgrade-overcloud-containers.sh.j2
-upgrade_undercloud_repo_script: upgrade-repo-tripleo-ci.sh.j2
-upgrade_overcloud_repo_template: overcloud-repo-tripleo-ci.yaml.j2
 
 # save time by doing a mixed upgrade
-step_pre_undercloud_upgrade: true
-step_upgrade_undercloud: false
 mixed_upgrade: true
-overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
-overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
-overcloud_templates_branch: stable/{{ overcloud_release }}
 
 undercloud_generate_service_certificate: false
 
@@ -36,6 +28,7 @@ upgrade_composable_scenario: multinode-containers.yaml
 deployed_server: true
 
 # Tripleo_upgrade role parameters
+# Major Ugrade: baremetal -> containers
 undercloud_upgrade: false
 overcloud_upgrade: true
 tht_directory: "/usr/share/openstack-tripleo-heat-templates"
