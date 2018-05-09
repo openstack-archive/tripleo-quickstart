@@ -14,6 +14,8 @@ overcloud_update: true
 container_registry_file: containers-default-parameters.yaml
 tripleo_upgrade_validations_non_fatal: true
 tripleo_upgrade_debug: true
+# Reduce CI wall time
+tripleo_upgrade_converge_plan_only: true
 tripleo_ci: true
 use_oooq: true
 overcloud_ssh_user: "tripleo-admin"
