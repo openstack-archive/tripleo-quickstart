@@ -30,10 +30,7 @@ container_args: >-
 
 deploy_steps_ansible_workflow: true
 config_download_args: >-
-  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
   -e {{ working_dir }}/config-download.yaml
-  --config-download
-  --deployed-server
   --disable-validations
   --verbose
 
