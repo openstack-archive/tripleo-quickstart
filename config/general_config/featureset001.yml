@@ -135,3 +135,9 @@ deploy_steps_ansible_workflow: >-
   {%- else -%}
   false
   {%- endif -%}
+config_download_args: >-
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --verbose
+  {%- endif -%}
