@@ -62,6 +62,11 @@ deploy_steps_ansible_workflow: >-
   false
   {%- endif -%}
 config_download_args: >-
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --deployed-server
+  {%- endif %}
   {% if release not in ['newton','ocata','pike'] -%}
   -e {{ working_dir }}/config-download.yaml
   --disable-validations
