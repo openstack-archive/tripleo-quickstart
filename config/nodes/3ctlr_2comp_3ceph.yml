@@ -55,6 +55,6 @@ overcloud_nodes:
 node_count: 8
 
 topology: >-
-  --compute-scale 3
-  --control-scale 2
+  --compute-scale 2
+  --control-scale 3
   --ceph-storage-scale 3
