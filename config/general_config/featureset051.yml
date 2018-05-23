@@ -24,7 +24,7 @@ composable_scenario: scenario000-multinode-containers.yaml
 upgrade_composable_scenario: scenario000-multinode-containers.yaml
 deployed_server: true
 
-test_ping: true
+test_ping: false
 run_tempest: false
 
 # save time by doing a mixed upgrade
