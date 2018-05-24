@@ -6,7 +6,6 @@
 undercloud_generate_service_certificate: false
 ssl_overcloud: false
 undercloud_check_sanity: true
-undercloud_upgrade_cleanup: true
 containerized_overcloud: false
 containerized_overcloud_upgrade: false
 containerized_undercloud_upgrade: true
