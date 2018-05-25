@@ -5,7 +5,7 @@ validate_template: scenario007-multinode.yaml
 deployed_server: true
 
 network_isolation: false
-enable_pacemaker: false
+enable_pacemaker: true
 overcloud_ipv6: false
 containerized_overcloud: true
 
@@ -24,14 +24,12 @@ telemetry_args: >-
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
 
-# TODO(numans) - Change to neutron-ml2-ovn-ha.yaml once OVN bundle pacemaker support
-# is ready.
 extra_args: >-
   --ntp-server pool.ntp.org
   {% if release in ['pike', 'queens'] -%}
   -e {{ overcloud_templates_path }}/environments/services-docker/neutron-ovn.yaml
   {%- else -%}
-  -e {{ overcloud_templates_path }}/environments/services/neutron-ovn.yaml
+  -e {{ overcloud_templates_path }}/environments/services/neutron-ovn-ha.yaml
   {%- endif -%}
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
