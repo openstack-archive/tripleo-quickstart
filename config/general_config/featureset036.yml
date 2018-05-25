@@ -19,8 +19,8 @@ run_tripleo_validations_negative_tests: false
 exit_on_validations_failure: False
 
 deployed_server: true
-composable_scenario: scenario001-multinode.yaml
-upgrade_composable_scenario: scenario001-multinode-containers.yaml
+composable_scenario: scenario002-multinode.yaml
+upgrade_composable_scenario: scenario002-multinode-containers.yaml
 composable_roles: true
 overcloud_roles:
   - name: Controller
