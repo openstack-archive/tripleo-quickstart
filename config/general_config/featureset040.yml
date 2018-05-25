@@ -19,12 +19,12 @@ ssl_overcloud: false
 
 step_introspect: false
 
-composable_scenario: scenario001-multinode-containers.yaml
-upgrade_composable_scenario: scenario001-multinode-containers.yaml
+composable_scenario: scenario003-multinode-containers.yaml
+upgrade_composable_scenario: scenario003-multinode-containers.yaml
 deployed_server: true
 
-test_ping: true
-run_tempest: false
+test_ping: false
+run_tempest: true
 
 # save time by doing a mixed upgrade
 step_pre_undercloud_upgrade: true
