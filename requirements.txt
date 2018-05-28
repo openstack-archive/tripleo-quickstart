@@ -1,3 +1,4 @@
+cmd2==0.8.5
 ara==0.14.5
 ansible==2.4.1
 jmespath
