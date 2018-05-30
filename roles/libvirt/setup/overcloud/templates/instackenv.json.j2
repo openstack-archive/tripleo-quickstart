@@ -25,7 +25,7 @@
           "pm_type": "ipmi",
         {% endif %}
         "pm_user": "admin",
-        "pm_addr": "{{ undercloud_local_ip|default(undercloud_network_cidr|nthhost(1)) }}",
+        "pm_addr": "{{ undercloud_local_ip|default(undercloud_network_cidr)|nthhost(1) }}",
         "pm_port": "{{ node.virtualbmc_port }}",
       {% endif %}
       "mac": [
