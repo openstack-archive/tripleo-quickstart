@@ -23,3 +23,4 @@ Contents:
    contributing
    working-with-extras
    rhosp
+   troubleshoot
