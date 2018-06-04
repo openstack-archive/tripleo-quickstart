@@ -1,0 +1,9 @@
+##################################################
+# FEATURESET052 - TRIPLEO STANDALONE
+##################################################
+
+non_root_user_setup: true
+ovb_setup_connectivity: false
+package_installs: true
+vxlan_networking: false
+
