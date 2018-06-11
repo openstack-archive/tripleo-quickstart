@@ -16,12 +16,13 @@
 import json
 import os
 
+from distutils.version import LooseVersion
 from novaclient import __version__ as nc_version
 from novaclient import client
 from urlparse import urljoin
 
 # We can remove this logic when newton (novaclient 6) is EOL
-if nc_version[0] <= "6":
+if LooseVersion(nc_version) <= LooseVersion("6.0.2"):
     nova = client.Client(2,
                          os.environ.get("OS_USERNAME"),
                          os.environ.get("OS_PASSWORD"),
