@@ -53,7 +53,7 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
     - tempest-setup
-    - "{% if tempest_format == 'containers' -%}tempest_container{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -68,4 +68,4 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
     - tempest-setup
-    - "{% if tempest_format == 'containers' -%}tempest_container{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
