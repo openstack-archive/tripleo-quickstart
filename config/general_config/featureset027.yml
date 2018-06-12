@@ -78,7 +78,7 @@ artcl_create_docs_payload:
     - overcloud-prep-images
     - overcloud-prep-network
     - tempest-setup
-    - "{% if tempest_format == 'containers' -%}tempest_container{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
   included_static_docs:
     - env-setup-virt
@@ -91,4 +91,4 @@ artcl_create_docs_payload:
     - overcloud-prep-images
     - overcloud-prep-network
     - tempest-setup
-    - "{% if tempest_format == 'containers' -%}tempest_container{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
