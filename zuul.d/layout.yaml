@@ -38,6 +38,7 @@
             files:
               - config/general_config/featureset028.yml
         - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
+            voting: false
             files:
               - config/general_config/featureset030.yml
     gate:
@@ -70,9 +71,6 @@
         - tripleo-ci-centos-7-scenario007-multinode-oooq:
             files:
               - config/general_config/featureset028.yml
-        - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
-            files:
-              - config/general_config/featureset030.yml
     experimental:
       jobs:
         - tripleo-ci-centos-7-scenario005-multinode-oooq:
