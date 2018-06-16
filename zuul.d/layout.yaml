@@ -41,6 +41,9 @@
             voting: false
             files:
               - config/general_config/featureset030.yml
+        - tripleo-ci-centos-7-standalone:
+            files:
+              - config/general_config/featureset052.yml
     gate:
       queue: tripleo
       jobs:
