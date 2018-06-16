@@ -493,7 +493,7 @@ export ARA_DATABASE="sqlite:///${OPT_WORKDIR}/ara.sqlite"
 #set the ansible ssh.config options if not already set.
 source $OOOQ_DIR/ansible_ssh_env.sh
 
-if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 && -z "$OPT_LIST_TASKS_ONLY" ]; then
+if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 -a -z "$OPT_LIST_TASKS_ONLY" ]; then
     # Clear out inventory file to avoid tripping over data
     # from a previous invocation
     rm -f $ANSIBLE_INVENTORY
