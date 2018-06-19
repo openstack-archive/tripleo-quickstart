@@ -150,6 +150,11 @@ bootstrap () {
         fi
     popd
     )
+    bootstrap_rc=$?
+    if [ $bootstrap_rc -ne 0 ]; then
+        return $bootstrap_rc
+    fi
+
     # In order to do any filesystem operations on the system running ansible (if it has SELinux intalled)
     # we need the python bindings in the venv. Unfortunately, it is not available on pypi, so we need to
     # pull it from the system site packages.
