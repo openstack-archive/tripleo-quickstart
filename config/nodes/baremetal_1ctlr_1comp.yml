@@ -1,0 +1,2 @@
+# Overcloud nodes are defined in hardware-specific files.
+overcloud_nodes:
