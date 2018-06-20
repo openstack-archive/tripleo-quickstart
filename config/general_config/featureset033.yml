@@ -16,7 +16,9 @@ ssl_overcloud: false
 # Centos OpenSihft repo
 add_repos:
   - type: package
-    pkg_name: centos-release-openshift-origin
+    # NOTE(mandre) centos-release-openshift-origin39 provides the newest
+    # packages for 3.9 branch
+    pkg_name: centos-release-openshift-origin39
 
 extra_args: >-
   --ntp-server pool.ntp.org
