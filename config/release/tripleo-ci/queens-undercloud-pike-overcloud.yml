@@ -10,6 +10,7 @@ docker_registry_namespace: "tripleo{{release}}"
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 overcloud_docker_registry_namespace: "tripleo{{ overcloud_release }}"
 overcloud_docker_image_tag: "{{ overcloud_dlrn_hash }}"
+docker_ceph_tag: v3.0.3-stable-3.0-jewel-centos-7-x86_64
 
 overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
 overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
