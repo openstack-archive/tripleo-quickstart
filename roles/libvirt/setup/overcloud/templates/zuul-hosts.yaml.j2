@@ -1,0 +1,41 @@
+all:
+  children:
+    peers:
+      hosts:
+        secondary: null
+      vars: {}
+    switch:
+      hosts:
+        primary: null
+      vars: {}
+  hosts:
+    primary:
+      ansible_connection: ssh
+      ansible_host: "{{ subnode_0_ip }}"
+      ansible_port: 22
+      ansible_user: zuul
+      nodepool:
+        az: null
+        cloud: libvirt
+        interface_ip: "{{ subnode_0_ip }}"
+        label: centos-7
+        private_ipv4: "{{ subnode_0_ip }}"
+        provider: libvirt
+        public_ipv4: "{{ subnode_0_ip }}"
+        region: libvirt
+        public_ipv6: null
+    secondary:
+      ansible_connection: ssh
+      ansible_host: "{{ subnode_1_ip }}"
+      ansible_port: 22
+      ansible_user: zuul
+      nodepool:
+        az: null
+        cloud: libvirt
+        interface_ip: "{{ subnode_1_ip }}"
+        label: centos-7
+        private_ipv4: "{{ subnode_1_ip }}"
+        provider: libvirt
+        public_ipv4:  "{{ subnode_1_ip }}"
+        region: libvirt
+        public_ipv6: null
