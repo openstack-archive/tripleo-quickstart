@@ -70,7 +70,7 @@ The following is a list of design decisions made to solve the problem.
   Solve for Scenario #1
     * Focus on virtualization tools available in CentOS and Red Hat Enterprise
       Linux, use libvirt
-    * Create a easy to use script to execute tripleo-quickstart e.g.
+    * Create an easy to use script to execute tripleo-quickstart e.g.
       quickstart.sh that Jake can just download and execute
 
       Example:::
