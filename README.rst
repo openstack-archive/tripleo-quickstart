@@ -31,9 +31,8 @@ OpenStack installation, usually consisting of multiple VMs.
 You will need a ``$VIRTHOST`` with at least **16 GB** of RAM, preferably **32
 GB**, and you must be able to ``ssh`` to the virthost machine as root without a
 password from the machine running ansible.  Currently the virthost machine must
-be running a recent Red Hat-based Linux distribution (CentOS 7, RHEL 7, Fedora
-22 - only CentOS 7 is currently tested), but we hope to add support for non-Red
-Hat distributions too.
+be running a recent Red Hat-based Linux distribution (CentOS 7.x, RHEL 7.x).
+Other distributions could work but will not be supported with out CI validation.
 
 ..  note::
     Running quickstart.sh commands as root is not suggested or supported.
