@@ -119,7 +119,7 @@ repos:
 
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
-  {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt centos-opstools.enable=0;
+  {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt quickstart-centos-opstools.enabled=0;
   {%endif %}
   sudo yum-config-manager --disable rdo-qemu-ev;
   sudo rpm -e epel-release || true;
