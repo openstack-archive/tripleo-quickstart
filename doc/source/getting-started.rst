@@ -4,12 +4,12 @@ Getting started with TripleO-Quickstart
 =======================================
 
 For the most basic invocations of TripleO-Quickstart please refer to the
-:ref:`readme`.  The README will walk you through the basic setup
+:ref:`basic_usage`.  This quide will walk you through the basic setup
 and execution.
 
 This document will walk through some more basic invocations of
 TripleO-Quickstart once you've had success with the steps outlined in the
-README.
+guide.
 
 A step by step deployment with playbooks
 ----------------------------------------
