@@ -94,3 +94,7 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
+config_download_args: >-
+  {% if overcloud_release is defined and overcloud_release in ['queens'] -%}
+  --no-config-download
+  {%- endif -%}
