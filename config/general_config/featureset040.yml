@@ -23,9 +23,6 @@ composable_scenario: scenario003-multinode-containers.yaml
 upgrade_composable_scenario: scenario003-multinode-containers.yaml
 deployed_server: true
 
-test_ping: false
-run_tempest: true
-
 # save time by doing a mixed upgrade
 mixed_upgrade: true
 
@@ -104,3 +101,14 @@ undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 undercloud_resource_registry_args:
   "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
+
+# Tempest configuration, keep always at the end of the file
+test_ping: false
+run_tempest: true
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}

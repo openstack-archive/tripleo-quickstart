@@ -35,11 +35,6 @@ config_download_args: >-
   --disable-validations
   --verbose
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
-tempest_config: false
-test_ping: false
-run_tempest: false
 composable_roles: true
 
 # NOTE(flaper87): There's likely a better way to do this
@@ -69,3 +64,19 @@ overcloud_roles:
       - Storage
       - StorageMgmt
       - Tenant
+
+# Tempest configuration, keep always at the end of the file
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+tempest_config: false
+test_ping: false
+run_tempest: false
+
