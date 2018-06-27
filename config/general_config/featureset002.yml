@@ -12,7 +12,7 @@ step_introspect: true
 to_build: true
 # Delete the overcloud after deployment
 step_delete_overcloud: true
-undercloud_check_idempotency: true
+undercloud_check_idempotency: false
 
 # This enables container deployements after Pike
 containerized_overcloud: >-

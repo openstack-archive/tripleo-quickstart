@@ -20,6 +20,7 @@ containerized_overcloud: >-
   {%- else -%}
   true
   {%- endif -%}
+undercloud_check_idempotency: true
 delete_docker_cache: true
 
 # Tell tripleo about our environment
