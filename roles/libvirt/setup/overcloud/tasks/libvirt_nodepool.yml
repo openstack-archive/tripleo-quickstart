@@ -208,3 +208,9 @@
     echo "nameserver {{ custom_nameserver|default('8.8.8.8') }} " >> /etc/resolv.conf;
     echo "append domain-name-servers {{ custom_nameserver|default('8.8.8.8') }};" >> /etc/dhcp/dhclient.conf
   become: true
+
+- name: Create inventory suitable for zuul-jobs/multinode
+  template:
+    src: "{{ zuul_hosts_template }}"
+    dest: "{{ local_working_dir }}/zuul-hosts.yaml"
+    mode: 0755
