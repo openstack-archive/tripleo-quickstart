@@ -105,6 +105,11 @@ fi
 # the local working directory does not exist, or if explicitly
 # requested via --bootstrap.
 bootstrap () {
+    if ! command -v virtualenv ; then
+        echo "WARNING Could not find virtualenv binary necessary for
+            bootstrap. Attempting to install dependencies before proceeding."
+        install_deps
+    fi
     (   # run in a subshell so that we can 'set -e' without aborting
         # the main script immediately (because we want to clean up
         # on failure).
