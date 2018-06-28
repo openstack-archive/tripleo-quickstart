@@ -64,6 +64,7 @@ repos:
       - os-net-config
       - os-refresh-config
       - python-tripleoclient*
+      - python*-tripleo-common
       - openstack-tripleo-*
       - puppet-*
 
