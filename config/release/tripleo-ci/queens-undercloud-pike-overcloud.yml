@@ -87,6 +87,7 @@ repos:
       - openstack-puppet-modules
       - openstack-tripleo-ui
       - puppet-*
+      - python-paunch
 
   - type: generic
     reponame: delorean-queens-deps

@@ -139,6 +139,7 @@ Settings example for repositories:
               - openstack-tripleo-puppet-elements
               - openstack-tripleo-ui
               - puppet-*
+              - python-paunch
             releases:
               - master
 

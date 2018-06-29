@@ -80,6 +80,7 @@ repos:
       - python-tripleoclient
       - openstack-tripleo-*
       - puppet-*
+      - python-paunch
 
   - type: generic
     reponame: delorean-queens-deps

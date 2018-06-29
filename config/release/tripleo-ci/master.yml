@@ -67,6 +67,7 @@ repos:
       - python*-tripleo-common
       - openstack-tripleo-*
       - puppet-*
+      - python-paunch
 
   - type: generic
     reponame: delorean-master-deps
