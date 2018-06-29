@@ -80,7 +80,7 @@ undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.ya
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/net-config-undercloud.yaml"
 ctlplane_masquerade: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
   true
