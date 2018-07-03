@@ -96,6 +96,6 @@ tempest_plugins: >-
   {%- else -%}{{ tempest_plugins_old }}
   {%- endif -%}
 tempest_extra_config: >-
-  {% if release not in ['newton', 'ocata', 'pike'] -%}
+  {% if release not in ['newton', 'ocata'] -%}
     {'auth.tempest_roles': '"Member, creator"'}
   {%- endif -%}
