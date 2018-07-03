@@ -135,7 +135,11 @@ bootstrap () {
 
     pushd $OOOQ_DIR
         python setup.py install egg_info --egg-base $OPT_WORKDIR || { echo 'python setup.py install failed' ; exit 1; }
-        pip install --force-reinstall "${OPT_REQARGS[@]}" || { echo 'python setup.py install failed' ; exit 1; }
+        if [ $OPT_CLEAN == 1 ]; then
+            pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}" || { echo 'python setup.py install failed' ; exit 1; }
+        else
+            pip install --force-reinstall "${OPT_REQARGS[@]}" || { echo 'python setup.py install failed' ; exit 1; }
+        fi
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
             mkdir -p .tmp
             EXTRAS_DIR=$(/bin/mktemp -d -p $(pwd)/.tmp)
@@ -145,7 +149,12 @@ bootstrap () {
                     git://git.openstack.org \
                     openstack/tripleo-quickstart-extras
                 cd openstack/tripleo-quickstart-extras
-                pip install  .
+                if [ $OPT_CLEAN == 1 ]; then
+                    pip install --no-cache-dir --force-reinstall .
+                else
+                    pip install --force-reinstall .
+                fi
+        exit
             popd
         fi
     popd
