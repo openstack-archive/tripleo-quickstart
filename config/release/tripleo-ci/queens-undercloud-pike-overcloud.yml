@@ -43,8 +43,8 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
-  export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-queens/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo | grep baseurl | cut -d= -f2`
-  export CURRENT_TRIPLEO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-queens/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo | grep baseurl | cut -d= -f2`
+  export CURRENT_RDO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-queens/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  export CURRENT_TRIPLEO_MIRROR=`curl -L --silent https://trunk.rdoproject.org/centos7-queens/{{ dlrn_hash_path|default(dlrn_hash_tag) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
   # If running tripleo-quickstart from review.openstack.org or review.rdoproject.org, try to use AFS mirrors
   if [[ -e /etc/ci/mirror_info.sh ]]; then
   eval $(source /etc/ci/mirror_info.sh; echo NODEPOOL_MIRROR_HOST="$NODEPOOL_MIRROR_HOST"; echo NODEPOOL_BUILDLOGS_CENTOS_PROXY="$NODEPOOL_BUILDLOGS_CENTOS_PROXY")
