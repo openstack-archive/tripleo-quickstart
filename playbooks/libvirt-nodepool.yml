@@ -17,7 +17,13 @@
   vars:
     - libvirt_nodepool: true
   roles:
-    - libvirt/setup/overcloud
+    - role: libvirt/setup/overcloud
+      environment:
+        SUPERMIN_KERNEL_VERSION: "{{ lookup('env', 'SUPERMIN_KERNEL_VERSION') }}"
+        SUPERMIN_KERNEL: "{{ lookup('env', 'SUPERMIN_KERNEL') }}"
+        SUPERMIN_MODULES:  "{{ lookup('env', 'SUPERMIN_MODULES') }}"
+        LIBGUESTFS_BACKEND: "{{ lookup('env', 'LIBGUESTFS_BACKEND') }}"
+        LIBGUESTFS_BACKEND_SETTINGS: "{{ lookup('env', 'LIBGUESTFS_BACKEND_SETTINGS') }}"
   become: true
 
 - name: Add nodes to the generated inventory
