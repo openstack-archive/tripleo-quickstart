@@ -36,6 +36,8 @@ repos:
     custom_cmd: 'sudo yum install -y --enablerepo=extras'
 
 repo_cmd_after: |
+  sudo yum remove -y centos-release-ceph-hammer || true
+  sudo yum remove -y centos-release-ceph-jewel || true
   sudo yum-config-manager --save --setopt centos-ceph-luminous.gpgcheck=0
   sudo yum repolist;
   {% if repo_setup_run_update|default(true)|bool %}
