@@ -6,7 +6,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   readme
+   basic-usage
    configuration
    feature-configuration
    node-configuration

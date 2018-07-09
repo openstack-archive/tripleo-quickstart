@@ -1,5 +1,10 @@
 .. include:: ../../README.rst
 
+.. _basic_usage:
+
+Basic usage
+===========
+
 Getting the script
 ------------------
 
