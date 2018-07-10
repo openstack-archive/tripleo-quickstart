@@ -13,7 +13,6 @@ undercloud_check_sanity: true
 # containers config
 containerized_overcloud: false
 containerized_undercloud: true
-undercloud_install_cli_options: " --use-heat"
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
