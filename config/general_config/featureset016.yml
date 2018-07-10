@@ -12,6 +12,10 @@ enable_opstools_repo: true
 
 containerized_overcloud: true
 undercloud_generate_service_certificate: false
+undercloud_install_cli_options: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  --use-heat=False
+  {%- endif -%}
 
 ssl_overcloud: false
 

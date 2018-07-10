@@ -3,6 +3,11 @@ ssl_overcloud: false
 undercloud_check_idempotency: true
 undercloud_check_sanity: false
 
+undercloud_install_cli_options: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  --use-heat=False
+  {%- endif -%}
+
 test_ping: false
 run_tempest: true
 test_regex: ''
