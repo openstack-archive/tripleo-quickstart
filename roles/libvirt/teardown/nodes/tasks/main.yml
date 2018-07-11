@@ -17,7 +17,7 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
 # If libvirt isn't available we can skip everything else.
-- when: libvirt_check|success
+- when: libvirt_check is success
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
@@ -37,14 +37,14 @@
       - name: Destroy overcloud vms
         command:
           virsh destroy "{{ item.item.name }}"
-        when: item|success
+        when: item is success
         with_items: "{{ overcloud_check.results }}"
         ignore_errors: true
 
       - name: Undefine overcloud vms
         command:
           virsh undefine "{{ item.item.name }}"
-        when: item|success
+        when: item is success
         with_items: "{{ overcloud_check.results }}"
 
       # The `virsh vol-dumpxml ... > /dev/null` is here (and elsewhere) due to
@@ -73,13 +73,13 @@
       - name: Destroy supplemental vm
         command: >
           virsh destroy "{{ supplemental_node.name|default('') }}"
-        when: supplemental_check|success
+        when: supplemental_check is success
         ignore_errors: true
 
       - name: Undefine supplemental vm
         command: >
           virsh undefine "{{ supplemental_node.name|default('') }}" --remove-all-storage
-        when: supplemental_check|success
+        when: supplemental_check is success
         ignore_errors: true
 
     # Do the same thing to the undercloud node.
@@ -92,13 +92,13 @@
     - name: Destroy undercloud vm
       command: >
         virsh destroy "{{ undercloud_node.name }}"
-      when: undercloud_check|success
+      when: undercloud_check is success
       ignore_errors: true
 
     - name: Undefine undercloud vm
       command: >
         virsh undefine "{{ undercloud_node.name }}"
-      when: undercloud_check|success
+      when: undercloud_check is success
 
     - name: Delete undercloud vm storage
       shell: |
@@ -126,28 +126,28 @@
       shell: |
         virsh pool-dumpxml "{{ libvirt_volume_pool }}" |
         virsh pool-define /dev/stdin
-      when: pool_check|success
+      when: pool_check is success
 
     - name: Destroy volume pool
       command: >
         virsh pool-destroy "{{ libvirt_volume_pool }}"
-      when: pool_check|success
+      when: pool_check is success
       ignore_errors: true
 
     - name: Undefine volume pool
       command: >
         virsh pool-undefine "{{ libvirt_volume_pool }}"
-      when: pool_check|success
+      when: pool_check is success
 
     - name: Get UID of pool user
       command: id -u "{{ ansible_user_id }}"
       register: pool_uid
       changed_when: false
-      when: pool_check|success
+      when: pool_check is success
 
     - name: Destroy pool definition file
       file:
         path: "/run/user/{{ pool_uid.stdout }}/libvirt/storage/run/{{ libvirt_volume_pool }}.xml"
         state: absent
-      when: pool_check|success
+      when: pool_check is success
 

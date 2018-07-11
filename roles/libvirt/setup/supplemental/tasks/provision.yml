@@ -43,7 +43,7 @@
   environment:
     LIBVIRT_DEFAULT_URI: '{{ libvirt_uri }}'
 
-- when: supplemental_vol_check|failed
+- when: supplemental_vol_check is failed
   block:
   # TODO(hrybacki): Update fetch-images role to handle supplemental images
   - name: Fetch centos image for ipa

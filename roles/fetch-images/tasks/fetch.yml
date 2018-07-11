@@ -32,7 +32,7 @@
   set_fact:
     image_cache_path: "{{ _latest }}"
     cacheable: true
-  when: latest_exists|success and _force_cached_image
+  when: latest_exists is success and _force_cached_image
 
 # The md5sum for base OS images are not hosted, they are defined in a configuration file.
 # Handle base os images slightly differently
@@ -63,7 +63,7 @@
 # Otherwise, check if there's a new image available.
 - when:
     - image.md5sum is not defined
-    - not _force_cached_image or latest_exists|failed
+    - not _force_cached_image or latest_exists is failed
   block:
 
     # Get the expected checksum for the remote image.
@@ -96,7 +96,7 @@
 
 # Note.. image_exists and base_image_exists are required variables because
 # even unused variables will overwrite each other.
-- when: image_exists is defined and (image_exists|failed or base_image_exists|failed)
+- when: image_exists is defined and (image_exists is failed or base_image_exists is failed)
   block:
 
     # This task will download the image.  We're using `curl` here
@@ -132,7 +132,7 @@
       fail:
         msg: image checksum does not match
       when: >
-        image_exists|failed and
+        image_exists is failed and
         (md5_expected != md5_actual)
 
     - name: Cache image by checksum

@@ -7,7 +7,7 @@
   changed_when: false
 
 # If the non-root user exists, perform a variety of cleanup tasks.
-- when: non_root_uid|success
+- when: non_root_uid is success
   block:
     # Look for and kill any processes owned by the non-root user.
     # This will let us remove the user later on.
@@ -23,7 +23,7 @@
         pkill -u {{ non_root_user }}
       ignore_errors: true
       become: true
-      when: proc_exist|success
+      when: proc_exist is success
 
     - name: Wait for processes to exit
       command: >
@@ -33,13 +33,13 @@
       delay: 3
       until: proc_kill.stdout == '0'
       ignore_errors: true
-      when: proc_exist|success
+      when: proc_exist is success
       become: true
 
     - name: Kill (SIGKILL) all processes owned by non-root user
       command: >
         pkill -9 -u {{ non_root_user }}
-      when: proc_exist|success
+      when: proc_exist is success
       ignore_errors: true
       become: true
 

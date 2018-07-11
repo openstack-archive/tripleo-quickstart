@@ -20,11 +20,11 @@
   template:
     src: volume_pool.xml.j2
     dest: "{{ working_dir }}/volume_pool.xml"
-  when: pool_check|failed
+  when: pool_check is failed
 
 - name: Define volume pool
   command: "virsh pool-define {{ working_dir }}/volume_pool.xml"
-  when: pool_check|failed
+  when: pool_check is failed
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
