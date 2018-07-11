@@ -111,10 +111,6 @@ bootstrap () {
             bootstrap. Attempting to install dependencies before proceeding."
         install_deps
     fi
-    (   # run in a subshell so that we can 'set -e' without aborting
-        # the main script immediately (because we want to clean up
-        # on failure).
-
     set -e
 
     virtualenv\
@@ -140,11 +136,11 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
-        python setup.py install egg_info --egg-base $OPT_WORKDIR || { echo 'python setup.py install failed' ; exit 1; }
+        python setup.py install egg_info --egg-base $OPT_WORKDIR
         if [ $OPT_CLEAN == 1 ]; then
-            pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}" || { echo 'python setup.py install failed' ; exit 1; }
+            pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
         else
-            pip install --force-reinstall "${OPT_REQARGS[@]}" || { echo 'python setup.py install failed' ; exit 1; }
+            pip install --force-reinstall "${OPT_REQARGS[@]}"
         fi
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
             mkdir -p .tmp
@@ -164,11 +160,6 @@ bootstrap () {
             popd
         fi
     popd
-    )
-    bootstrap_rc=$?
-    if [ $bootstrap_rc -ne 0 ]; then
-        return $bootstrap_rc
-    fi
 
     # In order to do any filesystem operations on the system running ansible (if it has SELinux intalled)
     # we need the python bindings in the venv. Unfortunately, it is not available on pypi, so we need to
@@ -531,6 +522,11 @@ if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
     VERBOSITY=vvvv
 else
     VERBOSITY=vv
+fi
+
+if [ ! -f $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK ]; then
+    printf "\n !! execute quickstart.sh --clean to ensure the dependencies are installed !!"
+    exit 1
 fi
 
 ansible-playbook -$VERBOSITY $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK \
