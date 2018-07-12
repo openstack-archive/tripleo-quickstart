@@ -418,7 +418,8 @@
 # In the upcoming release of ansible 2.4 this should be moved to
 # iptables_raw
 #  - name: ensure the required tcp ports are open on the virthost
-  - iptables:
+  - name: configure iptables
+    iptables:
       table: filter
       chain: INPUT
       action: insert
@@ -452,6 +453,8 @@
   - name: reload the systemctl daemon after file update
     shell: systemctl daemon-reload
     become: true
+    tags:
+      - skip_ansible_lint
 
   - name: Enable ssh tunnel service
     service:

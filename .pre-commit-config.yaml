@@ -1,0 +1,7 @@
+repos:
+- repo: https://github.com/willthames/ansible-lint.git
+  rev: v3.5.1
+  hooks:
+    - id: ansible-lint
+      entry: env ANSIBLE_LIBRARY=./library ansible-lint
+      files: \.(yaml|yml)$

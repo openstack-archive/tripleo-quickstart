@@ -24,6 +24,9 @@ If you wish to contribute, you'll want to get setup by following the
 documentation available at `How To
 Contribute <https://wiki.openstack.org/wiki/How_To_Contribute>`__.
 
+Developers are encouraged to install `pre-commit <https://pre-commit.com/#install>`__ in order
+to auto-perform a minimal set of checks on commit.
+
 Once you've cloned the repository using your account, install the
 `git-review <https://docs.openstack.org/infra/manual/developers.html#installing-git-review>`__
 tool, then from the ``tripleo-quickstart`` repository run::
