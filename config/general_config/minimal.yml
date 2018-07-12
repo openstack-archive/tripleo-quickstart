@@ -21,6 +21,39 @@ containerized_overcloud: >-
   {%- endif -%}
 delete_docker_cache: true
 
+containerized_undercloud: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+undercloud_install_cli_options: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  --use-heat
+  {%- endif -%}
+
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_enable_routed_networks: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_clean_nodes: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+
 # Tell tripleo about our environment.
 enable_pacemaker: false
 network_isolation: true
@@ -54,7 +87,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - tempest-setup
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
     - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
   included_static_docs:
     - env-setup-virt
@@ -69,7 +102,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - tempest-setup
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
     - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 # Use the traditional ping test in newton, ocata and pike
@@ -92,4 +125,10 @@ deploy_steps_ansible_workflow: >-
   true
   {%- else -%}
   false
+  {%- endif -%}
+config_download_args: >-
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --verbose
   {%- endif -%}
