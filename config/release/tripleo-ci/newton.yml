@@ -16,8 +16,8 @@ inject_images:
 release: newton
 dlrn_hash_tag: current-passed-ci
 dlrn_hash_tag_newest: current
-overcloud_image_url: http://66.187.229.139/builds-newton/current-tripleo/overcloud-full.tar
-ipa_image_url: http://66.187.229.139/builds-newton/current-tripleo/ironic-python-agent.tar
+overcloud_image_url: https://images.rdoproject.org/newton/rdo_trunk/current-tripleo/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/newton/rdo_trunk/current-tripleo/ironic-python-agent.tar
 repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;

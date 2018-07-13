@@ -16,8 +16,8 @@ inject_images:
 release: ocata
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
-overcloud_image_url: http://66.187.229.139/builds-ocata/current-tripleo/overcloud-full.tar
-ipa_image_url: http://66.187.229.139/builds-ocata/current-tripleo/ironic-python-agent.tar
+overcloud_image_url: https://images.rdoproject.org/ocata/rdo_trunk/current-tripleo-rdo/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/ocata/rdo_trunk/current-tripleo-rdo/ironic-python-agent.tar
 repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
