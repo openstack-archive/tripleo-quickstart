@@ -201,6 +201,8 @@
       '{{ working_dir }}/undercloud-resized.qcow2'
     environment:
       LIBGUESTFS_BACKEND: direct
+      LIBGUESTFS_DEBUG: 1
+      LIBGUESTFS_TRACE: 1
 
   - name: Rename resized image to original name
     command: >
@@ -229,6 +231,8 @@
       exit 1; fi'
     environment:
       LIBGUESTFS_BACKEND: direct
+      LIBGUESTFS_DEBUG: 1
+      LIBGUESTFS_TRACE: 1
 
   - name: Set libvirt environment when using root to run tasks
     set_fact:
