@@ -8,8 +8,7 @@ step_introspect: false
 # Tell tripleo about our environment.
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 test_ping: true
 enable_pacemaker: true
 

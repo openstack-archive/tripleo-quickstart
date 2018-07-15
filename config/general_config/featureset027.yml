@@ -3,8 +3,7 @@
 # Tell tripleo how we want things done.
 # Note: The order of the templates and arguments passed to heat matters.
 
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 
 network_isolation: false
 enable_pacemaker: false

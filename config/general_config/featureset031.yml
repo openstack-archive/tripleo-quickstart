@@ -26,7 +26,6 @@ telemetry_args: >-
 
 extra_args: >-
   -e {{ overcloud_templates_path }}/environments/services/neutron-opendaylight.yaml
-  --ntp-server pool.ntp.org
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.

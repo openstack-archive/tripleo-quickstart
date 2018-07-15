@@ -13,8 +13,7 @@ undercloud_generate_service_certificate: false
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false
 
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 
 container_args: >-
   {% if release in ['pike','queens'] -%}

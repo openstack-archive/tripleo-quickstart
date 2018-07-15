@@ -20,8 +20,7 @@ add_repos:
     # packages for 3.9 branch
     pkg_name: centos-release-openshift-origin39
 
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 
 container_args: >-
   {% if release in ['pike','queens'] -%}

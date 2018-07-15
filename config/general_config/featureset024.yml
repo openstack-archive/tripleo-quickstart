@@ -33,7 +33,6 @@ extra_args: >-
   -e {{ overcloud_templates_path }}/environments/puppet-ceph.yaml
   {% endif %}
   {% if release not in ['newton', 'ocata'] %}-e {{ overcloud_templates_path }}/ci/environments/ceph-min-osds.yaml{% endif %}
-  --ntp-server pool.ntp.org
 test_ping: true
 
 run_tempest: false
