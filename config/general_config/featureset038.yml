@@ -1,0 +1,32 @@
+# Deploy an Openstack environment with Octavia in a containerized overcloud
+#
+composable_scenario: scenario010-multinode-containers.yaml
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+containerized_overcloud: true
+
+# Do not generate or enable SSL
+undercloud_generate_service_certificate: false
+ssl_overcloud: false
+
+# TODO: We need to be able to access the amphora image from somewhere
+# (install from RDO package?) before we can run tempest
+test_ping: false
+run_tempest: false
+tempest_config: false
+deployed_server: true
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+config_download_args: >-
+  {% if release not in ['queens'] -%}
+  -e {{ working_dir }}/config-download.yaml
+  --disable-validations
+  --verbose
+  {%- endif -%}
