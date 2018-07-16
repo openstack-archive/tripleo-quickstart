@@ -26,8 +26,7 @@ delete_docker_cache: true
 enable_pacemaker: false
 network_isolation: false
 
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 
 # Tempest
 run_tempest: true

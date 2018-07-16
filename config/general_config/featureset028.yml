@@ -27,7 +27,6 @@ telemetry_args: >-
 # TODO(numans) - Change to neutron-ml2-ovn-ha.yaml once OVS 2.7.2 is available
 # in rdo.
 extra_args: >-
-  --ntp-server pool.ntp.org
   -e {{ overcloud_templates_path }}/environments/neutron-ml2-ovn.yaml
 
 composable_roles: true

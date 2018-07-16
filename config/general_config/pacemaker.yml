@@ -35,10 +35,9 @@ telemetry_args: >-
    {% endif %}
 
 extra_args: >-
-  --ntp-server pool.ntp.org
    {% if release not in ['newton', 'ocata', 'pike'] %}
-  -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
-  {% endif %}
+   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+   {% endif %}
 
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs

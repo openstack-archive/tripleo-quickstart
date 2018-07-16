@@ -12,8 +12,7 @@ overcloud_nodes:
     virtualbmc_port: 6231
 
 # Tell tripleo how we want things done.
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 
 # This config is extremely resource intensive, so we disable telemetry
 # in order to reduce the overall memory footprint

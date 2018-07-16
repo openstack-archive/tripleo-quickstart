@@ -25,8 +25,7 @@ telemetry_args: >-
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
 
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 test_ping: true
 
 run_tempest: false

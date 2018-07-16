@@ -15,7 +15,6 @@ overcloud_nodes:
 # Tell tripleo how we want things done.
 extra_args: >-
   --compute-scale 1
-  --ntp-server pool.ntp.org
 
 network_isolation: true
 

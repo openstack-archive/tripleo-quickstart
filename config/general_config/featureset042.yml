@@ -28,7 +28,6 @@ telemetry_args: >-
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
 
 extra_args: >-
-  --ntp-server pool.ntp.org
   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
   -e /usr/share/openstack-tripleo-heat-templates/environments/ipsec.yaml
 

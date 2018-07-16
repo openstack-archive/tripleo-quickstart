@@ -48,7 +48,6 @@ telemetry_args: >-
    {% endif %}
 
 extra_args: >-
-  --ntp-server pool.ntp.org
   {% if release == 'pike' -%}
   -e {{ overcloud_templates_path }}/environments/services-docker/neutron-ovn.yaml
   {%- else -%}

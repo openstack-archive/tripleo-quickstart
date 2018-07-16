@@ -3,7 +3,6 @@
 undercloud_generate_service_certificate: false
 step_introspect: false
 extra_args: >-
-  --ntp-server pool.ntp.org
   - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-ansible.yaml
   - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-mds.yaml
   - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-rgw.yaml

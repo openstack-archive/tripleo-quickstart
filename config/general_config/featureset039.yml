@@ -41,8 +41,7 @@ step_introspect: false
 # Tell tripleo about our environment.
 network_isolation: true
 network_isolation_type: 'multiple-nics'
-extra_args: >-
-  --ntp-server pool.ntp.org
+extra_args: ''
 test_ping: true
 enable_pacemaker: true
 run_tempest: false

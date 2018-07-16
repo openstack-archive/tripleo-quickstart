@@ -51,7 +51,6 @@ network_isolation_args: >-
   -e {{ working_dir }}/network-environment.yaml
 
 extra_args: >-
-  --ntp-server pool.ntp.org
   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
 
 undercloud_enable_routed_networks: >-
