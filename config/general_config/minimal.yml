@@ -32,6 +32,12 @@ undercloud_install_cli_options: >-
   --use-heat
   {%- endif -%}
 
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
+
 ctlplane_masquerade: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
   true
