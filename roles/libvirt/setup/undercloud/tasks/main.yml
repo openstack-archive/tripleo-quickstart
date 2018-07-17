@@ -256,6 +256,35 @@
     environment: "{{ libvirt_environment }}"
     when:  not undercloud_use_custom_boot_images|bool
 
+- when:
+    - not undercloud_use_custom_boot_images|bool
+    - not overcloud_as_undercloud|bool
+  block:
+  # NOTE(ykarel) This is required to get the undercloud specific
+  # kernel when not using overcloud_as_undercloud.
+  - name: Extract the kernel and initramfs from the undercloud image
+    command: >
+      virt-get-kernel -a '{{ working_dir }}/undercloud.qcow2' --unversioned-names
+      --output '{{ working_dir }}'
+    environment:
+      LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+
+  # NOTE(trown) The undercloudvm template expects this to be
+  # named overcloud-full.vmlinuz. We can update the devmode case
+  # to not require this step
+  - name: rename undercloud kernel
+    command: >
+      mv '{{ working_dir }}/vmlinuz'
+      '{{ working_dir }}/overcloud-full.vmlinuz'
+
+  # NOTE(trown) The undercloudvm template expects this to be
+  # named overcloud-full.initrd. We can update the devmode case
+  # to not require this step
+  - name: rename undercloud initramfs
+    command: >
+      mv '{{ working_dir }}/initramfs'
+      '{{ working_dir }}/overcloud-full.initrd'
+
   # NOTE(trown): This is a bit of a hack to get the undercloud vm
   # template to use the external kernel and initrd. We should
   # instead use a different var for this and set it in the devmode
