@@ -58,6 +58,7 @@ repos:
       - python-tripleoclient
       - openstack-tripleo-*
       - puppet-*
+      - python-paunch
 
   ## All other packages from ocata-promoted
   - type: generic
