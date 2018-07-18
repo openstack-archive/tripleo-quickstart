@@ -1,6 +1,6 @@
 # Summary of the feature set.
 # Deploy an Openstack environment with ssl undercloud, introspect, and use network isolation
-# Note: any change in this featureset must also be done in featureset035.
+# Note: any change in this featureset must also be done in featureset035 and featureset053.
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
