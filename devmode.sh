@@ -18,20 +18,20 @@ usage () {
     echo "Usage: $0 [options] virthost"
     echo ""
     echo "Options:"
-    echo "  -c, --config <type>"
+    echo "  -c, --config <type> Only minimal.yml config is supported and tested."
     echo "                      specify the node configuration (default=$CONFIG)"
     echo "  -n, --no-gate       do not ask for gating a commit when gating"
     echo "                      variables are missing (default is gating)"
     echo "  -w, --working-dir <dir>"
     echo "                      directory where the virtualenv, inventory files, etc."
     echo "                      are created (default=$WORKSPACE)"
-    echo "  -o, --ovb           deploy using OVB"
     echo "  -d, --delete-all-stacks"
     echo "                      delete all stacks in the tenant before deployment."
     echo "                      will also delete associated keypairs if they exist."
     echo "  -r, --release <release>"
     echo "                      OpenStack release to deploy (default=$RELEASE)."
-    echo "  -h, --help          print this help and exit"
+    echo "  -h, --help          print this help and exit. Note OVB is no longer supported.
+                                See https://docs.openstack.org/tripleo-docs/latest/contributor/reproduce-ci.html"
     echo "  virthost            target machine used for deployment, required argument"
 }
 
@@ -86,27 +86,6 @@ gerrit-gate () {
     export GERRIT_{HOST,BRANCH,CHANGE_ID,PATCHSET_REVISION}
 }
 
-ovb-deploy() {
-    if [[ -z $OS_AUTH_URL || -z $OS_USERNAME ]]; then
-        interactive=1
-        echo "What is the path to the OpenStack RC file for the OVB system?"
-        echo "This can be downloaded from the OpenStack Web interface through"
-        echo "Access & Security - API Access - Download OpenStack RC File"
-        read -p "OPENRC_PATH=" OPENRC_PATH
-        source $OPENRC_PATH
-    fi
-
-    if [[ $ENVIRONMENT != "rdocloud" ]] && [[ $CUSTOM_REQUIREMENTS_INSTALL == "none" ]]; then
-        interactive=1
-        echo "What is the line to be added to the requirements file?"
-        echo "This line should include the path to the repo that"
-        echo "will be pip installed."
-        read -p "CUSTOM_REQUIREMENTS_INSTALL=" CUSTOM_REQUIREMENTS_INSTALL
-        echo ""
-    fi
-    export CUSTOM_REQUIREMENTS_INSTALL
-
-}
 
 interactive-gate () {
     if [[ -n "$ZUUL_HOST" ]]; then
@@ -171,10 +150,6 @@ while [ "x$1" != "x" ]; do
             GATE=0
             ;;
 
-        --ovb|-o)
-            DEPLOY_TYPE=ovb
-            VIRTHOST=localhost
-            ;;
         --release|-r)
             RELEASE=$2
             shift
@@ -206,7 +181,7 @@ pushd $(dirname ${BASH_SOURCE[0]:-$0})
 export VIRTHOST=$1
 export WORKSPACE
 
-if [[ -z $VIRTHOST ]] && [[ $DEPLOY_TYPE != "ovb" ]]; then
+if [[ -z $VIRTHOST ]]; then
     usage
     echo ""
     echo "Specify the virthost to use. You need to be able to ssh as root without"
@@ -224,16 +199,9 @@ fi
 
 BASE_QUICKSTART_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-if [[ "$DEPLOY_TYPE" == "ovb" ]]; then
-    ovb-deploy
-    if [[ "$CONFIG" == "minimal" ]]; then
-        CONFIG=ovb-minimal-pacemaker-public-bond
-    fi
 
-    bash $BASE_QUICKSTART_DIR/ci-scripts/full-deploy-ovb.sh $RELEASE $CONFIG $JOB_TYPE $ENVIRONMENT $CUSTOM_REQUIREMENTS_INSTALL $DELETE_ALL_STACKS
-else
-    bash $BASE_QUICKSTART_DIR/ci-scripts/full-deploy.sh $RELEASE $BUILD_SYS $CONFIG $JOB_TYPE
-fi
+bash $BASE_QUICKSTART_DIR/ci-scripts/full-deploy.sh $RELEASE $BUILD_SYS $CONFIG $JOB_TYPE
+
 
 popd
 

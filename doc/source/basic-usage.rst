@@ -68,16 +68,10 @@ if ssh is not setup to support it.
 Enable Developer mode
 ---------------------
 
-If you are working on TripleO upstream development, and need to reproduce what
-runs in tripleo-ci, you will want to use developer mode.
-
-This will fetch the images produced by tripleo-ci instead of the ones produced
-by RDO. The incantation for a job using the quickstart defaults other than
-developer mode would be::
-
-    bash devmode.sh $VIRTHOST
-
-The full set of developer mode instructions are available in :ref:`devmode`
+Please refer to
+the `OpenStack Documentation
+<https://docs.openstack.org/tripleo-docs/latest/contributor/reproduce-ci.html
+for devmode>`_
 
 Feature Configuration and Nodes
 -------------------------------
