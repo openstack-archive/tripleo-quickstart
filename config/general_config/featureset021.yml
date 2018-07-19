@@ -11,6 +11,7 @@
 undercloud_generate_service_certificate: true
 ssl_overcloud: false
 overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
 
 # This enables container deployements after Pike
@@ -33,7 +34,7 @@ undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.ya
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
 
 # Tell tripleo about our environment
 enable_pacemaker: false
