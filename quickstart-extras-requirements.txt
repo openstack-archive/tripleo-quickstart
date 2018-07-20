@@ -1,2 +1,3 @@
 git+https://git.openstack.org/openstack/tripleo-quickstart-extras/#egg=tripleo-quickstart-extras
 git+https://git.openstack.org/openstack/tripleo-ha-utils/#egg=tripleo-ha-utils
+git+https://git.openstack.org/openstack/browbeat/#egg=browbeat
