@@ -59,7 +59,6 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
         --working-dir $WORKSPACE/ \
         --no-clone \
         --bootstrap \
-        --clean \
         --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
         --playbook build-test-packages.yml \
         --tags all \
@@ -82,7 +81,6 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
         $VIRTHOST
 else
     bash quickstart.sh \
-        --clean \
         --bootstrap \
         --tags all \
         --config $WORKSPACE/config/general_config/$CONFIG.yml \

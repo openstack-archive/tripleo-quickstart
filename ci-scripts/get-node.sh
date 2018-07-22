@@ -8,6 +8,7 @@ pushd $WORKSPACE/tripleo-quickstart
 # This serves as a fail-fast syntax check for quickstart gates.
 ./quickstart.sh \
     --working-dir $WORKSPACE/ \
+    --clean \
     --no-clone \
     --bootstrap \
     --requirements requirements.txt \
