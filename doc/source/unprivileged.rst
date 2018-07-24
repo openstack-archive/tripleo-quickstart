@@ -18,7 +18,7 @@ this section and start reading below at "Configure KVM".
 Place the following into ``playbook.yml`` in the ``tripleo-quickstart``
 directory::
 
-    - host: localhost
+    - hosts: localhost
       roles:
         - environment/setup
 
@@ -85,8 +85,8 @@ Once these packages are installed, you need to start ``libvirtd``
 Configuring libvirt networks
 ----------------------------
 
-The quickstart requires two networks. The ``external`` network provides
-inbound access into the virtual environment set up the playbooks. The
+Quickstart requires two networks. The ``external`` network provides
+inbound access into the virtual environment set up by the playbooks. The
 ``overcloud`` network connects the overcloud hosts to the undercloud,
 and is used both for provisioning, inbound access to the overcloud, and
 communication between overcloud hosts.
@@ -158,7 +158,7 @@ Deploying TripleO
 
 With all of the system configuration tasks out of the way, the rest of
 the process can be run as an unprivileged user. You will need to create
-a YAML document that described your network configuration and that
+a YAML document that describes your network configuration and that
 optionally changes any of the default values used in the quickstart
 deployment. To describe the network resources we created above, I would
 create a file called ``config.yml`` with the following content::
