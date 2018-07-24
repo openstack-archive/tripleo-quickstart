@@ -24,10 +24,6 @@ containerized_undercloud: >-
   {%- else -%}
   false
   {%- endif -%}
-undercloud_install_cli_options: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  --use-heat
-  {%- endif -%}
 
 ctlplane_masquerade: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
