@@ -14,11 +14,13 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 
 # Centos OpenSihft repo
-add_repos:
-  - type: package
+# NOTE(flaper87): Commenting this out until
+# openshift-ansible 3.10 hits the centos repos
+#add_repos:
+#  - type: package
     # NOTE(mandre) centos-release-openshift-origin39 provides the newest
     # packages for 3.9 branch
-    pkg_name: centos-release-openshift-origin39
+    #    pkg_name: centos-release-openshift-origin39
 
 extra_args: ''
 
@@ -45,7 +47,13 @@ composable_roles: true
 # NOTE(flaper87): There's likely a better way to do this
 repo_cmd_after: |
   sudo yum update -y
-  sudo yum install -y openshift-ansible-playbooks
+  # NOTE(flaper87): Commenting this out until
+  # openshift-ansible 3.10 hits the centos repos
+  # sudo yum install -y openshift-ansible-playbooks
+  if [ ! -d /usr/share/ansible/openshift-ansible ]; then
+    sudo git clone -b openshift-ansible-3.10.18-1 https://github.com/openshift/openshift-ansible /usr/share/ansible/openshift-ansible/
+    sudo chmod a+r /usr/share/ansible/openshift-ansible/
+  fi
 
 overcloud_roles:
   - name: Controller
