@@ -1,6 +1,6 @@
 cmd2==0.8.5
 ara==0.15.0
-ansible==2.5.5
+ansible==2.5.8
 jmespath
 netaddr>=0.7.18
 os-client-config
