@@ -196,6 +196,9 @@ usage () {
     echo "                      multiple times. By using this flag you override "
     echo "                      both requirements.txt and quickstart-extras-requirements.txt."
     echo "                      The user assumes responsibility for the requirements. "
+    echo "  -u, --url-requirements <PIP format URL>"
+    echo "                      Pip format URL for requirements to install for quickstart"
+    echo "                      For example: -u git+https://git.openstack.org/openstack/tripleo-upgrade#egg=tripleo-upgrade"
     echo "  -R, --release       OpenStack release to deploy (default=$OPT_RELEASE)"
     echo "  -c, --config <file>"
     echo "                      specify the config file that contains the node"
@@ -264,8 +267,13 @@ while [ "x$1" != "x" ]; do
             OPT_SYSTEM_PACKAGES=1
             ;;
 
-        --requirements|-r)
+        --requirements-file|-r)
             OPT_REQARGS+=("-r")
+            OPT_REQARGS+=("$2")
+            shift
+            ;;
+
+        --url-requirements|-u)
             OPT_REQARGS+=("$2")
             shift
             ;;
@@ -386,6 +394,8 @@ done
 
 if [ -z "$OPT_REQARGS" ]; then
     OPT_REQARGS=("-r"  "$OOOQ_BASE_REQUIREMENTS" "-r" "$OOOQ_EXTRA_REQUIREMENTS")
+else
+    OPT_REQARGS+=("-r"  "$OOOQ_BASE_REQUIREMENTS")
 fi
 
 if [ "$PRINT_LOGO" = 1 ]; then
