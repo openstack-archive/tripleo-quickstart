@@ -267,7 +267,7 @@ while [ "x$1" != "x" ]; do
             OPT_SYSTEM_PACKAGES=1
             ;;
 
-        --requirements-file|-r)
+        --requirements|-r)
             OPT_REQARGS+=("-r")
             OPT_REQARGS+=("$2")
             shift
