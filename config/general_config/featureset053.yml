@@ -5,7 +5,7 @@
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: true
-ssl_overcloud: true
+ssl_overcloud: false
 overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
 
@@ -23,10 +23,6 @@ containerized_undercloud: >-
   true
   {%- else -%}
   false
-  {%- endif -%}
-undercloud_install_cli_options: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  --use-heat
   {%- endif -%}
 
 ctlplane_masquerade: >-
@@ -78,8 +74,6 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
-
-undercloud_ntp_servers: pool.ntp.org
 
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
@@ -148,3 +142,9 @@ config_download_args: >-
   {%- endif -%}
 
 enable_minimal_browbeat: true
+# Browbeat specific settings
+elastic_enabled: false
+grafana_enabled: false
+statsd_enabled: false
+rsyslog_forwarding: false
+browbeat_config_file: browbeat-minimal-ci.yaml.j2
