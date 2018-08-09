@@ -9,6 +9,12 @@ novajoin_connect_timeout: 60
 novajoin_read_timeout: 60
 # Set the FreeIPA server IP
 freeipa_internal_ip: "{{ external_network_cidr|nthhost(10) }}"
+# We'll use FreeIPA as the nameserver
+nameserver_from_virthost: false
+
+# Extra
+undercloud_enable_ui: false
+enable_port_forward_for_tripleo_ui: false
 
 # Set node hostnames.
 tripleo_domain: tripleodomain.example.com
@@ -22,6 +28,8 @@ overcloud_cloud_name_storage_management: "overcloud.storagemgmt.{{ tripleo_domai
 overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
 
 # Define FreeIPA server as DNS server for under/overcloud.
+custom_nameserver:
+- "{{ freeipa_internal_ip }}"
 undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
 overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
 
