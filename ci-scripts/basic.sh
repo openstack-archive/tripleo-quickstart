@@ -26,7 +26,7 @@ socketdir=$(mktemp -d /tmp/sockXXXXXX)
 export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 
 # preparation steps to run with the gated roles
-CI_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CI_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 source $CI_SCRIPT_DIR/include-gate-changes.sh
 
 # CI_ENV is set on the slave running the jobs
