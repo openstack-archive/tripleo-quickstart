@@ -94,7 +94,14 @@ config_download_args: >-
   --no-config-download
   {%- endif -%}
 
-undercloud_install_cli_options: >-
+containerized_undercloud: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
-  --use-heat=False
+  true
+  {%- else -%}
+  false
   {%- endif -%}
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
