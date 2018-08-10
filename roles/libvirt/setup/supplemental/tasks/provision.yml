@@ -89,8 +89,7 @@
     uri: '{{ libvirt_uri }}'
 
 - name: Wait for VM to come online
-  pause:
-    seconds: 30
+  wait_for: timeout=30
 
 # Add the supplemental to the in-memory inventory.
 - name: Add supplemental node vm to inventory
