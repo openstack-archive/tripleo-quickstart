@@ -106,21 +106,6 @@ artcl_create_docs_payload:
     - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
     - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
-# Use the traditional ping test in newton, ocata and pike
-# Run tempest in queens+
-
-test_ping: >-
-  {% if release in ['newton', 'ocata', 'pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
-# looking for a small set of tempest tests to validate
-# tempest config and execution are working
-run_tempest: true
-test_white_regex: 'tempest.api.compute.admin'
-
 deploy_steps_ansible_workflow: >-
   {% if release not in ['newton','ocata','pike'] -%}
   true
@@ -133,3 +118,29 @@ config_download_args: >-
   --config-download
   --verbose
   {%- endif -%}
+
+# Tempest configuration, keep always at the end of the file
+# Use the traditional ping test in newton, ocata and pike
+# Run tempest in queens+
+
+test_ping: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
+# looking for a small set of tempest tests to validate
+# tempest config and execution are working
+run_tempest: true
+test_white_regex: 'tempest.api.compute.admin'
+
+

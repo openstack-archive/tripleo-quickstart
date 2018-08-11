@@ -50,23 +50,6 @@ extra_args: >-
   -e {{ overcloud_templates_path }}/environments/services/neutron-ovn-ha.yaml
   {%- endif -%}
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
-tempest_config: true
-test_ping: false
-run_tempest: true
-test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-
-# Run containerized tempest from master and ongoing
-tempest_format: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-
 deployed_server: >-
   {% if release in ['newton','ocata','pike','queens'] -%}
   true
@@ -85,3 +68,24 @@ config_download_args: >-
   --disable-validations
   --verbose
   {%- endif -%}
+
+
+# Tempest configuration, keep always at the end of the file
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+tempest_config: true
+test_ping: false
+run_tempest: true
+test_white_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+

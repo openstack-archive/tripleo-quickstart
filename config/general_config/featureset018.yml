@@ -84,6 +84,26 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
+deployed_server: >-
+  {% if release in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  -e {{ working_dir }}/config-download.yaml
+  --disable-validations
+  --verbose
+  {%- endif -%}
+
+# Tempest configuration, keep always at the end of the file
 # Use the traditional ping test in newton and ocata
 # Run tempest in pike+
 
@@ -103,9 +123,9 @@ run_tempest: >-
 
 test_white_regex: ''
 
-# Run containerized tempest from master and ongoing
+# Run tempest in containers when at least undercloud is containerized
 tempest_format: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  {% if containerized_undercloud|bool -%}
   container
   {%- else -%}
   packages
@@ -126,21 +146,4 @@ tempest_plugins: >-
   {%- else -%}{{ tempest_plugins_old }}
   {%- endif -%}
 
-deployed_server: >-
-  {% if release in ['newton','ocata','pike','queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-deploy_steps_ansible_workflow: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-config_download_args: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  -e {{ working_dir }}/config-download.yaml
-  --disable-validations
-  --verbose
-  {%- endif -%}
+

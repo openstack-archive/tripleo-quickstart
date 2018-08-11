@@ -28,6 +28,7 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
+# Tempest configuration, keep always at the end of the file
 # Use the traditional ping test in newton and ocata
 # Run tempest in pike+
 
@@ -43,6 +44,14 @@ run_tempest: >-
   false
   {%- else -%}
   true
+  {%- endif -%}
+
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
   {%- endif -%}
 
 test_white_regex: ''

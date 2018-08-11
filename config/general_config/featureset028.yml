@@ -43,6 +43,15 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
+# Tempest configuration, keep always at the end of the file
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
 test_ping: false
 run_tempest: true
 test_white_regex: ''

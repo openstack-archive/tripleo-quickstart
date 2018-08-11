@@ -8,7 +8,17 @@ undercloud_install_cli_options: >-
   --use-heat=False
   {%- endif -%}
 
+# Tempest configuration, keep always at the end of the file
+
 test_ping: false
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
 run_tempest: true
 test_regex: ''
 tempest_undercloud: true

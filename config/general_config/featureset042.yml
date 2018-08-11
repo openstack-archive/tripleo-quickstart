@@ -63,11 +63,19 @@ artcl_create_docs_payload:
     - tempest-setup
     - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
+deploy_steps_ansible_workflow: true
+
+# Tempest configuration, keep always at the end of the file
 test_ping: false
 run_tempest: true
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
 
 test_white_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-
-deploy_steps_ansible_workflow: true

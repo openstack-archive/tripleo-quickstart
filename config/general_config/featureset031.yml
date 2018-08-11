@@ -27,14 +27,6 @@ telemetry_args: >-
 extra_args: >-
   -e {{ overcloud_templates_path }}/environments/services/neutron-opendaylight.yaml
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
-test_ping: false
-run_tempest: true
-test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-
 # Add ODL Repo
 add_repos:
   - type: generic
@@ -60,3 +52,20 @@ config_download_args: >-
   --disable-validations
   --verbose
   {%- endif -%}
+
+# Tempest configuration, keep always at the end of the file
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+test_ping: false
+run_tempest: true
+test_white_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
