@@ -2,7 +2,7 @@ release: queens
 overcloud_release: newton
 target_upgrade_version: queens
 
-overcloud_templates_branch: stable/newton
+overcloud_templates_branch: newton-eol
 overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
 overcloud_templates_path: "{{working_dir}}/tripleo-heat-templates"
 
