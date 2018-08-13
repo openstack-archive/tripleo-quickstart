@@ -91,3 +91,29 @@ else
         $VIRTHOST
 fi
 
+if [ "$JOB_TYPE" = "standalone" ]; then
+    bash quickstart.sh \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --bootstrap \
+        --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+        --playbook build-test-packages.yml \
+        --tags all \
+        --teardown all \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
+        $VIRTHOST
+
+    bash quickstart.sh \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
+        --retain-inventory \
+        --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+        --config $WORKSPACE/config/general_config/$CONFIG.yml \
+        --skip-tags provision \
+        --tags all \
+        --teardown none \
+        --playbook quickstart-extras-standalone.yml \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
+        $VIRTHOST
