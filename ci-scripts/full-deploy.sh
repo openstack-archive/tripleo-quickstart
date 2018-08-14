@@ -6,12 +6,14 @@
 set -eux
 
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
+: ${WORKSPACE:=$HOME/.quickstart}
+: ${VIRTHOST:=127.0.0.1}
 
-RELEASE=$1
+RELEASE=${1:-master-tripleo-ci}
 # unused variable in script, kept for consistency
-BUILD_SYS=$2
-CONFIG=$3
-JOB_TYPE=$4
+BUILD_SYS=${2:-delorean}
+CONFIG=${3:-minimal}
+JOB_TYPE=${4:-standalone}
 
 if [ "$JOB_TYPE" = "gate" ] || \
    [ "$JOB_TYPE" = "periodic" ] || \
@@ -32,7 +34,7 @@ elif [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     fi
 elif [ "$JOB_TYPE" = "promote" ]; then
     REL_TYPE=$LOCATION
-elif [ "$JOB_TYPE" = "standalone" ]; then
+elif [ "$JOB_TYPE" = "standalone" ] || [ "$JOB_TYPE" = "standalone3" ]; then
     echo "using standalone, single node deployment"
 else
     echo "Job type must be one of the following:"
@@ -42,6 +44,7 @@ else
     echo " * dlrn-gate - for gating upstream changes"
     echo " * dlrn-gate-check - for gating upstream changes"
     echo " * standalone - for standalone deployments"
+    echo " * standalone3 - for standalone deployments"
     exit 1
 fi
 
@@ -56,66 +59,98 @@ CI_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $CI_SCRIPT_DIR/include-gate-changes.sh
 
 # we need to run differently (and twice) when gating upstream changes
-if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
-    # provison the virthost and build the gated DLRN packages
-    bash quickstart.sh \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --bootstrap \
-        --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --playbook build-test-packages.yml \
-        --tags all \
-        --teardown all \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        $VIRTHOST
-    # skip provisioning and run the gate using the previously built RPMs
-    bash quickstart.sh \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --retain-inventory \
-        --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --config $WORKSPACE/config/general_config/$CONFIG.yml \
-        --skip-tags provision \
-        --tags all \
-        --teardown none \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        $VIRTHOST
-elif [ "$JOB_TYPE" = "standalone" ]; then
-    bash quickstart.sh \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --bootstrap \
-        --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --playbook build-test-packages.yml \
-        --tags all \
-        --teardown all \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        $VIRTHOST
+case "$JOB_TYPE" in
+    dlrn-gate*)
+        # provison the virthost and build the gated DLRN packages
+        bash quickstart.sh \
+            --working-dir $WORKSPACE/ \
+            --no-clone \
+            --bootstrap \
+            --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+            --playbook build-test-packages.yml \
+            --tags all \
+            --teardown all \
+            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            $OPT_ADDITIONAL_PARAMETERS \
+            $VIRTHOST
+        # skip provisioning and run the gate using the previously built RPMs
+        bash quickstart.sh \
+            --working-dir $WORKSPACE/ \
+            --no-clone \
+            --retain-inventory \
+            --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+            --config $WORKSPACE/config/general_config/$CONFIG.yml \
+            --skip-tags provision \
+            --tags all \
+            --teardown none \
+            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            $OPT_ADDITIONAL_PARAMETERS \
+            $VIRTHOST
+        ;;
+    standalone)
+        bash quickstart.sh \
+            --working-dir $WORKSPACE/ \
+            --no-clone \
+            --bootstrap \
+            --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+            --playbook build-test-packages.yml \
+            --tags all \
+            --teardown all \
+            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            $OPT_ADDITIONAL_PARAMETERS \
+            $VIRTHOST
 
-    bash quickstart.sh \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --retain-inventory \
-        --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
-        --config $WORKSPACE/config/general_config/$CONFIG.yml \
-        --skip-tags provision \
-        --tags all \
-        --teardown none \
-        --playbook quickstart-extras-standalone.yml \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        $VIRTHOST
-else
-    bash quickstart.sh \
-        --bootstrap \
-        --tags all \
-        --config $WORKSPACE/config/general_config/$CONFIG.yml \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        $VIRTHOST
-fi
+        bash quickstart.sh \
+            --working-dir $WORKSPACE/ \
+            --no-clone \
+            --retain-inventory \
+            --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+            --config $WORKSPACE/config/general_config/$CONFIG.yml \
+            --environment $WORKSPACE/config/environments/standalone_centos_libvirt.yml \
+            --skip-tags provision \
+            --tags all \
+            --teardown none \
+            --playbook quickstart-extras-standalone.yml \
+            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            $OPT_ADDITIONAL_PARAMETERS \
+            $VIRTHOST
+        ;;
+    standalone3)
+        bash quickstart.sh \
+            --working-dir $WORKSPACE/ \
+            --no-clone \
+            --bootstrap \
+            --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+            --playbook build-test-packages.yml \
+            --tags all \
+            --teardown all \
+            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            $OPT_ADDITIONAL_PARAMETERS \
+            $VIRTHOST
+
+        bash quickstart.sh \
+            --working-dir $WORKSPACE/ \
+            --no-clone \
+            --retain-inventory \
+            --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+            --config $WORKSPACE/config/general_config/$CONFIG.yml \
+            --environment $WORKSPACE/config/environments/standalone_fedora_libvirt.yml \
+            --skip-tags provision \
+            --tags all \
+            --teardown none \
+            --playbook quickstart-extras-standalone.yml \
+            --release tripleo-ci/master_fedora28 \
+            $OPT_ADDITIONAL_PARAMETERS \
+            $VIRTHOST
+        ;;
+    *)
+        bash quickstart.sh \
+            --bootstrap \
+            --tags all \
+            --config $WORKSPACE/config/general_config/$CONFIG.yml \
+            --working-dir $WORKSPACE/ \
+            --no-clone \
+            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            $OPT_ADDITIONAL_PARAMETERS \
+            $VIRTHOST
+esac

@@ -71,7 +71,9 @@
       --run-command 'chown {{ undercloud_user }}:{{ undercloud_user }} /home/{{ undercloud_user }}/{{ item }}'
     changed_when: true
     with_items: "{{ inject_images | default('') }}"
-    when: overcloud_as_undercloud|bool or use_external_images|bool
+    when:
+      - overcloud_as_undercloud|bool or use_external_images|bool
+      - inject_images|length > 0
 
   # This copies the `instackenv.json` configuration file that we
   # generated in the overcloud setup role to the undercloud host.

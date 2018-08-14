@@ -7,7 +7,7 @@ FS_TYPE=`findmnt -o FSTYPE -fn /`
 if [ "$FS_TYPE" = "xfs" ]; then
     xfs_growfs /
 elif [ "$FS_TYPE" = "ext4" ]; then
-    resize2fs /dev/sda
+    resize2fs {{ guest_partition }} || true
 else
     echo "ERROR: Unknown filesystem, cannot resize."
     exit 1

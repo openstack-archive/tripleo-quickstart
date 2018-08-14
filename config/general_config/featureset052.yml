@@ -6,6 +6,10 @@ non_root_user_setup: true
 ovb_setup_connectivity: false
 package_installs: true
 vxlan_networking: false
+toci_vxlan_networking: false
+enable_vbmc: false
+deploy_supplemental_node: false
+undercloud_setup: true
 
 # role / scenario definition
 # deployment role

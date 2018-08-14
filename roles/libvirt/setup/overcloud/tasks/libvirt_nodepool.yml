@@ -57,6 +57,7 @@
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+  when: resize_qcow_filesystem|default(true)|bool
 
 - name: Disable cloud-init
   command: >
@@ -79,10 +80,11 @@
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
+# note upstream images may be in use and have the zuul user created
 - name: Add zuul user to the image
   command: >
     virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --run-command 'useradd zuul'
+    --run-command 'id -u zuul &>/dev/null || useradd zuul'
     --mkdir /home/zuul/.ssh
     --run-command 'cp /root/.ssh/authorized_keys /home/zuul/.ssh/'
     --run-command 'chown -R zuul:zuul /home/zuul/.ssh'
@@ -91,6 +93,9 @@
     --run-command 'echo "zuul ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/zuul'
     --run-command 'chmod 0440 /etc/sudoers.d/zuul'
     --selinux-relabel
+  # we should NOT create symlinks between python->python3
+  # see https://www.python.org/dev/peps/pep-0394/
+  # --run-command 'ln -s /usr/bin/python3 /usr/bin/python'
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
@@ -158,6 +163,7 @@
     ansible_private_key_file: "~/.ssh/id_rsa"
     subnode_private_ip: "{{ subnode_0_ip }}"
     subnode_public_ip: "{{ subnode_0_ip }}"
+    ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
 
 - name: Set hostname correctly for subnode-0
   delegate_to: subnode-0
@@ -199,6 +205,7 @@
     ansible_private_key_file: "~/.ssh/id_rsa"
     subnode_private_ip: "{{ subnode_1_ip }}"
     subnode_public_ip: "{{ subnode_1_ip }}"
+    ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
 
 - name: Set hostname correctly for subnode-1
   delegate_to: subnode-1

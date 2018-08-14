@@ -17,3 +17,4 @@ convert_image_install_pkgs:
 
 convert_image_tempest_plugins: []
 convert_image_host_memory: 2048
+guest_partition: /dev/sda

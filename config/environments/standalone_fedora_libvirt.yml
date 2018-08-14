@@ -1,0 +1,27 @@
+# This environment can be used to use an upstream OpenStack Fedora qcow2 image for the undercloud
+# instead of the default pre-built undercloud qcow2
+
+undercloud_image_url: https://images.rdoproject.org/fedora-stable/Fedora-Cloud-Base-RDO-28-latest.qcow2
+# https://download.fedoraproject.org/pub/fedora/linux/releases/28/Cloud/x86_64/images/Fedora-Cloud-Base-28-1.1.x86_64.qcow2
+
+# the name should always be undercloud
+images:
+    - name: undercloud
+      url: "{{ undercloud_image_url }}"
+      type: qcow2
+
+inject_images: []
+
+guest_partition: /dev/sda1
+baseos_as_undercloud: true
+overcloud_as_undercloud: false
+undercloud_setup: true
+use_external_images: true
+ovb_setup_connectivity: false
+non_root_user_setup: true
+package_installs: true
+hostname_correction: true
+
+# standalone interface
+standalone_interface: ens4
+standalone_ip: 192.168.24.2

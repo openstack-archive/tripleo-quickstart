@@ -1,0 +1,29 @@
+# This environment can be used to use a base CentOS qcow2 image for the undercloud
+# instead of the default pre-built undercloud qcow2
+
+# baseos undercloud settings
+undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1805.qcow2
+
+# this must be named undercloud
+images:
+    - name: undercloud
+      url: "{{ undercloud_image_url }}"
+      type: qcow2
+      md5sum: "3bb5a5fd550980aa4bf3c80071f8cbb0  CentOS-7-x86_64-GenericCloud-1805.qcow2"
+
+
+inject_images: []
+
+guest_partition: /dev/sda1
+baseos_as_undercloud: true
+overcloud_as_undercloud: false
+undercloud_setup: true
+use_external_images: true
+ovb_setup_connectivity: false
+non_root_user_setup: true
+package_installs: true
+hostname_correction: true
+
+# standalone interface
+standalone_interface: eth1
+standalone_ip: 192.168.24.2
