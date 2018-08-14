@@ -235,3 +235,6 @@ update_images: false
 
 # If running in chroot-like environments (containers)
 chrooted: false
+
+# moved from tqe
+undercloud_generate_service_certificate: true
