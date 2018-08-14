@@ -11,37 +11,39 @@
   args:
     creates: "{{ virt_host_key }}"
 
-- name: Ensure tuned is installed
-  package:
-    name: "tuned"
-    state: "present"
-  become: true
+- when: not chrooted|bool
+  block:
+    - name: Ensure tuned is installed
+      package:
+        name: "tuned"
+        state: "present"
+      become: true
 
-- name: Ensure tuned is enabled and started
-  service:
-    name: "tuned"
-    enabled: "yes"
-    state: "started"
-  become: true
+    - name: Ensure tuned is enabled and started
+      service:
+        name: "tuned"
+        enabled: "yes"
+        state: "started"
+      become: true
 
-- name: Retrieve current tuned profile
-  command: tuned-adm active
-  register: tuned
-  changed_when: False
+    - name: Retrieve current tuned profile
+      command: tuned-adm active
+      register: tuned
+      changed_when: False
 
-- name: Set tuned profile if not already set
-  command: tuned-adm profile "{{ tuned_profile }}"
-  become: true
-  when: tuned.stdout.find(tuned_profile) != 1
+    - name: Set tuned profile if not already set
+      command: tuned-adm profile "{{ tuned_profile }}"
+      become: true
+      when: tuned.stdout.find(tuned_profile) != 1
 
-# Create a non-root user on the target host.  This is the user that
-# will own the virtual infrastructure on which we deploy openstack.
-- name: Create non-root user
-  user:
-    name: "{{ non_root_user }}"
-    state: present
-    shell: /bin/bash
-  become: true
+    # Create a non-root user on the target host.  This is the user that
+    # will own the virtual infrastructure on which we deploy openstack.
+    - name: Create non-root user
+      user:
+        name: "{{ non_root_user }}"
+        state: present
+        shell: /bin/bash
+      become: true
 
 - name: Get the non-root user UID
   command: "id {{ non_root_user }} -u"
