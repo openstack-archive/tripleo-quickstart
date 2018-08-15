@@ -32,6 +32,8 @@ elif [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     fi
 elif [ "$JOB_TYPE" = "promote" ]; then
     REL_TYPE=$LOCATION
+elif [ "$JOB_TYPE" = "standalone" ]; then
+    echo "using standalone, single node deployment"
 else
     echo "Job type must be one of the following:"
     echo " * gate - for gating changes on tripleo-quickstart or -extras"
@@ -39,6 +41,7 @@ else
     echo " * periodic - for running periodic jobs"
     echo " * dlrn-gate - for gating upstream changes"
     echo " * dlrn-gate-check - for gating upstream changes"
+    echo " * standalone - for standalone deployments"
     exit 1
 fi
 
