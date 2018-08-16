@@ -28,11 +28,12 @@ containerized_undercloud: >-
   false
   {%- endif -%}
 
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
 undercloud_enable_tempest: >-
   {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
   true

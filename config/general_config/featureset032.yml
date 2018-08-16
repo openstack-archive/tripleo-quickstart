@@ -52,11 +52,12 @@ containerized_undercloud: >-
   false
   {%- endif -%}
 
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ overcloud_templates_path }}/net-config-undercloud.yaml"
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
 
 # Tempest configuration, keep always at the end of the file
 # Run tempest in containers when at least undercloud is containerized
