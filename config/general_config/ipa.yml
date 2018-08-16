@@ -11,6 +11,12 @@ novajoin_read_timeout: 60
 freeipa_internal_ip: "{{ external_network_cidr|nthhost(10) }}"
 # We'll use FreeIPA as the nameserver
 nameserver_from_virthost: false
+containerized_overcloud: >-
+  {% if release in ['newton', 'ocata'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
 
 # Extra
 undercloud_enable_ui: false
