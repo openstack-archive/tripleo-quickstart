@@ -79,19 +79,7 @@ if [ "$JOB_TYPE" = "dlrn-gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
-else
-    bash quickstart.sh \
-        --bootstrap \
-        --tags all \
-        --config $WORKSPACE/config/general_config/$CONFIG.yml \
-        --working-dir $WORKSPACE/ \
-        --no-clone \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
-        $OPT_ADDITIONAL_PARAMETERS \
-        $VIRTHOST
-fi
-
-if [ "$JOB_TYPE" = "standalone" ]; then
+elif [ "$JOB_TYPE" = "standalone" ]; then
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
@@ -114,6 +102,16 @@ if [ "$JOB_TYPE" = "standalone" ]; then
         --tags all \
         --teardown none \
         --playbook quickstart-extras-standalone.yml \
+        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        $OPT_ADDITIONAL_PARAMETERS \
+        $VIRTHOST
+else
+    bash quickstart.sh \
+        --bootstrap \
+        --tags all \
+        --config $WORKSPACE/config/general_config/$CONFIG.yml \
+        --working-dir $WORKSPACE/ \
+        --no-clone \
         --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
