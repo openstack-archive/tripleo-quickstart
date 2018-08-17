@@ -13,6 +13,7 @@
     group: "{{ non_root_group }}"
     state: present
     shell: /bin/bash
+    create_home: true
   become: true
   when: not chrooted|bool
 
