@@ -4,7 +4,15 @@
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
 
 # preparation steps to run with the gated changes
-if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
+if [ "$JOB_TYPE" = "gate" ] ||
+   [ "$JOB_TYPE" = "dlrn-gate-check" ] ||
+   [ "$JOB_TYPE" = "standalone" ]; then
+
+    pushd $WORKSPACE/tripleo-quickstart
+    sed -i.bak '/extras/d' $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt
+    echo "file://$WORKSPACE/tripleo-quickstart-extras/#egg=tripleo-quickstart-extras" >> $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt
+    popd
+
     bash quickstart.sh \
         --working-dir $WORKSPACE/ \
         --no-clone \
