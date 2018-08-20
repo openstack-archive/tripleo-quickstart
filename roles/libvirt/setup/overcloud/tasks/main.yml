@@ -39,7 +39,7 @@
         '{{ item.item.name }}'.qcow2 '{{ flavors[item.item.flavor].disk }}'G
         --format qcow2
       when:
-        - item|failed
+        - item is failed
         - not libvirt_nodepool_vms|default("false")|bool
       with_items: "{{ overcloud_vol_check.results }}"
 
@@ -90,7 +90,7 @@
     - name: Attach additional blockdevices to overcloud objectstorage VMs
       command: >
         virsh attach-disk --config {{ item.item[0].name }} {{ libvirt_volume_path }}/{{ item.item[0].name }}_{{ item.item[1] }}.img {{ item.item[1] }}
-      when: item|failed
+      when: item is failed
       with_items: "{{ overcloud_extradisks_check.results }}"
 
 # Generate the `instackenv.json` configuration file.  Note that this

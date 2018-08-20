@@ -130,7 +130,7 @@
 - name: Get libvirt nodepool IP addresses
   script: "get-domain-ip.sh subnode-0"
   register: "subnode_0_ip_result"
-  until: "subnode_0_ip_result|success"
+  until: "subnode_0_ip_result is success"
   retries: 20
   delay: 10
 
@@ -171,7 +171,7 @@
 - name: Get libvirt nodepool IP addresses
   script: "get-domain-ip.sh subnode-1"
   register: "subnode_1_ip_result"
-  until: "subnode_1_ip_result|success"
+  until: "subnode_1_ip_result is success"
   retries: 20
   delay: 10
 

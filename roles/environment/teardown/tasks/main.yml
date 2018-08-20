@@ -13,7 +13,7 @@
   changed_when: false
 
 # If libvirt is not available, we can skip the rest of the tasks.
-- when: libvirt_check|success
+- when: libvirt_check is success
   block:
 
   # Check to see if the networks exist.
@@ -30,7 +30,7 @@
     - name: Stop libvirt networks
       command: >
         virsh net-destroy "{{ item.item.name }}"
-      when: libvirt_check|success and item|success
+      when: libvirt_check is success and item is success
       with_items: "{{ network_check.results }}"
       ignore_errors: true
       become: true
@@ -38,7 +38,7 @@
     - name: Undefine libvirt networks
       command: >
         virsh net-undefine "{{ item.item.name }}"
-      when: libvirt_check|success and item|success
+      when: libvirt_check is success and item is success
       with_items: "{{ network_check.results }}"
       ignore_errors: true
       become: true

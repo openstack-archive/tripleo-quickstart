@@ -26,7 +26,7 @@
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
-- when: undercloud_vol_check|failed
+- when: undercloud_vol_check is failed
   environment:
     LIBGUESTFS_BACKEND: direct
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
@@ -169,7 +169,7 @@
 # Resize the undercloud image if it was not converted from an overcloud
 # image
 - when:
-    - undercloud_vol_check|failed
+    - undercloud_vol_check is failed
     - not overcloud_as_undercloud|bool
   block:
   - name: >
@@ -182,7 +182,7 @@
     register: undercloud_partitions
 
 - when:
-    - undercloud_vol_check|failed
+    - undercloud_vol_check is failed
     - not overcloud_as_undercloud|bool
     - undercloud_partitions.stdout=='/dev/sda1'
   block:
@@ -207,7 +207,7 @@
             '{{ working_dir }}/undercloud.qcow2'
 
 - when:
-    - undercloud_vol_check|failed
+    - undercloud_vol_check is failed
     - not overcloud_as_undercloud|bool
     - undercloud_partitions.stdout=='/dev/sda'
   block:
@@ -294,7 +294,7 @@
         overcloud_as_undercloud: true
         cacheable: true
 
-- when: undercloud_vol_check|failed
+- when: undercloud_vol_check is failed
   environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
@@ -370,7 +370,7 @@
 - name: Get undercloud vm ip address
   script: "get-undercloud-ip.sh {{ undercloud_node.name }}"
   register: undercloud_vm_ip_result
-  until: undercloud_vm_ip_result|success
+  until: undercloud_vm_ip_result is success
   retries: "{{ undercloud_ip_retries }}"
   delay: 10
   environment:
