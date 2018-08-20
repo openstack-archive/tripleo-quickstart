@@ -161,7 +161,7 @@ bootstrap () {
         fi
     popd
 
-    # In order to do any filesystem operations on the system running ansible (if it has SELinux intalled)
+    # In order to do any filesystem operations on the system running ansible (if it has SELinux installed)
     # we need the python bindings in the venv. Unfortunately, it is not available on pypi, so we need to
     # pull it from the system site packages.
     copy_selinux_to_venv
