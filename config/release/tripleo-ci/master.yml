@@ -68,6 +68,8 @@ repos:
       - openstack-tripleo-*
       - puppet-*
       - python-paunch
+      - ansible-role-tripleo-*
+      - ansible-role-container-registry
 
   - type: generic
     reponame: delorean-master-deps
