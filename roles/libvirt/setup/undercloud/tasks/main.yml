@@ -104,6 +104,7 @@
       user: root
       key: "{{ lookup('file', virt_power_key|quote + '.pub')|default('') }}"
     when: libvirt_uri == "qemu:///system"
+    become: true
 
   # Copy the public key to `$HOME/.ssh/authorized_keys` for the `root`
   # and `undercloud_user` user on the undercloud.
