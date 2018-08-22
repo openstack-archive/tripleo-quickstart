@@ -53,15 +53,18 @@ repos:
     baseurl: $RDO_DLRN_REPO
     priority: 10
     includepkgs:
+      - ansible-role-container-registry
+      - ansible-role-tripleo*
+      - ansible-tripleo-ipsec
       - instack
       - instack-undercloud
+      - openstack-tripleo-*
       - os-apply-config
       - os-collect-config
       - os-net-config
       - os-refresh-config
-      - python-tripleoclient
-      - openstack-tripleo-*
       - puppet-*
+      - python*-tripleo*
       - python-paunch
 
   ## All other packages from pike-promoted

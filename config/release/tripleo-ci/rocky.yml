@@ -57,19 +57,19 @@ repos:
     baseurl: $RDO_DLRN_REPO
     priority: 10
     includepkgs:
+      - ansible-role-container-registry
+      - ansible-role-tripleo*
+      - ansible-tripleo-ipsec
       - instack
       - instack-undercloud
+      - openstack-tripleo-*
       - os-apply-config
       - os-collect-config
       - os-net-config
       - os-refresh-config
-      - python-tripleoclient*
-      - python*-tripleo-common
-      - openstack-tripleo-*
       - puppet-*
+      - python*-tripleo*
       - python-paunch
-      - ansible-role-tripleo-*
-      - ansible-role-container-registry
 
   - type: generic
     reponame: delorean-rocky-deps
