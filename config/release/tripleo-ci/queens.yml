@@ -117,6 +117,8 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo /etc/yum.repos.d/CentOS-QEMU-EV.repo;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
+  # add bootstrap dependencies tripleo/+bug/1785067
+  sudo yum install -y openstack-heat-agents
   {% if repo_setup_run_update|default(true)|bool %}
   sudo yum update -y
   {% endif %}

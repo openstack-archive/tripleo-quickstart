@@ -117,6 +117,8 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum repolist;
   sudo yum clean metadata
+  # add bootstrap dependencies tripleo/+bug/1785067
+  sudo yum install -y openstack-heat-agents
   {% if repo_setup_run_update|default(true)|bool %}
   sudo yum update -y
   {% endif %}
