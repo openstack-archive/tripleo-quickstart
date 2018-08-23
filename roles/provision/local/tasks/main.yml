@@ -23,14 +23,17 @@
       state: directory
       owner: "{{ ansible_env.USER }}"
       group: "{{ current_group_local }}"
-    become: true
   rescue:
+  # if it fails we try again as with become, become must be fallback because
+  # otherwise first attempt will fail on local machines without sudo, a
+  # use case that we want to support.
   - name: Ensure local working dir exists
     file:
       path: "{{ local_working_dir }}"
       state: directory
       owner: "{{ ansible_env.USER }}"
       group: "{{ current_group_local }}"
+    become: true
 
 # This file needs to exist because it will later be referenced in some
 # ssh command lines.
