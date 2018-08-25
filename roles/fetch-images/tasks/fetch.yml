@@ -71,6 +71,9 @@
       command: >
         curl -sfL {{ image.url }}.md5
       register: md5_expected
+      until: md5_expected.rc not in [18, 56, 22]
+      retries: 5
+      delay: 5
 
     - name: sanitize the md5sum
       set_fact:
