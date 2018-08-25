@@ -107,4 +107,7 @@ tempest_format: >-
   packages
   {%- endif -%}
 
+# Install the latest unlreleased packages from CentOS
+enable_centos_cr_repo: true
+
 
