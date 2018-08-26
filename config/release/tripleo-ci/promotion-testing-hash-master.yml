@@ -37,13 +37,11 @@ repo_cmd_before: |
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
   rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-master/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
-  rdo_dlrn_deps=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-master/delorean-deps.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
-  if [[ -z "$rdo_dlrn" || -z "$rdo_dlrn_deps" ]]; then
+  if [[ -z "$rdo_dlrn" ]]; then
     echo "Failed to parse dlrn hash"
     exit 1
   fi
   export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
-  export RDO_DLRN_DEPS_REPO=${rdo_dlrn_deps/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
 
 repos:
   - type: generic
@@ -53,9 +51,15 @@ repos:
     baseurl: $RDO_DLRN_REPO
 
   - type: generic
-    reponame: delorean-deps
-    filename: delorean-deps.repo
-    baseurl: $RDO_DLRN_DEPS_REPO
+    reponame: delorean-master-deps
+    filename: delorean-master-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-master/deps/latest/
+
+  - type: generic
+    reponame: delorean-master-build-deps
+    filename: delorean-master-build-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-master/build-deps/latest/
+    enabled: 0
 
   # CentOS related repos
   - type: generic
