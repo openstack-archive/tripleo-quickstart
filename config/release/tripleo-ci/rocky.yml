@@ -78,9 +78,9 @@ repos:
 
   - type: generic
     reponame: delorean-rocky-build-deps
-    reponame: delorean-rocky-deps
-    filename: delorean-rocky-deps.repo
-    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-rocky/deps/latest/
+    filename: delorean-rocky-build-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos7-rocky/build-deps/latest/
+    enabled: 0
 
   # CentOS related repos
   - type: generic
