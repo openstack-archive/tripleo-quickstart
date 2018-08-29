@@ -79,7 +79,7 @@ artcl_create_docs_payload:
 # Tempest
 # Run containerized tempest from master and ongoing
 tempest_format: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  {% if containerized_undercloud|bool -%}
   container
   {%- else -%}
   packages
@@ -98,14 +98,6 @@ test_ping: false
 skip_file_src: ''
 # For full tempest run we need to make sure concurrency is not too high
 tempest_workers: 3
-
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
 
 # Install the latest unlreleased packages from CentOS
 enable_centos_cr_repo: true

@@ -19,7 +19,6 @@ step_introspect: false
 
 composable_scenario: scenario001-multinode-containers.yaml
 validate_template: scenario001-multinode.yaml
-deployed_server: true
 
 containerized_undercloud: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}

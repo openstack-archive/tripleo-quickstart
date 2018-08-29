@@ -2,7 +2,6 @@
 # Deploy an Openstack environment with opnfv configured in the overcloud
 composable_scenario: scenario008-multinode-containers.yaml
 validate_template: scenario008-multinode-containers.yaml
-deployed_server: true
 
 network_isolation: false
 enable_pacemaker: false
