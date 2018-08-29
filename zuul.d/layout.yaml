@@ -4,8 +4,8 @@
       - tripleo-multinode-baremetal-minimal
       - tripleo-multinode-container-minimal
       - tripleo-multinode-branchful
-      - publish-openstack-sphinx-docs
-      - release-notes-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
     check:
       jobs:
         - tripleo-ci-centos-7-3nodes-multinode:
