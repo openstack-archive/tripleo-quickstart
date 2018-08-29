@@ -7,3 +7,4 @@ jenkins-job-builder
 docutils>=0.11
 sphinx>=1.6.2 # BSD
 reno>=1.8.0  # Apache-2.0
+yamllint # GPLv3
