@@ -1,10 +1,11 @@
-
 - project:
     templates:
       - tripleo-undercloud-jobs
       - tripleo-multinode-baremetal-minimal
       - tripleo-multinode-container-minimal
       - tripleo-multinode-branchful
+      - publish-openstack-sphinx-docs
+      - release-notes-jobs
     check:
       jobs:
         - tripleo-ci-centos-7-3nodes-multinode:
@@ -46,6 +47,7 @@
         - tripleo-ci-centos-7-standalone:
             files:
               - config/general_config/featureset052.yml
+        - openstack-tox-linters
     gate:
       queue: tripleo
       jobs:
@@ -79,6 +81,7 @@
         - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
             files:
               - config/general_config/featureset030.yml
+        - openstack-tox-linters
     experimental:
       jobs:
         - tripleo-ci-centos-7-scenario006-multinode-oooq:
