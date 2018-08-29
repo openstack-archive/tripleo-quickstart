@@ -88,19 +88,24 @@ overcloud_roles:
       - Tenant
 
 deployed_server: >-
-  {% if release in ['newton','ocata','pike','queens'] -%}
+  {% if release in ['newton','ocata','pike'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
 deploy_steps_ansible_workflow: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
+  {% if release not in ['newton','ocata','pike'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
 config_download_args: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --deployed-server
+  {%- endif %}
+  {% if release not in ['newton','ocata','pike'] -%}
   -e {{ working_dir }}/config-download.yaml
   --disable-validations
   --verbose
