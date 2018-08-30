@@ -19,6 +19,10 @@ add_repos:
     # NOTE(mandre) centos-release-openshift-origin39 provides the newest
     # packages for 3.9 branch
     pkg_name: centos-release-openshift-origin39
+  - type: generic
+    reponame: quickstart-centos-virt-container
+    filename: quickstart-centos-virt-container.repo
+    baseurl: https://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/
 
 extra_args: ''
 
