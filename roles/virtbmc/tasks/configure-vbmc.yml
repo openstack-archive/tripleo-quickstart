@@ -1,14 +1,7 @@
 ---
 
-- name: Install VirtualBMC package
-  when: release not in ['liberty', 'mitaka', 'newton']
-  package:
-    name: "python2-virtualbmc"
-    state: present
-    use: yum
-  become: true
-
 - name: Create VirtualBMC directories
+  when: release not in ['liberty', 'mitaka', 'newton']
   file:
     path: "{{ item }}"
     state: directory
@@ -69,6 +62,22 @@
     vbmc_libvirt_uri: "qemu+ssh://{{ non_root_user }}@{{ vbmc_address }}/session?socket=/run/user/{{ non_root_user_uid }}/libvirt/libvirt-sock&keyfile=/root/.ssh/id_rsa_virt_power&no_verify=1&no_tty=1"
   when: vbmc_libvirt_uri is not defined
 
+- name: Install VirtualBMC package
+  when: release not in ['liberty', 'mitaka', 'newton']
+  package:
+    name: "python2-virtualbmc"
+    state: present
+    use: yum
+  become: true
+
+- name: Start the Virtual BMCs (virtualbmc >= 1.4.0+)
+  when: release not in ['liberty', 'mitaka', 'newton', 'ocata', 'pike', 'queens']
+  service:
+    name: "virtualbmc"
+    state: started
+    enabled: true
+  become: true
+
 - name: Create the Virtual BMCs
   when: release not in ['liberty', 'mitaka', 'newton']
   command: "vbmc add {{ item.name }} --port {{ item.virtualbmc_port }} --libvirt-uri {{ vbmc_libvirt_uri }}"
@@ -76,12 +85,15 @@
     creates: /root/.vbmc/{{ item.name }}/config
   with_items: "{{ overcloud_nodes }}"
   become: true
-  become_user: root
 
-# TODO(lucasagomes): The service file should be included in the
-#                    virtualbmc RPM package.
-- name: Create the VirtualBMC systemd service
-  when: release not in ['liberty', 'mitaka', 'newton']
+- name: Start the Virtual BMCs (virtualbmc >= 1.4.0+)
+  when: release not in ['liberty', 'mitaka', 'newton', 'ocata', 'pike', 'queens']
+  command: "vbmc start {{ item.name }}"
+  with_items: "{{ overcloud_nodes }}"
+  become: true
+
+- name: Create the VirtualBMC systemd service (virtualbmc < 1.4.0)
+  when: release in ['ocata', 'pike', 'queens']
   copy:
     mode: 0664
     dest: "/usr/lib/systemd/system/virtualbmc@.service"
@@ -101,12 +113,11 @@
       WantedBy=multi-user.target
   become: true
 
-- name: Start the Virtual BMCs
-  when: release not in ['liberty', 'mitaka', 'newton']
+- name: Start the Virtual BMCs (virtualbmc < 1.4.0)
+  when: release in ['ocata', 'pike', 'queens']
   service:
     name: "virtualbmc@{{ item.name }}"
     state: started
     enabled: true
   with_items: "{{ overcloud_nodes }}"
   become: true
-
