@@ -29,6 +29,7 @@ container_args: >-
   -e {{ working_dir }}/containers-default-parameters.yaml
   -e {{ overcloud_templates_path }}/environments/openshift.yaml
 
+docker_openshift_etcd_namespace: docker.io/{{ docker_registry_namespace }}
 deploy_steps_ansible_workflow: true
 config_download_args: >-
   -e {{ working_dir }}/config-download.yaml
