@@ -48,6 +48,9 @@
             files:
               - config/general_config/featureset052.yml
         - openstack-tox-linters
+        - tripleo-ci-centos-7-scenario010-multinode-oooq-container:
+            files:
+              - config/general_config/featureset038.yml
     gate:
       queue: tripleo
       jobs:
