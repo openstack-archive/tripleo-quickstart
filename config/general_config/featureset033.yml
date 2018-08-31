@@ -26,7 +26,11 @@ container_args: >-
   {% if release in ['pike','queens'] -%}
   -e {{ overcloud_templates_path }}/environments/docker.yaml
   {%- endif -%}
+  {% if release in ['ocata', 'pike', 'queens', 'rocky'] %}
   -e {{ working_dir }}/containers-default-parameters.yaml
+  {% else %}
+  -e {{ working_dir }}/containers-prepare-parameter.yaml
+  {% endif %}
   -e {{ overcloud_templates_path }}/environments/openshift.yaml
 
 docker_openshift_etcd_namespace: docker.io/{{ docker_registry_namespace }}
