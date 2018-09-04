@@ -37,7 +37,13 @@ overcloud_upgrade: true
 create_docker_registry: false
 use_local_docker_registry: false
 create_container_images_download_script: false
-container_registry_file: "containers-default-parameters.yaml"
+# Need to update once stein is released
+container_registry_file: >-
+  {% if release not in ['ocata','pike','queens','rocky'] -%}
+  containers-prepare-parameter.yaml
+  {%- else -%}
+  containers-default-parameters.yaml
+  {%- endif -%}
 tripleo_ci: true
 use_oooq: true
 tripleo_upgrade_debug: true

@@ -54,7 +54,13 @@ use_oooq: true
 # Run prep container before upgrade.
 prep_container_upgrade_run: true
 containerized_overcloud_upgrade: true
-container_registry_file: "containers-default-parameters.yaml"
+# Need to update once stein is released
+container_registry_file: >-
+  {% if release not in ['ocata','pike','queens','rocky'] -%}
+  containers-prepare-parameter.yaml
+  {%- else -%}
+  containers-default-parameters.yaml
+  {%- endif -%}
 
 # Adjust user to CI
 overcloud_ssh_user: "tripleo-admin"
