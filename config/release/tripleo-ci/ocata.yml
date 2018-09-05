@@ -61,7 +61,7 @@ repos:
       - os-refresh-config
       - puppet-*
       - python*-tripleo*
-      - python-paunch
+      - python*-paunch*
 
   ## All other packages from ocata-promoted
   - type: generic

@@ -58,7 +58,7 @@ repos:
       - python-tripleoclient
       - openstack-tripleo-*
       - puppet-*
-      - python-paunch
+      - python*-paunch*
 
   ## All other packages from newton-promoted
   - type: generic

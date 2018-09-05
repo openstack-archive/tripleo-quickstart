@@ -70,7 +70,7 @@ repos:
       - os-refresh-config
       - puppet-*
       - python*-tripleo*
-      - python-paunch
+      - python*-paunch*
 
   - type: generic
     reponame: delorean-master-deps

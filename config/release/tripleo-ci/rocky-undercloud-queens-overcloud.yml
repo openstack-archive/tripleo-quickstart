@@ -83,7 +83,7 @@ repos:
       - python*-tripleo-common
       - openstack-tripleo-*
       - puppet-*
-      - python-paunch
+      - python*-paunch*
 
   - type: generic
     reponame: delorean-rocky-deps
