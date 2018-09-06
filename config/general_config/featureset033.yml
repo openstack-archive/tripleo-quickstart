@@ -13,12 +13,12 @@ undercloud_generate_service_certificate: false
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false
 
-# Centos OpenSihft repo
+# Centos OpenShift repo
 add_repos:
   - type: package
-    # NOTE(mandre) centos-release-openshift-origin39 provides the newest
-    # packages for 3.9 branch
-    pkg_name: centos-release-openshift-origin39
+    # NOTE(mandre) centos-release-openshift-origin310 provides the newest
+    # packages for 3.10 branch
+    pkg_name: centos-release-openshift-origin310
   - type: generic
     reponame: quickstart-centos-virt-container
     filename: quickstart-centos-virt-container.repo
