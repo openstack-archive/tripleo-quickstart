@@ -65,6 +65,18 @@ tempest_extra_config: >
     'object-storage-feature-enabled.discoverability': 'False',
     'service_available.swift': 'False',
     {%- endif -%}
+    {% if release in ['queens'] -%}
+    'share.max_api_microversion': '2.42',
+    {%- endif -%}
+    {% if release in ['pike'] -%}
+    'share.max_api_microversion': '2.40',
+    {%- endif -%}
+    {% if release in ['ocata'] -%}
+    'share.max_api_microversion': '2.32',
+    {%- endif -%}
+    {% if release in ['newton'] -%}
+    'share.max_api_microversion': '2.22',
+    {%- endif -%}
     'share.multitenancy_enabled': 'False',
     'share.enable_protocols': 'cephfs',
     'share.capability_snapshot_support': 'False',
