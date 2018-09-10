@@ -159,5 +159,9 @@ tempest_extra_config: >
     'share.capability_create_share_from_snapshot_support': 'False',
   }
 
-tempest_plugins:
-  - python2-manila-tests-tempest
+tempest_plugins: >-
+  {%- if release in ['newton', 'ocata', 'pike'] -%}
+  ["python-manila-tests"]
+  {%- else -%}
+  ["python2-manila-tests-tempest"]
+  {%- endif -%}
