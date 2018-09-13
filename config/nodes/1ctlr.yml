@@ -9,7 +9,7 @@ node_count: 1
 
 deployed_server_overcloud_roles:
   - name: Controller
-    hosts: "{{ subnodes.0 }}"
+    hosts: "$(sed -n 1,1p /etc/nodepool/sub_nodes_private)"
 
 topology: >-
   --compute-scale 0

@@ -39,60 +39,21 @@
         ansible_private_key_file: "{{ overcloud_key }}"
         ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.ansible"'
 
-- name: check existence of legacy nodepool directory
-  stat:
-    path: /etc/nodepool/sub_nodes_private
-  register: stat_subnodes_private_result
-
-- when: inventory == 'multinode' and stat_subnodes_private_result.stat.exists == True
+- when: inventory == 'multinode'
   block:
     - name: Get subnodes
       command: cat /etc/nodepool/sub_nodes_private
       register: nodes
 
-    - name: Create empty subnodes
-      set_fact:
-        subnodes: "[]"
-
-    - name: Add subnodes info from legacy nodepool directory
-      set_fact:
-        subnodes: "{{ subnodes }} + [item]"
-      with_items: '{{ nodes.stdout_lines | default([]) }}'
-
-- name: Add subnode to ansible inventory
-  with_indexed_items: "{{ subnodes }}"
-  add_host:
-    name: 'subnode-{{ item.0 + 2 }}'
-    groups: "overcloud"
-    ansible_host: "{{ item.1 }}"
-    inventory_ip: "{{ item.1 }}"
-    ansible_user: "{{ lookup('env','USER') }}"
-    ansible_private_key_file: "/home/{{ ansible_user }}/.ssh/id_rsa"
-  when: inventory == 'multinode'
-
-- name: check existence of legacy nodepool primary node file
-  stat:
-    path: /etc/nodepool/primary_node_private
-  register: stat_primary_node_result
-
-- when: inventory == 'multinode' and stat_primary_node_result.stat.exists == True
-  block:
-    - name: Get primary nodes
-      command: cat /etc/nodepool/primary_node_private
-      register: primary_node_private
-
-    - name: Create primary_node
-      set_fact:
-        primary_node: "{{ primary_node_private.stdout | default('') }}"
-
-    - name: Add primary_node to ansible inventory
+    - name: Add subnode to ansible inventory
+      with_indexed_items: '{{ nodes.stdout_lines | default([]) }}'
       add_host:
-        name: 'primary_node'
-        groups: "undercloud"
-        ansible_host: "{{ primary_node }}"
-        inventory_ip: "{{ primary_node }}"
+        name: 'subnode-{{ item.0 + 2 }}'
+        groups: "overcloud"
+        ansible_host: '{{ item.1 }}'
+        inventory_ip: '{{ item.1 }}'
         ansible_user: "{{ lookup('env','USER') }}"
-        ansible_private_key_file: "/home/{{ ansible_user }}/.ssh/id_rsa"
+        ansible_private_key_file: "/etc/nodepool/id_rsa"
 
 #required for regeneration of ssh.config.ansible
 - name: set_fact for undercloud ip
