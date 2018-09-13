@@ -113,10 +113,16 @@ bootstrap () {
     fi
     set -e
 
-    virtualenv\
-        $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
-        $OPT_WORKDIR
-    . $OPT_WORKDIR/bin/activate
+    # Activate the virtualenv only when it is not already activated otherwise
+    # It create the virtualenv and then activate it.
+    if [[ -z ${VIRTUAL_ENV+x} ]]; then
+        virtualenv\
+            $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
+            $OPT_WORKDIR
+        . $OPT_WORKDIR/bin/activate
+    else
+        echo "Warning: VIRTUAL_ENV=$VIRTUAL_ENV was found active and is being reused."
+    fi
     pip install pip --upgrade
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
