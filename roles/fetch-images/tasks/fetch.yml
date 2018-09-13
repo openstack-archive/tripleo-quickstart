@@ -69,7 +69,7 @@
     # Get the expected checksum for the remote image.
     - name: Get image expected checksum
       command: >
-        curl -sfL {{ image.url }}.md5
+        curl -skfL {{ image.url }}.md5
       register: md5_expected
       until: md5_expected.rc not in [18, 56, 22]
       retries: 5
@@ -109,7 +109,7 @@
     # to continue interrupted downloads.
     - name: Get image
       command: >
-        curl -sfL -C- -o _{{ image.name }}.{{ image.type}} {{ image.url }}
+        curl -skfL -C- -o _{{ image.name }}.{{ image.type}} {{ image.url }}
       args:
         chdir: "{{ image_cache_dir }}"
       register: curl_result
