@@ -127,6 +127,11 @@ repos:
     filename: quickstart-centos-opstools.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/opstools/x86_64/
 
+  - type: generic
+    reponame: quickstart-centos-virt7-container-testing
+    filename: quickstart-centos-virt7-container-testing.repo
+    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/virt/x86_64/container/
+
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt quickstart-centos-opstools.enabled=0;
