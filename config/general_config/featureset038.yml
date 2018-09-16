@@ -6,27 +6,138 @@ network_isolation: false
 enable_pacemaker: false
 overcloud_ipv6: false
 containerized_overcloud: true
+delete_docker_cache: true
 
-# Do not generate or enable SSL
-undercloud_generate_service_certificate: false
-ssl_overcloud: false
-
-# TODO: We need to be able to access the amphora image from somewhere
-# (install from RDO package?) before we can run tempest
-test_ping: false
-run_tempest: false
-tempest_config: false
-deployed_server: true
-deploy_steps_ansible_workflow: >-
-  {% if release not in ['queens'] -%}
+containerized_undercloud: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
 
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
+undercloud_enable_tempest: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: false
+
+# This enables the deployment of the overcloud with SSL.
+ssl_overcloud: false
+
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
+
+deployed_server: >-
+  {% if release in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
 config_download_args: >-
-  {% if release not in ['queens'] -%}
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --deployed-server
+  {%- endif %}
+  {% if release not in ['newton','ocata','pike'] -%}
   -e {{ working_dir }}/config-download.yaml
   --disable-validations
   --verbose
   {%- endif -%}
+
+# Tempest configuration, keep always at the end of the file
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+test_ping: false
+# TODO(cgoncalves): enable tempest run once https://review.openstack.org/#/c/591997/ is merged
+run_tempest: false
+test_white_regex: ''
+
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+  - 'octavia_tempest_plugin.tests.api'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer.LoadBalancerScenarioTest'
+tempest_plugins:
+  - python-octavia-tests-tempest
