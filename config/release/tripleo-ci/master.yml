@@ -116,9 +116,9 @@ repos:
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/opstools/x86_64/
 
   - type: generic
-    reponame: quickstart-centos-virt7-container-common-candidate
-    filename: quickstart-centos-virt7-container-common-candidate.repo
-    baseurl: ${NODEPOOL_CBS_CENTOS_PROXY}/virt7-container-common-candidate/x86_64/os/
+    reponame: quickstart-centos-virt7-container-testing
+    filename: quickstart-centos-virt7-container-testing.repo
+    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/virt/x86_64/container/
 
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
