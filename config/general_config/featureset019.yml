@@ -131,9 +131,18 @@ tempest_format: >-
   packages
   {%- endif -%}
 
-tempest_whitelist:
+tempest_whitelist_old:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+tempest_whitelist_new:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
   - 'manila_tempest_tests.tests.api.test_shares.SharesCephFSTest.test_create_get_delete_share'
+
+# manila test is disabled in older releases as a temporary workaround for
+# https://launchpad.net/bugs/1790857
+tempest_whitelist: >-
+  {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_whitelist_new }}
+  {%- else -%}{{ tempest_whitelist_old }}
+  {%- endif -%}
 
 tempest_extra_config: >
   {
