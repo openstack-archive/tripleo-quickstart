@@ -39,13 +39,13 @@ repo_cmd_before: |
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
   rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
-  rdo_dlrn_deps=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/delorean-deps.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  rdo_dlrn_deps=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7-ocata/delorean-deps.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2 | head -n 1`
   if [[ -z "$rdo_dlrn" || -z "$rdo_dlrn_deps" ]]; then
     echo "Failed to parse dlrn hash"
     exit 1
   fi
   export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
-  export RDO_DLRN_DEPS_REPO=${rdo_dlrn_deps/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+  export RDO_DLRN_DEPS_REPO=${rdo_dlrn_deps/https:\/\/buildlogs.centos.org/$NODEPOOL_BUILDLOGS_CENTOS_PROXY}
 
 repos:
   - type: generic
