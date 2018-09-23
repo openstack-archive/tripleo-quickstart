@@ -93,7 +93,7 @@ The following is a list of design decisions made to solve the problem.
 Problem: Make the deployment as fast as possible
 ================================================
 A deployment of TripleO by default takes more time to install than let's say
-`DevStack <https://docs.openstack.org/developer/devstack/>`_.
+`DevStack <https://docs.openstack.org/devstack/latest/>`_.
 TripleO is a much more robust and capable deployment so with great power
 comes great patience.  People are not always patient so how can
 we speed up the deployment? By building preinstalled images we hope to
