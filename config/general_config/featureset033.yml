@@ -49,7 +49,8 @@ composable_roles: true
 # NOTE(flaper87): There's likely a better way to do this
 repo_cmd_after: |
   sudo yum update -y
-  sudo yum install -y openshift-ansible-playbooks
+  sudo yum install -y openshift-ansible-playbooks-3.10.41
+  sudo yum-config-manager --disable centos-openshift-origin310
 
 overcloud_roles:
   - name: Controller
