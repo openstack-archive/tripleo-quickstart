@@ -87,7 +87,7 @@ bootstrap () {
     if [ "$OPT_NO_CLONE" != 1 ]; then
         if ! [ -d "$OOOQ_DIR" ]; then
             echo "Cloning tripleo-quickstart repository..."
-            git clone https://github.com/openstack/tripleo-quickstart.git \
+            git clone https://git.openstack.org/openstack/tripleo-quickstart \
                 $OOOQ_DIR
         fi
 
