@@ -30,8 +30,18 @@ Provision a libvirt guest environment
 First things first and in this case we need libvirt guests
 setup and running to host the TripleO Undercloud and Overcloud
 
+.. note:: By default, Quickstart builds the guests' images using qemu
+   emulation (``LIBGUESTFS_BACKEND_SETTINGS=force_tcg``), which is slow
+   but just works. In order to enable KVM acceleration, use
+   ``export LIBGUESTFS_BACKEND_SETTINGS=network_bridge=virbr0``.
+   It may be like a 4 times faster to build VM images in that mode,
+   except that you may be hit by bug1743749_.
+
+   .. _bug1743749: https://bugs.launchpad.net/tripleo/+bug/1743749
+
 Example::
 
+    export LIBGUESTFS_BACKEND_SETTINGS=network_bridge=virbr0
     bash quickstart.sh -R master --no-clone --tags all \
         --nodes config/nodes/1ctlr_1comp.yml -p quickstart.yml $VIRTHOST
 
