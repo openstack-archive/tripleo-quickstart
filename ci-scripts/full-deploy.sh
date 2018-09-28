@@ -104,7 +104,6 @@ case "$JOB_TYPE" in
             --working-dir $WORKSPACE/ \
             --no-clone \
             --retain-inventory \
-            --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
             --config $WORKSPACE/config/general_config/$CONFIG.yml \
             --environment $WORKSPACE/config/environments/standalone_centos_libvirt.yml \
             --skip-tags provision \
@@ -132,7 +131,6 @@ case "$JOB_TYPE" in
             --working-dir $WORKSPACE/ \
             --no-clone \
             --retain-inventory \
-            --extra-vars compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
             --config $WORKSPACE/config/general_config/$CONFIG.yml \
             --environment $WORKSPACE/config/environments/standalone_fedora_libvirt.yml \
             --skip-tags provision \
