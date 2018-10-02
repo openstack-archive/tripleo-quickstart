@@ -11,6 +11,9 @@ docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 overcloud_docker_registry_namespace: "tripleo{{ overcloud_release }}"
 overcloud_docker_image_tag: "{{ overcloud_dlrn_hash }}"
 
+# NOTE(aschultz) this can be bumped when ansible >=2.4.5 is available via package
+undercloud_ara_version: 0.15.0
+
 overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
 overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
 overcloud_templates_branch: stable/{{ overcloud_release }}

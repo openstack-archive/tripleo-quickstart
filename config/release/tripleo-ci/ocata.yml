@@ -16,6 +16,10 @@ inject_images:
 release: ocata
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
+
+# NOTE(aschultz) this can be bumped when ansible >=2.4.5 is available via package
+undercloud_ara_version: 0.15.0
+
 overcloud_image_url: https://images.rdoproject.org/ocata/rdo_trunk/current-tripleo-rdo/overcloud-full.tar
 ipa_image_url: https://images.rdoproject.org/ocata/rdo_trunk/current-tripleo-rdo/ironic-python-agent.tar
 repo_cmd_before: |

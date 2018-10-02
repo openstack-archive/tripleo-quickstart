@@ -6,6 +6,9 @@ overcloud_templates_branch: newton-eol
 overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
 overcloud_templates_path: "{{working_dir}}/tripleo-heat-templates"
 
+# NOTE(aschultz) this can be bumped when ansible >=2.4.5 is available via package
+undercloud_ara_version: 0.15.0
+
 dlrn_hash_tag: current-passed-ci
 dlrn_hash_tag_newest: current
 
