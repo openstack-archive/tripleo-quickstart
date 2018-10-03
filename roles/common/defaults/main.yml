@@ -191,7 +191,7 @@ enable_vnc_console: true
 release: queens
 
 # This option controls whether or not to use the repo setup for TripleO
-# development. Since this requires some other options to be funtional,
+# development. Since this requires some other options to be functional,
 # it is best to specify release master-tripleo-ci rather than
 # just flipping this to true.
 devmode: false
