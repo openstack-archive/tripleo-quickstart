@@ -69,7 +69,7 @@ Enable Developer mode
 ---------------------
 
 Please refer to
-the `OpenStack Documentation for devmode
+the `OpenStack Documentation
 <https://docs.openstack.org/tripleo-docs/latest/contributor/reproduce-ci.html>`_
 
 Feature Configuration and Nodes
