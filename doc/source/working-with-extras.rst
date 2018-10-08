@@ -32,7 +32,7 @@ example using some common developer settings::
                     --release master \
                     --no-clone \
                     --clean \
-                    --config config/general_config/minimal_pacemaker.yml \
+                    --config config/general_config/pacemaker.yml \
                     virthost.example.com
 
 This uses the currently cloned tripleo-quickstart repository instead of
