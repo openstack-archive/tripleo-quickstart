@@ -1,3 +1,4 @@
+---
 # Create `virt_host_key`, which we will use to log in to the target
 # host.  Note that this tasks runs on the ansible control host
 # (because of the `delegate_to: localhost`), and we will later copy

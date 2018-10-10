@@ -1,3 +1,4 @@
+---
 - name: Set CPU vendor
   set_fact:
     cpu_vendor: "{{ 'intel' if 'Intel' in ansible_processor|join('') else

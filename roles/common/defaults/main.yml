@@ -1,3 +1,4 @@
+---
 # This directory is used to store a variety of files generated
 # during the deploy process (ansible inventory, ssh configuration, ssh
 # key files, etc)

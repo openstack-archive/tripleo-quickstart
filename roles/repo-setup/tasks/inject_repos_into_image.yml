@@ -1,3 +1,4 @@
+---
 - name: Inject the repositories into the image
   include_role:
     name: modify-image

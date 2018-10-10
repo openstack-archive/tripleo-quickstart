@@ -1,5 +1,4 @@
 ---
-
 - name: Create VirtualBMC directories
   when: release not in ['newton']
   file:

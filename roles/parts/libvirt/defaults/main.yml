@@ -1,3 +1,4 @@
+---
 # The packages required to set up our desired libvirt environment.
 libvirt_packages:
   - qemu-kvm

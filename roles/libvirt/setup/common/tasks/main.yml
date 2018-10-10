@@ -1,3 +1,4 @@
+---
 # Create a libvirt volume pool.  This is where we'll be creating
 # images for the undercloud and overcloud.
 # Note: the virt_pool module is not working properly on rhel-7.2

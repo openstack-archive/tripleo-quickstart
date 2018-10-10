@@ -1,5 +1,4 @@
 ---
-
 # SSH key used to access the undercloud/overcloud machines.
 undercloud_key: "{{ local_working_dir }}/id_rsa_undercloud"
 overcloud_key: "{{ local_working_dir }}/id_rsa_overcloud"
