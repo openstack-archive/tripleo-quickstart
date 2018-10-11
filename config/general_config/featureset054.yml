@@ -1,0 +1,88 @@
+# Deploy an Openstack environment with a containerized overcloud
+# using scenario0012
+
+undercloud_setup: true
+network_isolation: false
+overcloud_ipv6: false
+ironic_overcloud: true
+
+# pacemaker settings are configured in the scenario template
+# do not set `enable_pacemaker` in the featureset
+
+containerized_overcloud: true
+undercloud_generate_service_certificate: false
+
+ssl_overcloud: false
+
+step_true: false
+
+composable_scenario: scenario012-multinode-containers.yaml
+validate_template: scenario012-multinode.yaml
+deployed_server: true
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-upgrade
+    - overcloud-validate
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
+
+# Use the traditional ping test in newton and ocata
+# Run tempest in pike+
+
+test_ping: >-
+  false
+
+run_tempest: >-
+  true
+
+test_regex: ''
+tempest_whitelist:
+  - 'ironic_tempest_plugin.tests.scenario.test_baremetal_multitenancy.BaremetalMultitenancy.test_baremetal_multitenancy'
+
+tempest_plugins:
+  - python-ironic-tests-tempest
+
+tempest_extra_config: {'auth.create_isolated_networks': 'False', 'validation.connect_method': 'fixed', 'validation.network_for_ssh': 'provisioning', 'baremetal.use_provision_network': 'True'}
+
+deploy_steps_ansible_workflow:
+  true
+config_download_args: >-
+  -e {{ working_dir }}/config-download.yaml
+  --disable-validations
+  --verbose
