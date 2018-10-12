@@ -102,4 +102,9 @@ tempest_workers: 3
 # Install the latest unlreleased packages from CentOS
 enable_centos_cr_repo: true
 
-
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
