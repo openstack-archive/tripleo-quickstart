@@ -1,0 +1,6 @@
+---
+- name: Create repo setup script
+  template:
+    src: "{{ repo_setup_script_source }}"
+    dest: "{{ repo_setup_dir }}/{{ repo_setup_script }}"
+    mode: 0755
