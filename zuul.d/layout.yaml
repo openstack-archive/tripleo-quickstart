@@ -8,9 +8,6 @@
       - release-notes-jobs-python3
     check:
       jobs:
-        - tripleo-ci-centos-7-3nodes-multinode:
-            files:
-              - config/general_config/featureset032.yml
         - tripleo-ci-centos-7-scenario001-multinode-oooq:
             files:
               - config/general_config/featureset005.yml
