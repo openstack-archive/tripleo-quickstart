@@ -21,10 +21,18 @@ add_repos:
     # NOTE(mandre) centos-release-openshift-origin310 provides the newest
     # packages for 3.10 branch
     pkg_name: centos-release-openshift-origin310
+    # NOTE(trown) The atomic package from centos-extras does not work for
+    # us but its version is higher than the one from the virt-sig. Hence,
+    # using priorities to ensure we get the virt-sig package.
+  - type: package
+    pkg_name: yum-plugin-priorities
   - type: generic
     reponame: quickstart-centos-virt-container
     filename: quickstart-centos-virt-container.repo
     baseurl: https://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/
+    includepkgs:
+      - atomic
+    priority: 1
 
 extra_args: ''
 
