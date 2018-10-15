@@ -17,7 +17,7 @@
 
     - name: Get DLRN hash newest - passed tag
       shell: >
-        curl -s https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_tag_newest }}/delorean.repo \
+        curl -s {{ dlrn_baseurl }}/{{ dlrn_hash_tag_newest }}/delorean.repo \
         | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
       register: full_hash_newest_result
       retries: 3

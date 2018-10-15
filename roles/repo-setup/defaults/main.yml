@@ -23,14 +23,15 @@ repo_cmd_after: |
   sudo {{ ansible_pkg_mgr }} update -y
 
 # Repositories definitions
+dlrn_baseurl: https://trunk.rdoproject.org/centos7-{{ release }}
 repos:
   - type: file
     filename: delorean.repo
-    down_url: https://trunk.rdoproject.org/centos7-{{ release }}/current/delorean.repo
+    down_url: "{{ dlrn_baseurl }}/current/delorean.repo"
 
   - type: file
     filename: delorean-deps.repo
-    down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
+    down_url: "{{ dlrn_baseurl }}/delorean-deps.repo"
 
 repo_setup_run_update: true
 
@@ -58,3 +59,4 @@ known_hash_tags:
   - current-tripleo-rdo
   - current-tripleo-rdo-internal
   - current-passed-ci
+

@@ -17,7 +17,7 @@
 
     - name: Get DLRN hash - passed tag
       shell: >
-        curl -s https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_tag }}/delorean.repo \
+        curl -s {{ dlrn_baseurl }}/{{ dlrn_hash_tag }}/delorean.repo \
         | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
       register: full_hash_result
       retries: 3
@@ -27,6 +27,7 @@
         dlrn_hash: "{{ full_hash_result.stdout }}"
         cacheable: true
 
+# TODO: Fix for fedora
 - when: overcloud_release is defined and overcloud_release != ""
   block:
 
