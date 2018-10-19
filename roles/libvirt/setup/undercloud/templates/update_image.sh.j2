@@ -7,11 +7,15 @@
 
 timeout -s 15 -k 1200 900 bash << EOS
     set -x
+    {% if ansible_pkg_mgr == "yum" %}
     sed -i -e "/proxy\=/d" /etc/yum.conf
+    {% endif %}
 
-    yum update -y
+    {{ ansible_pkg_mgr }} update -y
 
     {% if "undercloud" in item.path %}
+    {{ ansible_pkg_mgr }} install -y libselinux-python* python*-libselinux
+    {{ ansible_pkg_mgr }} install -y git
     mkdir -p /opt/{{ undercloud_user }}/new/tripleo-ci
     git clone https://git.openstack.org/openstack-infra/tripleo-ci /opt/stack/new/tripleo-ci
     {% endif  %}
@@ -19,9 +23,9 @@ timeout -s 15 -k 1200 900 bash << EOS
     rm -rf /etc/puppet/modules/*
     rm -rf /opt/{{ undercloud_user }}
     {% if release in ['liberty', 'mitaka', 'newton', 'ocata', 'pike' ] %}
-    yum install -y openstack-puppet-modules
+    {{ ansible_pkg_mgr }} install -y openstack-puppet-modules
     {% else  %}
-    yum install -y puppet-tripleo
+    {{ ansible_pkg_mgr }} install -y puppet-tripleo
     {% endif  %}
     ln -s /usr/share/openstack-puppet/modules/* /etc/puppet/modules/
     {% endif  %}
