@@ -100,3 +100,8 @@ undercloud_container_cli: >-
   {%- else -%}
   podman
   {%- endif -%}
+
+extra_args: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens', 'rocky'] -%}
+  -e {{ overcloud_templates_path }}/environments/podman.yaml
+  {%- endif -%}
