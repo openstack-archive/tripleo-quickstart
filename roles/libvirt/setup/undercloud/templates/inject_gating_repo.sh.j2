@@ -20,6 +20,6 @@ priority=1
 EOF
 
 {% if gating_repo_enabled|bool %}
-{{ ansible_pkg_mgr }} --disablerepo="*" --enablerepo="gating-repo" update -y
+yum --disablerepo="*" --enablerepo="gating-repo" update -y
 {% endif %}
 

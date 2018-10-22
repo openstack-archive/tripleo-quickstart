@@ -15,19 +15,19 @@ fi
 
 {% if not undercloud_setup|bool %}
 
-{{ ansible_pkg_mgr }} clean all
+yum clean all
 {% if convert_image_update|bool %}
-{{ ansible_pkg_mgr }} update -y
+yum update -y
 {% endif %}
 
-{{ ansible_pkg_mgr }} remove -y {{ convert_image_remove_pkgs|join(" ") }}
-{{ ansible_pkg_mgr }} install -y {{ convert_image_install_pkgs|join(" ") }}
+yum remove -y {{ convert_image_remove_pkgs|join(" ") }}
+yum install -y {{ convert_image_install_pkgs|join(" ") }}
 # NOTE(trown) Install tempest and test packages in a seperate yum transaction
 # so that we do not fail the conversion if this install fails. There is a period
 # after TripleO uploads a new image, but before the buildlogs repo gets synced,
 # where this will fail because we try to install older test packages than the
 # service packages already installed in the image.
-{{ansible_pkg_mgr }} install -y {{ convert_image_tempest_plugins|join(" ") }} || /bin/true
+yum install -y {{ convert_image_tempest_plugins|join(" ") }} || /bin/true
 
 {% endif %}
 
