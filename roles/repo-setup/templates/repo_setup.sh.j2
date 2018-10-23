@@ -82,12 +82,7 @@ sudo cp -f /tmp/repo_role_tmp/{{ repo.filename }} /etc/yum.repos.d/
 ## * Install repo from package {{ repo.pkg_name|default(repo.pkg_url) }}
 ## ::
 
-{% if repo.custom_cmd is defined %}
-{{ repo.custom_cmd }} {{ repo.pkg_name|default(repo.pkg_url) }}
-{% else %}
-sudo  {{ ansible_pkg_mgr }} install -y {{ repo.pkg_name|default(repo.pkg_url) }}
-{% endif %}
-
+{{ repo.custom_cmd|default('sudo yum install -y') }} {{ repo.pkg_name|default(repo.pkg_url) }}
 {% endif %}
 
 {% endif %}

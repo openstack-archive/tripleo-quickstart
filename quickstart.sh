@@ -37,33 +37,19 @@ clean_virtualenv() {
 : ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
 : ${OOOQ_EXTRA_REQUIREMENTS:=quickstart-extras-requirements.txt}
 
-python_cmd() {
-    basename $(command -v python3 || command -v python2)
-}
-
-package_manager() {
-    PKG="$(command -v dnf || command -v yum)"
-    if [ "$(python_cmd)" == "python3" ]; then
-        echo "${PKG} -y --exclude='python2*' $*"
-    else
-        echo "${PKG} -y --exclude='python3*' $*"
-    fi
-}
-
 install_deps () {
     # If sudo isn't installed assume we already are a super user
     # install it anyways so that the install of the other deps succeeds
-    sudo true || $(package_manager) install sudo
-    sudo $(package_manager) install \
+    sudo true || yum install -y sudo
+    sudo yum -y install \
         /usr/bin/git \
+        /usr/bin/virtualenv \
         gcc \
         iproute \
         libyaml \
-        libselinux-python* \
-        python*-libselinux \
+        libselinux-python \
         libffi-devel \
         openssl-devel \
-        python*-virtualenv \
         redhat-rpm-config
 }
 
@@ -120,18 +106,18 @@ fi
 # the local working directory does not exist, or if explicitly
 # requested via --bootstrap.
 bootstrap () {
-    if ! $(python_cmd) -m virtualenv --version >/dev/null ; then
+    if ! command -v virtualenv ; then
         echo "WARNING Could not find virtualenv binary necessary for
             bootstrap. Attempting to install dependencies before proceeding."
         install_deps
     fi
     set -e
 
-    $(python_cmd) -m virtualenv \
+    virtualenv\
         $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
         $OPT_WORKDIR
     . $OPT_WORKDIR/bin/activate
-    $(python_cmd) -m pip install pip --upgrade
+    pip install pip --upgrade
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
         if ! [ -d "$OOOQ_DIR" ]; then
@@ -150,11 +136,11 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
-        $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR
+        python setup.py install egg_info --egg-base $OPT_WORKDIR
         if [ $OPT_CLEAN == 1 ]; then
-            $(python_cmd) -m pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
+            pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
         else
-            $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
+            pip install --force-reinstall "${OPT_REQARGS[@]}"
         fi
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
             mkdir -p .tmp
@@ -166,9 +152,9 @@ bootstrap () {
                     openstack/tripleo-quickstart-extras
                 cd openstack/tripleo-quickstart-extras
                 if [ $OPT_CLEAN == 1 ]; then
-                    $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
+                    pip install --no-cache-dir --force-reinstall .
                 else
-                    $(python_cmd) -m pip install --force-reinstall .
+                    pip install --force-reinstall .
                 fi
         exit
             popd

@@ -12,15 +12,13 @@ stable:
   - mitaka
   - liberty
 repo_cmd_before: |
-  {% if ansible_pkg_mgr == "yum" %}
-  sudo {{ ansible_pkg_mgr }} install -y yum-plugin-priorities;
-  {% endif %}
-  sudo {{ ansible_pkg_mgr }} clean all;
+  sudo yum install -y yum-plugin-priorities;
+  sudo yum clean all;
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
 repo_cmd_after: |
-  sudo {{ ansible_pkg_mgr }} repolist;
-  sudo {{ ansible_pkg_mgr }} update -y
+  sudo yum repolist;
+  sudo yum update -y
 
 # Repositories definitions
 repos:
