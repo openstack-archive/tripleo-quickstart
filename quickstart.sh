@@ -24,7 +24,7 @@ ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 : ${OPT_SYSTEM_PACKAGES:=0}
 : ${OPT_TAGS:=$DEFAULT_OPT_TAGS}
 : ${OPT_TEARDOWN:=nodes}
-: ${OPT_WORKDIR:=$HOME/.quickstart}
+: ${OPT_WORKDIR:=~/.quickstart}
 : ${OPT_LIST_TASKS_ONLY=""}
 
 clean_virtualenv() {
@@ -37,22 +37,102 @@ clean_virtualenv() {
 : ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
 : ${OOOQ_EXTRA_REQUIREMENTS:=quickstart-extras-requirements.txt}
 
-install_deps () {
-    # If sudo isn't installed assume we already are a super user
-    # install it anyways so that the install of the other deps succeeds
-    sudo true || yum install -y sudo
-    sudo yum -y install \
-        /usr/bin/git \
-        /usr/bin/virtualenv \
-        gcc \
-        iproute \
-        libyaml \
-        libselinux-python \
-        libffi-devel \
-        openssl-devel \
-        redhat-rpm-config
+python_cmd() {
+    distribution=unknown
+    distribution_major_version=unknown
+    # we prefer python2 because on few systems python->python3
+    python_cmd=python2
+
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        distribution_major_version=${VERSION_ID%.*}
+        case $NAME in
+        "Red Hat"*) distribution="RedHat"
+            if [ "$distribution_major_version" -ge "8" ]; then
+                python_cmd=python3
+            fi
+            ;;
+        "CentOS"*)
+            distribution="CentOS"
+            if [ "$distribution_major_version" -ge "8" ]; then
+                python_cmd=python3
+            fi
+            ;;
+        "Fedora"*)
+            distribution="Fedora"
+            if [ "$distribution_major_version" -ge "28" ]; then
+                python_cmd=python3
+            fi
+            ;;
+        "Ubuntu"*)
+            distribution="Ubuntu"
+            ;;
+        "Debian"*)
+            distribution="Debian"
+            ;;
+        esac
+    elif [ -f /etc/lsb-release ]; then
+        . /etc/lsb-release
+        distribution=${DISTRIB_ID}xx
+        distribution_major_version=${DISTRIB_RELEASE%.*}
+    elif [ -f /etc/debian_version ]; then
+        distribution="Debian"
+        distribution_major_version=$(cat /etc/debian_version | cut -d. -f1)
+    else
+        # Covers for FreeBSD and many others
+        distribution=$(uname -s)
+        if [ $distribution = Darwin ]; then
+            distribution="MacOSX"
+            distribution_major_version=$(sw_vers -productVersion | cut -d. -f1)
+        fi
+        which $python_cmd 2>&1 >/dev/null || {
+            python_cmd=/usr/local/bin/python2.7
+        }
+    fi
+    echo $python_cmd
 }
 
+package_manager() {
+    PKG="$(command -v dnf || command -v yum)"
+    if [ "$(python_cmd)" == "python3" ]; then
+        echo "${PKG} -y --exclude='python2*' $*"
+    else
+        echo "${PKG} -y --exclude='python3*' $*"
+    fi
+}
+
+install_deps () {
+    : ${NEED_SUDO:=false}
+    # check of deps, if something is missing try to install it at user level
+    # and only if this is not possible try to sudo.
+    for CMD in git gcc ip; do
+        command -v $CMD || NEED_SUDO=true
+    done
+    $(python_cmd) -m virtualenv --version || (
+        # only when outside a venv we try to install using --user
+        if [[ -z ${VIRTUAL_ENV+x} ]]; then
+            PIP_USER=yes
+        fi
+    )
+
+    if [ $NEED_SUDO ]; then
+        $(python_cmd) -m pip install virtualenv || NEED_SUDO=true
+            # If sudo isn't installed assume we already are a super user
+            # install it anyways so that the install of the other deps succeeds
+            sudo true || $(package_manager) install sudo
+            sudo $(package_manager) install \
+                /usr/bin/git \
+                gcc \
+                iproute \
+                libyaml \
+                libselinux-python* \
+                python*-libselinux \
+                libffi-devel \
+                openssl-devel \
+                python*-virtualenv \
+                redhat-rpm-config
+    fi
+}
 
 print_logo () {
 
@@ -106,24 +186,20 @@ fi
 # the local working directory does not exist, or if explicitly
 # requested via --bootstrap.
 bootstrap () {
-    if ! command -v virtualenv ; then
-        echo "WARNING Could not find virtualenv binary necessary for
-            bootstrap. Attempting to install dependencies before proceeding."
-        install_deps
-    fi
     set -e
+    install_deps
 
     # Activate the virtualenv only when it is not already activated otherwise
     # It create the virtualenv and then activate it.
     if [[ -z ${VIRTUAL_ENV+x} ]]; then
-        virtualenv\
+        $(python_cmd) -m virtualenv \
             $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
             $OPT_WORKDIR
         . $OPT_WORKDIR/bin/activate
     else
         echo "Warning: VIRTUAL_ENV=$VIRTUAL_ENV was found active and is being reused."
     fi
-    pip install pip --upgrade
+    $(python_cmd) -m pip install pip --upgrade
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
         if ! [ -d "$OOOQ_DIR" ]; then
@@ -142,11 +218,11 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
-        python setup.py install egg_info --egg-base $OPT_WORKDIR
+        $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR
         if [ $OPT_CLEAN == 1 ]; then
-            pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
+            $(python_cmd) -m pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
         else
-            pip install --force-reinstall "${OPT_REQARGS[@]}"
+            $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
         fi
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
             mkdir -p .tmp
@@ -158,9 +234,9 @@ bootstrap () {
                     openstack/tripleo-quickstart-extras
                 cd openstack/tripleo-quickstart-extras
                 if [ $OPT_CLEAN == 1 ]; then
-                    pip install --no-cache-dir --force-reinstall .
+                    $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
                 else
-                    pip install --force-reinstall .
+                    $(python_cmd) -m pip install --force-reinstall .
                 fi
         exit
             popd
@@ -169,15 +245,22 @@ bootstrap () {
 
     # In order to do any filesystem operations on the system running ansible (if it has SELinux installed)
     # we need the python bindings in the venv. Unfortunately, it is not available on pypi, so we need to
-    # pull it from the system site packages.
-    copy_selinux_to_venv
+    # pull it from the system site packages. This is needed only if they are not already present there,
+    # for example creating the virtualenv using --system-site-packages on a system that has the
+    # libselinux python bidings does not need it, so we detect it first.
+    $(python_cmd) -c "import selinux" 2>/dev/null ||
+        copy_selinux_to_venv
 }
 
 copy_selinux_to_venv() {
-    : ${LIBSELINUX_PYTHON_PATH:=lib64/python2.7/site-packages}
-    cp -R /usr/$LIBSELINUX_PYTHON_PATH/selinux $OPT_WORKDIR/$LIBSELINUX_PYTHON_PATH/ || true
-    # on Fedora the _selinux.so is one dir up for some reason
-    cp /usr/$LIBSELINUX_PYTHON_PATH/_selinux.so $OPT_WORKDIR/$LIBSELINUX_PYTHON_PATH/ || true
+    : ${LIBSELINUX_PYTHON_PATH:=lib64/python`$(python_cmd) -c "from sys import version_info as v; print('%s.%s' % (v[0], v[1]))"`/site-packages}
+
+    for FILE in /usr/$LIBSELINUX_PYTHON_PATH/_selinux* /usr/$LIBSELINUX_PYTHON_PATH/selinux ; do
+        ln -sf $FILE $VIRTUAL_ENV/$LIBSELINUX_PYTHON_PATH/
+    done
+
+    # validate that selinux import really works
+    $(python_cmd) -c "import sys; print(sys.path); import selinux; print('selinux.is_selinux_enabled: %s' % selinux.is_selinux_enabled())"
 }
 
 activate_venv() {
