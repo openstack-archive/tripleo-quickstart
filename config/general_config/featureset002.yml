@@ -139,12 +139,13 @@ test_ping: >-
   false
   {%- endif -%}
 
-run_tempest: >-
-  {% if release in ['newton', 'ocata', 'pike'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
+run_tempest: false
+# run_tempest: >-
+#   {% if release in ['newton', 'ocata', 'pike'] -%}
+#   false
+#   {%- else -%}
+#   true
+#   {%- endif -%}
 
 test_white_regex: ''
 tempest_whitelist:
