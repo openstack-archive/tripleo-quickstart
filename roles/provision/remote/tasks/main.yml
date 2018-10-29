@@ -50,7 +50,7 @@
   command: "id {{ non_root_user }} -u"
   register: non_root_user_uid_output
   changed_when: false
-  retry: 3
+  retries: 3
   delay: 5
   until: non_root_user_uid_output is not failed
 
