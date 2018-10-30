@@ -148,3 +148,9 @@ tempest_format: >-
   {%- else -%}
   packages
   {%- endif -%}
+undercloud_enable_tempest: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
