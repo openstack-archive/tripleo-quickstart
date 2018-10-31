@@ -94,9 +94,4 @@ undercloud_enable_tempest: >-
   false
   {%- endif -%}
 
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+
