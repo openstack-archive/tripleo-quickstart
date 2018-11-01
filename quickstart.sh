@@ -103,49 +103,69 @@ package_manager() {
     fi
 }
 
-install_deps () {
-    $(python_cmd) -m virtualenv --version >/dev/null || {
-        # only when outside a venv we try to install using --user
-        if [[ -z ${VIRTUAL_ENV+x} ]]; then
-            export PIP_USER=yes
-        fi
-        if ! $(python_cmd) -m pip --version >/dev/null ; then
-            echo "INFO: pip not found, we will attempt to install it using $(package_manager)."
-        else
-            $(python_cmd) -m pip install virtualenv || {
-                echo "INFO: virtualenv installation via pip failed, we will attempt to install it using $(package_manager)."
-            }
-        fi
-    }
+check_python_module () {
+    # validate module import and print package versions on single final line
+    $(python_cmd) -c "from __future__ import print_function; import $1; print('$1:%s ' % $1.__version__, end='')"
+}
 
+install_deps () {
     # If sudo isn't installed assume we already are a super user
     # install it anyways so that the install of the other deps succeeds
+    PYTHON_PACKAGES=()
+    MODULE_NAMES="pip virtualenv setuptools"
     rpm -q sudo || $(package_manager) install -y sudo
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
-    if [ "$(python_cmd)" == "python3" ]; then
-        PYTHON_PACKAGES="python3-libselinux python3-virtualenv python3-pip python3-PyYAML"
-    else
-        PYTHON_PACKAGES="libselinux-python python2-virtualenv python2-pip"
-    fi
     if [[ "$passwordless_sudo" == "1" ]]; then
-    sudo $(package_manager) install \
-        /usr/bin/git \
-        gcc \
-        iproute \
-        libyaml \
-        libffi-devel \
-        openssl-devel \
-        redhat-rpm-config \
-        $PYTHON_PACKAGES
+        if [ "$(python_cmd)" == "python3" ]; then
+            PYTHON_PACKAGES+=("python3-libselinux")
+            PYTHON_PACKAGES+=("python3-PyYAML")
+            PYTHON_PACKAGES+=("python3-setuptools")
+            VIRTUALENV_PACKAGE=python3-virtualenv
+            PIP_PACKAGE=python3-pip
+        else
+            PYTHON_PACKAGES+=("libselinux-python")
+            PYTHON_PACKAGES+=("python-setuptools")
+            VIRTUALENV_PACKAGE=python-virtualenv
+            PIP_PACKAGE=python-pip
+        fi
+
+        check_python_module virtualenv &> /dev/null || \
+            PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
+
+        sudo $(package_manager) install -y \
+            /usr/bin/git \
+            gcc \
+            iproute \
+            libyaml \
+            libffi-devel \
+            openssl-devel \
+            redhat-rpm-config \
+            ${PYTHON_PACKAGES[@]}
     else
         echo "WARNING: SUDO is not passwordless, assuming all packages are installed!"
     fi
-    # validate module import and print package versions on single final line
-    for module in pip virtualenv; do
-        $(python_cmd) -c "from __future__ import print_function; import $module; print('$module:%s ' % $module.__version__, end='')"
+
+    # pip is a special case because centos-7 repos do not have an rpm for
+    # it but EPEL or OSP repos do, so we attempt to install the rpm and
+    # fallback to easy_install before failing
+    check_python_module pip &> /dev/null || {
+        if yum provides pip 2>&1 | grep 'No matches found' >/dev/null; then
+            sudo easy_install pip
+        else
+            sudo $(package_manager) install -y $PIP_PACKAGE
+        fi
+    }
+
+    MISSING_MODULES=()
+    for module_name in $MODULE_NAMES; do
+        check_python_module $module_name || MISSING_MODULES+=("$module_name")
     done
-    set +x
-    echo "install-deps succeeded."
+    if [[ -n $MISSING_MODULES ]]; then
+        echo "ERROR: ${MISSING_MODULES[@]} not installed" 1>&2
+        return 1
+    else
+        echo "install-deps succeeded."
+    fi
 }
 
 print_logo () {
