@@ -26,6 +26,8 @@ ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 : ${OPT_TEARDOWN:=nodes}
 : ${OPT_WORKDIR:=~/.quickstart}
 : ${OPT_LIST_TASKS_ONLY=""}
+# disable pip implicit version check, if we need min version we should mention it
+export PIP_DISABLE_PIP_VERSION_CHECK=${PIP_DISABLE_PIP_VERSION_CHECK:=1}
 
 clean_virtualenv() {
     if [ -d $OPT_WORKDIR ]; then
@@ -102,36 +104,48 @@ package_manager() {
 }
 
 install_deps () {
-    : ${NEED_SUDO:=false}
-    # check of deps, if something is missing try to install it at user level
-    # and only if this is not possible try to sudo.
-    for CMD in git gcc ip; do
-        command -v $CMD || NEED_SUDO=true
-    done
-    $(python_cmd) -m virtualenv --version || (
+    $(python_cmd) -m virtualenv --version >/dev/null || {
         # only when outside a venv we try to install using --user
         if [[ -z ${VIRTUAL_ENV+x} ]]; then
-            PIP_USER=yes
+            export PIP_USER=yes
         fi
-    )
+        if ! $(python_cmd) -m pip --version >/dev/null ; then
+            echo "INFO: pip not found, we will attempt to install it using $(package_manager)."
+        else
+            $(python_cmd) -m pip install virtualenv || {
+                echo "INFO: virtualenv installation via pip failed, we will attempt to install it using $(package_manager)."
+            }
+        fi
+    }
 
-    if [ $NEED_SUDO ]; then
-        $(python_cmd) -m pip install virtualenv || NEED_SUDO=true
-            # If sudo isn't installed assume we already are a super user
-            # install it anyways so that the install of the other deps succeeds
-            sudo true || $(package_manager) install sudo
-            sudo $(package_manager) install \
-                /usr/bin/git \
-                gcc \
-                iproute \
-                libyaml \
-                libselinux-python* \
-                python*-libselinux \
-                libffi-devel \
-                openssl-devel \
-                python*-virtualenv \
-                redhat-rpm-config
+    # If sudo isn't installed assume we already are a super user
+    # install it anyways so that the install of the other deps succeeds
+    rpm -q sudo || $(package_manager) install -y sudo
+    sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
+    if [ "$(python_cmd)" == "python3" ]; then
+        PYTHON_PACKAGES="python3-libselinux python3-virtualenv python3-pip python3-PyYAML"
+    else
+        PYTHON_PACKAGES="libselinux-python python2-virtualenv python2-pip"
     fi
+    if [[ "$passwordless_sudo" == "1" ]]; then
+    sudo $(package_manager) install \
+        /usr/bin/git \
+        gcc \
+        iproute \
+        libyaml \
+        libffi-devel \
+        openssl-devel \
+        redhat-rpm-config \
+        $PYTHON_PACKAGES
+    else
+        echo "WARNING: SUDO is not passwordless, assuming all packages are installed!"
+    fi
+    # validate module import and print package versions on single final line
+    for module in pip virtualenv; do
+        $(python_cmd) -c "from __future__ import print_function; import $module; print('$module:%s ' % $module.__version__, end='')"
+    done
+    set +x
+    echo "install-deps succeeded."
 }
 
 print_logo () {
