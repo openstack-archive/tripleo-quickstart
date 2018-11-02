@@ -89,8 +89,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+    - tempest-setup
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -104,8 +103,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+    - tempest-setup
 
 deploy_steps_ansible_workflow: >-
   {% if release not in ['newton','ocata','pike'] -%}
@@ -139,9 +137,14 @@ tempest_format: >-
   packages
   {%- endif -%}
 
+undercloud_enable_tempest: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 # looking for a small set of tempest tests to validate
 # tempest config and execution are working
 run_tempest: true
 test_white_regex: 'tempest.api.compute.admin'
-
-
