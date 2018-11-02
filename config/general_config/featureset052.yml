@@ -18,24 +18,13 @@ standalone_role: Standalone.yaml
 test_ping: false
 standalone_ansible_lint: true
 run_tempest: true
-test_regex: ''
+# Running only smoke tests and a few scenarios
+test_white_regex: '\[.*\bsmoke\b.*\]'
 # NOTE(aschultz): containers assume RC at the moment
 tempest_undercloud: true
 tempest_overcloud: false
 tempest_os_cloud: standalone
 tempest_whitelist:
-  - 'tempest.api.identity'
-  - 'tempest.api.image.v2.test_images.BasicOperationsImagesTest'
-  - 'tempest.api.image.v2.test_images_tags_negative.ImagesTagsNegativeTest'
-  - 'tempest.api.image.v2.test_images_member_negative.ImagesMemberNegativeTest'
-  - 'tempest.api.compute.admin.test_flavors'
-  - 'tempest.api.compute.flavors'
-  - 'tempest.api.compute.keypairs'
-  - 'tempest.api.compute.admin.test_quotas'
-  - 'tempest.api.compute.admin.test_aggregates_negative'
-  - 'tempest.api.compute.security_groups'
-  - 'tempest.api.network.test_networks'
-  - 'tempest.api.network.test_networks_negative'
-  - 'tempest.api.network.test_security_groups_negative'
-  - 'tempest.api.network.test_ports'
-  - 'tempest.api.network.test_routers_negative'
+  - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario'
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+  - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
