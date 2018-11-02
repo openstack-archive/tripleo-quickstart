@@ -13,20 +13,14 @@ inject_images:
     - "overcloud-full.initrd"
     - "overcloud-full.vmlinuz"
 release: master
-# We don't have 'current-tripleo' at f28
-# working 'consistent'
-dlrn_hash_tag: 3e5a2d227c813937ad7ea23d334f7d23c1f8a2cc_dac3bdc8
-# working 'current'
-dlrn_hash_tag_newest: 1e506094949d68b452d044941c0d6f85ef997b9e_c7bc20cd
+dlrn_hash_tag: current-tripleo
+dlrn_hash_tag_newest: current
 dlrn_target: fedora
 dlrn_baseurl: https://trunk.rdoproject.org/fedora
-# TODO(aschultz): this needs a fix for fedora, currently it's centos specific
-dlrn_use_local_mirrors: false
 docker_registry_host: docker.io
 docker_registry_namespace: tripleomaster
-# We don't have 'current' at docker images
 docker_image_tag: current-tripleo
-# FIXME: docker_image_tag are not being read for standalone
+# FIXME: docker_image_tag is not working at standalone, that's a bug.
 container_build_id: current-tripleo
 docker_openshift_tag: v3.10.0
 overcloud_image_url: https://images.rdoproject.org/master/rdo_trunk/current-tripleo/overcloud-full.tar
