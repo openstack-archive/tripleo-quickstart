@@ -90,8 +90,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+    - tempest-setup
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -105,8 +104,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+    - tempest-setup
 
 # Use the traditional ping test in newton, ocata and pike
 # Run tempest in queens+
@@ -118,11 +116,26 @@ test_ping: >-
   false
   {%- endif -%}
 
+
 run_tempest: >-
   {% if release in ['newton', 'ocata', 'pike'] -%}
   false
   {%- else -%}
   true
+  {%- endif -%}
+
+undercloud_enable_tempest: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
   {%- endif -%}
 
 test_white_regex: ''
