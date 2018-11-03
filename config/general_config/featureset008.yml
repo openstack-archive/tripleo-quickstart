@@ -64,27 +64,18 @@ tempest_whitelist_new:
 # manila test is disabled in older releases as a temporary workaround for
 # https://launchpad.net/bugs/1790857
 tempest_whitelist: >-
-  {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_whitelist_new }}
+  {% if release not in ['newton', 'ocata'] -%}{{ tempest_whitelist_new }}
   {%- else -%}{{ tempest_whitelist_old }}
   {%- endif -%}
+
+manila_max_api_version: { 'newton': '2.22', 'ocata': '2.32', 'pike': '2.40', 'queens': '2.42' }
 
 tempest_extra_config: >
   {
     {% if release in ['newton', 'ocata', 'pike', 'queens'] -%}
     'object-storage-feature-enabled.discoverability': 'False',
     'service_available.swift': 'False',
-    {%- endif -%}
-    {% if release in ['queens'] -%}
-    'share.max_api_microversion': '2.42',
-    {%- endif -%}
-    {% if release in ['pike'] -%}
-    'share.max_api_microversion': '2.40',
-    {%- endif -%}
-    {% if release in ['ocata'] -%}
-    'share.max_api_microversion': '2.32',
-    {%- endif -%}
-    {% if release in ['newton'] -%}
-    'share.max_api_microversion': '2.22',
+    'share.max_api_microversion': '{{ manila_max_api_version[release] }}',
     {%- endif -%}
     'share.multitenancy_enabled': 'False',
     'share.enable_protocols': 'cephfs',
@@ -92,5 +83,9 @@ tempest_extra_config: >
     'share.capability_create_share_from_snapshot_support': 'False',
   }
 
-tempest_plugins:
-  - python2-manila-tests-tempest
+tempest_plugins: >-
+  {%- if release in ['newton', 'ocata', 'pike'] -%}
+  ["python-manila-tests"]
+  {%- else -%}
+  ["python2-manila-tests-tempest"]
+  {%- endif -%}
