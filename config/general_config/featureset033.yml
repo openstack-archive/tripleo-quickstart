@@ -47,7 +47,22 @@ container_args: >-
   {% endif %}
   -e {{ overcloud_templates_path }}/environments/openshift.yaml
 
+# NOTE(mandre) use container images mirrored on the dockerhub to take advantage
+# of the proxy setup by openstack infra
 docker_openshift_etcd_namespace: docker.io/{{ docker_registry_namespace }}
+docker_openshift_cluster_monitoring_namespace: docker.io/tripleomaster
+docker_openshift_cluster_monitoring_image: coreos-cluster-monitoring-operator
+docker_openshift_configmap_reload_namespace: docker.io/tripleomaster
+docker_openshift_configmap_reload_image: coreos-configmap-reload
+docker_openshift_prometheus_operator_namespace: docker.io/tripleomaster
+docker_openshift_prometheus_operator_image: coreos-prometheus-operator
+docker_openshift_prometheus_config_reload_namespace: docker.io/tripleomaster
+docker_openshift_prometheus_config_reload_image: coreos-prometheus-config-reloader
+docker_openshift_kube_rbac_proxy_namespace: docker.io/tripleomaster
+docker_openshift_kube_rbac_proxy_image: coreos-kube-rbac-proxy
+docker_openshift_kube_state_metrics_namespace: docker.io/tripleomaster
+docker_openshift_kube_state_metrics_image: coreos-kube-state-metrics
+
 deploy_steps_ansible_workflow: true
 config_download_args: >-
   -e {{ working_dir }}/config-download.yaml
