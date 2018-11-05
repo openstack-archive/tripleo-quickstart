@@ -119,18 +119,21 @@ install_deps () {
         if [ "$(python_cmd)" == "python3" ]; then
             PYTHON_PACKAGES+=("python3-libselinux")
             PYTHON_PACKAGES+=("python3-PyYAML")
-            PYTHON_PACKAGES+=("python3-setuptools")
+            SETUPTOOLS_PACKAGE=python3-setuptools
             VIRTUALENV_PACKAGE=python3-virtualenv
             PIP_PACKAGE=python3-pip
         else
             PYTHON_PACKAGES+=("libselinux-python")
-            PYTHON_PACKAGES+=("python-setuptools")
+            SETUPTOOLS_PACKAGE=python-setuptools
             VIRTUALENV_PACKAGE=python-virtualenv
             PIP_PACKAGE=python-pip
         fi
 
         check_python_module virtualenv &> /dev/null || \
             PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
+
+        check_python_module setuptools &> /dev/null || \
+            PYTHON_PACKAGES+=($SETUPTOOLS_PACKAGE)
 
         sudo $(package_manager) install -y \
             /usr/bin/git \
