@@ -15,12 +15,8 @@ undercloud_enable_validations: false
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false
 
-# Centos OpenShift repo
+# Centos Virt-SIG repo for atomic package
 add_repos:
-  - type: package
-    # NOTE(mandre) centos-release-openshift-origin310 provides the newest
-    # packages for 3.10 branch
-    pkg_name: centos-release-openshift-origin310
     # NOTE(trown) The atomic package from centos-extras does not work for
     # us but its version is higher than the one from the virt-sig. Hence,
     # using priorities to ensure we get the virt-sig package.
@@ -55,12 +51,6 @@ config_download_args: >-
   --verbose
 
 composable_roles: true
-
-# NOTE(flaper87): There's likely a better way to do this
-repo_cmd_after: |
-  sudo yum update -y
-  sudo yum install -y openshift-ansible-playbooks-3.10.41
-  sudo yum-config-manager --disable centos-openshift-origin310
 
 overcloud_roles:
   - name: Controller
