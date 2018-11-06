@@ -23,6 +23,10 @@ add_repos:
   - type: package
     pkg_name: yum-plugin-priorities
   - type: generic
+    reponame: quickstart-centos-paas
+    filename: quickstart-centos-paas.repo
+    baseurl: https://cbs.centos.org/repos/paas7-openshift-origin311-candidate/x86_64/os/
+  - type: generic
     reponame: quickstart-centos-virt-container
     filename: quickstart-centos-virt-container.repo
     baseurl: https://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/
