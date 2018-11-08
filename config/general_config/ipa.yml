@@ -39,6 +39,13 @@ custom_nameserver:
 undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
 overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
 
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 # Supplemental node related vars. #
 # Ensure that the FreeIPA server node is provisioned during deployment.
 deploy_supplemental_node: true
