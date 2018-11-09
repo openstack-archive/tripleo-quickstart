@@ -4,13 +4,13 @@
 
 undercloud_setup: true
 overcloud_ipv6: false
-
-# pacemaker settings are configured in the scenario template
-# do not set `enable_pacemaker` in the featureset
+network_isolation: false
+enable_pacemaker: false
 
 # Container prep parameters.
 containerized_overcloud: true
 containerized_overcloud_upgrade: true
+
 
 enable_opstools_repo: true
 
@@ -27,12 +27,12 @@ deployed_server: true
 test_ping: false
 run_tempest: false
 
-# save time by doing a mixed upgrade
-mixed_upgrade: true
-
 # Tripleo-upgrade role parameters
 # Major Upgrade: containers -> containers (keystone-only)
 overcloud_upgrade: true
+# This featureset is a master to master job, so we don't want to update the
+# repo during the upgrade run
+update_repo: false
 # disable tripleo-upgrade container manipulation.
 create_docker_registry: false
 use_local_docker_registry: false
@@ -53,6 +53,9 @@ tripleo_upgrade_validations_non_fatal: true
 # Reduce CI wall time
 tripleo_upgrade_converge_plan_only: true
 
+run_tripleo_validations: false
+run_tripleo_validations_negative_tests: false
+exit_on_validations_failure: false
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
 artcl_create_docs_payload:
@@ -81,6 +84,7 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-upgrade
     - overcloud-validate
+
 composable_roles: true
 overcloud_roles:
   - name: Controller
@@ -95,9 +99,19 @@ overcloud_roles:
       - StorageMgmt
       - Tenant
 
+
+
+deploy_steps_ansible_workflow: true
 config_download_args: >-
-  {% if overcloud_release is defined and overcloud_release in ['queens'] -%}
-  --no-config-download
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --deployed-server
+  {%- endif %}
+  {% if release not in ['newton','ocata','pike'] -%}
+  -e {{ working_dir }}/config-download.yaml
+  --disable-validations
+  --verbose
   {%- endif -%}
 
 containerized_undercloud: >-
@@ -106,8 +120,16 @@ containerized_undercloud: >-
   {%- else -%}
   false
   {%- endif -%}
+
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/ci/common/net-config-simple-bridge.yaml"
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
