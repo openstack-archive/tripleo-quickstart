@@ -7,10 +7,8 @@
 
 - include: create-repo-script.yml
 
-- include: setup_repos.yml
-  static: no
+- include_tasks: setup_repos.yml
   when: repo_run_live|bool
 
-- include: inject_repos_into_image.yml
-  static: no
+- include_tasks: inject_repos_into_image.yml
   when: repo_inject_image_path is defined
