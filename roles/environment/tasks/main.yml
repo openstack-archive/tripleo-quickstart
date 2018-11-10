@@ -1,9 +1,21 @@
-- name: Include os_family specific vars
-  include_vars: "{{ ansible_os_family|lower }}.yml"
-  ignore_errors: true
-- name: Include distribution specific vars
-  include_vars: "{{ ansible_distribution|lower }}.yml"
-  ignore_errors: true
-- name: Include version specific vars
-  include_vars: "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
-  ignore_errors: true
+# This layered system specific config loading pattern alllows us to minimize
+# configuration changes by defining var in optimal location. Each more
+# specific config file can override variables from previous ones. Keep in mind
+# that dictionaries are not combined, as this allows us to remove elements.
+#
+# vars/redhat.yml          <-- all RedHat distros
+# vars/redhat-8.yml        <-- would be loaded by RHEL & CentOS 8
+# vars/centos.yml
+# vars/centos-7.yml
+# vars/centos-7-6.yml      <-- good for a specific config override
+# vars/centos-7-6-1810.yml <-- very unlikely but posible
+- name: Include OS specific variables
+  include_vars: "{{ item }}"
+  failed_when: false
+  loop:
+      - "{{ ansible_os_family | lower }}.yml"
+      - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+      - "{{ ansible_distribution | lower }}.yml"
+      - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
+      - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version.split('.')[0:2] | join('-') | lower }}.yml"
+      - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version.split('.')[0:3] | join('-') | lower }}.yml"
