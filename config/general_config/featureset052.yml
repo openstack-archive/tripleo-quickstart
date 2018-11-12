@@ -15,6 +15,10 @@ undercloud_setup: true
 # deployment role
 standalone_role: Standalone.yaml
 
+# custom env files
+standalone_custom_env_files:
+  - /usr/share/openstack-tripleo-heat-templates/environments/low-memory-usage.yaml
+
 # validation
 
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
