@@ -22,7 +22,7 @@ timeout -s 15 -k 1200 900 bash << EOS
     {% if "overcloud" in item.path  %}
     rm -rf /etc/puppet/modules/*
     rm -rf /opt/{{ undercloud_user }}
-    {% if release in ['mitaka', 'newton', 'ocata', 'pike' ] %}
+    {% if release in ['newton', 'ocata', 'pike'] %}
     {{ ansible_pkg_mgr }} install -y openstack-puppet-modules
     {% else  %}
     {{ ansible_pkg_mgr }} install -y puppet-tripleo

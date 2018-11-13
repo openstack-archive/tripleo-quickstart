@@ -1,5 +1,0 @@
-release: mitaka
-undercloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/cbs/cloudsig-stable/testing/undercloud.qcow2
-overcloud_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/cbs/cloudsig-stable/testing/overcloud-full.tar
-ipa_image_url: http://artifacts.ci.centos.org/artifacts/rdo/images/mitaka/cbs/cloudsig-stable/testing/ironic-python-agent.tar
-

@@ -90,7 +90,7 @@
   # Copy the virt host private key to `$HOME/.ssh/id_rsa_virt_power` for
   # VirtualBMC be able to access the hypervisor where the VMs are located
   - name: Copy virt host ssh private key to working dir
-    when: release not in ['mitaka', 'newton']
+    when: release not in ['newton']
     copy:
       src: "{{ virt_power_key }}"
       dest: "{{ working_dir }}/id_rsa_virt_power"
@@ -126,7 +126,7 @@
   # in the overcloud setup role to the undercloud host to be used by
   # VirtualBMC+libvirt to access the virthost.
   - name: Copy id_rsa_virt_power to appliance
-    when: release not in ['mitaka', 'newton']
+    when: release not in ['newton']
     command: >
       virt-customize -a {{ working_dir }}/undercloud.qcow2
       --upload '{{ working_dir }}/id_rsa_virt_power:/root/.ssh/id_rsa_virt_power'

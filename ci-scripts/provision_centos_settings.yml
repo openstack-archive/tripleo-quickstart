@@ -174,9 +174,6 @@ installer:
       id: cirros-0.3.4-x86_64-disk.img
     dir: tempest
   images:
-    mitaka:
-      files:
-      - no_op
     7-director:
       files:
       - no_op

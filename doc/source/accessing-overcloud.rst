@@ -70,10 +70,6 @@ at ``http://localhost:8080`` to access Horizon.
 You can add multiple ``-L`` arguments to the ssh command line to expose
 multiple services.
 
-.. NOTE::
-   If you are deploying mitaka release, you will need to use the
-   ``overcloud-public-vip`` host (which will be defined in ``/etc/hosts``
-   on the undercloud).
 
 SSH Dynamic Proxy
 -----------------

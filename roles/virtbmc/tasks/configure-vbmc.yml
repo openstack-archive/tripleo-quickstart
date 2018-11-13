@@ -1,7 +1,7 @@
 ---
 
 - name: Create VirtualBMC directories
-  when: release not in ['liberty', 'mitaka', 'newton']
+  when: release not in ['newton']
   file:
     path: "{{ item }}"
     state: directory
@@ -14,7 +14,7 @@
   become: true
 
 - name: Create VirtualBMC configuration file
-  when: release not in ['liberty', 'mitaka', 'newton']
+  when: release not in ['newton']
   copy:
     mode: 0750
     dest: "/etc/virtualbmc/virtualbmc.conf"
@@ -63,7 +63,7 @@
   when: vbmc_libvirt_uri is not defined
 
 - name: Install VirtualBMC package
-  when: release not in ['liberty', 'mitaka', 'newton']
+  when: release not in ['newton']
   package:
     name: "python2-virtualbmc"
     state: present
@@ -71,7 +71,7 @@
   become: true
 
 - name: Start the Virtual BMCs (virtualbmc >= 1.4.0+)
-  when: release not in ['liberty', 'mitaka', 'newton', 'ocata', 'pike', 'queens']
+  when: release not in ['newton', 'ocata', 'pike', 'queens']
   service:
     name: "virtualbmc"
     state: started
@@ -79,7 +79,7 @@
   become: true
 
 - name: Create the Virtual BMCs
-  when: release not in ['liberty', 'mitaka', 'newton']
+  when: release not in ['newton']
   command: "vbmc add {{ item.name }} --port {{ item.virtualbmc_port }} --libvirt-uri {{ vbmc_libvirt_uri }}"
   args:
     creates: /root/.vbmc/{{ item.name }}/config
@@ -87,7 +87,7 @@
   become: true
 
 - name: Start the Virtual BMCs (virtualbmc >= 1.4.0+)
-  when: release not in ['liberty', 'mitaka', 'newton', 'ocata', 'pike', 'queens']
+  when: release not in ['newton', 'ocata', 'pike', 'queens']
   command: "vbmc start {{ item.name }}"
   with_items: "{{ overcloud_nodes }}"
   become: true

@@ -153,7 +153,7 @@ Settings example for repositories:
             pkg_name: centos-release-ceph-hammer
             custom_cmd: 'yum install -y --enablerepo=extras'
             releases:
-              - mitaka
+              - master
 
           - type: package
             pkg_name: centos-release-ceph-jewel
