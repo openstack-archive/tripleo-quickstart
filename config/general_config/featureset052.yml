@@ -36,3 +36,10 @@ tempest_whitelist:
   - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario'
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
+
+standalone_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
