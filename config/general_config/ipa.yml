@@ -23,7 +23,7 @@ undercloud_enable_ui: false
 enable_port_forward_for_tripleo_ui: false
 
 # Set node hostnames.
-tripleo_domain: tripleodomain.example.com
+tripleo_domain: ooo.test
 freeipa_server_hostname: "ipa.{{ tripleo_domain }}"
 undercloud_undercloud_hostname: "undercloud.{{ tripleo_domain }}"
 overcloud_cloud_name: "overcloud.{{ tripleo_domain }}"
