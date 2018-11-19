@@ -8,9 +8,8 @@ repo_run_live: true
 stable:
   - pike
   - ocata
-  - newton
-  - mitaka
-  - liberty
+  - queens
+  - rocky
 repo_cmd_before: |
   {% if ansible_pkg_mgr == "yum" %}
   sudo {{ ansible_pkg_mgr }} install -y yum-plugin-priorities;
