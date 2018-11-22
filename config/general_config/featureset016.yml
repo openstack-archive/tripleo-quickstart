@@ -134,9 +134,11 @@ tempest_format: >-
   {%- endif -%}
 
 tempest_whitelist_old:
+  - 'tempest.api.identity.v3'
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
   - 'ceilometer.tests.tempest.scenario.test_telemetry_integration.TestTelemetryIntegration'
 tempest_whitelist_new:
+  - 'tempest.api.identity.v3'
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
   - 'telemetry_tempest_plugin.scenario.test_telemetry_integration.TestTelemetryIntegration'
 tempest_whitelist: >-
