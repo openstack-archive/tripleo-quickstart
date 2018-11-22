@@ -32,7 +32,7 @@ repo_cmd_before: |
   else
     # Otherwise, fallback to official mirrors provided by CentOS.
     export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
-    export NODEPOOL_CBS_CENTOS_PROXY=https://cbs.centos.org/repos
+    export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
   rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/centos7/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
@@ -117,7 +117,7 @@ repos:
   - type: generic
     reponame: quickstart-centos-virt7-container-testing
     filename: quickstart-centos-virt7-container-testing.repo
-    baseurl: ${NODEPOOL_CBS_CENTOS_PROXY}/virt7-container-common-candidate/x86_64/os/
+    baseurl: ${NODEPOOL_BUILDLOGS_CENTOS_PROXY}/centos/7/virt/x86_64/container/
 
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
