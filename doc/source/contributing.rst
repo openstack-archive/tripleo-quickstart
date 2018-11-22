@@ -21,7 +21,7 @@ activate `pre-commit <https://pre-commit.com/>`__ hooks::
 
     pip install --user pre-commit
     # to enable automatic run on commit:
-    pre-commit --install-hooks
+    pre-commit install --install-hooks
     # to uninstall hooks
     pre-commit uninstall
 
