@@ -11,7 +11,7 @@
         - tripleo-ci-centos-7-scenario001-multinode-oooq:
             files:
               - config/general_config/featureset005.yml
-        - tripleo-ci-centos-7-scenario001-multinode-oooq-container:
+        - tripleo-ci-centos-7-scenario001-standalone:
             files:
               - ^config/.*$
         - tripleo-ci-centos-7-scenario002-multinode-oooq:
