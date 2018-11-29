@@ -176,9 +176,6 @@ installer:
     8-director:
       files:
       - no_op
-    liberty:
-      files:
-      - no_op
   dib_dir: /home/stack/DIB
   updates:
     enabled: false
