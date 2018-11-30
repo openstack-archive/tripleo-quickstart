@@ -2,6 +2,20 @@
 
 - when: inventory == 'all'
   block:
+    #required for liberty based deployments
+    - name: copy get-overcloud-nodes.py to undercloud
+      template:
+        src: 'get-overcloud-nodes.py.j2'
+        dest: '{{ working_dir }}/get-overcloud-nodes.py'
+        mode: 0755
+
+    #required for liberty based deployments
+    - name: fetch overcloud node names and IPs
+      shell: >
+          source {{ working_dir }}/stackrc;
+          python {{ working_dir }}/get-overcloud-nodes.py
+      register: registered_overcloud_nodes
+
     - name: list the overcloud nodes
       debug: var=registered_overcloud_nodes.stdout
 
