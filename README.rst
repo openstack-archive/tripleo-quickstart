@@ -14,6 +14,9 @@ An up-to-date HTML version is available on docs.openstack.org_.
 
 .. _docs.openstack.org: https://docs.openstack.org/tripleo-quickstart/latest/
 
+Release notes for the project can be found at:
+https://docs.openstack.org/releasenotes/tripleo-quickstart/
+
 One of the barriers to entry for trying out TripleO and its derivatives has
 been the relative difficulty in getting an environment up quickly.
 
