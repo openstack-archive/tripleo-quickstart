@@ -1,6 +1,6 @@
 # Convert an overcloud-full.qcow2 into an image to boot an undercloud from
 
-The `convert-image` role transforms a overcloud-full image into one which an
+The `convert-image` role transforms an overcloud-full image into one which an
 undercloud can be booted from in order to save time on package installs, while
 not needing to maintain/host a specific undercloud image.
 
