@@ -1,7 +1,6 @@
 - project:
     templates:
       - tripleo-undercloud-jobs
-      - tripleo-multinode-baremetal-minimal
       - tripleo-multinode-container-minimal
       - tripleo-multinode-branchful
       - publish-openstack-docs-pti
