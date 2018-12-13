@@ -1,0 +1,50 @@
+#######################################################
+# Temporary featureset - TripleO standalone
+# Mixed Fedora 28, CentOS 7 containers job
+# Featureset052 with docker_registry_namespace override
+#######################################################
+
+non_root_user_setup: true
+ovb_setup_connectivity: false
+package_installs: true
+vxlan_networking: false
+toci_vxlan_networking: false
+enable_vbmc: false
+deploy_supplemental_node: false
+undercloud_setup: true
+
+# role / scenario definition
+# deployment role
+standalone_role: Standalone.yaml
+
+# custom env files
+standalone_custom_env_files:
+  - /usr/share/openstack-tripleo-heat-templates/environments/low-memory-usage.yaml
+
+# validation
+
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+test_ping: false
+standalone_ansible_lint: true
+run_tempest: true
+# Running only smoke tests and a few scenarios
+test_white_regex: '\[.*\bsmoke\b.*\]'
+# NOTE(aschultz): containers assume RC at the moment
+tempest_undercloud: true
+tempest_overcloud: false
+tempest_os_cloud: standalone
+tempest_whitelist:
+  - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario'
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+  - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
+
+standalone_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
+
+# Release file override
+docker_registry_namespace: tripleomaster
