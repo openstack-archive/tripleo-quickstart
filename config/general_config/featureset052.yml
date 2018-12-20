@@ -37,9 +37,12 @@ tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
 
-standalone_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+# https://bugs.launchpad.net/tripleo/+bug/1804434
+# https://github.com/containers/libpod/issues/1844
+standalone_container_cli: docker
+# standalone_container_cli: >-
+#   {% if release in ['rocky'] -%}
+#   docker
+#   {%- else -%}
+#   podman
+#   {%- endif -%}

@@ -25,9 +25,12 @@ run_tempest: false
 undercloud_generate_service_certificate: true
 undercloud_enable_swift_encryption: true
 
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+# https://bugs.launchpad.net/tripleo/+bug/1804434
+# https://github.com/containers/libpod/issues/1844
+undercloud_container_cli: docker
+# undercloud_container_cli: >-
+#   {% if release in ['rocky'] -%}
+#   docker
+#   {%- else -%}
+#   podman
+#   {%- endif -%}
