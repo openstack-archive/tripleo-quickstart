@@ -9,7 +9,7 @@ features:
     the overcloud nodes configuration, and all that involves
     their set up, should be put into nodes configuration
     files.
-    The nodes file should follow the scheme 
+    The nodes file should follow the scheme
     N<type>[_N<type>[_N<type>]...].yml
     Where N is the number of nodes of a certain <type>,
     <type> could be one of ctlr for controllers, comp for

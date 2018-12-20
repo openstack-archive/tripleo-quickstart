@@ -78,6 +78,8 @@
   - name: Provision script execution
     shell: >
       'bash ~/supplemental_node_provisioner.sh'
+    tags:
+      - skip_ansible_lint
 
 # Start the supplemental node virtual machine.
 - name: Start supplemental node vm
