@@ -94,13 +94,13 @@ undercloud_enable_tempest: >-
   false
   {%- endif -%}
 
-# https://bugs.launchpad.net/tripleo/+bug/1804434
-# https://github.com/containers/libpod/issues/1844
-undercloud_container_cli: docker
-# undercloud_container_cli: >-
-#   {% if release in ['rocky'] -%}
-#   docker
-#   {%- else -%}
-#   podman
-#   {%- endif -%}
-
+undercloud_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
+# the variable is only used in overcloud-deploy role
+# for stein and beyond, so it's safe to set it to podman,
+# as for stable branches the variable won't be used.
+overcloud_container_cli: podman

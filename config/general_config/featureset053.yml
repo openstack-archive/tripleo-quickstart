@@ -163,12 +163,9 @@ statsd_enabled: false
 rsyslog_forwarding: false
 browbeat_config_file: browbeat-minimal-ci.yaml.j2
 
-# https://bugs.launchpad.net/tripleo/+bug/1804434
-# https://github.com/containers/libpod/issues/1844
-undercloud_container_cli: docker
-# undercloud_container_cli: >-
-#   {% if release in ['rocky'] -%}
-#   docker
-#   {%- else -%}
-#   podman
-#   {%- endif -%}
+undercloud_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
