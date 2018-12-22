@@ -9,40 +9,48 @@ tmp:
   node_prefix: '{{ node.prefix | reject("none") | join("-") }}-'
   hostname_prefix: '{{ hostname.prefix | reject("none") | join("-") }}-'
   anchors:
-  - http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
-  - https://trunk.rdoproject.org/centos7-liberty/
+  - https://repos.fedorapeople.org/repos/openstack/openstack-rocky/rdo-release-rocky.rpm
+  - https://trunk.rdoproject.org/centos7-rocky/
 product:
   rpmrepo:
-    CentOS: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
-    Fedora: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
-    RedHat: http://rdoproject.org/repos/openstack-liberty/rdo-release-liberty.rpm
+    CentOS: https://repos.fedorapeople.org/repos/openstack/openstack-rocky/rdo-release-rocky.rpm
+    Fedora: https://repos.fedorapeople.org/repos/openstack/openstack-rocky/rdo-release-rocky.rpm
+    RedHat: https://repos.fedorapeople.org/repos/openstack/openstack-rocky/rdo-release-rocky.rpm
   repo_type: delorean
   name: rdo
   short_name: rdo
-  full_version: liberty
+  full_version: rocky
   repo:
     delorean_mgt_pin_version: current-passed-ci
     delorean:
       repo_file: delorean.repo
       CentOS:
-        '7': https://trunk.rdoproject.org/centos7-liberty/
+        '7': https://trunk.rdoproject.org/centos7-rocky/
       RedHat:
-        '7.2': https://trunk.rdoproject.org/centos7-liberty/
-        '7.0': https://trunk.rdoproject.org/centos7-liberty/
-        '7.1': https://trunk.rdoproject.org/centos7-liberty/
+        '7.6': https://trunk.rdoproject.org/centos7-rocky/
+        '7.5': https://trunk.rdoproject.org/centos7-rocky/
+        '7.4': https://trunk.rdoproject.org/centos7-rocky/
+        '7.3': https://trunk.rdoproject.org/centos7-rocky/
+        '7.2': https://trunk.rdoproject.org/centos7-rocky/
+        '7.0': https://trunk.rdoproject.org/centos7-rocky/
+        '7.1': https://trunk.rdoproject.org/centos7-rocky/
     delorean_deps:
       repo_file: delorean-deps.repo
       CentOS:
-        '7': https://trunk.rdoproject.org/centos7-liberty/
+        '7': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
       RedHat:
-        '7.2': https://trunk.rdoproject.org/centos7-liberty/
-        '7.0': https://trunk.rdoproject.org/centos7-liberty/
-        '7.1': https://trunk.rdoproject.org/centos7-liberty/
+        '7.6': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
+        '7.5': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
+        '7.4': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
+        '7.3': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
+        '7.2': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
+        '7.0': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
+        '7.1': https://trunk.rdoproject.org/centos7-rocky/delorean-deps.repo
     delorean_pin_version: current-passed-ci
   version:
     major: 8
     minor: 0
-    code_name: liberty
+    code_name: rocky
   build: last_known_good
   config:
     enable_epel: y
