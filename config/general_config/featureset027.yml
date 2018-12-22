@@ -126,9 +126,12 @@ mistral_test_black_regex:
   - 'mistral_tempest_tests.tests.scenario.engine.actions.v2.test_openstack_actions.OpenStackActionsTestsV2.test_swift_actions'
   - 'mistral_tempest_tests.tests.scenario.engine.actions.v2.test_multi_vim_authentication.MultiVimActionsTests.test_multi_vim_support_target_headers'
 
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+# https://bugs.launchpad.net/tripleo/+bug/1804434
+# https://github.com/containers/libpod/issues/1844
+undercloud_container_cli: docker
+# undercloud_container_cli: >-
+#   {% if release in ['rocky'] -%}
+#   docker
+#   {%- else -%}
+#   podman
+#   {%- endif -%}
