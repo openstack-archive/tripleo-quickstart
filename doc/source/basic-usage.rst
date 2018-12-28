@@ -125,5 +125,3 @@ The full documentation is in the ``doc/source`` directory, it can be built
 using::
 
     tox -e docs
-
-

@@ -15,6 +15,9 @@
 # generate_baremetal_macs method ripped from
 # openstack/tripleo-incubator/scripts/configure-vm
 
+import math
+import random
+
 DOCUMENTATION = '''
 ---
 module: generate_macs
@@ -23,9 +26,6 @@ short_description: Generate a list of Ethernet MAC addresses
 description:
    - Generate a list of Ethernet MAC addresses suitable for baremetal testing.
 '''
-
-import math
-import random
 
 MAX_NUM_MACS = math.trunc(0xff / 2)
 
@@ -86,6 +86,8 @@ def main():
     module.exit_json(**result)
 
 # see http://docs.ansible.com/developing_modules.html#common-module-boilerplate
-from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.basic import AnsibleModule  # noqa
+
+
 if __name__ == '__main__':
     main()
