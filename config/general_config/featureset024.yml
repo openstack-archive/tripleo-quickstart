@@ -9,7 +9,7 @@ overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
 
 # Tell tripleo about our environment.
-#network_environment_file: ovb-multiple-nics-v6.yaml
+# network_environment_file: ovb-multiple-nics-v6.yaml
 overcloud_ipv6: true
 enable_pacemaker: true
 network_isolation: true
@@ -61,4 +61,3 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-

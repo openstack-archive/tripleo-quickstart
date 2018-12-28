@@ -144,7 +144,7 @@ tempest_whitelist: >-
   {%- else -%}{{ tempest_whitelist_old }}
   {%- endif -%}
 
-manila_max_api_version: { 'newton': '2.22', 'ocata': '2.32', 'pike': '2.40', 'queens': '2.42' }
+manila_max_api_version: {'newton': '2.22', 'ocata': '2.32', 'pike': '2.40', 'queens': '2.42'}
 
 tempest_extra_config: >
   {

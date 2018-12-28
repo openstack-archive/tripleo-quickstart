@@ -1,3 +1,4 @@
+---
 # This is the playbook used by the `quickstart.sh` script.
 
 # The [provision.yml](provision.yml.html) playbook is responsible for
@@ -18,30 +19,29 @@
 
 # The `libvirt/setup` role creates the undercloud and overcloud
 # virtual machines.
-- name:  Setup undercloud and overcloud vms
+- name: Setup undercloud and overcloud vms
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - libvirt/teardown
     - libvirt/setup
 
 # Add the undercloud node to the generated
 # inventory.
-- name:  Inventory the undercloud
+- name: Inventory the undercloud
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   vars:
-      inventory: undercloud
+    inventory: undercloud
   roles:
     - tripleo-inventory
 
 # DEPLOY ALL THE THINGS!  Depending on the currently selected set of
 # tags, this will deploy the undercloud, deploy the overcloud, and
 # perform some validation tests on the overcloud.
-- name:  Install undercloud and deploy overcloud
+- name: Install undercloud and deploy overcloud
   hosts: undercloud
-  gather_facts: no
+  gather_facts: false
   roles:
     - tripleo/undercloud
     - tripleo/overcloud
-

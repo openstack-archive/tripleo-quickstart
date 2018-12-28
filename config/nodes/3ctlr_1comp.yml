@@ -40,4 +40,3 @@ overcloud_nodes:
 topology: >-
   --compute-scale 1
   --control-scale 3
-

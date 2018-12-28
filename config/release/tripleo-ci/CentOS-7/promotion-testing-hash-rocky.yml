@@ -7,18 +7,18 @@ delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag)
 docker_image_tag: *promotion-testing-tag
 
 images:
-    - name: overcloud-full
-      url: "{{ overcloud_image_url }}"
-      type: tar
-    - name: ipa_images
-      url: "{{ ipa_image_url }}"
-      type: tar
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
 inject_images:
-    - "ironic-python-agent.initramfs"
-    - "ironic-python-agent.kernel"
-    - "overcloud-full.qcow2"
-    - "overcloud-full.initrd"
-    - "overcloud-full.vmlinuz"
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
 release: rocky
 dlrn_hash_tag: tripleo-ci-testing
 overcloud_image_url: https://images.rdoproject.org/rocky/rdo_trunk/current-tripleo/overcloud-full.tar

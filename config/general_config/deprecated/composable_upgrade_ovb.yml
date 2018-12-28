@@ -13,7 +13,7 @@ extra_args: " --control-flavor baremetal --compute-flavor baremetal \
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
-undercloud_generate_service_certificate: True
+undercloud_generate_service_certificate: true
 
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false

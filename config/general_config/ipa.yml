@@ -3,7 +3,7 @@
 # TLS everywhere related vars. #
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
-undercloud_generate_service_certificate: True
+undercloud_generate_service_certificate: true
 enable_tls_everywhere: true
 novajoin_connect_timeout: 60
 novajoin_read_timeout: 60
@@ -35,7 +35,7 @@ overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
 
 # Define FreeIPA server as DNS server for under/overcloud.
 custom_nameserver:
-- "{{ freeipa_internal_ip }}"
+  - "{{ freeipa_internal_ip }}"
 undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
 overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
 

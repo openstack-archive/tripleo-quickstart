@@ -91,4 +91,3 @@ ctlplane_masquerade: >-
   {%- else -%}
   false
   {%- endif -%}
-

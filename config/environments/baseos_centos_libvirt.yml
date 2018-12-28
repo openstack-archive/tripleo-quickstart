@@ -34,4 +34,3 @@ hostname_correction: true
 # standalone interface
 standalone_interface: eth1
 standalone_ip: 192.168.24.2
-

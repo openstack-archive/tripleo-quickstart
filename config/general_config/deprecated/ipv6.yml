@@ -69,7 +69,7 @@ network_environment_args:
   StorageMgmtAllocationPools: [{"start": "fd00:fd00:fd00:4000::10", "end": "fd00:fd00:fd00:4000:ffff:ffff:ffff:fffe"}]
   TenantNetCidr: 172.16.0.0/24
   TenantAllocationPools: [{"start": "172.16.0.10", "end": "172.16.0.250"}]
-  DnsServers: [ '{{ external_network_cidr6|nthhost(1) }}' ]
+  DnsServers: ['{{ external_network_cidr6|nthhost(1) }}']
 
 networks:
   - name: external
@@ -101,4 +101,3 @@ networks:
 
   - name: overcloud6
     bridge: brovc6
-

@@ -9,18 +9,18 @@ docker_image_tag: *promotion-testing-tag
 
 
 images:
-    - name: overcloud-full
-      url: "{{ overcloud_image_url }}"
-      type: tar
-    - name: ipa_images
-      url: "{{ ipa_image_url }}"
-      type: tar
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
 inject_images:
-    - "ironic-python-agent.initramfs"
-    - "ironic-python-agent.kernel"
-    - "overcloud-full.qcow2"
-    - "overcloud-full.initrd"
-    - "overcloud-full.vmlinuz"
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
 release: newton
 dlrn_hash_tag: tripleo-ci-testing
 overcloud_image_url: https://images.rdoproject.org/newton/rdo_trunk/current-tripleo/overcloud-full.tar
@@ -104,4 +104,3 @@ repo_cmd_after: |
   {% if repo_setup_run_update|default(true)|bool %}
   sudo yum update -y
   {% endif %}
-

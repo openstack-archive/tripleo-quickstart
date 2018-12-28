@@ -47,4 +47,3 @@ bash quickstart.sh \
     --no-clone \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE \
     $VIRTHOST
-

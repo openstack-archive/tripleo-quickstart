@@ -9,4 +9,3 @@ hypervisor_wait: false
 network_isolation: false
 package_installs: true
 non_root_user_setup: true
-

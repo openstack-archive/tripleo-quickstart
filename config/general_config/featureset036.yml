@@ -16,7 +16,7 @@ run_tripleo_validations: false
 # scripts
 run_tripleo_validations_negative_tests: false
 # Exit tripleo-quickstart on validations failure
-exit_on_validations_failure: False
+exit_on_validations_failure: false
 
 deployed_server: true
 composable_scenario: scenario002-multinode.yaml
@@ -67,7 +67,7 @@ overcloud_ssh_user: "tripleo-admin"
 
 # Workaround for deploying newton from queen.
 overcloud_prep_post_hook_script: |
-  cat > {{overcloud_templates_path}}/plan-environment.yaml<<EOF
+  cat > {{ overcloud_templates_path }}/plan-environment.yaml<<EOF
   version: 1.0
 
   name: overcloud

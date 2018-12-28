@@ -150,5 +150,3 @@ tempest_plugins: >-
   {% if release not in ['newton', 'ocata', 'pike'] -%}{{ tempest_plugins_new }}
   {%- else -%}{{ tempest_plugins_old }}
   {%- endif -%}
-
-
