@@ -1,13 +1,12 @@
 ---
-- name:  Setup undercloud and baremetal vms and networks in libvirt
+- name: Setup undercloud and baremetal vms and networks in libvirt
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - libvirt/setup
 
 - name: Add nodes to the generated inventory
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - tripleo-inventory
-

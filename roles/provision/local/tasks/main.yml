@@ -2,7 +2,7 @@
 - name: Check that virthost is set
   fail:
     msg: "You need to set virthost before running these playbooks."
-  when: virthost|default("") == ""
+  when: virthost|default("") | length == 0
 
 - name: Get current user group for localhost
   command: "id -gn"
@@ -17,23 +17,23 @@
     - provision
 
 - block:
-  - name: Ensure local working dir exists
-    file:
-      path: "{{ local_working_dir }}"
-      state: directory
-      owner: "{{ ansible_env.USER }}"
-      group: "{{ current_group_local }}"
+    - name: Ensure local working dir exists
+      file:
+        path: "{{ local_working_dir }}"
+        state: directory
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ current_group_local }}"
   rescue:
-  # if it fails we try again as with become, become must be fallback because
-  # otherwise first attempt will fail on local machines without sudo, a
-  # use case that we want to support.
-  - name: Ensure local working dir exists
-    file:
-      path: "{{ local_working_dir }}"
-      state: directory
-      owner: "{{ ansible_env.USER }}"
-      group: "{{ current_group_local }}"
-    become: true
+    # if it fails we try again as with become, become must be fallback because
+    # otherwise first attempt will fail on local machines without sudo, a
+    # use case that we want to support.
+    - name: Ensure local working dir exists
+      file:
+        path: "{{ local_working_dir }}"
+        state: directory
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ current_group_local }}"
+      become: true
 
 # This file needs to exist because it will later be referenced in some
 # ssh command lines.
@@ -46,9 +46,8 @@
 # written out to disk unless you call the `tripleo-inventory` role.
 - name: Add the virthost to the inventory
   add_host:
-    name: "{{virthost}}"
+    name: "{{ virthost }}"
     groups: "virthost"
     ansible_fqdn: "{{ virthost }}"
     ansible_user: "root"
     ansible_host: "{{ virthost }}"
-

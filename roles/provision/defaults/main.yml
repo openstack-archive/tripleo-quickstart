@@ -3,5 +3,4 @@
 virt_host_key: "{{ local_working_dir }}/id_rsa_virt_host"
 
 # Exit the playbook when a non suported linux distro is found on the virthost
-supported_distro_check: yes
-
+supported_distro_check: true

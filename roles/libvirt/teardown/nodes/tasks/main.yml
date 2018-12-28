@@ -4,7 +4,7 @@
 
 - name: Include vars for libvirt-nodepool
   include_vars:
-    file:  ../roles/libvirt/setup/overcloud/tasks/vars/libvirt_nodepool_vars.yml
+    file: ../roles/libvirt/setup/overcloud/tasks/vars/libvirt_nodepool_vars.yml
   when: libvirt_nodepool|default(false)
 
 - name: Check if libvirt is available
@@ -25,62 +25,62 @@
     - when: overcloud_nodes
       block:
 
-      # Check if the overcloud nodes exist.
-      - name: Check overcloud vms
-        command: >
-          virsh domid "{{ item.name }}"
-        with_items: "{{ overcloud_nodes }}"
-        ignore_errors: true
-        register: overcloud_check
+        # Check if the overcloud nodes exist.
+        - name: Check overcloud vms
+          command: >
+            virsh domid "{{ item.name }}"
+          with_items: "{{ overcloud_nodes }}"
+          ignore_errors: true
+          register: overcloud_check
 
-      # Destroy and undefine the overcloud nodes.
-      - name: Destroy overcloud vms
-        command:
-          virsh destroy "{{ item.item.name }}"
-        when: item is success
-        with_items: "{{ overcloud_check.results }}"
-        ignore_errors: true
+        # Destroy and undefine the overcloud nodes.
+        - name: Destroy overcloud vms
+          command:
+            virsh destroy "{{ item.item.name }}"
+          when: item is success
+          with_items: "{{ overcloud_check.results }}"
+          ignore_errors: true
 
-      - name: Undefine overcloud vms
-        command:
-          virsh undefine "{{ item.item.name }}"
-        when: item is success
-        with_items: "{{ overcloud_check.results }}"
+        - name: Undefine overcloud vms
+          command:
+            virsh undefine "{{ item.item.name }}"
+          when: item is success
+          with_items: "{{ overcloud_check.results }}"
 
-      # The `virsh vol-dumpxml ... > /dev/null` is here (and elsewhere) due to
-      # [1293804].
-      #
-      # [1293804]: https://bugzilla.redhat.com/show_bug.cgi?id=1293804
-      - name: Delete baremetal vm storage
-        shell: |
-          virsh vol-dumpxml --pool '{{ libvirt_volume_pool }}' \
-            '{{ item.name }}'.qcow2 2>&1 > /dev/null
-          virsh vol-delete --pool '{{ libvirt_volume_pool }}' \
-            '{{ item.name }}'.qcow2
-        with_items: "{{ overcloud_nodes }}"
-        ignore_errors: true
+        # The `virsh vol-dumpxml ... > /dev/null` is here (and elsewhere) due to
+        # [1293804].
+        #
+        # [1293804]: https://bugzilla.redhat.com/show_bug.cgi?id=1293804
+        - name: Delete baremetal vm storage
+          shell: |
+            virsh vol-dumpxml --pool '{{ libvirt_volume_pool }}' \
+              '{{ item.name }}'.qcow2 2>&1 > /dev/null
+            virsh vol-delete --pool '{{ libvirt_volume_pool }}' \
+              '{{ item.name }}'.qcow2
+          with_items: "{{ overcloud_nodes }}"
+          ignore_errors: true
 
     # Do the same thing to the supplemental node.
     - environment:
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
       block:
-      - name: Check undercloud vm
-        command: >
-          virsh domid "{{ supplemental_node.name|default('') }}"
-        ignore_errors: true
-        register: supplemental_check
+        - name: Check undercloud vm
+          command: >
+            virsh domid "{{ supplemental_node.name|default('') }}"
+          ignore_errors: true
+          register: supplemental_check
 
-      - name: Destroy supplemental vm
-        command: >
-          virsh destroy "{{ supplemental_node.name|default('') }}"
-        when: supplemental_check is success
-        ignore_errors: true
+        - name: Destroy supplemental vm
+          command: >
+            virsh destroy "{{ supplemental_node.name|default('') }}"
+          when: supplemental_check is success
+          ignore_errors: true
 
-      - name: Undefine supplemental vm
-        command: >
-          virsh undefine "{{ supplemental_node.name|default('') }}" --remove-all-storage
-        when: supplemental_check is success
-        ignore_errors: true
+        - name: Undefine supplemental vm
+          command: >
+            virsh undefine "{{ supplemental_node.name|default('') }}" --remove-all-storage
+          when: supplemental_check is success
+          ignore_errors: true
 
     # Do the same thing to the undercloud node.
     - name: Check undercloud vm
@@ -150,4 +150,3 @@
         path: "/run/user/{{ pool_uid.stdout }}/libvirt/storage/run/{{ libvirt_volume_pool }}.xml"
         state: absent
       when: pool_check is success
-

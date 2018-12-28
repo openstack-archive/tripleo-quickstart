@@ -16,4 +16,3 @@
     create_home: true
   become: true
   when: not chrooted|bool
-

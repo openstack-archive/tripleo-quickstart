@@ -2,14 +2,14 @@
 
 - when: inventory == 'all'
   block:
-    #required for liberty based deployments
+    # required for liberty based deployments
     - name: copy get-overcloud-nodes.py to undercloud
       template:
         src: 'get-overcloud-nodes.py.j2'
         dest: '{{ working_dir }}/get-overcloud-nodes.py'
         mode: 0755
 
-    #required for liberty based deployments
+    # required for liberty based deployments
     - name: fetch overcloud node names and IPs
       shell: >
           source {{ working_dir }}/stackrc;
@@ -23,7 +23,7 @@
       fetch:
         src: '{{ working_dir }}/.ssh/id_rsa'
         dest: '{{ overcloud_key }}'
-        flat: yes
+        flat: true
         mode: 0400
 
     # add host to the ansible group formed from its type
@@ -55,7 +55,7 @@
         ansible_user: "{{ lookup('env','USER') }}"
         ansible_private_key_file: "/etc/nodepool/id_rsa"
 
-#required for regeneration of ssh.config.ansible
+# required for regeneration of ssh.config.ansible
 - name: set_fact for undercloud ip
   set_fact:
     undercloud_ip: "{{ hostvars['undercloud'].undercloud_ip }}"
@@ -75,7 +75,7 @@
     ansible_fqdn: supplemental
     ansible_user: '{{ supplemental_user }}'
     ansible_private_key_file: '{{ local_working_dir }}/id_rsa_supplemental'
-    ansible_ssh_extra_args: '-F "{{local_working_dir}}/ssh.config.ansible"'
+    ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.ansible"'
     supplemental_node_ip: "{{ supplemental_node_ip }}"
   when: supplemental_node_ip is defined
 
@@ -85,7 +85,7 @@
     cacheable: true
   when: hostvars['supplemental'] is defined and hostvars['supplemental'].supplemental_node_ip is defined
 
-#readd the undercloud to reset the ansible_ssh parameters set in quickstart
+# readd the undercloud to reset the ansible_ssh parameters set in quickstart
 - name: Add undercloud vm to inventory
   add_host:
     name: undercloud
@@ -97,7 +97,7 @@
     undercloud_ip: "{{ undercloud_ip }}"
   when: not virthost_with_private_key and undercloud_ip is defined
 
-#required for regeneration of ssh.config.ansible
+# required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
   set_fact:
     undercloud_ssh_proxy_command: "ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
@@ -107,7 +107,7 @@
     cacheable: true
   when: virthost_with_private_key and undercloud_ip is defined
 
-#required for regeneration of ssh.config.ansible
+# required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
   set_fact:
     undercloud_ssh_proxy_command: "ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
@@ -159,7 +159,7 @@
   set_fact:
     id_rsa_virt_power_exists: true
     cacheable: true
-  when: undercloud_ip is not defined and result_stat_id_rsa_virt_power.stat.exists == True
+  when: undercloud_ip is not defined and result_stat_id_rsa_virt_power.stat.exists
 
 - name: regenerate ssh config, if no undercloud has been launched.
   delegate_to: localhost

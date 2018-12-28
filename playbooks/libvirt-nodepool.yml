@@ -4,16 +4,16 @@
 ---
 - name: Destroy previous setup
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   vars:
     - libvirt_nodepool: true
   roles:
     - libvirt/teardown/nodes
   become: true
 
-- name:  Setup undercloud and baremetal vms and networks in libvirt
+- name: Setup undercloud and baremetal vms and networks in libvirt
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   vars:
     - libvirt_nodepool: true
   roles:
@@ -21,14 +21,13 @@
       environment:
         SUPERMIN_KERNEL_VERSION: "{{ lookup('env', 'SUPERMIN_KERNEL_VERSION') }}"
         SUPERMIN_KERNEL: "{{ lookup('env', 'SUPERMIN_KERNEL') }}"
-        SUPERMIN_MODULES:  "{{ lookup('env', 'SUPERMIN_MODULES') }}"
+        SUPERMIN_MODULES: "{{ lookup('env', 'SUPERMIN_MODULES') }}"
         LIBGUESTFS_BACKEND: "{{ lookup('env', 'LIBGUESTFS_BACKEND') }}"
         LIBGUESTFS_BACKEND_SETTINGS: "{{ lookup('env', 'LIBGUESTFS_BACKEND_SETTINGS') }}"
   become: true
 
 - name: Add nodes to the generated inventory
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - tripleo-inventory
-

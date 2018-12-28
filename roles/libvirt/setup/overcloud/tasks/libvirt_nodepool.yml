@@ -51,7 +51,11 @@
   register: hash
 
 - name: Copy generated password to file
-  local_action: copy content={{ hash.stdout }} dest="{{ working_dir }}/pwtemp" mode=0600
+  delegate_to: localhost
+  copy:
+    content: "{{ hash.stdout }}"
+    dest: "{{ working_dir }}/pwtemp"
+    mode: 0600
 
 - name: Inject password into the image
   command: >
@@ -123,22 +127,22 @@
 - environment:
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
-  # Create libvirt volumes and upload them to libvirt.
-  - name: Create libvirt nodepool volumes
-    command: >
-      virsh vol-create-as {{ libvirt_volume_pool}}
-      {{ item.name }}.qcow2
-      {{ flavors[item.flavor].disk }}G --format qcow2
-    with_items: "{{ overcloud_nodes }}"
+    # Create libvirt volumes and upload them to libvirt.
+    - name: Create libvirt nodepool volumes
+      command: >
+        virsh vol-create-as {{ libvirt_volume_pool }}
+        {{ item.name }}.qcow2
+        {{ flavors[item.flavor].disk }}G --format qcow2
+      with_items: "{{ overcloud_nodes }}"
 
-  - name: Upload the volume to storage pool
-    command: >
-      virsh -k 0 vol-upload --pool '{{ libvirt_volume_pool }}'
-      '{{ item.name }}.qcow2'
-      '{{ local_working_dir }}/undercloud.qcow2'
-    async: 600
-    poll: 10
-    with_items: "{{ overcloud_nodes }}"
+    - name: Upload the volume to storage pool
+      command: >
+        virsh -k 0 vol-upload --pool '{{ libvirt_volume_pool }}'
+        '{{ item.name }}.qcow2'
+        '{{ local_working_dir }}/undercloud.qcow2'
+      async: 600
+      poll: 10
+      with_items: "{{ overcloud_nodes }}"
 
 - name: Start libvirt nodepool nodes
   virt:

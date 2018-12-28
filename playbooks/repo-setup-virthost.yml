@@ -1,7 +1,7 @@
 # This will optionally setup yum repos on the virthost
 - name: setup yum repos on virthost
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - repo-setup
   tags:

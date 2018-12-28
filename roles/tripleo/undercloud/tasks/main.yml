@@ -1,3 +1,4 @@
+---
 - name: deprecation message
   vars:
     deprecation_warning_msg: |
@@ -14,4 +15,3 @@
 - name: include the tripleo-quickstart-extras undercloud-deploy
   include_role:
     name: undercloud-deploy
-

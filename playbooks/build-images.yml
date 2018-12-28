@@ -6,13 +6,13 @@
 
 - name: Add the virthost node to the generated inventory
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - tripleo-inventory
 
-- name:  Setup the virthost to build images then build them
+- name: Setup the virthost to build images then build them
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - parts/kvm
     - parts/libvirt
@@ -22,5 +22,4 @@
     # with a different meaning. We should namespace the
     # variables better so that they can both be set separately
     # in a config file or extra-vars passed to ansible.
-    - { role: "image-build", working_dir: "/var/lib/oooq-images" }
-
+    - {role: "image-build", working_dir: "/var/lib/oooq-images"}

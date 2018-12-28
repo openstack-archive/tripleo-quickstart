@@ -22,4 +22,3 @@ EOF
 {% if gating_repo_enabled|bool %}
 {{ ansible_pkg_mgr }} --disablerepo="*" --enablerepo="gating-repo" update -y
 {% endif %}
-

@@ -11,8 +11,8 @@
 # - `libvirt/setup/undercloud`
 # - `libvirt/setup/supplemental`
 dependencies:
-  - { role: libvirt }
-  - { role: setup/user }
-  - { role: setup/overcloud }
-  - { role: setup/undercloud }
-  - { role: setup/supplemental, when: deploy_supplemental_node|bool }
+  - {role: libvirt}
+  - {role: setup/user}
+  - {role: setup/overcloud}
+  - {role: setup/undercloud}
+  - {role: setup/supplemental, when: deploy_supplemental_node|bool}

@@ -4,7 +4,7 @@
   setup:
     filter: "*"
   delegate_to: localhost
-  delegate_facts: True
+  delegate_facts: true
   when: hostvars['localhost'].ansible_user_dir is not defined
 
 - include_tasks: inventory.yml

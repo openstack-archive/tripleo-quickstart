@@ -14,4 +14,3 @@
     repo_setup_dir: "{{ working_dir }}"
   with_items: "{{ qcow_images.files | default([]) }}"
   changed_when: true
-

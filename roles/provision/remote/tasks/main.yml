@@ -29,7 +29,7 @@
     - name: Retrieve current tuned profile
       command: tuned-adm active
       register: tuned
-      changed_when: False
+      changed_when: false
 
     - name: Set tuned profile if not already set
       command: tuned-adm profile "{{ tuned_profile }}"
@@ -43,7 +43,7 @@
         name: "{{ non_root_user }}"
         state: present
         shell: /bin/bash
-        create_home: yes
+        create_home: true
       become: true
 
 - name: Get the non-root user UID
@@ -139,4 +139,3 @@
     owner: "{{ non_root_user }}"
     group: "{{ non_root_group }}"
   become: true
-

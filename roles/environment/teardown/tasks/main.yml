@@ -16,7 +16,7 @@
 - when: libvirt_check is success
   block:
 
-  # Check to see if the networks exist.
+    # Check to see if the networks exist.
     - name: Check libvirt networks
       command: >
         virsh net-uuid "{{ item.name }}"
@@ -46,7 +46,7 @@
     - name: Remove bridge whitelisting from qemu bridge helper
       lineinfile:
         dest: "{{ qemu_bridge_conf }}"
-        line: "allow {{item.bridge}}"
+        line: "allow {{ item.bridge }}"
         state: absent
       with_items: "{{ networks }}"
       become: true

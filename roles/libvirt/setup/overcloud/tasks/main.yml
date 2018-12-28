@@ -8,7 +8,7 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
 
-    #ensure python-netaddr is installed for next task
+    # ensure python-netaddr is installed for next task
     - name: ensure python-netaddr
       become: true
       package:
@@ -28,7 +28,7 @@
     # Create libvirt volumes for the overcloud hosts.
     - name: Check if overcloud volumes exist
       command: >
-        virsh vol-info --pool '{{libvirt_volume_pool}}' '{{item.name}}.qcow2'
+        virsh vol-info --pool '{{ libvirt_volume_pool }}' '{{ item.name }}.qcow2'
       register: overcloud_vol_check
       ignore_errors: true
       with_items: "{{ overcloud_nodes }}"

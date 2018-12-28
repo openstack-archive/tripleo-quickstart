@@ -22,4 +22,3 @@ not needing to maintain/host a specific undercloud image.
   set for the root user on the overcloud-full image.  The
   resulting overcloud and undercloud instances will have
   the password set.
-

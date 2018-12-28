@@ -11,9 +11,9 @@ force_cached_images: false
 # You can also control the caching behavior per-image by setting the
 # `force_cached` key.
 images:
-    - name: undercloud
-      url: "{{ undercloud_image_url }}"
-      type: qcow2
+  - name: undercloud
+    url: "{{ undercloud_image_url }}"
+    type: qcow2
 
 # These are keys that we generate; `virt_power_key` is used *by the
 # undercloud* to start/stop virtual machines on the virthost.

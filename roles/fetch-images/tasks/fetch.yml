@@ -27,7 +27,7 @@
 
 # If we want to use the most recent image in the local cache
 # (`_force_cached_image` is `true`) *and* such an image exists, point
-# `image_cache_path` at `latest-{{image.name}}.qcow2`.
+# `image_cache_path` at `latest-{{ image.name }}.qcow2`.
 - name: Set path to cached image [local]
   set_fact:
     image_cache_path: "{{ _latest }}"
@@ -109,7 +109,7 @@
     # to continue interrupted downloads.
     - name: Get image
       command: >
-        curl -skfL -C- -o _{{ image.name }}.{{ image.type}} {{ image.url }}
+        curl -skfL -C- -o _{{ image.name }}.{{ image.type }} {{ image.url }}
       args:
         chdir: "{{ image_cache_dir }}"
       register: curl_result
@@ -120,7 +120,7 @@
     # Compute the md5 checksum of the image we just downloaded
     - name: Get actual md5 checksum of image
       command: >
-        md5sum -b _{{ image.name }}.{{ image.type}}
+        md5sum -b _{{ image.name }}.{{ image.type }}
       args:
         chdir: "{{ image_cache_dir }}"
       register: md5_actual
@@ -140,7 +140,7 @@
 
     - name: Cache image by checksum
       command: >
-        mv _{{ image.name }}.{{ image.type}} {{ image_cache_path }}
+        mv _{{ image.name }}.{{ image.type }} {{ image_cache_path }}
       args:
         chdir: "{{ image_cache_dir }}"
 
@@ -189,9 +189,9 @@
 - name: Get tar images from cache
   unarchive:
     src: "{{ image_cache_path }}"
-    copy: no
+    copy: false
     dest: "{{ image_fetch_dir }}"
-    list_files: yes
+    list_files: true
   when: image.type == "tar"
 
 - name: Clean image cache directory

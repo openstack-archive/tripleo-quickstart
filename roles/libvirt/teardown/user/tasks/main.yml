@@ -9,4 +9,3 @@
   with_file:
     - "{{ virt_power_key }}.pub"
   ignore_errors: true
-
