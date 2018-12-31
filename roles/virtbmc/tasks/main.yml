@@ -1,5 +1,5 @@
 ---
 
 - name: Include VBMC setup if enabled
-  include: configure-vbmc.yml
+  include_tasks: configure-vbmc.yml
   when: enable_vbmc|bool

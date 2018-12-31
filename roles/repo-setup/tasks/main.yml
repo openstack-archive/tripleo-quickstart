@@ -1,11 +1,11 @@
 ---
-- include: get-dlrn-hash.yml
+- include_tasks: get-dlrn-hash.yml
   when: dlrn_hash_tag is defined and dlrn_task_run is not defined
 
-- include: get-dlrn-hash-newest.yml
+- include_tasks: get-dlrn-hash-newest.yml
   when: dlrn_hash_tag_newest is defined and dlrn_task_run_newest is not defined
 
-- include: create-repo-script.yml
+- include_tasks: create-repo-script.yml
 
 - include_tasks: setup_repos.yml
   when: repo_run_live|bool

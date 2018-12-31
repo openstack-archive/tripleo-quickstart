@@ -94,4 +94,4 @@ it in your extra. The example shown below would provide a fully functioning clou
 your playbook to run against::
 
     - name: Setup the cloud
-      include: quickstart-extras.yml
+      include_tasks: quickstart-extras.yml

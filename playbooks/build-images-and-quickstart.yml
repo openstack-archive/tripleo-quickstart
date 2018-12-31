@@ -1,4 +1,4 @@
 ---
-- include: build-images.yml
-- include: quickstart-extras.yml
+- import_playbook: build-images.yml
+- import_playbook: quickstart-extras.yml
 
