@@ -1,5 +1,5 @@
 # Summary of the feature set.
-# Deploy an non-ha Openstack environment, without SSL, introspect, and
+# Deploy an non-ha Openstack environment, introspect, and
 # ready to execute tempest tests.
 # Example of usage:
 # ./quickstart.sh -t all --retain-inventory -e \
@@ -9,7 +9,7 @@
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: true
-ssl_overcloud: false
+ssl_overcloud: true
 overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
@@ -21,15 +21,61 @@ containerized_overcloud: >-
   {%- else -%}
   true
   {%- endif -%}
-undercloud_check_idempotency: true
+undercloud_check_idempotency: false
 delete_docker_cache: true
 
+containerized_undercloud: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+undercloud_enable_routed_networks: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+undercloud_clean_nodes: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_inspection_extras: false
+
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
+
 # Tell tripleo about our environment
-enable_pacemaker: false
-network_isolation: false
+enable_pacemaker: true
+network_isolation: true
+network_isolation_type: "multiple-nics"
+network_isolation_args: >-
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
+
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
 
 extra_args: ''
 
+undercloud_ntp_servers: pool.ntp.org
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
@@ -63,29 +109,16 @@ artcl_create_docs_payload:
     - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 deploy_steps_ansible_workflow: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
+  {% if release not in ['newton','ocata','pike'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
-
-containerized_undercloud: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
-undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
-undercloud_cloud_domain: "localdomain"
-undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
-undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
-ctlplane_masquerade: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  true
-  {%- else -%}
-  false
+config_download_args: >-
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --verbose
   {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file
@@ -113,4 +146,11 @@ tempest_format: >-
   container
   {%- else -%}
   packages
+  {%- endif -%}
+
+undercloud_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
   {%- endif -%}
