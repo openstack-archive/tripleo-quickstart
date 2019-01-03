@@ -699,12 +699,20 @@ Access the undercloud by:
     ssh -F $OPT_WORKDIR/ssh.config.ansible undercloud
 
 Follow the documentation in the link below to complete your deployment.
+Note, by default only the undercloud has been installed.
 
-    http://ow.ly/c44w304begR
+    https://docs.openstack.org/tripleo-docs/latest/install/basic_deployment/basic_deployment_cli.html#upload-images
+
+For fully automated deployments please refer to:
+
+    https://docs.openstack.org/tripleo-quickstart/latest/getting-started.html
+
+TripleO's cheat sheet is available at:
+
+    http://superuser.openstack.org/articles/new-tripleo-quick-start-cheatsheet/
 
 ##################################
 Virtual Environment Setup Complete
 ##################################
 EOF
 fi
-
