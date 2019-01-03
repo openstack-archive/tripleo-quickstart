@@ -9,18 +9,18 @@ docker_ceph_tag: v3.0.3-stable-3.0-jewel-centos-7-x86_64
 
 
 images:
-    - name: overcloud-full
-      url: "{{ overcloud_image_url }}"
-      type: tar
-    - name: ipa_images
-      url: "{{ ipa_image_url }}"
-      type: tar
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
 inject_images:
-    - "ironic-python-agent.initramfs"
-    - "ironic-python-agent.kernel"
-    - "overcloud-full.qcow2"
-    - "overcloud-full.initrd"
-    - "overcloud-full.vmlinuz"
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
 release: pike
 dlrn_hash_tag: tripleo-ci-testing
 overcloud_image_url: https://images.rdoproject.org/pike/rdo_trunk/current-tripleo/overcloud-full.tar

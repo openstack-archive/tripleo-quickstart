@@ -1,4 +1,3 @@
-
 # This will require (2*16) ==  32 GB for the overcloud nodes,
 # plus another 18GB for the undercloud, total  50 gb
 control_memory: 16384

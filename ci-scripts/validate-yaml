@@ -54,8 +54,7 @@ def validate_directory(path):
 
     for dirpath, dirnames, filenames in os.walk(path):
         for filename in filenames:
-            if not (filename.endswith('.yml') or
-                    filename.endswith('.yaml')):
+            if not (filename.endswith('.yml') or filename.endswith('.yaml')):
                 continue
 
             filename = os.path.join(dirpath, filename)

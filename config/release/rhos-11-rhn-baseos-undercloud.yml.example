@@ -37,4 +37,3 @@ rhsm_repos:
   - name: rhel-{{ rhel_version_number }}-server-openstack-{{ osp_release_version_number }}-rpms
   - name: rhel-{{ rhel_version_number }}-server-rhceph-{{ rhceph_version_number }}-osd-rpms
   - name: rhel-{{ rhel_version_number }}-server-rhceph-{{ rhceph_version_number }}-mon-rpms
-

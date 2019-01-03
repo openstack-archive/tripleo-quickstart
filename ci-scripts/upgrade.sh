@@ -44,4 +44,3 @@ bash quickstart.sh \
     --playbook upgrade.yml \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
-

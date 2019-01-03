@@ -1,16 +1,17 @@
+---
 node:
   prefix:
-  - mf03f
-  - rhos-ci
-  - '37'
-  - rdo
-  - rmgr
+    - mf03f
+    - rhos-ci
+    - '37'
+    - rdo
+    - rmgr
 tmp:
   node_prefix: '{{ node.prefix | reject("none") | join("-") }}-'
   hostname_prefix: '{{ hostname.prefix | reject("none") | join("-") }}-'
   anchors:
-  - https://repos.fedorapeople.org/repos/openstack/openstack-rocky/rdo-release-rocky.rpm
-  - https://trunk.rdoproject.org/centos7-rocky/
+    - https://repos.fedorapeople.org/repos/openstack/openstack-rocky/rdo-release-rocky.rpm
+    - https://trunk.rdoproject.org/centos7-rocky/
 product:
   rpmrepo:
     CentOS: https://repos.fedorapeople.org/repos/openstack/openstack-rocky/rdo-release-rocky.rpm
@@ -59,41 +60,41 @@ workaround:
   set_key_encrypted_volumes: true
 hostname:
   prefix:
-  - nh1nv
-  - rmgr
+    - nh1nv
+    - rmgr
 instack_user_home: /home/stack
 job:
   archive:
-  - /var/log/
-  - /etc/yum.repos.d
-  - /etc/selinux
-  - /root/
-  - /var/lib/mysql
-  - /etc/nova
-  - /etc/ceilometer
-  - /etc/cinder
-  - /etc/glance
-  - /etc/keystone
-  - /etc/neutron
-  - /etc/swift
-  - /etc/heat
-  - /etc/libvirt
-  - /etc/rabbitmq
-  - /etc/ntp
-  - /etc/puppet
-  - /etc/qpid
-  - /etc/qpidd.conf
-  - /home/stack/.instack/install-undercloud.log
-  - /home/stack/stackrc
-  - /home/stack/*.log
-  - /home/stack/*.json
-  - /home/stack/*.conf
-  - /home/stack/deploy-overcloudrc
-  - /home/stack/network-environment.yaml
-  - /home/stack/tempest/*.xml
-  - /home/stack/tempest/*.log
-  - /home/stack/tempest/etc/*.conf
-  - /usr/share/openstack-tripleo-heat-templates
+    - /var/log/
+    - /etc/yum.repos.d
+    - /etc/selinux
+    - /root/
+    - /var/lib/mysql
+    - /etc/nova
+    - /etc/ceilometer
+    - /etc/cinder
+    - /etc/glance
+    - /etc/keystone
+    - /etc/neutron
+    - /etc/swift
+    - /etc/heat
+    - /etc/libvirt
+    - /etc/rabbitmq
+    - /etc/ntp
+    - /etc/puppet
+    - /etc/qpid
+    - /etc/qpidd.conf
+    - /home/stack/.instack/install-undercloud.log
+    - /home/stack/stackrc
+    - /home/stack/*.log
+    - /home/stack/*.json
+    - /home/stack/*.conf
+    - /home/stack/deploy-overcloudrc
+    - /home/stack/network-environment.yaml
+    - /home/stack/tempest/*.xml
+    - /home/stack/tempest/*.log
+    - /home/stack/tempest/etc/*.conf
+    - /usr/share/openstack-tripleo-heat-templates
   gzip_logs: true
   artifact_url: https://ci.centos.org/artifacts/rdo
   rsync_path: rdo@artifacts.ci.centos.org::rdo
@@ -117,8 +118,8 @@ provisioner:
       remote_user: stack
       name: host0
       groups:
-      - provisioned
-      - virthost
+        - provisioned
+        - virthost
   arch: x86_64
   key_file: /home/rhos-ci/rdo-ci-public.pem
   distro:
@@ -147,19 +148,19 @@ installer:
     command: --templates
   firewall:
     rules:
-    - ' -A INPUT -m state --state ESTABLISHED,RELATED -m comment --comment "001 QA
-      incoming related session exist the host interface MGMT" -j ACCEPT'
-    - ' -A INPUT -p tcp -m tcp --dport 22 -m comment --comment "002 QA incoming SSH"
-      -j ACCEPT'
-    - ' -A INPUT -p icmp -m comment --comment "003 QA incoming ICMP" -j ACCEPT'
-    - ' -A INPUT -i lo -m comment --comment "004 QA incoming loopback" -j ACCEPT'
-    - ' -A INPUT -p udp --sport 53 -m comment --comment "005 QA incoming DNS" -j ACCEPT'
-    - ' -A INPUT -p udp --sport 123 -m comment --comment "006 QA incoming NTP" -j
-      ACCEPT'
-    - ' -P INPUT DROP'
+      - ' -A INPUT -m state --state ESTABLISHED,RELATED -m comment --comment "001 QA
+        incoming related session exist the host interface MGMT" -j ACCEPT'
+      - ' -A INPUT -p tcp -m tcp --dport 22 -m comment --comment "002 QA incoming SSH"
+        -j ACCEPT'
+      - ' -A INPUT -p icmp -m comment --comment "003 QA incoming ICMP" -j ACCEPT'
+      - ' -A INPUT -i lo -m comment --comment "004 QA incoming loopback" -j ACCEPT'
+      - ' -A INPUT -p udp --sport 53 -m comment --comment "005 QA incoming DNS" -j ACCEPT'
+      - ' -A INPUT -p udp --sport 123 -m comment --comment "006 QA incoming NTP" -j
+        ACCEPT'
+      - ' -P INPUT DROP'
   network_restart: true
   post_action:
-  - none
+    - none
   tempest:
     skip_file: rdoci-rdo-liberty-rdo-manager
     test_white_regex: .*smoke
@@ -176,11 +177,11 @@ installer:
   images:
     7-director:
       files:
-      - no_op
+        - no_op
     version: last_known_good
     8-director:
       files:
-      - no_op
+        - no_op
   dib_dir: /home/stack/DIB
   updates:
     enabled: false
@@ -285,4 +286,3 @@ hw_env:
   network_cidr: 192.168.0.0/24
   ExternalNetworkVlanID: null
   network_type: flat
-

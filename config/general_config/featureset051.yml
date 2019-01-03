@@ -100,7 +100,6 @@ overcloud_roles:
       - Tenant
 
 
-
 deploy_steps_ansible_workflow: true
 config_download_args: >-
   {% if release in ['queens'] -%}

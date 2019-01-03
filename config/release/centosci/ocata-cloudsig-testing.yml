@@ -19,4 +19,3 @@ repo_cmd_after: |
 overcloud_repo_paths:
   - "$(ls /etc/yum.repos.d/rdo*)"
   - "$(ls /etc/yum.repos.d/CentOS-Ceph-*)"
-

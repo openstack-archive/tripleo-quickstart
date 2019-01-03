@@ -17,4 +17,3 @@ overcloud_repo_paths:
   - "$(ls /etc/yum.repos.d/CentOS-OpenStack-ocata*)"
   - "$(ls /etc/yum.repos.d/CentOS-QEMU*)"
   - "$(ls /etc/yum.repos.d/CentOS-Ceph-*)"
-

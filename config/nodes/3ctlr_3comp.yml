@@ -50,4 +50,3 @@ network_isolation_type: 'single-nic-vlans'
 topology: >-
   --compute-scale 3
   --control-scale 3
-

@@ -19,4 +19,3 @@ deployed_server_overcloud_roles:
 
 topology: >-
   --compute-scale 0
-

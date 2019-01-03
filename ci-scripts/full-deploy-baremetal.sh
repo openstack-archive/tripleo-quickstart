@@ -35,4 +35,3 @@ bash quickstart.sh \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $OPT_ADDITIONAL_PARAMETERS \
     $VIRTHOST
-

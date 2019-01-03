@@ -4,7 +4,7 @@
 non_root_chown: true
 non_root_user: stack
 undercloud_user: stack
-working_dir: "/home/{{non_root_user}}"
+working_dir: "/home/{{ non_root_user }}"
 ssh_user: root
 libvirt_uri: qemu:///system
 

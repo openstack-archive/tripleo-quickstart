@@ -40,4 +40,3 @@ bash quickstart.sh \
     -e virthost_user=$VIRTHOST_USER \
     --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
-

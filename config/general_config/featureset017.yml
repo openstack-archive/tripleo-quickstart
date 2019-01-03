@@ -174,5 +174,3 @@ tempest_extra_config: >-
 # This is a workaround to have test_volume_boot_pattern passing, it's failing
 # due a concurrency, for more information, check lp 1744151
 tempest_workers: 1
-
-

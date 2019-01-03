@@ -7,18 +7,18 @@ ipa_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_has
 overcloud_as_undercloud: true
 update_images: true
 images:
-    - name: overcloud-full
-      url: "{{ overcloud_image_url }}"
-      type: tar
-    - name: ipa_images
-      url: "{{ ipa_image_url }}"
-      type: tar
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
 inject_images:
-    - "ironic-python-agent.initramfs"
-    - "ironic-python-agent.kernel"
-    - "overcloud-full.qcow2"
-    - "overcloud-full.initrd"
-    - "overcloud-full.vmlinuz"
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
 
 repos:
   - type: generic

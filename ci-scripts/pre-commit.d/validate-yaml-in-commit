@@ -16,4 +16,3 @@ git diff --cached --name-only --diff-filter=ACM | grep '.yml' | (
 cd $tmpdir
 xargs --no-run-if-empty $SCRIPTS/validate-yaml
 )
-
