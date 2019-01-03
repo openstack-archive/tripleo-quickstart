@@ -308,10 +308,10 @@ usage () {
     echo "Usage: $0 --install-deps"
     echo "                      install quickstart package dependencies and exit"
     echo ""
-    echo "Usage: $0 [options] <virthost>"
+    echo "Usage: $0 [options] [virthost]"
     echo ""
     echo "  virthost            a physical machine hosting the libvirt VMs of the TripleO"
-    echo "                      deployment, required argument"
+    echo "                      deployment, required unless VIRTHOST is already defined."
     echo ""
     echo "Basic options:"
     echo "  -p, --playbook <file>"
@@ -595,15 +595,15 @@ elif [[ "$OPT_CONFIG" =~ (^|.*/)minimal_pacemaker.yml$ ]]; then
 fi
 
 if [ "$OLD_CONFIG" != "" ]; then
-    echo "******************** PLEASE READ ****************************"
-    echo ""
-    echo "DEPRECATION NOTICE: $OLD_CONFIG has been deprecated"
-    echo ""
+    echo "******************** PLEASE READ ****************************" >&2
+    echo "" >&2
+    echo "DEPRECATION NOTICE: $OLD_CONFIG has been deprecated" >&2
+    echo "" >&2
     sleep 3;
 fi
 
 if [ "$OPT_INSTALL_DEPS" = 1 ]; then
-    echo "NOTICE: installing dependencies"
+    echo "NOTICE: installing dependencies" >&2
     install_deps
     exit $?
 fi
@@ -612,17 +612,23 @@ if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
     bootstrap
 
     if [ $? -ne 0 ]; then
-        echo "ERROR: bootstrap failed; try \"$0 --install-deps\""
-        echo "       to install package dependencies or \"$0 --clean\""
-        echo "       to remove $OPT_WORKDIR and start over"
+        echo "ERROR: bootstrap failed; try \"$0 --install-deps\"" >&2
+        echo "       to install package dependencies or \"$0 --clean\"" >&2
+        echo "       to remove $OPT_WORKDIR and start over" >&2
         exit 1
     fi
 fi
 
 if [ "$#" -lt 1 ]; then
-    echo "ERROR: You must specify a target machine." >&2
-    usage >&2
-    exit 2
+    if ["${VIRTHOST:-}" == ""]; then
+        echo "ERROR: You didn't specify a target machine and VIRTHOST is not defined" >&2
+        usage >&2
+        exit 2
+    else
+        echo "NOTICE: Using VIRTHOST=$VIRHOST as target machine" >&2
+    fi
+else
+    VIRTHOST=$1
 fi
 
 if [ "$#" -gt 2 ]; then
@@ -630,7 +636,6 @@ if [ "$#" -gt 2 ]; then
     exit 2
 fi
 
-VIRTHOST=$1
 
 print_logo
 echo "Installing OpenStack ${OPT_RELEASE:+"$OPT_RELEASE "}on host $VIRTHOST"
@@ -661,7 +666,7 @@ else
 fi
 
 if [ ! -f $OPT_WORKDIR/playbooks/$OPT_PLAYBOOK ]; then
-    printf "\n !! execute quickstart.sh --clean to ensure the dependencies are installed !!"
+    printf "\n !! execute quickstart.sh --clean to ensure the dependencies are installed !!" >&2
     exit 1
 fi
 
