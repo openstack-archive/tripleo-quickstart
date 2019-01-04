@@ -1,5 +1,22 @@
 ---
 
+- name: check pub_key exists
+  stat:
+    path: "{{ pub_key }}"
+  register: stat_pub_key
+
+- name: use ssh-agent first reported key if local pub_key not found
+  when: not stat_pub_key.stat.exists
+  block:
+
+    - name: dump first ssh-agent key
+      shell: |
+        ssh-add -L | head -1 > {{ pub_key }}.agent
+
+    - name: reassign pub_key to point to ssh-agent key
+      set_fact:
+        pub_key: "{{ pub_key }}.agent"
+
 - name: Fetch a CentOS image to use for libvirt nodepool nodes
   include_role:
     name: fetch-images
