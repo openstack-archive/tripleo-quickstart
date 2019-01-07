@@ -33,7 +33,7 @@
 
 # Allow the user to optionally perform a yum repo setup
 # the virthost_repo_setup variable by default is set to false
-- include: repo-setup-virthost.yml
+- import_playbook: repo-setup-virthost.yml
   when: virthost_repo_setup|bool
 
 - name: Check if the target virthost distro is supported (RHEL or CentOS)

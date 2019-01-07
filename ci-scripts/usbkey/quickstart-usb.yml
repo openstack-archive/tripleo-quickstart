@@ -4,7 +4,7 @@
 # The [provision.yml](provision.yml.html) playbook is responsible for
 # creating an inventory entry for our `virthost` and for creating an
 # unprivileged user on that host for use by our virtual environment.
-- include: provision.yml
+- include_tasks: provision.yml
   tags:
     - provision
 

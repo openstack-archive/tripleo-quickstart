@@ -63,7 +63,7 @@
       with_items: "{{ overcloud_nodes }}"
       when: libvirt_nodepool_vms|default("false")|bool
 
-    - include: libvirt_nodepool.yml
+    - include_tasks: libvirt_nodepool.yml
       when: libvirt_nodepool_vms|default("false")|bool
 
     # Create additional blockdevices for each objectstorage flavor node

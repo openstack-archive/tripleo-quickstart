@@ -31,7 +31,7 @@
     tasks_from: get-dlrn-hash-newest
   when: dlrn_hash_tag_newest is defined and dlrn_task_run_newest is not defined
 
-- include: fetch.yml
+- include_tasks: fetch.yml
   vars:
     image: "{{ item }}"
   with_items: "{{ images }}"
