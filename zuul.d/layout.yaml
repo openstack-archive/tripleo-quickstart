@@ -22,9 +22,10 @@
         - tripleo-ci-centos-7-scenario003-multinode-oooq:
             files:
               - config/general_config/featureset007.yml
-        - tripleo-ci-centos-7-scenario003-multinode-oooq-container:
+        - tripleo-ci-centos-7-scenario003-standalone:
             files:
-              - config/general_config/featureset018.yml
+              - config/general_config/featureset052.yml
+              - zuul.d/layout.yaml
         - tripleo-ci-centos-7-scenario004-multinode-oooq:
             files:
               - config/general_config/featureset008.yml
