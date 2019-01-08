@@ -10,8 +10,13 @@
   block:
 
     - name: dump first ssh-agent key
+      become: false
+      # ^ non false could break agent by causing:
+      # Could not open a connection to your authentication agent.
       shell: |
         ssh-add -L | head -1 > {{ pub_key }}.agent
+        test -s {{ pub_key }}.agent
+      # ^ fail if the file is empty
 
     - name: reassign pub_key to point to ssh-agent key
       set_fact:
@@ -177,7 +182,6 @@
     ansible_host: "{{ subnode_0_ip }}"
     ansible_fqdn: "{{ subnode_0_ip }}"
     ansible_user: zuul
-    ansible_private_key_file: "~/.ssh/id_rsa"
     subnode_private_ip: "{{ subnode_0_ip }}"
     subnode_public_ip: "{{ subnode_0_ip }}"
     ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
@@ -219,7 +223,6 @@
     ansible_host: "{{ subnode_1_ip }}"
     ansible_fqdn: "{{ subnode_1_ip }}"
     ansible_user: zuul
-    ansible_private_key_file: "~/.ssh/id_rsa"
     subnode_private_ip: "{{ subnode_1_ip }}"
     subnode_public_ip: "{{ subnode_1_ip }}"
     ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
