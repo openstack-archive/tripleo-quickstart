@@ -57,6 +57,10 @@
         - tripleo-ci-centos-7-scenario001-standalone:
             files:
               - ^config/.*$
+        - tripleo-ci-centos-7-scenario002-standalone:
+            files:
+              - config/general_config/featureset052.yml
+              - zuul.d/layout.yaml
         - tripleo-ci-centos-7-scenario004-standalone:
             files:
               - config/general_config/featureset052.yml
