@@ -23,4 +23,3 @@ if [ -z "$ip" ]; then
 fi
 
 echo $ip
-

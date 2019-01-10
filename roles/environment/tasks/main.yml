@@ -7,4 +7,3 @@
 - name: Include version specific vars
   include_vars: "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower }}.yml"
   ignore_errors: true
-

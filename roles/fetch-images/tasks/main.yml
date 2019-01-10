@@ -35,4 +35,3 @@
   vars:
     image: "{{ item }}"
   with_items: "{{ images }}"
-

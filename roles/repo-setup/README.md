@@ -86,7 +86,7 @@ parameters) is always nice for users too:
     ---
     - name:  Run repo setup
       hosts: undercloud
-      gather_facts: no
+      gather_facts: false
       roles:
         - repo-setup
 

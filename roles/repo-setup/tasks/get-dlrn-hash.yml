@@ -28,7 +28,7 @@
         cacheable: true
 
 # TODO: Fix for fedora
-- when: overcloud_release is defined and overcloud_release != ""
+- when: overcloud_release is defined and (overcloud_release | length != 0)
   block:
 
     - name: Get DLRN overcloud hash

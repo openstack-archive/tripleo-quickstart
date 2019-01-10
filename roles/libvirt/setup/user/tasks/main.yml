@@ -33,7 +33,7 @@
     mode: 0600
 
 - name: Read virt_power private key
-  no_log: True
+  no_log: true
   set_fact:
     virt_power_key_pvt: "{{ lookup('file', virt_power_key)|default('') }}"
     cacheable: true
@@ -43,4 +43,3 @@
     user: "{{ ansible_user_id }}"
     key: "{{ lookup('file', virt_power_key|quote + '.pub')|default('') }}"
     manage_dir: true
-

@@ -48,7 +48,7 @@
 # There is a bug w/ virt_net and RHEL where the network xml
 # file is not written to /etc/libvirt/qemu/networks/ This causes
 # network to be considered transient.
-- when: net_autostart.changed != true
+- when: not net_autostart.changed
   block:
 
     - name: Check if "virsh net-autostart" was successful
@@ -66,14 +66,14 @@
 
     # copy the xml to a file
     - name: copy network-xml to file
-      copy: content={{ item.get_xml }} dest=/tmp/network-{{item.item.name}}.xml
+      copy: content={{ item.get_xml }} dest=/tmp/network-{{ item.item.name }}.xml
       with_items: "{{ net_xml.results }}"
       become: true
 
     # redefine the network w/ virsh, this will write the xml file to
     # /etc/libvirt/qemu/networks/ and it will no longer be transient
     - name: redefine the libvirt networks so the config is written to /etc/libvirt
-      command: virsh net-define /tmp/network-{{item.name}}.xml
+      command: virsh net-define /tmp/network-{{ item.name }}.xml
       with_items: "{{ networks }}"
       become: true
 
@@ -94,7 +94,7 @@
 - name: Whitelist bridges for unprivileged access
   lineinfile:
     dest: "{{ qemu_bridge_conf }}"
-    line: "allow {{item.bridge}}"
+    line: "allow {{ item.bridge }}"
   with_items: "{{ networks }}"
   become: true
 

@@ -25,7 +25,7 @@
 
 - name: Add the virthost node to the generated inventory
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   roles:
     - tripleo-inventory
   tags:
@@ -51,4 +51,3 @@
   tasks:
     - name: Force-refresh facts
       setup:
-

@@ -2,4 +2,3 @@
 # variables defined in that role are available here.
 dependencies:
   - common
-

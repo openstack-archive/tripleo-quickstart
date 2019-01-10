@@ -1,2 +1,11 @@
 dependencies:
   - common
+galaxy_info:
+  author: Red Hat, Inc.
+  license: Apache
+  description: libvirt setup supplemental
+  platforms:
+    - name: CentOS
+      versions:
+        - 7
+  min_ansible_version: 2.4

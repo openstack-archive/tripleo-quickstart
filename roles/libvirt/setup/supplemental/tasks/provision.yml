@@ -45,41 +45,41 @@
 
 - when: supplemental_vol_check is failed
   block:
-  # TODO(hrybacki): Update fetch-images role to handle supplemental images
-  - name: Fetch centos image for ipa
-    get_url:
-      url: '{{ supplemental_base_image_url }}'
-      dest: '{{ image_cache_dir }}/supplemental_base.qcow2'
+    # TODO(hrybacki): Update fetch-images role to handle supplemental images
+    - name: Fetch centos image for ipa
+      get_url:
+        url: '{{ supplemental_base_image_url }}'
+        dest: '{{ image_cache_dir }}/supplemental_base.qcow2'
 
-  - name: Ensure virt-manager in installed on virthost
-    package:
-      name: 'virt-install'
-      state: 'present'
-    become: true
+    - name: Ensure virt-manager in installed on virthost
+      package:
+        name: 'virt-install'
+        state: 'present'
+      become: true
 
-  - name: Prepare TLS everywhere provisoner script
-    template:
-      src: tls_everywhere_provisioner.sh.j2
-      dest: '~/tls_everywhere_provisioner.sh'
-      mode: 0700
-    when: enable_tls_everywhere|bool
+    - name: Prepare TLS everywhere provisoner script
+      template:
+        src: tls_everywhere_provisioner.sh.j2
+        dest: '~/tls_everywhere_provisioner.sh'
+        mode: 0700
+      when: enable_tls_everywhere|bool
 
-  - name: Execute tls everywhere provisioner script
-    shell: 'bash ~/tls_everywhere_provisioner.sh &> ~/tls_everywhere_provisioner.log'
-    when: enable_tls_everywhere|bool
+    - name: Execute tls everywhere provisioner script
+      shell: 'bash ~/tls_everywhere_provisioner.sh &> ~/tls_everywhere_provisioner.log'
+      when: enable_tls_everywhere|bool
 
 - when: supplemental_provisioning_script is defined and not enable_tls_everywhere|bool
   block:
-  - name: Move scripts to virthost
-    copy:
-      src: '{{ supplemental_provisioning_script }}'
-      dest: '~/supplemental_node_provisioner.sh'
-      mode: 0744
-  - name: Provision script execution
-    shell: >
-      'bash ~/supplemental_node_provisioner.sh'
-    tags:
-      - skip_ansible_lint
+    - name: Move scripts to virthost
+      copy:
+        src: '{{ supplemental_provisioning_script }}'
+        dest: '~/supplemental_node_provisioner.sh'
+        mode: 0744
+    - name: Provision script execution
+      shell: >
+        'bash ~/supplemental_node_provisioner.sh'
+      tags:
+        - skip_ansible_lint
 
 # Start the supplemental node virtual machine.
 - name: Start supplemental node vm
@@ -87,7 +87,7 @@
     name: '{{ supplemental_node.name }}'
     command: start
     state: running
-    autostart: True
+    autostart: true
     uri: '{{ libvirt_uri }}'
 
 - name: Wait for VM to come online

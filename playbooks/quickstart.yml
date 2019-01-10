@@ -7,7 +7,7 @@
   tasks:
     - name: Add virthost
       add_host:
-        name: "{{virthost}}"
+        name: "{{ virthost }}"
         groups: "virthost"
         ansible_fqdn: "{{ virthost }}"
         ansible_user: "root"
@@ -36,7 +36,7 @@
 # access on the target host.
 - name: Install libvirt packages and configure networks
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   tags:
     - environment
   roles:
@@ -44,9 +44,9 @@
 
 # The `libvirt/setup` role creates the undercloud and overcloud
 # virtual machines.
-- name:  Setup undercloud, overcloud, and supplemental vms
+- name: Setup undercloud, overcloud, and supplemental vms
   hosts: virthost
-  gather_facts: yes
+  gather_facts: true
   tags:
     - libvirt
   roles:
@@ -55,7 +55,7 @@
 
 - name: Add the undercloud node to the generated inventory
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   tags:
     - undercloud-inventory
   roles:
@@ -65,7 +65,7 @@
 # This must be done after inventory is run for the first time
 - name: Create the virtual BMC
   hosts: undercloud
-  gather_facts: yes
+  gather_facts: true
   tags:
     - libvirt
   roles:

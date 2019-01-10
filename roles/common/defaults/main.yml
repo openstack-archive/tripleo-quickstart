@@ -19,7 +19,7 @@ working_dir: "/home/{{ undercloud_user }}"
 # undercloud image.
 image_cache_dir: "/var/cache/tripleo-quickstart/images/{{ release }}"
 
-image_fetch_dir: "{{ working_dir}}"
+image_fetch_dir: "{{ working_dir }}"
 
 # This determines whether to download a pre-built undercloud.qcow2 or
 # whether to instead use an overcloud-full.qcow2 and convert it on
@@ -63,36 +63,36 @@ undercloud_vcpu: 6
 # the pre-defined flavors created by `openstack install undercloud`.
 flavors:
   compute:
-    memory: '{{compute_memory|default(default_memory)}}'
-    disk: '{{compute_disk|default(default_disk)}}'
-    vcpu: '{{compute_vcpu|default(default_vcpu)}}'
+    memory: '{{ compute_memory|default(default_memory) }}'
+    disk: '{{ compute_disk|default(default_disk) }}'
+    vcpu: '{{ compute_vcpu|default(default_vcpu) }}'
 
   control:
-    memory: '{{control_memory|default(default_memory)}}'
-    disk: '{{control_disk|default(default_disk)}}'
-    vcpu: '{{control_vcpu|default(default_vcpu)}}'
+    memory: '{{ control_memory|default(default_memory) }}'
+    disk: '{{ control_disk|default(default_disk) }}'
+    vcpu: '{{ control_vcpu|default(default_vcpu) }}'
 
   ceph:
-    memory: '{{ceph_memory|default(default_memory)}}'
-    disk: '{{ceph_disk|default(default_disk)}}'
-    vcpu: '{{ceph_vcpu|default(default_vcpu)}}'
+    memory: '{{ ceph_memory|default(default_memory) }}'
+    disk: '{{ ceph_disk|default(default_disk) }}'
+    vcpu: '{{ ceph_vcpu|default(default_vcpu) }}'
     extradisks: true
 
   blockstorage:
-    memory: '{{block_memory|default(default_memory)}}'
-    disk: '{{block_disk|default(default_disk)}}'
-    vcpu: '{{block_vcpu|default(default_vcpu)}}'
+    memory: '{{ block_memory|default(default_memory) }}'
+    disk: '{{ block_disk|default(default_disk) }}'
+    vcpu: '{{ block_vcpu|default(default_vcpu) }}'
 
   objectstorage:
-    memory: '{{objectstorage_memory|default(default_memory)}}'
-    disk: '{{objectstorage_disk|default(default_disk)}}'
-    vcpu: '{{objectstorage_vcpu|default(default_vcpu)}}'
+    memory: '{{ objectstorage_memory|default(default_memory) }}'
+    disk: '{{ objectstorage_disk|default(default_disk) }}'
+    vcpu: '{{ objectstorage_vcpu|default(default_vcpu) }}'
     extradisks: true
 
   undercloud:
-    memory: '{{undercloud_memory|default(undercloud_memory)}}'
-    disk: '{{undercloud_disk|default(undercloud_disk)}}'
-    vcpu: '{{undercloud_vcpu|default(undercloud_vcpu)}}'
+    memory: '{{ undercloud_memory|default(undercloud_memory) }}'
+    disk: '{{ undercloud_disk|default(undercloud_disk) }}'
+    vcpu: '{{ undercloud_vcpu|default(undercloud_vcpu) }}'
 
 # We create a single undercloud node.
 undercloud_node:
@@ -149,7 +149,7 @@ networks:
       - 1024
       - 65535
 
-#Enable network isolation with single-nic-vlans for virtualized deployments
+# Enable network isolation with single-nic-vlans for virtualized deployments
 undercloud_network_cidr: 192.168.24.0/24
 undercloud_external_network_cidr: >-
   {%- if overcloud_ipv6|bool %}2001:db8:fd00:1000::/64{% else %}10.0.0.1/24{% endif -%}
@@ -222,12 +222,12 @@ non_root_chown: false
 enable_port_forward_for_tripleo_ui: false
 
 # This enables the run of several tripleo-validations tests through Mistral
-run_tripleo_validations: False
+run_tripleo_validations: false
 # This enables the run of tripleo-validations negative tests through shell
 # scripts
-run_tripleo_validations_negative_tests: False
+run_tripleo_validations_negative_tests: false
 # Exit tripleo-quickstart on validations failures
-exit_on_validations_failure: False
+exit_on_validations_failure: false
 
 # Update undercloud and overcloud images with the repos provided via the
 # release config.
