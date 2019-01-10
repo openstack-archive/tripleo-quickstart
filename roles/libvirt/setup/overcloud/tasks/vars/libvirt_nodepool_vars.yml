@@ -9,7 +9,7 @@ overcloud_nodes:
 
   - name: subnode-1
     flavor: control
-pub_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
+pub_key: "~/.ssh/id_rsa.pub"
 image_fetch_dir: "{{ local_working_dir }}"
 libvirt_nodepool_vms: true
 create_instackenv_json: false
