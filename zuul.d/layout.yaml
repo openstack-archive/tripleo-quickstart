@@ -5,23 +5,9 @@
       - tripleo-multinode-branchful
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
+      - tripleo-standalone-scenarios-full
     check:
       jobs:
-        - tripleo-ci-centos-7-scenario001-standalone:
-            files:
-              - ^config/.*$
-        - tripleo-ci-centos-7-scenario002-standalone:
-            files:
-              - config/general_config/featureset052.yml
-              - zuul.d/layout.yaml
-        - tripleo-ci-centos-7-scenario003-standalone:
-            files:
-              - config/general_config/featureset052.yml
-              - zuul.d/layout.yaml
-        - tripleo-ci-centos-7-scenario004-standalone:
-            files:
-              - config/general_config/featureset052.yml
-              - zuul.d/layout.yaml
         - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
             files:
               - config/general_config/featureset030.yml
@@ -39,17 +25,6 @@
       queue: tripleo
       jobs:
         - openstack-tox-linters
-        - tripleo-ci-centos-7-scenario001-standalone:
-            files:
-              - ^config/.*$
-        - tripleo-ci-centos-7-scenario002-standalone:
-            files:
-              - config/general_config/featureset052.yml
-              - zuul.d/layout.yaml
-        - tripleo-ci-centos-7-scenario004-standalone:
-            files:
-              - config/general_config/featureset052.yml
-              - zuul.d/layout.yaml
     experimental:
       jobs:
         - tripleo-ci-centos-7-scenario006-multinode-oooq-container:
