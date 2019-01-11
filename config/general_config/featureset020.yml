@@ -9,7 +9,7 @@
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: true
-ssl_overcloud: true
+ssl_overcloud: false
 overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
@@ -21,7 +21,12 @@ containerized_overcloud: >-
   {%- else -%}
   true
   {%- endif -%}
-undercloud_check_idempotency: false
+undercloud_check_idempotency: >-
+  {% if release not in ['ocata','pike','queens', 'rocky'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
 delete_docker_cache: true
 
 containerized_undercloud: >-
