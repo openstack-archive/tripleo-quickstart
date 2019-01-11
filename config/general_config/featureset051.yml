@@ -10,7 +10,10 @@ enable_pacemaker: false
 # Container prep parameters.
 containerized_overcloud: true
 containerized_overcloud_upgrade: true
-
+# mixed_upgrade, used for a mixed initial deployment of undercloud and overcloud releases
+mixed_upgrade: false
+# noop_upgrade, used when running upgrades from $release to $release
+noop_upgrade: true
 
 enable_opstools_repo: true
 
