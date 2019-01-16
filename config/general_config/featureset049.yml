@@ -3,9 +3,9 @@
 undercloud_generate_service_certificate: false
 step_introspect: false
 extra_args: >-
-  - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-ansible.yaml
-  - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-mds.yaml
-  - {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-rgw.yaml
+  -e {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-ansible.yaml
+  -e {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-mds.yaml
+  -e {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-rgw.yaml
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
 containerized_overcloud: true
