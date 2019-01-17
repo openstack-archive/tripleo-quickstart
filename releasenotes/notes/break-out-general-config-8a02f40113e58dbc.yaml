@@ -23,4 +23,3 @@ deprecations:
     tested into featureset files. For example, the old
     minimal.yml file was split into no_netiso.yml and
     1ctlr_1comp.yml
-

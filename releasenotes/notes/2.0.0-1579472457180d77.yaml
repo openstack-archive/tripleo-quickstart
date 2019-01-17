@@ -39,4 +39,3 @@ other:
   - Undercloud deploy role moved to tripleo-quickstart-extras
   - Added repo configuration to the release configs for usage by the repo-setup
     role in tripleo-quickstart-extras
-
