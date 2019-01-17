@@ -656,7 +656,10 @@ source $OOOQ_DIR/ansible_ssh_env.sh
 if [ "$OPT_RETAIN_INVENTORY_FILE" = 0 -a -z "$OPT_LIST_TASKS_ONLY" ]; then
     # Clear out inventory file to avoid tripping over data
     # from a previous invocation
-    rm -f $ANSIBLE_INVENTORY
+    cat >$ANSIBLE_INVENTORY <<EOF
+[localhost]
+127.0.0.1  ansible_connection=local
+EOF
 fi
 
 if [ "$OPT_DEBUG_ANSIBLE" = 1 ]; then
