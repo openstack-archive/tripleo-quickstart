@@ -65,6 +65,19 @@ by quickstart e.g. ``~/.quickstart/ssh.config.ansible`` will try to proxy
 through the localhost to ssh to the localhost and will cause an error
 if ssh is not setup to support it.
 
+Re-Deploying
+------------
+::
+
+    bash quickstart.sh -X -b $VIRTHOST
+
+Please note that ~/.quickstart folder cannot be reused between deployments. It
+has to be removed before executing quickstart.sh again. Using the ``-X`` flag,
+the script will remove this directory and create it again.
+
+Note that using ``-b`` flag will also force the creation of the virtualenv
+environment and the installation of any requirement.
+
 Enable Developer mode
 ---------------------
 
