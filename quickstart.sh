@@ -117,7 +117,10 @@ install_deps () {
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [[ "$passwordless_sudo" == "1" ]]; then
         if [ "$(python_cmd)" == "python3" ]; then
-            PYTHON_PACKAGES+=("python3-libselinux")
+            # possible bug in ansible, f29 python 3 env fails
+            # w/o both python-libselinux packages installed
+            # https://bugs.launchpad.net/tripleo/+bug/1812324
+            PYTHON_PACKAGES+=("python3-libselinux python2-libselinux")
             PYTHON_PACKAGES+=("python3-PyYAML")
             SETUPTOOLS_PACKAGE=python3-setuptools
             VIRTUALENV_PACKAGE=python3-virtualenv
