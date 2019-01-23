@@ -1,4 +1,4 @@
-{% if hostvars[groups['virthost'][0]].ansible_host is defined %}
+{% if groups.virthost is defined and hostvars[groups['virthost'][0]].ansible_host is defined %}
 
 Host virthost
     Hostname {{ hostvars[groups['virthost'][0]].ansible_host }}

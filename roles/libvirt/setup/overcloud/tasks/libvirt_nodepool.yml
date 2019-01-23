@@ -56,7 +56,6 @@
   register: hash
 
 - name: Copy generated password to file
-  delegate_to: localhost
   copy:
     content: "{{ hash.stdout }}"
     dest: "{{ working_dir }}/pwtemp"
@@ -190,6 +189,12 @@
     subnode_public_ip: "{{ subnode_0_ip }}"
     ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
 
+- name: Add subnode-0 to known_hosts
+  known_hosts:
+    name: "{{ subnode_0_ip }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan
+      -t ecdsa-sha2-nistp256 ' + subnode_0_ip) }}"
+
 - name: Set hostname correctly for subnode-0
   delegate_to: subnode-0
   shell: >
@@ -230,6 +235,12 @@
     subnode_private_ip: "{{ subnode_1_ip }}"
     subnode_public_ip: "{{ subnode_1_ip }}"
     ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
+
+- name: Add subnode-1 to known_hosts
+  known_hosts:
+    name: "{{ subnode_1_ip }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan
+      -t ecdsa-sha2-nistp256 ' + subnode_1_ip) }}"
 
 - name: Set hostname correctly for subnode-1
   delegate_to: subnode-1
