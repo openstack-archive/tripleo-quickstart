@@ -8,7 +8,6 @@ dlrn_hash_tag_newest: current
 docker_registry_host: docker.io
 docker_registry_namespace: tripleopike
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
-docker_ceph_tag: v3.0.3-stable-3.0-jewel-centos-7-x86_64
 
 overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
 overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
