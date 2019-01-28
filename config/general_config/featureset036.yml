@@ -63,7 +63,7 @@ container_registry_file: >-
   {%- endif -%}
 
 # Adjust user to CI
-overcloud_ssh_user: "tripleo-admin"
+overcloud_ssh_user: "zuul"
 
 # Workaround for deploying newton from queen.
 overcloud_prep_post_hook_script: |

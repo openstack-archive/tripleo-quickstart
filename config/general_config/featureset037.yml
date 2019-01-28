@@ -25,7 +25,7 @@ tripleo_upgrade_debug: true
 tripleo_upgrade_converge_plan_only: true
 tripleo_ci: true
 use_oooq: true
-overcloud_ssh_user: "tripleo-admin"
+overcloud_ssh_user: "zuul"
 
 network_isolation: false
 enable_pacemaker: false
