@@ -225,6 +225,11 @@
     port: 22
     timeout: 600
 
+- name: dump nodepool node ip's address to disk
+  shell: >
+    echo "{{ subnode_0_ip }},{{ subnode_1_ip }}" > "{{ working_dir }}/nodepool_ips";
+  delegate_to: localhost
+
 - name: Add subnode-1 to inventory
   add_host:
     name: subnode-1
