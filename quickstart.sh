@@ -26,6 +26,7 @@ ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 : ${OPT_TEARDOWN:=nodes}
 : ${OPT_WORKDIR:=~/.quickstart}
 : ${OPT_LIST_TASKS_ONLY=""}
+: ${USER_OVERRIDE_SUDO_CHECK:=0}
 # disable pip implicit version check, if we need min version we should mention it
 export PIP_DISABLE_PIP_VERSION_CHECK=${PIP_DISABLE_PIP_VERSION_CHECK:=1}
 
@@ -103,19 +104,12 @@ fi
 # requested via --bootstrap.
 bootstrap () {
     set -e
+    # install required deps for a python virtual environment
     install_deps
-
-    # Activate the virtualenv only when it is not already activated otherwise
-    # It create the virtualenv and then activate it.
-    if [[ -z ${VIRTUAL_ENV+x} ]]; then
-        $(python_cmd) -m virtualenv \
-            $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
-            $OPT_WORKDIR
-        . $OPT_WORKDIR/bin/activate
-    else
-        echo "Warning: VIRTUAL_ENV=$VIRTUAL_ENV was found active and is being reused."
-    fi
-    $(python_cmd) -m pip install pip --upgrade
+    # setup the virtual environment
+    install_virtual_env
+    # continue package installs with bindep
+    install_package_deps_via_bindep
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
         if ! [ -d "$OOOQ_DIR" ]; then
@@ -159,24 +153,6 @@ bootstrap () {
         fi
     popd
 
-    # In order to do any filesystem operations on the system running ansible (if it has SELinux installed)
-    # we need the python bindings in the venv. Unfortunately, it is not available on pypi, so we need to
-    # pull it from the system site packages. This is needed only if they are not already present there,
-    # for example creating the virtualenv using --system-site-packages on a system that has the
-    # libselinux python bidings does not need it, so we detect it first.
-    $(python_cmd) -c "import selinux" 2>/dev/null ||
-        copy_selinux_to_venv
-}
-
-copy_selinux_to_venv() {
-    : ${LIBSELINUX_PYTHON_PATH:=lib64/python`$(python_cmd) -c "from sys import version_info as v; print('%s.%s' % (v[0], v[1]))"`/site-packages}
-
-    for FILE in /usr/$LIBSELINUX_PYTHON_PATH/_selinux* /usr/$LIBSELINUX_PYTHON_PATH/selinux ; do
-        ln -sf $FILE $VIRTUAL_ENV/$LIBSELINUX_PYTHON_PATH/
-    done
-
-    # validate that selinux import really works
-    $(python_cmd) -c "import sys; print(sys.path); import selinux; print('selinux.is_selinux_enabled: %s' % selinux.is_selinux_enabled())"
 }
 
 activate_venv() {
@@ -234,6 +210,9 @@ usage () {
     echo "  -g, --gerrit <change-id>"
     echo "                      check out <change-id> for the tripleo-quickstart repo"
     echo "                      before running the playbook"
+    echo "  -q, --override_sudo_check"
+    echo "                      If passwordless sudo is not enabled, prompt for "
+    echo "                      the user password while installing packages"
     echo "  -I, --retain-inventory"
     echo "                      keep the ansible inventory on start, used for consecutive"
     echo "                      runs of quickstart on the same environment"
@@ -319,6 +298,10 @@ while [ "x$1" != "x" ]; do
         --config|-c)
             OPT_CONFIG=$2
             shift
+            ;;
+
+        --override_sudo_check|-q)
+            USER_OVERRIDE_SUDO_CHECK=1
             ;;
 
         --nodes|-N)
