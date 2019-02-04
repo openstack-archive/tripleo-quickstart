@@ -31,15 +31,24 @@
     qemu-img create -f qcow2 -o preallocation=off
     '{{ working_dir }}/undercloud-resized.qcow2'
     '80G'
+
+- name: Test libguestfs
+  shell: libguestfs-test-tool > {{ working_dir }}/libguestfs-test.log 2>&1;
+  ignore_errors: true
+  register: libguestfs
+
+- name: Compose libguestfs env vars
+  template:
+    src: libguestfs-env.sh.j2
+    dest: "{{ working_dir }}/libguestf-env.sh"
+
 - name: Resize undercloud image (call virt-resize)
-  command: >
-    virt-resize --expand /dev/sda1
+  shell: >
+    source {{ working_dir }}/libguestf-env.sh &&
+    virt-resize -x --verbose --expand /dev/sda1
     '{{ working_dir }}/undercloud.qcow2'
     '{{ working_dir }}/undercloud-resized.qcow2'
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBGUESTFS_DEBUG: 1
-    LIBGUESTFS_TRACE: 1
+    >> {{ working_dir }}/virt-resize.log 2>&1
 
 - name: Rename resized image to original name
   command: >
@@ -62,12 +71,11 @@
     mode: 0600
 
 - name: Inject password into the image
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
+  shell: >
+    source {{ working_dir }}/libguestf-env.sh &&
+    virt-customize -v -a {{ working_dir }}/undercloud.qcow2
     --root-password file:"{{ working_dir }}/pwtemp"
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+    >> {{ working_dir }}/virt-customize.log 2>&1
   register: root_password
 
 - name: Remove root password file
@@ -76,39 +84,37 @@
     state: absent
 
 - name: Resize the filesystem
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
+  shell: >
+    source {{ working_dir }}/libguestf-env.sh &&
+    virt-customize -v -a {{ working_dir }}/undercloud.qcow2
     --run-command 'xfs_growfs /'
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+    >> {{ working_dir }}/virt-customize.log 2>&1
   when: resize_qcow_filesystem|default(true)|bool
 
 - name: Disable cloud-init
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
+  shell: >
+    source {{ working_dir }}/libguestf-env.sh &&
+    virt-customize -v -a {{ working_dir }}/undercloud.qcow2
     --run-command "grubby --update-kernel=ALL --args=\"cloud-init=disabled\""
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+    >> {{ working_dir }}/virt-customize.log 2>&1
 
 - name: Inject ssh public key into the image
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
+  shell: >
+    source {{ working_dir }}/libguestf-env.sh &&
+    virt-customize -v -a {{ working_dir }}/undercloud.qcow2
     --mkdir /root/.ssh/
-    --upload '{{ pub_key }}:/root/.ssh/authorized_keys'
+    --upload {{ pub_key }}:/root/.ssh/authorized_keys
     --run-command 'chown -R root:root /root/.ssh'
     --run-command 'chmod 0700 /root/.ssh'
     --run-command 'chmod 0600 /root/.ssh/authorized_keys'
     --selinux-relabel
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
+    >> {{ working_dir }}/virt-customize.log 2>&1
 
 # note upstream images may be in use and have the zuul user created
 - name: Add zuul user to the image
-  command: >
-    virt-customize -a {{ working_dir }}/undercloud.qcow2
+  shell: >
+    source {{ working_dir }}/libguestf-env.sh &&
+    virt-customize -v -a {{ working_dir }}/undercloud.qcow2
     --run-command 'id -u zuul &>/dev/null || useradd zuul'
     --mkdir /home/zuul/.ssh
     --run-command 'cp /root/.ssh/authorized_keys /home/zuul/.ssh/'
@@ -118,12 +124,10 @@
     --run-command 'echo "zuul ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/zuul'
     --run-command 'chmod 0440 /etc/sudoers.d/zuul'
     --selinux-relabel
+    >> {{ working_dir }}/virt-customize.log 2>&1
   # we should NOT create symlinks between python->python3
   # see https://www.python.org/dev/peps/pep-0394/
   # --run-command 'ln -s /usr/bin/python3 /usr/bin/python'
-  environment:
-    LIBGUESTFS_BACKEND: direct
-    LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
 - debug:
     msg: "Add basic packages we need to the image"
@@ -164,7 +168,7 @@
   register: "subnode_0_ip_result"
   until: "subnode_0_ip_result is success"
   retries: 20
-  delay: 10
+  delay: 20
 
 - name: Set_fact for undercloud ip
   set_fact:
@@ -211,7 +215,7 @@
   register: "subnode_1_ip_result"
   until: "subnode_1_ip_result is success"
   retries: 20
-  delay: 10
+  delay: 20
 
 - name: Set_fact for undercloud ip
   set_fact:

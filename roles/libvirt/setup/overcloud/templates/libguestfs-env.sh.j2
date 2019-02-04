@@ -1,0 +1,10 @@
+export LIBGUESTFS_BACKEND=direct
+
+{% if libguestfs is failed %}
+# FIXME(ykarel) LIBGUESTFS_BACKEND_SETTINGS can be removed once
+# https://bugs.launchpad.net/tripleo/+bug/1743749 is completely fixed.
+export LIBGUESTFS_BACKEND_SETTINGS=force_tcg
+{% endif %}
+
+export LIBGUESTFS_DEBUG=1
+export LIBGUESTFS_TRACE=1
