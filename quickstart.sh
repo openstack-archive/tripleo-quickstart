@@ -39,7 +39,16 @@ clean_virtualenv() {
 : ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
 : ${OOOQ_EXTRA_REQUIREMENTS:=quickstart-extras-requirements.txt}
 
-source install-deps.sh
+# Our docs support running quickstart.sh as a standalone script.
+# We have to download install-deps.sh to support that use case.
+ABSPATH=$(readlink -f $0)
+ABSDIR=$(dirname $ABSPATH)
+if [[ ! -e ${ABSDIR}/install-deps.sh ]]; then
+    echo "install-deps.sh was not found, in the same directory ($ABSDIR) as quickstart.sh"
+    echo "downloading install-deps.sh to ${ABSDIR}/install-deps.sh"
+    curl -o ${ABSDIR}/install-deps.sh https://git.openstack.org/cgit/openstack/tripleo-quickstart/plain/install-deps.sh
+fi
+source ${ABSDIR}/install-deps.sh
 
 print_logo () {
 
