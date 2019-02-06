@@ -37,6 +37,10 @@ update_repo: false
 create_docker_registry: false
 use_local_docker_registry: false
 create_container_images_download_script: false
+
+# do not run workload test
+launch_sanity_workload: false
+
 # Need to update once stein is released
 container_registry_file: >-
   {% if release not in ['ocata','pike','queens','rocky'] -%}

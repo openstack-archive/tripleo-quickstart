@@ -48,6 +48,9 @@ create_docker_registry: false
 use_local_docker_registry: false
 create_container_images_download_script: false
 
+# do not run workload test
+launch_sanity_workload: false
+
 tripleo_ci: true
 use_oooq: true
 
