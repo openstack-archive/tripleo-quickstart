@@ -1,10 +1,166 @@
 # Summary of feature set
 # Deploy an HA OpenStack environment with an IPA server.
 
-# TLS everywhere related vars. #
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: true
+ssl_overcloud: true
+overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+step_introspect: true
+
+# This enables container deployements after Pike
+containerized_overcloud: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+delete_docker_cache: true
+
+containerized_undercloud: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_enable_routed_networks: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_clean_nodes: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_inspection_extras: false
+
+
+# Tell tripleo about our environment.
+enable_pacemaker: true
+network_isolation: true
+network_isolation_type: "multiple-nics"
+network_isolation_args: >-
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
+
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
+
+extra_args: >-
+   {% if release not in ['newton', 'ocata', 'pike'] %}
+   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+   {% endif %}
+
+undercloud_ntp_servers: pool.ntp.org
+# keep the doc gen settings at the bottom of the config file.
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - novajoin_prep
+    - install_novajoin
+    - overcloud-custom-tht-script
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - novajoin_prep
+    - install_novajoin
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --verbose
+  {%- endif -%}
+
+# Tempest configuration, keep always at the end of the file
+# Use the traditional ping test in newton, ocata and pike
+# Run tempest in queens+
+test_ping: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+run_tempest: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+test_white_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+undercloud_enable_tempest: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
+
+# TLS everywhere related vars. #
 enable_tls_everywhere: true
 novajoin_connect_timeout: 60
 novajoin_read_timeout: 60
@@ -14,6 +170,7 @@ freeipa_admin_password: fce95318204114530f31f885c9df588f
 
 # Set node hostnames.
 tripleo_domain: ooo.test
+undercloud_cloud_domain: "{{ tripleo_domain }}"
 freeipa_server_hostname: "ipa.{{ tripleo_domain }}"
 undercloud_undercloud_hostname: "undercloud.{{ tripleo_domain }}"
 overcloud_cloud_name: "overcloud.{{ tripleo_domain }}"
@@ -22,11 +179,6 @@ overcloud_cloud_name_internal: "overcloud.internalapi.{{ tripleo_domain }}"
 overcloud_cloud_name_storage: "overcloud.storage.{{ tripleo_domain }}"
 overcloud_cloud_name_storage_management: "overcloud.storagemgmt.{{ tripleo_domain }}"
 overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
-
-# Define FreeIPA server as DNS server for under/overcloud.
-undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
-overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
-
 # Supplemental node related vars. #
 # Ensure that the FreeIPA server node is provisioned during deployment.
 deploy_supplemental_node: true
@@ -34,43 +186,10 @@ supplemental_user: centos
 supplemental_node_ip: "{{ freeipa_internal_ip }}"
 supplemental_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
 
-# We don't need introspection in a virtual environment (because we are
-# creating all the "hardware" we really know the necessary information).
-step_introspect: false
+# Define FreeIPA server as DNS server for under/overcloud.
+undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
+overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
 
-# Tell tripleo about our environment.
-network_isolation: true
-network_isolation_type: 'multiple-nics'
-extra_args: ''
-test_ping: true
-enable_pacemaker: true
-run_tempest: false
-
-# Options below direct automatic doc generation by tripleo-collect-logs.
-artcl_gen_docs: true
-artcl_create_docs_payload:
-  included_deployment_scripts:
-    - undercloud-install
-    - novajoin_prep
-    - install_novajoin
-    - overcloud-custom-tht-script
-    - overcloud-prep-flavors
-    - overcloud-prep-images
-    - overcloud-prep-network
-    - overcloud-deploy
-    - overcloud-deploy-post
-    - overcloud-validate
-  included_static_docs:
-    - env-setup-virt
-  table_of_contents:
-    - env-setup-virt
-    - novajoin_prep
-    - install_novajoin
-    - undercloud-install
-    - overcloud-custom-tht-script
-    - overcloud-prep-flavors
-    - overcloud-prep-images
-    - overcloud-prep-network
-    - overcloud-deploy
-    - overcloud-deploy-post
-    - overcloud-validate
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
