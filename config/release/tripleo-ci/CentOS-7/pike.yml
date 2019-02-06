@@ -109,6 +109,13 @@ repos:
     filename: quickstart-centos-opstools.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/opstools/x86_64/
 
+  - type: generic
+    reponame: quickstart-centos7-rt
+    filename: quickstart-centos7-rt.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/rt/x86_64/
+    includepkgs: tuned-profiles-cpu-partitioning
+    enabled: 0
+
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt quickstart-centos-opstools.enabled=0;
