@@ -1,0 +1,17 @@
+# possible bug in ansible, f29 python 3 env fails
+# w/o both python-libselinux packages installed
+# https://bugs.launchpad.net/tripleo/+bug/1812324
+
+gcc
+git
+iproute
+libyaml
+libffi-devel
+openssl-devel
+python2-libselinux [platform:fedora]
+python3-libselinux [platform:fedora]
+python3-netaddr [platform:fedora]
+python3-setuptools [platform:fedora]
+python3-virtualenv [platform:fedora]
+python3-pip [platform:fedora]
+redhat-rpm-config
