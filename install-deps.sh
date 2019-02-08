@@ -198,9 +198,7 @@ install_package_deps_via_bindep(){
     echo "install_package_deps_via_bindep"
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [ "$passwordless_sudo" == "1" ] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
-        for i in `bindep -b -f bindep_$(python_cmd).txt`; do
-            sudo $(package_manager) -y install $i;
-        done
+        bindep -b -f bindep.txt || sudo $(package_manager) -y install `bindep -b -f  bindep.txt`;
     else
         print_sudo_warning
     fi
