@@ -8,7 +8,7 @@
   when: hostvars['localhost'].ansible_user_dir is not defined
 
 - include_tasks: inventory.yml
-  when: inventory in ['multinode', 'all', 'undercloud']
+  when: inventory in ['multinode', 'all', 'undercloud', 'extra_node']
 
 - include_tasks: openstack.yml
   when: inventory == 'openstack'

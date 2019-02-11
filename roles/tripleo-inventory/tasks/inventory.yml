@@ -66,24 +66,36 @@
   set_fact:
     virthost_with_private_key: "{{ 'virthost' in groups and groups['virthost']|length>0 and hostvars[groups['virthost'][0]].ansible_private_key_file is defined }}"
 
-# Add the supplemental to the in-memory inventory.
-- name: Add supplemental node vm to inventory
-  add_host:
-    name: supplemental
-    groups: supplemental
-    ansible_host: supplemental
-    ansible_fqdn: supplemental
-    ansible_user: '{{ supplemental_user }}'
-    ansible_private_key_file: '{{ local_working_dir }}/id_rsa_supplemental'
-    ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.ansible"'
-    supplemental_node_ip: "{{ supplemental_node_ip }}"
-  when: supplemental_node_ip is defined
+- when: inventory == 'extra_node'
+  block:
 
-- name: set_fact for supplemental ip
-  set_fact:
-    supplemental_node_ip: "{{ hostvars['supplemental'].supplemental_node_ip }}"
-    cacheable: true
-  when: hostvars['supplemental'] is defined and hostvars['supplemental'].supplemental_node_ip is defined
+    - name: Get IP of extra node in OVB stack
+      script: get_extra_node.py {{ working_dir }}
+      args:
+        executable: python3
+      register: node_ip
+
+    - name: set_fact for supplemental ip
+      set_fact:
+        supplemental_node_ip: "{{ node_ip.stdout|replace('\n', '')|replace('\r', '')|trim }}"
+        cacheable: true
+      when: node_ip.stdout
+
+    - name: Show the supplemental ip
+      debug: msg="Supplemental node IP = {{ supplemental_node_ip }}"
+      when: supplemental_node_ip is defined
+
+    - name: Add supplemental node vm to inventory
+      add_host:
+        name: supplemental
+        groups: supplemental
+        ansible_host: supplemental
+        ansible_fqdn: supplemental
+        ansible_user: '{{ supplemental_user }}'
+        ansible_private_key_file: '{{ extra_node_key }}'
+        ansible_ssh_extra_args: '-F "{{ local_working_dir }}/ssh.config.ansible"'
+        supplemental_node_ip: "{{ supplemental_node_ip }}"
+      when: supplemental_node_ip is defined
 
 # readd the undercloud to reset the ansible_ssh parameters set in quickstart
 - name: Add undercloud vm to inventory
