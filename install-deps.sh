@@ -198,13 +198,13 @@ install_package_deps_via_bindep(){
     echo "install_package_deps_via_bindep"
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [ "$passwordless_sudo" == "1" ] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
-        bindep -b -f bindep.txt || sudo $(package_manager) -y install `bindep -b -f  bindep.txt`;
+        bindep -b || sudo $(package_manager) -y install `bindep -b`;
         # EPEL will NOT be installed on any nodepool nodes.
         # EPEL could be installed in the same transaction as other packages on CentOS/RHEL
         # This can leave the system with an older ansible version. Ansible 2.7+ required
         # Run through the deps and update them
         yum-config-manager enable epel || true
-        sudo $(package_manager) -y update `bindep -b -l newline -f bindep.txt`
+        sudo $(package_manager) -y update `bindep -b -l newline`
     else
         print_sudo_warning
     fi
