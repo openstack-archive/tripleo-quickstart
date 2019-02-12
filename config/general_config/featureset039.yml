@@ -164,8 +164,6 @@ undercloud_container_cli: >-
 enable_tls_everywhere: true
 novajoin_connect_timeout: 60
 novajoin_read_timeout: 60
-# Set the FreeIPA server IP
-freeipa_internal_ip: "{{ external_network_cidr|nthhost(10) }}"
 freeipa_admin_password: fce95318204114530f31f885c9df588f
 
 # Set node hostnames.
@@ -183,12 +181,7 @@ overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
 # Ensure that the FreeIPA server node is provisioned during deployment.
 deploy_supplemental_node: true
 supplemental_user: centos
-supplemental_node_ip: "{{ freeipa_internal_ip }}"
 supplemental_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
-
-# Define FreeIPA server as DNS server for under/overcloud.
-undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
-overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
 
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_resource_registry_args:

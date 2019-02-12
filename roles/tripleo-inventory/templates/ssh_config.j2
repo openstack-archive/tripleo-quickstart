@@ -43,10 +43,15 @@ Host undercloud
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
-{% if deploy_supplemental_node %}
+{% if deploy_supplemental_node|bool and supplemental_node_ip is defined %}
 Host supplemental
+    Hostname {{ supplemental_node_ip }}
+{% if inventory == 'extra_node' %}
+    IdentityFile {{ extra_node_key }}
+{% else %}
     ProxyCommand {{ supplemental_ssh_proxy_command }}
     IdentityFile {{ local_working_dir }}/id_rsa_supplemental
+{% endif %}
     User {{ supplemental_user }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
