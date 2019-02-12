@@ -37,3 +37,7 @@ python-virtualenv [platform:centos-7]
 python-pip [platform:centos-7]
 #
 redhat-rpm-config [platform:rpm]
+
+# other-requirements
+libffi-dev [platform:dpkg]
+libffi-devel [platform:rpm]
