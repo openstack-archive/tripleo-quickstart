@@ -10,6 +10,9 @@ undercloud_check_sanity: true
 containerized_overcloud: false
 containerized_overcloud_upgrade: false
 
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+
 # Tripleo-upgrade specific parameters
 undercloud_upgrade: true
 overcloud_deploy_script: "{{ working_dir }}/overcloud_deploy.sh"
