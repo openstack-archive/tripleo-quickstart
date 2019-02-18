@@ -92,7 +92,29 @@ undercloud_enable_tempest: >-
   {%- endif -%}
 
 run_tempest: true
-test_regex: '.*'
+test_white_regex: '.*'
+test_black_regex:
+  - 'sahara_tempest_plugin'
+  - 'manila_tempest_tests'
+  - 'patrole_tempest_plugin'
+  - 'zaqar_tempest_plugin'
+  - 'watcher_tempest_plugin'
+  - 'vitrage_tempest_plugin'
+  - 'trove_tempest_plugin'
+  - 'tripleo_common_tempest_plugin'
+  - 'tempest_horizon'
+  - 'octavia_tempest_plugin'
+  - 'novajoin_tempest_plugin'
+  - 'murano_tempest_tests'
+  - 'mistral_tempest_tests'
+  - 'magnum_tempest_plugin'
+  - 'kuryr_tempest_plugin'
+  - 'ironic_tempest_plugin'
+  - 'heat_tempest_plugin'
+  - 'designate_tempest_plugin'
+  - 'congress_tempest_plugin'
+  - 'barbican_tempest_plugin'
+  - 'ec2api_tempest_plugin'
 test_ping: false
 # Run tempest without skip file
 skip_file_src: ''
