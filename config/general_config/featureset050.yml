@@ -11,6 +11,9 @@ containerized_overcloud: false
 containerized_overcloud_upgrade: false
 containerized_undercloud_upgrade: true
 
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+
 # Tripleo-upgrade specific parameters
 undercloud_upgrade: true
 tripleo_ci: true
