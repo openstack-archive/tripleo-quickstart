@@ -164,9 +164,15 @@ undercloud_container_cli: >-
 enable_tls_everywhere: true
 novajoin_connect_timeout: 60
 novajoin_read_timeout: 60
+external_network_cidr: 10.0.0.0/24
+
 freeipa_admin_password: fce95318204114530f31f885c9df588f
 
 # Set node hostnames.
+freeipa_internal_ip: "{{ external_network_cidr|nthhost(250) }}"
+supplemental_node_ip: "{{ freeipa_internal_ip }}"
+undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
+overcloud_dns_servers: ["{{ freeipa_internal_ip }}", "8.8.8.8"]
 tripleo_domain: ooo.test
 undercloud_cloud_domain: "{{ tripleo_domain }}"
 freeipa_server_hostname: "ipa.{{ tripleo_domain }}"
