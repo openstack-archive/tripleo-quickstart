@@ -43,9 +43,9 @@ Host undercloud
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
-{% if deploy_supplemental_node|bool and supplemental_node_ip_private is defined %}
+{% if deploy_supplemental_node|bool and (supplemental_node_ip_private is defined or supplemental_node_ip is defined) %}
 Host supplemental
-    Hostname {{ supplemental_node_ip_private }}
+    Hostname {{ supplemental_node_ip_private|default(supplemental_node_ip) }}
 {% if undercloud_type == 'ovb' %}
     IdentityFile {{ extra_node_key }}
 {% else %}
