@@ -166,13 +166,13 @@ installer:
     test_white_regex: .*smoke
     enabled: true
     cirros_alt:
-      url: http://download.cirros-cloud.net/0.3.4/
-      name: cirros-0.3.4-x86_64-disk.img_alt
-      id: cirros-0.3.4-x86_64-disk.img_alt
+      url: http://download.cirros-cloud.net/0.3.6/
+      name: cirros-0.3.6-x86_64-disk.img_alt
+      id: cirros-0.3.6-x86_64-disk.img_alt
     cirros:
-      url: http://download.cirros-cloud.net/0.3.4/
-      name: cirros-0.3.4-x86_64-disk.img
-      id: cirros-0.3.4-x86_64-disk.img
+      url: http://download.cirros-cloud.net/0.3.6/
+      name: cirros-0.3.6-x86_64-disk.img
+      id: cirros-0.3.6-x86_64-disk.img
     dir: tempest
   images:
     7-director:
