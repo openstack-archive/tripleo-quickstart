@@ -98,3 +98,6 @@ deploy_steps_ansible_workflow: >-
   {%- else -%}
   false
   {%- endif -%}
+
+# Switch this variable to 'podman' once we run OVB jobs on CentOS8.
+overcloud_container_cli: docker
