@@ -224,3 +224,4 @@ Note and Known limitation:
 .. _053: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset053.yml
 .. _054: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset054.yml
 .. _055: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset055.yml
+.. _058: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset058.yml
