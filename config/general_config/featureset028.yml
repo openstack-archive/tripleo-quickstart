@@ -24,10 +24,8 @@ telemetry_args: >-
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
 
-# TODO(numans) - Change to neutron-ml2-ovn-ha.yaml once OVS 2.7.2 is available
-# in rdo.
 extra_args: >-
-  -e {{ overcloud_templates_path }}/environments/neutron-ml2-ovn.yaml
+  -e {{ overcloud_templates_path }}/environments/services/neutron-ovn-ha.yaml
 
 composable_roles: true
 overcloud_roles:
