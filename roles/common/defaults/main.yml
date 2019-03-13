@@ -153,6 +153,9 @@ networks:
 undercloud_network_cidr: 192.168.24.0/24
 undercloud_external_network_cidr: >-
   {%- if overcloud_ipv6|bool %}2001:db8:fd00:1000::/64{% else %}10.0.0.1/24{% endif -%}
+# undercloud_external_network_cidr_ipv4 is only used for routing when
+# the overcloud is ipv6
+undercloud_external_network_cidr_ipv4: 10.0.0.1/24
 undercloud_networks:
   external:
     address: "{{ undercloud_external_network_cidr|nthhost(1) }}"
