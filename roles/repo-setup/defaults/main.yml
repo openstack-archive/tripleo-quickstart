@@ -10,6 +10,7 @@ stable:
   - ocata
   - queens
   - rocky
+  - stein
 repo_cmd_before: |
   {% if ansible_pkg_mgr == "yum" %}
   sudo {{ ansible_pkg_mgr }} install -y yum-plugin-priorities;

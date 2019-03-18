@@ -1,0 +1,142 @@
+devmode: true
+overcloud_as_undercloud: true
+images:
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+inject_images:
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
+release: stein
+distro_ver: centos7
+distro_deps_repo_name: deps
+dlrn_hash_tag: current-tripleo
+dlrn_hash_tag_newest: current
+dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
+docker_registry_host: docker.io
+docker_registry_namespace: "tripleo{{ release }}"
+docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+docker_openshift_tag: v3.11.0
+overcloud_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/current-tripleo/overcloud-full.tar"
+ipa_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/current-tripleo/ironic-python-agent.tar"
+repo_cmd_before: |
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo yum clean all;
+  sudo yum-config-manager --disable "*"
+  if [ -e /etc/ci/mirror_info.sh ]; then
+    source /etc/ci/mirror_info.sh
+  else
+    # Otherwise, fallback to official mirrors provided by CentOS.
+    export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
+    export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
+  fi
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  tripleo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  if [[ -z "$rdo_dlrn" || -z "$tripleo_dlrn" ]]; then
+    echo "Failed to parse dlrn hash"
+    exit 1
+  fi
+  export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+  export TRIPLEO_DLRN_REPO=${tripleo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+
+repos:
+  # RDO repos
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    priority: 20
+    baseurl: $TRIPLEO_DLRN_REPO
+
+  - type: generic
+    reponame: delorean-current
+    filename: delorean-current.repo
+    baseurl: $RDO_DLRN_REPO
+    priority: 10
+    includepkgs:
+      - ansible-role-container-registry
+      - ansible-role-tripleo*
+      - ansible-tripleo-ipsec
+      - instack
+      - instack-undercloud
+      - openstack-tripleo-*
+      - os-apply-config
+      - os-collect-config
+      - os-net-config
+      - os-refresh-config
+      - puppet-*
+      - python*-tripleo*
+      - python*-paunch*
+
+  - type: generic
+    reponame: "delorean-{{ release }}-deps"
+    filename: "delorean-{{ release }}-deps.repo"
+    baseurl: ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ distro_deps_repo_name }}/latest/
+
+  - type: generic
+    reponame: delorean-master-build-deps
+    filename: delorean-master-build-deps.repo
+    baseurl: ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/build-deps/latest/
+    enabled: 0
+
+  # CentOS related repos
+  - type: generic
+    reponame: quickstart-centos-base
+    filename: quickstart-centos-base.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/os/x86_64/
+
+  - type: generic
+    reponame: quickstart-centos-updates
+    filename: quickstart-centos-updates.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/updates/x86_64/
+
+  - type: generic
+    reponame: quickstart-centos-extras
+    filename: quickstart-centos-extras.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/extras/x86_64/
+
+  - type: generic
+    reponame: quickstart-centos-qemu
+    filename: quickstart-centos-qemu.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/virt/x86_64/kvm-common/
+
+  - type: generic
+    reponame: quickstart-centos-ceph-luminous
+    filename: quickstart-centos-ceph-luminous.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/storage/x86_64/ceph-luminous/
+
+  - type: generic
+    reponame: quickstart-centos-opstools
+    filename: quickstart-centos-opstools.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/opstools/x86_64/
+
+  - type: generic
+    reponame: quickstart-centos7-rt
+    filename: quickstart-centos7-rt.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/rt/x86_64/
+    enabled: 0
+
+repo_cmd_after: |
+  sudo yum install -y yum-plugin-priorities;
+  {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt quickstart-centos-opstools.enabled=0;
+  {%endif %}
+  sudo yum-config-manager --disable rdo-qemu-ev;
+  sudo rpm -e epel-release || true;
+  sudo yum remove -y rdo-release centos-release-ceph-* centos-release-openstack-* centos-release-qemu-ev || true;
+  sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo /etc/yum.repos.d/CentOS-QEMU-EV.repo;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo yum repolist;
+  sudo yum clean metadata
+  {% if repo_setup_run_update|default(true)|bool %}
+  sudo yum update -y
+  {% endif %}
+
+undercloud_rpm_dependencies: >-
+  python-tripleoclient
+  ceph-ansible

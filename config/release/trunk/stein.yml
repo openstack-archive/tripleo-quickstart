@@ -1,0 +1,49 @@
+release: stein
+dlrn_hash_tag: current-tripleo-rdo
+docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+overcloud_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar
+
+overcloud_as_undercloud: true
+update_images: true
+images:
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+inject_images:
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
+
+repos:
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    baseurl: https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/
+    priority: 20
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
+
+  - type: package
+    pkg_name: centos-release-ceph-luminous
+    custom_cmd: 'sudo yum install -y --enablerepo=extras'
+
+repo_cmd_after: |
+  sudo yum remove -y centos-release-ceph-hammer || true
+  sudo yum remove -y centos-release-ceph-jewel || true
+  sudo yum-config-manager --save --setopt centos-ceph-luminous.gpgcheck=0
+  sudo yum repolist;
+  {% if repo_setup_run_update|default(true)|bool %}
+  sudo yum update -y
+  {% endif %}
+
+undercloud_rpm_dependencies: >-
+  python-tripleoclient
+  ceph-ansible
