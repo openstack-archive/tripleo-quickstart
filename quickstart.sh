@@ -482,12 +482,12 @@ if [ "$OPT_BOOTSTRAP" = 1 ] || ! [ -f "$OPT_WORKDIR/bin/activate" ]; then
 fi
 
 if [ "$#" -lt 1 ]; then
-    if ["${VIRTHOST:-}" == ""]; then
+    if [ "${VIRTHOST:-}" == "" ]; then
         echo "ERROR: You didn't specify a target machine and VIRTHOST is not defined" >&2
         usage >&2
         exit 2
     else
-        echo "NOTICE: Using VIRTHOST=$VIRHOST as target machine" >&2
+        echo "NOTICE: Using VIRTHOST=$VIRTHOST as target machine" >&2
     fi
 else
     VIRTHOST=$1
