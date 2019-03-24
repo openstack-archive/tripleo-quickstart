@@ -140,7 +140,7 @@ bootstrap () {
             pushd $EXTRAS_DIR
                 $ZUUL_CLONER --cache-dir \
                     /opt/git \
-                    git://git.openstack.org \
+                    https://git.openstack.org \
                     openstack/tripleo-quickstart-extras
                 cd openstack/tripleo-quickstart-extras
                 if [ $OPT_CLEAN == 1 ]; then
