@@ -206,6 +206,19 @@
         mv -f '{{ working_dir }}/undercloud-resized.qcow2'
               '{{ working_dir }}/undercloud.qcow2'
 
+    - name: Resize undercloud image (expand the FS)
+      command: >
+        virt-customize -a '{{ working_dir }}/undercloud.qcow2'
+        --run-command 'FS_TYPE=`findmnt -o FSTYPE -fn /`;
+        if [ "$FS_TYPE" = "xfs" ]; then xfs_growfs /;
+        elif [ "$FS_TYPE" = "ext4" ]; then resize2fs /dev/sda1;
+        else echo "ERROR: Unknown filesystem $FSTYPE, cannot resize.";
+        exit 1; fi'
+      environment:
+        LIBGUESTFS_BACKEND: direct
+        LIBGUESTFS_DEBUG: 1
+        LIBGUESTFS_TRACE: 1
+
 - when:
     - undercloud_vol_check is failed
     - not overcloud_as_undercloud|bool

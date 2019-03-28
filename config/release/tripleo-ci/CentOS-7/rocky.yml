@@ -137,3 +137,9 @@ repo_cmd_after: |
 undercloud_rpm_dependencies: >-
   python-tripleoclient
   ceph-ansible
+
+# baseos settings
+baseos_undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1901.qcow2
+baseos_image: centos
+baseos_image_type: qcow2
+baseos_md5sum: "26c52282b53e6fe746fbfd5542421675  CentOS-7-x86_64-GenericCloud-1901.qcow2"
