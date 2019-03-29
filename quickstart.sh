@@ -42,8 +42,8 @@ clean_virtualenv() {
 
 # Our docs support running quickstart.sh as a standalone script.
 # We have to download install-deps.sh to support that use case.
-ABSPATH=$(readlink -f $0)
-ABSDIR=$(dirname $ABSPATH)
+ABSDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 if [[ ! -e ${ABSDIR}/install-deps.sh ]]; then
     echo "install-deps.sh was not found, in the same directory ($ABSDIR) as quickstart.sh"
     echo "downloading install-deps.sh to ${ABSDIR}/install-deps.sh"
@@ -395,9 +395,7 @@ fi
 
 
 if [ "$OPT_NO_CLONE" = 1 ]; then
-    SCRIPT=$( readlink -f "${BASH_SOURCE[0]}" )
-    THIS_DIR=$( dirname $SCRIPT )
-    OOOQ_DIR=$THIS_DIR
+    OOOQ_DIR=$ABSDIR
 else
     OOOQ_DIR=$OPT_WORKDIR/tripleo-quickstart
 fi
