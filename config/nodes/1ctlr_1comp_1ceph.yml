@@ -17,8 +17,9 @@ overcloud_nodes:
 node_count: 3
 
 # Tell tripleo which nodes to deploy.
-topology: >-
-  --ceph-storage-scale 1
+topology_map:
+  CephStorage:
+    scale: 1
 
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'

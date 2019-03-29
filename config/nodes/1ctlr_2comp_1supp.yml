@@ -23,5 +23,6 @@ supplemental_node:
   name: ipa
   flavor: undercloud
 
-topology: >-
-  --compute-scale 2
+topology_map:
+  Compute:
+    scale: 2

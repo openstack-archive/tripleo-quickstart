@@ -38,6 +38,8 @@ overcloud_nodes:
     virtualbmc_port: 6233
 
 # Tell tripleo which nodes to deploy.
-topology: >-
-  --compute-scale 1
-  --control-scale 3
+topology_map:
+  Controller:
+    scale: 3
+  Compute:
+    scale: 1
