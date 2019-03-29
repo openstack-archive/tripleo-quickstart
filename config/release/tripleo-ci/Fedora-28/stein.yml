@@ -28,6 +28,8 @@ ipa_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/current-tr
 repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  {# dnf-plugins-core provides config-manager command #}
+  sudo dnf install -y dnf-plugins-core;
   sudo dnf clean all;
   sudo dnf config-manager --set-disabled "*"
   if [ -e /etc/ci/mirror_info.sh ]; then
