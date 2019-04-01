@@ -48,7 +48,9 @@
     virt-resize -x --verbose --expand /dev/sda1
     '{{ working_dir }}/undercloud.qcow2'
     '{{ working_dir }}/undercloud-resized.qcow2'
-    >> {{ working_dir }}/virt-resize.log 2>&1
+    2>&1 | tee -a {{ working_dir }}/virt-resize.log
+  register: result
+  no_log: result is success
 
 - name: Rename resized image to original name
   command: >
