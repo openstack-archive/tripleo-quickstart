@@ -11,6 +11,14 @@ vxlan_networking: false
 # deployment role
 standalone_role: Standalone.yaml
 
+# docker / podman configuration
+standalone_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
+
 standalone_upgrade: true
 # validation
 
