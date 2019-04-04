@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+
+    - name: validate image urls
+      uri:
+        url: "{{ item }}"
+        method: HEAD
+        status_code: 200
+      with_items:
+        - "{{ ipa_image_url }}"
+        - "{{ overcloud_image_url }}"
