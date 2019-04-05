@@ -29,6 +29,26 @@ containerized_undercloud: >-
   {%- else -%}
   false
   {%- endif -%}
+ctlplane_masquerade: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+undercloud_enable_routed_networks: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+undercloud_clean_nodes: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_inspection_extras: false
 
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
@@ -37,8 +57,20 @@ undercloud_resource_registry_args:
   "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
 
 # Tell tripleo about our environment
-enable_pacemaker: false
-network_isolation: false
+enable_pacemaker: true
+network_isolation: true
+network_isolation_type: "multiple-nics"
+network_isolation_args: >-
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
+
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
 
 extra_args: ''
 
@@ -74,6 +106,18 @@ artcl_create_docs_payload:
     - tempest-setup
     - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
+deploy_steps_ansible_workflow: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+config_download_args: >-
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --verbose
+  {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file
 # Tempest
@@ -124,9 +168,9 @@ tempest_workers: 3
 # Install the latest unlreleased packages from CentOS
 enable_centos_cr_repo: true
 
-ctlplane_masquerade: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  true
+undercloud_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
   {%- else -%}
-  false
+  podman
   {%- endif -%}
