@@ -177,8 +177,8 @@
   script: "get-domain-ip.sh subnode-0"
   register: "subnode_0_ip_result"
   until: "subnode_0_ip_result is success"
-  retries: 20
-  delay: 20
+  retries: "{{ libvirt_wait_retries }}"
+  delay: "{{ libvirt_wait_delay }}"
 
 - name: Set_fact for undercloud ip
   set_fact:
@@ -226,8 +226,8 @@
   script: "get-domain-ip.sh subnode-1"
   register: "subnode_1_ip_result"
   until: "subnode_1_ip_result is success"
-  retries: 20
-  delay: 20
+  retries: "{{ libvirt_wait_retries }}"
+  delay: "{{ libvirt_wait_delay }}"
 
 - name: Set_fact for undercloud ip
   set_fact:
