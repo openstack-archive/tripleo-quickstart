@@ -32,11 +32,11 @@ repos:
     down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
 
   - type: package
-    pkg_name: centos-release-ceph-luminous
+    pkg_name: centos-release-ceph-nautilus
     custom_cmd: 'sudo yum install -y --enablerepo=extras'
 
 repo_cmd_after: |
-  sudo yum-config-manager --save --setopt centos-ceph-luminous.gpgcheck=0
+  sudo yum-config-manager --save --setopt centos-ceph-nautilus.gpgcheck=0
   sudo yum repolist;
   {% if repo_setup_run_update|default(true)|bool %}
   sudo yum update -y
