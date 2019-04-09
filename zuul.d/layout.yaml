@@ -15,9 +15,14 @@
         - tripleo-ci-centos-7-scenario009-multinode-oooq-container:
             files:
               - config/general_config/featureset033.yml
+              - requirements.txt
         - tripleo-ci-centos-7-standalone:
             files:
               - config/general_config/featureset052.yml
+              - requirements.txt
+        - tripleo-ci-centos-7-containers-multinode:
+            files:
+              - requirements.txt
         - openstack-tox-linters
         - tripleo-ci-centos-7-scenario010-multinode-oooq-container:
             files:
