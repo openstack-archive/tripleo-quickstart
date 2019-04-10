@@ -21,3 +21,5 @@ images:
     url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1802.qcow2
     type: qcow2
     md5sum: "b3ff9077d80b5f17bcbb7356f7982fd4 *CentOS-7-x86_64-GenericCloud-1802.qcow2"
+libvirt_wait_retries: 30
+libvirt_wait_delay: 20
