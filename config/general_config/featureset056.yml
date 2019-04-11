@@ -47,6 +47,3 @@ tempest_whitelist:
   - 'tempest.api.network.test_security_groups_negative'
   - 'tempest.api.network.test_ports'
   - 'tempest.api.network.test_routers_negative'
-
-# NOTE(cjeanner) Activate new check only on a non-voting fs
-validate_services: true
