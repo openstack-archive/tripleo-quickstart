@@ -24,6 +24,7 @@ all:
         public_ipv4: "{{ subnode_0_ip }}"
         region: libvirt
         public_ipv6: null
+{% if subnode_1_ip is defined %}
     secondary:
       ansible_connection: ssh
       ansible_host: "{{ subnode_1_ip }}"
@@ -39,3 +40,4 @@ all:
         public_ipv4:  "{{ subnode_1_ip }}"
         region: libvirt
         public_ipv6: null
+{% endif %}

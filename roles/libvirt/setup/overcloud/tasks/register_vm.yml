@@ -1,0 +1,48 @@
+- name: Get libvirt nodepool IP addresses
+  script: "get-domain-ip.sh {{ item.name }}"
+  register: "ip_result"
+  until: "ip_result is success"
+  retries: "{{ libvirt_wait_retries }}"
+  delay: "{{ libvirt_wait_delay }}"
+
+- name: Set_fact for undercloud ip
+  set_fact:
+    "{{ item.name.replace('-', '_') }}_ip": "{{ ip_result.stdout_lines[0] }}"
+    cacheable: true
+
+- name: Wait until ssh is available
+  wait_for:
+    host: "{{ ip_result.stdout_lines[0] }}"
+    state: started
+    port: 22
+    timeout: 600
+
+- name: Add {{ item.name }} to inventory
+  add_host:
+    name: "{{ item.name }}"
+    groups: subnodes
+    ansible_host: "{{ ip_result.stdout_lines[0] }}"
+    ansible_fqdn: "{{ ip_result.stdout_lines[0] }}"
+    ansible_user: zuul
+    subnode_private_ip: "{{ ip_result.stdout_lines[0] }}"
+    subnode_public_ip: "{{ ip_result.stdout_lines[0] }}"
+    ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
+
+- name: Add {{ item.name }} to known_hosts
+  known_hosts:
+    name: "{{ ip_result.stdout_lines[0] }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan
+      -t ecdsa-sha2-nistp256 ' + ip_result.stdout_lines[0]) }}"
+
+- name: Set hostname correctly for {{ item.name }}
+  delegate_to: "{{ item.name }}"
+  shell: >
+    echo "127.0.0.1  {{ item.name }} localhost" > /etc/hosts;
+    echo "HOSTNAME={{ item.name }}" >> /etc/sysconfig/network;
+    echo "{{ item.name }}" > /etc/hostname;
+    hostnamectl set-hostname {{ item.name }};
+    {% if custom_nameserver is defined and custom_nameserver %}
+    echo "nameserver {{ custom_nameserver }} " >> /etc/resolv.conf;
+    echo "append domain-name-servers {{ custom_nameserver }};" >> /etc/dhcp/dhclient.conf
+    {% endif %}
+  become: true
