@@ -104,15 +104,6 @@ repos:
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/rt/x86_64/
     enabled: 0
 
-  - type: generic
-    reponame: rdoinfo_repo_test
-    filename: rdoinfo_repo_test.repo
-    priority: 1
-    gpgcheck: 0
-    enabled: 1
-    baseurl: http://38.145.32.220/rdoinfo_repo_test/
-
-
 repo_cmd_after: |
   sudo yum install -y yum-plugin-priorities;
   {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt quickstart-centos-opstools.enabled=0;
