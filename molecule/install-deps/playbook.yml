@@ -1,0 +1,18 @@
+---
+
+- name: Converge
+  hosts: all
+  tasks:
+
+    - name: deploy install-deps.sh
+      copy:
+        src: ../../install-deps.sh
+        dest: install-deps.sh
+        mode: 0744
+
+    - name: "runs install-deps.sh"
+      shell: bash -x install-deps.sh
+      args:
+        warn: false
+      tags:
+        - skip_ansible_lint
