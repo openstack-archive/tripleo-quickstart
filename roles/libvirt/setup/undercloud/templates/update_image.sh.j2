@@ -13,7 +13,7 @@ timeout -s 15 -k 1200 900 bash << EOS
 
     {% if "undercloud" in item.path %}
     mkdir -p /opt/{{ undercloud_user }}/new/tripleo-ci
-    git clone https://git.openstack.org/openstack-infra/tripleo-ci /opt/stack/new/tripleo-ci
+    git clone https://opendev.org/openstack/tripleo-ci /opt/stack/new/tripleo-ci
     {% endif  %}
     {% if "overcloud" in item.path  %}
     rm -rf /etc/puppet/modules/*
