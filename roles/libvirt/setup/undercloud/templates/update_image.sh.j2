@@ -17,7 +17,7 @@ timeout -s 15 -k 1200 900 bash << EOS
     {{ ansible_pkg_mgr }} install -y libselinux-python* python*-libselinux
     {{ ansible_pkg_mgr }} install -y git
     mkdir -p /opt/{{ undercloud_user }}/new/tripleo-ci
-    git clone https://git.openstack.org/openstack-infra/tripleo-ci /opt/stack/new/tripleo-ci
+    git clone https://opendev.org/openstack/tripleo-ci /opt/stack/new/tripleo-ci
     {% endif  %}
     {% if "overcloud" in item.path  %}
     rm -rf /etc/puppet/modules/*
