@@ -26,7 +26,7 @@ Some of the environment configuration will be stored in TripleO Quickstart or
 TripleO Quickstart Extras, however sometimes the configuration is specific
 to CI and may only exist in the environment itself.  For example variables
 specific to executing TripleO Quickstart in upstream will live in
-https://github.com/openstack-infra/tripleo-ci/tree/master/toci-quickstart
+https://opendev.org/openstack/tripleo-ci/src/branch/master/toci-quickstart
 
 Example Invocation::
 

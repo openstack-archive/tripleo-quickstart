@@ -117,7 +117,7 @@ if [ "$JOB_TYPE" = "promote" ]; then
     if [[ $RELEASE = "rhos-12" || $RELEASE = "rhos-13" ]]; then
         export FEATURESET=featureset022
 
-        # TODO: remove when/if https://review.openstack.org/#/c/529408 lands
+        # TODO: remove when/if https://review.opendev.org/#/c/529408 lands
         OPT_VARS+=("-e tempest_config=true")
         OPT_VARS+=("-e run_tempest=true")
         OPT_VARS+=("-e tempest_workers=4")

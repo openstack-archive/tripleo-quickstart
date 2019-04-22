@@ -47,7 +47,7 @@ ABSDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if [[ ! -e ${ABSDIR}/install-deps.sh ]]; then
     echo "install-deps.sh was not found, in the same directory ($ABSDIR) as quickstart.sh"
     echo "downloading install-deps.sh to ${ABSDIR}/install-deps.sh"
-    curl -o ${ABSDIR}/install-deps.sh https://git.openstack.org/cgit/openstack/tripleo-quickstart/plain/install-deps.sh
+    curl -o ${ABSDIR}/install-deps.sh https://opendev.org/openstack/tripleo-quickstart/raw/branch/master/install-deps.sh
 fi
 source ${ABSDIR}/install-deps.sh
 
@@ -114,7 +114,7 @@ bootstrap () {
     if [ "$OPT_NO_CLONE" != 1 ]; then
         if ! [ -d "$OOOQ_DIR" ]; then
             echo "Cloning tripleo-quickstart repository..."
-            git clone https://git.openstack.org/openstack/tripleo-quickstart \
+            git clone https://opendev.org/openstack/tripleo-quickstart \
                 $OOOQ_DIR
         fi
 
@@ -140,7 +140,7 @@ bootstrap () {
             pushd $EXTRAS_DIR
                 $ZUUL_CLONER --cache-dir \
                     /opt/git \
-                    https://git.openstack.org \
+                    https://opendev.org \
                     openstack/tripleo-quickstart-extras
                 cd openstack/tripleo-quickstart-extras
                 if [ $OPT_CLEAN == 1 ]; then
@@ -179,7 +179,7 @@ usage () {
     echo "                      The user assumes responsibility for the requirements. "
     echo "  -u, --url-requirements <PIP format URL>"
     echo "                      Pip format URL for requirements to install for quickstart"
-    echo "                      For example: -u git+https://git.openstack.org/openstack/tripleo-upgrade#egg=tripleo-upgrade"
+    echo "                      For example: -u git+https://opendev.org/openstack/tripleo-upgrade#egg=tripleo-upgrade"
     echo "  -R, --release       OpenStack release to deploy (default=$OPT_RELEASE)"
     echo "  -c, --config <file>"
     echo "                      specify the config file that contains the node"

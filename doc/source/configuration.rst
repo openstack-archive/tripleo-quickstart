@@ -76,7 +76,7 @@ into the undercloud, so the system can use it.
 Please note that you also need to define all the images you want to
 fetch, using the ``images`` setting. You will need to define the name
 of the image, the url where to get it, and the image type (qcow2, tar).
-As a reference, please look at the `config <http://git.openstack.org/cgit/openstack/tripleo-quickstart/tree/config/release/master-tripleo-ci.yml>`_
+As a reference, please look at the `config <https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/release/master-tripleo-ci.yml>`_
 
 Consuming external/custom vmlinuz and initrd for undercloud
 -----------------------------------------------------------

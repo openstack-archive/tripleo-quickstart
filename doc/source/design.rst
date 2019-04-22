@@ -86,9 +86,9 @@ The following is a list of design decisions made to solve the problem.
       patches into the deployment workflow see the following for details :ref:`devmode`.
       the patch(es) into her deployment
     * Allow Joan to test her patch with testing tools like `tempest
-      <https://github.com/openstack/tripleo-quickstart-extras/tree/master/
-      roles/validate-tempest>`_ or `more basic tests <https://github.com/
-      openstack/tripleo-quickstart-extras/tree/master/roles/validate-simple>`_
+      <https://opendev.org/openstack/tripleo-quickstart-extras/src/branch/master/
+      roles/validate-tempest>`_ or `more basic tests <https://opendev.org/
+      openstack/tripleo-quickstart-extras/src/branch/master/roles/validate-simple>`_
 
 Problem: Make the deployment as fast as possible
 ================================================
@@ -99,8 +99,8 @@ comes great patience.  People are not always patient so how can
 we speed up the deployment? By building preinstalled images we hope to
 improve the install time of TripleO.
 
-  * We have created the `build image <https://github.com/openstack/
-    tripleo-quickstart-extras/tree/master/roles/build-images>`_ ansible role.
+  * We have created the `build image <https://opendev.org/openstack/
+    tripleo-quickstart-extras/src/branch/master/roles/build-images>`_ ansible role.
   * The TripleO team hosts TripleO images for the public at
     `ci.centos <https://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/>`_
     and `here <https://images.rdoproject.org/>`_
@@ -115,7 +115,7 @@ to give each command meaning.
 
   Solve for Scenario #1
     * Provision an environment and `create all the scripts and documentation
-      <https://github.com/openstack/tripleo-quickstart-extras/tree/master/
+      <https://opendev.org/openstack/tripleo-quickstart-extras/src/branch/master/
       roles/collect-logs>`_ one needs for a successful deployment
       **without** automatically deploying.  Let the user take it **step by
       step** while reading and analyzing the commands with the in-line
@@ -124,8 +124,8 @@ to give each command meaning.
   Solve for Scenario #2
     * Again, allow developers to integrate their patches, reference :ref:`devmode`,
       but also allow experienced developers to update the commands, turn on
-      debug, hand edit code by `providing the scripts <https://github.com/
-      openstack/tripleo-quickstart-extras/blob/master/roles/overcloud-deploy/
+      debug, hand edit code by `providing the scripts <https://opendev.org/
+      openstack/tripleo-quickstart-extras/src/branch/master/roles/overcloud-deploy/
       tasks/create-scripts.yml>`_ to deploy **without** automatically
       deploying.
 
@@ -162,8 +162,8 @@ to get the same results from tripleo-quickstart whether using upstream
 OpenStack CI or a local tripleo-quickstart deployment on libvirt.
 
   Solve for Scenario #2
-    * use composable ansible `roles <https://github.com/openstack/
-      tripleo-quickstart-extras/tree/master/roles>`_ that have limited scope
+    * use composable ansible `roles <https://opendev.org/openstack/
+      tripleo-quickstart-extras/src/branch/master/roles>`_ that have limited scope
       and are reusable. Small tools that do one thing and do one thing well has
       proven to be a robust model.
     * Allow developers to test their patches, reference :ref:`devmode`

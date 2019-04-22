@@ -16,7 +16,7 @@ by the `Mistral Validation framework` or by Ansible directly. They are available
 independently from the UI or the command line client.
 
 * Free software: Apache license
-* Source: http://git.openstack.org/cgit/openstack/tripleo-validations
+* Source: https://opendev.org/openstack/tripleo-validations
 * Bugs: https://bugs.launchpad.net/tripleo/+bugs?field.tag=validations
 
 Running TripleO-Validations using TripleO-Quickstart

@@ -123,7 +123,7 @@ config_download_args: >-
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
-# TODO(cgoncalves): enable tempest run once https://review.openstack.org/#/c/591997/ is merged
+# TODO(cgoncalves): enable tempest run once https://review.opendev.org/#/c/591997/ is merged
 run_tempest: false
 test_white_regex: ''
 

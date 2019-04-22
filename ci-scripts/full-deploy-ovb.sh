@@ -36,7 +36,7 @@ if [ "$JOB_TYPE" = "gate" ] || \
     fi
 elif [ "$JOB_TYPE" = "dlrn-gate-check" ]; then
     # setup a test patch to be built
-    export ZUUL_HOST=review.openstack.org
+    export ZUUL_HOST=review.opendev.org
     export ZUUL_CHANGES=openstack/tripleo-heat-templates:master:refs/changes/70/528770/1
     unset REL_TYPE
     if [ "$RELEASE" = "master-tripleo-ci" ]; then

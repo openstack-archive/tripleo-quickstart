@@ -39,12 +39,12 @@ usage () {
 zuul-gate () {
     if [[ -z "$ZUUL_HOST" ]]; then
         interactive=1
-        echo "Which Zuul host to use? (default=review.openstack.org)"
+        echo "Which Zuul host to use? (default=review.opendev.org)"
         read -p "ZUUL_HOST=" ZUUL_HOST
-        ZUUL_HOST=${ZUUL_HOST:-"review.openstack.org"}
+        ZUUL_HOST=${ZUUL_HOST:-"review.opendev.org"}
         echo ""
     fi
-    ZUUL_HOST=${ZUUL_HOST:-"review.openstack.org"}
+    ZUUL_HOST=${ZUUL_HOST:-"review.opendev.org"}
     if [[ -z "$ZUUL_CHANGES" ]]; then
         interactive=1
         echo "Specify ZUUL_CHANGES variable from logs/reproduce.sh"
@@ -57,9 +57,9 @@ zuul-gate () {
 gerrit-gate () {
     if [[ -z "$GERRIT_HOST" ]]; then
         interactive=1
-        echo "Which Gerrit host to use? (default=review.openstack.org)"
+        echo "Which Gerrit host to use? (default=review.opendev.org)"
         read -p "GERRIT_HOST=" GERRIT_HOST
-        GERRIT_HOST=${GERRIT_HOST:-"review.openstack.org"}
+        GERRIT_HOST=${GERRIT_HOST:-"review.opendev.org"}
         echo ""
     fi
     if [[ -z "$GERRIT_BRANCH" ]]; then

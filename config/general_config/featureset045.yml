@@ -16,7 +16,7 @@ release: master
 # for now, we will just start the update without changing the repository
 
 overcloud_templates_path: "{{ working_dir }}/tripleo-heat-templates"
-overcloud_templates_repo: https://git.openstack.org/openstack/tripleo-heat-templates
+overcloud_templates_repo: https://opendev.org/openstack/tripleo-heat-templates
 overcloud_templates_branch: stable/{{ overcloud_release }}
 
 undercloud_generate_service_certificate: false

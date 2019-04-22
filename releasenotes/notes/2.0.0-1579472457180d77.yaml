@@ -13,8 +13,8 @@ features:
 upgrade:
   - Each entry in the overcloud_nodes dict needs to be updated with a
     virtualbmc_port entry. See `c8c6e57ca2aad70c859505e02213ddfe40223e19
-    <https://git.openstack.org/cgit/openstack/tripleo-quickstart/commit/
-    ?id=c8c6e57ca2aad70c859505e02213ddfe40223e19>`__
+    <https://opendev.org/openstack/tripleo-quickstart/commit/
+    c8c6e57ca2aad70c859505e02213ddfe40223e19>`__
 deprecations:
   - roles/tripleo/undercloud redirects to the undercloud-deploy role in
     tripleo-quickstart-extras, but that redirect will be removed in the Queens

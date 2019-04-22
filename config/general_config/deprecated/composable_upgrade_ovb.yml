@@ -4,7 +4,7 @@ set_overcloud_workers: false
 node_count: 2
 overcloud_nodes:
 
-# Remove when https://review.openstack.org/#/c/414167/ is merged
+# Remove when https://review.opendev.org/#/c/414167/ is merged
 validation_args: " "
 
 extra_args: " --control-flavor baremetal --compute-flavor baremetal \

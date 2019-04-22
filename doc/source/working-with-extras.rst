@@ -11,7 +11,7 @@ and a few auxiliary roles for doing CI related tasks.
 
 These roles are hosted at the tripleo-quickstart-extras_ repository.
 
-.. _tripleo-quickstart-extras: http://git.openstack.org/cgit/openstack/tripleo-quickstart-extras/
+.. _tripleo-quickstart-extras: https://opendev.org/openstack/tripleo-quickstart-extras/
 
 Extras can be installed manually using Python setuptools, but ``quickstart.sh``
 provides an automated system for building the Python virtual environment and

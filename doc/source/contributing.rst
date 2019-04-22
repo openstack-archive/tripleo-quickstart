@@ -53,7 +53,7 @@ changes via Gerrit. The ``tripleo-quickstart`` project uses the
 workflow <https://docs.openstack.org/infra/manual/developers.html#development-workflow>`__.
 
 You can anonymously clone the repository via
-``git clone https://git.openstack.org/openstack/tripleo-quickstart.git``
+``git clone https://opendev.org/openstack/tripleo-quickstart.git``
 
 If you wish to contribute, you'll want to get setup by following the
 documentation available at `How To
