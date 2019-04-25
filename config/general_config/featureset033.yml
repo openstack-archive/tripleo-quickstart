@@ -49,7 +49,7 @@ container_args: >-
 
 # NOTE(mandre) use container images mirrored on the dockerhub to take advantage
 # of the proxy setup by openstack infra
-docker_openshift_etcd_namespace: docker.io/{{ docker_registry_namespace }}
+docker_openshift_etcd_namespace: docker.io/tripleomaster
 docker_openshift_cluster_monitoring_namespace: docker.io/tripleomaster
 docker_openshift_cluster_monitoring_image: coreos-cluster-monitoring-operator
 docker_openshift_configmap_reload_namespace: docker.io/tripleomaster
