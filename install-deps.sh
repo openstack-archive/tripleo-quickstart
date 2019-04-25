@@ -164,16 +164,26 @@ copy_selinux_to_venv() {
 install_virtual_env(){
     # Activate the virtualenv only when it is not already activated otherwise
     # It create the virtualenv and then activate it.
+    export PYTHONWARNINGS=ignore:DEPRECATION::pip._internal.cli.base_command
+    export PIP_DISABLE_PIP_VERSION_CHECK=1
 
-    echo "Running install_virtual_env"
     if [[ -z ${VIRTUAL_ENV+x} ]]; then
-        $(python_cmd) -m virtualenv \
-            $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
-            $OPT_WORKDIR
+
+        if [[ -f $OPT_WORKDIR/bin/activate ]]; then
+            echo "Warning: $OPT_WORKDIR virtualenv already exists, just activating it."
+        else
+            echo "Creating virtualenv at $OPT_WORKDIR"
+            $(python_cmd) -m virtualenv \
+                $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
+                $OPT_WORKDIR
+        fi
+
         . $OPT_WORKDIR/bin/activate
+
     else
         echo "Warning: VIRTUAL_ENV=$VIRTUAL_ENV was found active and is being reused."
     fi
+
     $(python_cmd) -m pip install pip --upgrade
     echo "Installing bindep"
     $(python_cmd) -m pip install bindep --upgrade
@@ -185,7 +195,6 @@ install_virtual_env(){
     # libselinux python bidings does not need it, so we detect it first.
     $(python_cmd) -c "import selinux" 2>/dev/null ||
         copy_selinux_to_venv
-
 }
 
 install_bindep(){
