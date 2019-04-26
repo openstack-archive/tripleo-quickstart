@@ -83,7 +83,7 @@ Enable Developer mode
 
 Please refer to
 the `OpenStack Documentation
-<https://docs.openstack.org/tripleo-docs/latest/contributor/reproduce-ci.html>`_
+<https://docs.openstack.org/tripleo-docs/latest/ci/reproduce-ci.html>`_
 
 Feature Configuration and Nodes
 -------------------------------
