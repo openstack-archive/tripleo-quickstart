@@ -88,7 +88,7 @@ the `OpenStack Documentation
 Feature Configuration and Nodes
 -------------------------------
 
-In previous versions of triple-quickstart a config file was used to determine
+In previous versions of tripleo-quickstart a config file was used to determine
 not only the features that would be enabled in tripleo and openstack but also
 the number of nodes to be used. For instance "config/general_config/ha.yml" would
 configure pacemaker and ensure three controller nodes were provisioned.  This type
