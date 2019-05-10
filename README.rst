@@ -37,6 +37,13 @@ password from the machine running ansible.  Currently the virthost machine must
 be running a recent Red Hat-based Linux distribution (CentOS 7.x, RHEL 7.x).
 Other distributions could work but will not be supported with out CI validation.
 
+Quickstart tool runs commands with superuser privileges as installing packages
+to the deployer system. The script should be run by a sudo user, e.g.
+``deployer``, which should be added to the sudoers configuration, as shown
+below::
+
+    deployer ALL=(ALL) NOPASSWD: ALL
+
 ..  note::
     Running quickstart.sh commands as root is not suggested or supported.
 
