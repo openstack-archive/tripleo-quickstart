@@ -7,7 +7,6 @@ os-client-config
 pbr>=1.6
 setuptools>=11.3
 shade>=1.8.0
-Werkzeug==0.15.2
 python-neutronclient
 python-openstackclient
 python-heatclient
