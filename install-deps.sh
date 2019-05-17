@@ -8,9 +8,9 @@
 # python2 and python3 have been validated
 
 print_sudo_warning() {
-    echo -e "\e[31m WARNING: SUDO is not passwordless, assuming all packages \
-are installed! \n export USER_OVERRIDE_SUDO_CHECK=1 \n to be prompted for sudo \
-password \e[0m"
+    echo -e "\e[31m WARNING: SUDO user is not passwordless.\
+\n export USER_OVERRIDE_SUDO_CHECK=1 \n to be prompted for sudo \
+password.  \e[0m"
 }
 
 python_cmd() {

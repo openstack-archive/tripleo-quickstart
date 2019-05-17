@@ -48,6 +48,7 @@ if [[ ! -e ${ABSDIR}/install-deps.sh ]]; then
     echo "install-deps.sh was not found, in the same directory ($ABSDIR) as quickstart.sh"
     echo "downloading install-deps.sh to ${ABSDIR}/install-deps.sh"
     curl -o ${ABSDIR}/install-deps.sh https://opendev.org/openstack/tripleo-quickstart/raw/branch/master/install-deps.sh
+    curl -o ${ABSDIR}/bindep.txt https://opendev.org/openstack/tripleo-quickstart/raw/branch/master/bindep.txt
 fi
 source ${ABSDIR}/install-deps.sh
 
@@ -465,6 +466,8 @@ fi
 if [ "$OPT_INSTALL_DEPS" = 1 ]; then
     echo "NOTICE: installing dependencies" >&2
     install_deps
+    install_bindep
+    install_package_deps_via_bindep
     exit $?
 fi
 
