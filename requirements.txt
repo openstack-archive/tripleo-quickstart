@@ -10,3 +10,4 @@ shade>=1.8.0
 python-neutronclient
 python-openstackclient
 python-heatclient
+warlock!=1.3.2
