@@ -9,6 +9,13 @@ iproute [platform:rpm]
 libyaml [platform:rpm]
 libffi-devel [platform:rpm]
 openssl-devel [platform:rpm]
+# rhel 8
+python3-libselinux [platform:rhel-8]
+python3-netaddr [platform:rhel-8]
+python3-setuptools [platform:rhel-8]
+python3-virtualenv [platform:rhel-8]
+python3-pip [platform:rhel-8]
+
 # fedora 29
 python3-libselinux [platform:fedora-29]
 python3-netaddr [platform:fedora-29]

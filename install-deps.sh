@@ -17,36 +17,40 @@ python_cmd() {
     distribution=unknown
     distribution_major_version=unknown
     # we prefer python2 because on few systems python->python3
-    python_cmd=${USER_PYTHON_OVERRIDE:=python2}
 
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         distribution_major_version=${VERSION_ID%.*}
-        case $NAME in
-        "Red Hat"*) distribution="RedHat"
-            if [ "$distribution_major_version" -ge "8" ]; then
-                python_cmd=${USER_PYTHON_OVERRIDE:=python3}
-            fi
-            ;;
-        "CentOS"*)
-            distribution="CentOS"
-            if [ "$distribution_major_version" -ge "8" ]; then
-                python_cmd=${USER_PYTHON_OVERRIDE:=python3}
-            fi
-            ;;
-        "Fedora"*)
-            distribution="Fedora"
-            if [ "$distribution_major_version" -ge "28" ]; then
-                python_cmd=${USER_PYTHON_OVERRIDE:=python3}
-            fi
-            ;;
-        "Ubuntu"*)
-            distribution="Ubuntu"
-            ;;
-        "Debian"*)
-            distribution="Debian"
-            ;;
-        esac
+        distribution=${ID}
+        PYTHON_CMD=python2
+        # check /etc/os-release to see how these variables are set
+        case ${ID} in
+            rhel)
+                distribution="RedHat"
+                if [ "$distribution_major_version" -ge "8" ]; then
+                    PYTHON_CMD=python3
+                fi
+                ;;
+            centos)
+                distribution="CentOS"
+                if [ "$distribution_major_version" -ge "8" ]; then
+                    PYTHON_CMD=python3
+                fi
+                ;;
+            fedora)
+                distribution="Fedora"
+                if [ "$distribution_major_version" -ge "28" ]; then
+                    PYTHON_CMD=python3
+                fi
+                ;;
+            ubuntu)
+                distribution="Ubuntu"
+                ;;
+            debian)
+                distribution="Debian"
+                ;;
+            esac
+        python_cmd=${USER_PYTHON_OVERRIDE:-$PYTHON_CMD}
     elif [ -f /etc/lsb-release ]; then
         . /etc/lsb-release
         distribution=${DISTRIB_ID}xx
@@ -89,18 +93,19 @@ install_deps () {
 
     # install enough rpms for the appropriate python version to
     # enable bindep and python environments
-
+    echo "Python Command is:"
+    python_cmd
     echo "Running install_deps"
     PYTHON_PACKAGES=()
     MODULE_NAMES="pip virtualenv setuptools"
-    rpm -q sudo || $(package_manager) install -y sudo
+    rpm -q sudo || $(package_manager) install sudo
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [[ "$passwordless_sudo" == "1" ]] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
         if [ "$(python_cmd)" == "python3" ]; then
             # possible bug in ansible, f29 python 3 env fails
             # w/o both python-libselinux packages installed
             # https://bugs.launchpad.net/tripleo/+bug/1812324
-            PYTHON_PACKAGES+=("python3-libselinux python2-libselinux")
+            PYTHON_PACKAGES+=("python3-libselinux")
             PYTHON_PACKAGES+=("python3-PyYAML")
             SETUPTOOLS_PACKAGE=python3-setuptools
             VIRTUALENV_PACKAGE=python3-virtualenv
@@ -113,16 +118,19 @@ install_deps () {
         fi
         echo "Installing RPM packages $PYTHON_PACKAGES $SETUPTOOLS_PACKAGE \
         $VIRTUALENV_PACKAGE $PIP_PACKAGE" | tr -s [:space:]
-        sudo $(package_manager) -y install $PYTHON_PACKAGES \
+        sudo $(package_manager) install $PYTHON_PACKAGES \
                                             $SETUPTOOLS_PACKAGE \
                                             $VIRTUALENV_PACKAGE \
                                             $PIP_PACKAGE
+
+        sudo $(package_manager) install python2-libselinux || true
 
         check_python_module virtualenv &> /dev/null || \
             PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
 
         check_python_module setuptools &> /dev/null || \
             PYTHON_PACKAGES+=($SETUPTOOLS_PACKAGE)
+
     else
         print_sudo_warning
     fi
@@ -130,11 +138,12 @@ install_deps () {
     # pip is a special case because centos-7 repos do not have an rpm for
     # it but EPEL or OSP repos do, so we attempt to install the rpm and
     # fallback to easy_install before failing
+    echo "checking python modules"
     check_python_module pip &> /dev/null || {
         if yum provides pip 2>&1 | grep 'No matches found' >/dev/null; then
             sudo easy_install pip
         else
-            sudo $(package_manager) install -y $PIP_PACKAGE
+            sudo $(package_manager) install $PIP_PACKAGE
         fi
     }
 
@@ -146,7 +155,7 @@ install_deps () {
         echo "ERROR: ${MISSING_MODULES[@]} not installed" 1>&2
         return 1
     else
-        echo "install-deps succeeded."
+        echo -e "\n\e[32m SUCCESS: install-deps succeeded. \e[0m"
     fi
 }
 
@@ -201,22 +210,25 @@ install_bindep(){
     # --user installs fail from a virtenv
     echo "Running install_bindep"
     $(python_cmd) -m pip install --user bindep --upgrade
+    export PATH=$PATH:$HOME/.local/bin
+    echo -e "\n\e[32m SUCCESS: installed bindep. \e[0m"
 }
 
 install_package_deps_via_bindep(){
     echo "install_package_deps_via_bindep"
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [ "$passwordless_sudo" == "1" ] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
-        PATH=$PATH:~/.local/bin bindep -b || sudo $(package_manager) -y install `bindep -b`;
+        PATH=$PATH:~/.local/bin bindep -b || sudo $(package_manager) install `bindep -b`;
         # EPEL will NOT be installed on any nodepool nodes.
         # EPEL could be installed in the same transaction as other packages on CentOS/RHEL
         # This can leave the system with an older ansible version. Ansible 2.7+ required
         # Run through the deps and update them
         yum-config-manager enable epel || true
-        sudo $(package_manager) -y update `bindep -b -l newline`
+        sudo $(package_manager) update `bindep -b -l newline`
     else
         print_sudo_warning
     fi
+    echo -e "\n\e[32m SUCCESS: installed required packages via bindep. \e[0m"
 
 }
 
@@ -231,7 +243,7 @@ bootstrap_ansible_via_rpm(){
     fi
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [ "$passwordless_sudo" == "1" ] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
-        sudo $(package_manager) -y install $PACKAGES;
+        sudo $(package_manager) install $PACKAGES;
     else
         print_sudo_warning
     fi
