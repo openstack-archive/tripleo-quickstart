@@ -1,0 +1,25 @@
+# Define a single controller node and two compute nodes.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    virtualbmc_port: 6230
+    default_name: overcloud-controller-0
+    hostnamemap_override: overcloud-controller-foo-0
+
+  - name: compute_0
+    flavor: compute
+    virtualbmc_port: 6231
+    default_name: overcloud-novacompute-0
+    hostnamemap_override: overcloud-novacompute-bar-0
+
+  - name: compute_1
+    flavor: compute
+    virtualbmc_port: 6232
+    default_name: overcloud-novacompute-1
+    hostnamemap_override: overcloud-novacompute-bar-1
+
+node_count: 3
+
+topology_map:
+  Compute:
+    scale: 2
