@@ -50,7 +50,7 @@ EOF
 # NOTE(hrybacki): The ugly is formed as such because Ansible <2.3 lacks the ability to control
 #                 whitespace trimming in jinja templates. This results in the inability to form
 #                 a proper newline. http://docs.ansible.com/ansible/template_module.html#options
-virt-customize -a ~{{ ssh_user }}/ipa.qcow2 \
+virt-customize -a $VMIMGIPA \
     --root-password password:redhat \
     --install openssh-server \
     --run-command "xfs_growfs /" \
