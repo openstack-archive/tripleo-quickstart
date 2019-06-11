@@ -1,7 +1,7 @@
 Accessing libvirt as an unprivileged user
 =========================================
 
-The virtual infrastructure provisioned by triple-quickstart is created
+The virtual infrastructure provisioned by tripleo-quickstart is created
 using an unprivileged account (by default the ``stack`` user). This
 means that logging into your virthost as root and running ``virsh list``
 will result in empty output, which can be confusing to someone not
