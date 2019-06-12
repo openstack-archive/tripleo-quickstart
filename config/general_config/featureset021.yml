@@ -135,8 +135,20 @@ undercloud_enable_tempest: >-
   false
   {%- endif -%}
 
+# Featureset 021 is a special case where we do not run full tempest
+# but just the tests on skiplist
+
+skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
+skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
+
+# This filter the known_failures where the undercloud value is not true
+# and return a list
+tempest_whitelist: "{{ skip_list_tests.known_failures | json_query('[?undercloud != `true`].test') }}"
+
 run_tempest: true
-test_white_regex: '.*'
+
+# Need to set test_white_regex to empty, otherwise it gets the default value that is '(smoke)'
+test_white_regex: ''
 test_black_regex:
   - 'sahara_tempest_plugin'
   - 'manila_tempest_tests'
