@@ -112,8 +112,8 @@ install_deps () {
             PIP_PACKAGE=python3-pip
         else
             PYTHON_PACKAGES+=("libselinux-python")
-            SETUPTOOLS_PACKAGE=python-setuptools
-            VIRTUALENV_PACKAGE=python-virtualenv
+            SETUPTOOLS_PACKAGE=python2-setuptools
+            VIRTUALENV_PACKAGE=python2-virtualenv
             PIP_PACKAGE=python-pip
         fi
         echo "Installing RPM packages $PYTHON_PACKAGES $SETUPTOOLS_PACKAGE \
