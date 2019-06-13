@@ -7,6 +7,7 @@
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
       - tripleo-standalone-scenarios-full
+      - openstack-tox-molecule
     check:
       jobs:
         - tripleo-ci-centos-7-scenario007-multinode-oooq-container:

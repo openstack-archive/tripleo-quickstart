@@ -1,0 +1,38 @@
+---
+driver:
+  name: docker
+log: true
+platforms:
+
+  - name: centos7-master
+    hostname: centos7-master
+    image: centos:7
+    dockerfile: ../Dockerfile.j2
+    pkg_extras: python-setuptools
+    easy_install:
+      - pip
+    environment: &env
+      http_proxy: "{{ lookup('env', 'http_proxy') }}"
+      https_proxy: "{{ lookup('env', 'https_proxy') }}"
+
+  - name: fedora28-master
+    hostname: fedora28-master
+    image: fedora:28
+    dockerfile: ../Dockerfile.j2
+    pkg_extras: python*-setuptools
+    environment:
+      <<: *env
+
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_STDOUT_CALLBACK: yaml
+scenario:
+  test_sequence:
+    - destroy
+    - create
+    - prepare
+    - converge
+    - destroy
+lint:
+  enabled: false
