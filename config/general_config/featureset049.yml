@@ -1,6 +1,8 @@
 # Containerized overcloud
 # Enables Ceph, Pacemaker and network isolation on single nic
 undercloud_generate_service_certificate: false
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 step_introspect: false
 extra_args: >-
   -e {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-ansible.yaml
