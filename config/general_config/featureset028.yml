@@ -25,7 +25,7 @@ telemetry_args: >-
    {% endif %}
 
 extra_args: >-
-  -e {{ overcloud_templates_path }}/environments/services/neutron-ovn-ha.yaml
+  -e {{ overcloud_templates_path }}/environments/services/neutron-ovn-non-dvr-ha.yaml
 
 composable_roles: true
 overcloud_roles:
