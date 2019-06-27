@@ -73,6 +73,7 @@ repos:
       - puppet-*
       - python*-tripleo*
       - python*-paunch*
+      - tripleo-ansible
 
   - type: generic
     reponame: "delorean-{{ release }}-deps"
