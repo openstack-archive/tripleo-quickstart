@@ -40,6 +40,19 @@ undercloud_generate_service_certificate: false
 
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
 
 # This featureset is extremely resource intensive, so we disable telemetry
 # in order to reduce the overall memory footprint
@@ -81,19 +94,6 @@ artcl_create_docs_payload:
     - overcloud-validate
     - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
     - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
-composable_roles: true
-overcloud_roles:
-  - name: Controller
-    CountDefault: 1
-    tags:
-      - primary
-      - controller
-    networks:
-      - External
-      - InternalApi
-      - Storage
-      - StorageMgmt
-      - Tenant
 
 deployed_server: >-
   {% if release in ['newton','ocata','pike','queens'] -%}
@@ -114,12 +114,18 @@ config_download_args: >-
   --verbose
   {%- endif -%}
 
-# Tempest configuration, keep always at the end of the file
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
+# Tempest configuration, keep always at the end of the file If `run_tempest` is
+# `true`, run tempests tests, otherwise do not run them. We also need to
+# selectively re-enable the globally blacklist octavia tempest plugin.
+skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
+skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
+skip_file_src: ''
+tempest_black: "{{ skip_list_tests.known_failures | json_query('[?test != `octavia_tempest_plugin`].test') }}"
+test_black_regex: "{{ tempest_black }}"
+
 test_ping: false
-# TODO(cgoncalves): enable tempest run once https://review.opendev.org/#/c/591997/ is merged
-run_tempest: false
+download_amphora: true
+run_tempest: true
 test_white_regex: ''
 
 # Run tempest in containers when at least undercloud is containerized
@@ -131,8 +137,21 @@ tempest_format: >-
   {%- endif -%}
 
 tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-  - 'octavia_tempest_plugin.tests.api'
   - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer.LoadBalancerScenarioTest'
 tempest_plugins:
   - python-octavia-tests-tempest
+tempest_extra_config:
+  load_balancer.member_role: '"Member"'
+  load_balancer.test_with_ipv6: false
+
+undercloud_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
+
+# the variable is only used in overcloud-deploy role
+# for stein and beyond, so it's safe to set it to podman,
+# as for stable branches the variable won't be used.
+overcloud_container_cli: podman
