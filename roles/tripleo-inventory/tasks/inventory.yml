@@ -71,8 +71,6 @@
 
     - name: Get IP of extra node in OVB stack
       script: get_extra_node.py {{ working_dir }}
-      args:
-        executable: python3
       register: node_ip
 
     - name: Set fact for private supplemental ip
@@ -95,8 +93,6 @@
 
     - name: Remove extra node
       script: remove_extra_node.py {{ working_dir }}
-      args:
-        executable: python3
 
 # readd the undercloud to reset the ansible_ssh parameters set in quickstart
 - name: Add undercloud vm to inventory
