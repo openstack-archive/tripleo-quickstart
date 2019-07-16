@@ -1,0 +1,72 @@
+devmode: true
+# limits validation on a specific enviroment due to restricted access
+validate_on: rdo
+overcloud_as_undercloud: true
+use_specific_hash: true
+docker_registry_host: trunk.registry.rdoproject.org
+docker_registry_namespace: tripleomaster
+delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+distro_deps_repo_name: deps
+docker_image_tag: *promotion-testing-tag
+
+images:
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+inject_images:
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
+release: master
+distro_ver: rhel8
+dlrn_hash_tag: tripleo-ci-testing
+overcloud_image_url: "http://38.145.34.141/rcm-guest/images/redhat8/master/rdo_trunk/tripleo-ci-testing/overcloud-full.tar"
+ipa_image_url: "http://38.145.34.141/rcm-guest/images/redhat8/master/rdo_trunk/tripleo-ci-testing/ironic-python-agent.tar"
+repo_cmd_before: |
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  {# dnf-plugins-core provides config-manager command #}
+  sudo dnf install -y dnf-plugins-core;
+  sudo dnf clean all;
+  sudo dnf config-manager --set-disabled "*"
+  if [ -e /etc/ci/mirror_info.sh ]; then
+    source /etc/ci/mirror_info.sh
+  else
+    # Otherwise, fallback to RHEL8 dlrn trunk.
+    export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
+  fi
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  if [[ -z "$rdo_dlrn" ]]; then
+    echo "Failed to parse dlrn hash"
+    exit 1
+  fi
+  export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+
+repos:
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    priority: 20
+    baseurl: $RDO_DLRN_REPO
+
+  - type: generic
+    reponame: "delorean-{{ release }}-deps"
+    filename: "delorean-{{ release }}-deps.repo"
+    baseurl: ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ distro_deps_repo_name }}/latest/
+
+repo_cmd_after: |
+  sudo dnf install -y chrony;
+  sudo dnf repolist;
+  sudo dnf clean all;
+  {% if repo_setup_run_update|default(true)|bool %}
+  sudo dnf update -y;
+  {% endif %}
+  sudo dnf clean metadata
+
+undercloud_rpm_dependencies: python3-tripleoclient
+ansible_python_interpreter: /usr/bin/python3
