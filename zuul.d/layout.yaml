@@ -21,9 +21,6 @@
             files:
               - config/general_config/featureset052.yml
               - requirements.txt
-        - tripleo-ci-centos-7-containers-multinode:
-            files:
-              - requirements.txt
         - openstack-tox-linters
         - tripleo-ci-centos-7-scenario010-multinode-oooq-container:
             files:
