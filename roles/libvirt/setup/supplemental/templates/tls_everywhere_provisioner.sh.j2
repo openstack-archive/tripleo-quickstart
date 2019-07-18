@@ -88,7 +88,7 @@ virsh vol-upload --pool $POOL_NAME $IMG_NAME $VMIMGIPA
 virt-install \
     --import \
     --name ipa \
-    --ram 8086 \
+    --ram 10240 \
     --disk path=$VOL_IMG_PATH,format=qcow2 \
     --vcpus 4 \
     --os-type linux \
