@@ -5,6 +5,8 @@
   tasks:
 
     - name: validate image urls
+      # TODO(ssbarnea): make the condition dynamic, like detecting rdo
+      when: validate_on is not defined
       uri:
         url: "{{ item }}"
         method: HEAD

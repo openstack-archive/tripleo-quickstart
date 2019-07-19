@@ -1,0 +1,107 @@
+overcloud_as_undercloud: true
+# limits validation on a specific enviroment due to restricted access
+validate_on: rdo
+images:
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+inject_images:
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
+release: master
+distro_ver: rhel8
+distro_deps_repo_name: deps
+dlrn_hash_tag: current-tripleo
+dlrn_hash_tag_newest: current
+dlrn_target: rhel8
+dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
+docker_registry_host: trunk.registry.rdoproject.org
+docker_registry_namespace: "tripleo{{ release }}"
+docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+undercloud_docker_insecure_registries: "{{ docker_registry_host }}"
+docker_prep_prefix: rhel-binary
+docker_ceph_namespace: docker.io/ceph
+docker_openshift_tag: v3.11.0
+overcloud_image_url: "http://38.145.34.141/rcm-guest/images/rhel8/master/rdo_trunk/tripleo-ci-testing/overcloud-full.tar"
+ipa_image_url: "http://38.145.34.141/rcm-guest/images/rhel8/master/rdo_trunk/tripleo-ci-testing/ironic-python-agent.tar"
+repo_cmd_before: |
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  {# dnf-plugins-core provides config-manager command #}
+  sudo dnf install -y dnf-plugins-core;
+  sudo dnf clean all;
+  sudo dnf config-manager --set-disabled "*"
+  if [ -e /etc/ci/mirror_info.sh ]; then
+    source /etc/ci/mirror_info.sh
+  else
+    # Otherwise, fallback to official mirrors provided by CentOS.
+    export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
+    export NODEPOOL_BUILDLOGS_CENTOS_PROXY=https://buildlogs.centos.org
+    export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
+  fi
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  tripleo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  if [[ -z "$rdo_dlrn" || -z "$tripleo_dlrn" ]]; then
+    echo "Failed to parse dlrn hash"
+    exit 1
+  fi
+  export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+  export TRIPLEO_DLRN_REPO=${tripleo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+
+repos:
+  # RDO repos
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    priority: 20
+    baseurl: $TRIPLEO_DLRN_REPO
+
+  - type: generic
+    reponame: delorean-current
+    filename: delorean-current.repo
+    baseurl: $RDO_DLRN_REPO
+    priority: 10
+    includepkgs:
+      - ansible-role-container-registry
+      - ansible-role-tripleo*
+      - ansible-tripleo-ipsec
+      - instack
+      - instack-undercloud
+      - openstack-tripleo-*
+      - os-apply-config
+      - os-collect-config
+      - os-net-config
+      - os-refresh-config
+      - puppet-*
+      - python*-tripleo*
+      - python*-paunch*
+      - tripleo-ansible
+
+  - type: generic
+    reponame: "delorean-{{ release }}-deps"
+    filename: "delorean-{{ release }}-deps.repo"
+    baseurl: ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ distro_deps_repo_name }}/latest/
+
+repo_cmd_after: |
+  sudo dnf install -y chrony;
+  sudo dnf repolist;
+  # TODO(chkumar246): Currently RHUI repos are disabled by default
+  # Once it is fixed, it will remove this.
+  sudo dnf config-manager --enable rhui-*;
+  sudo dnf clean all;
+  {% if repo_setup_run_update|default(true)|bool %}
+  sudo dnf update -y;
+  {% endif %}
+  sudo dnf clean metadata
+
+undercloud_rpm_dependencies: python3-tripleoclient
+ansible_python_interpreter: /usr/bin/python3
+# used for container updates
+standalone_container_prep_update_repo: >-
+  {{ gating_repo_name }},delorean-current
