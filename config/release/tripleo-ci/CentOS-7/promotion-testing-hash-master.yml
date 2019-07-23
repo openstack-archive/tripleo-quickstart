@@ -86,6 +86,8 @@ repos:
     reponame: quickstart-centos-ceph-nautilus
     filename: quickstart-centos-ceph-nautilus.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/storage/x86_64/ceph-nautilus/
+    exclude:
+      - ceph-ansible-*rc11*
 
   - type: generic
     reponame: quickstart-centos-opstools
