@@ -82,6 +82,7 @@ repos:
       - python*-tripleo*
       - python*-paunch*
       - tripleo-ansible
+      - ansible-config_template
 
   - type: generic
     reponame: "delorean-{{ release }}-deps"
