@@ -1,14 +1,6 @@
-devmode: true
+overcloud_as_undercloud: true
 # limits validation on a specific enviroment due to restricted access
 validate_on: rdo
-overcloud_as_undercloud: true
-use_specific_hash: true
-docker_registry_host: trunk.registry.rdoproject.org
-docker_registry_namespace: tripleomaster
-delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
-distro_deps_repo_name: deps
-docker_image_tag: *promotion-testing-tag
-
 images:
   - name: overcloud-full
     url: "{{ overcloud_image_url }}"
@@ -23,10 +15,22 @@ inject_images:
   - "overcloud-full.initrd"
   - "overcloud-full.vmlinuz"
 release: master
+use_specific_hash: true
 distro_ver: rhel8
+distro_deps_repo_name: deps
 dlrn_hash_tag: tripleo-ci-testing
+delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+dlrn_hash_tag_newest: current
+docker_registry_host: trunk.registry.rdoproject.org
+docker_registry_namespace: tripleomaster
+docker_image_tag: *promotion-testing-tag
+undercloud_docker_insecure_registries: "{{ docker_registry_host }}"
+docker_prep_prefix: rhel-binary
+docker_ceph_namespace: docker.io/ceph
+docker_openshift_tag: v3.11.0
 overcloud_image_url: "http://38.145.34.141/rcm-guest/images/redhat8/master/rdo_trunk/tripleo-ci-testing/overcloud-full.tar"
 ipa_image_url: "http://38.145.34.141/rcm-guest/images/redhat8/master/rdo_trunk/tripleo-ci-testing/ironic-python-agent.tar"
+
 repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
@@ -61,8 +65,11 @@ repos:
 
 repo_cmd_after: |
   sudo dnf install -y chrony;
-  sudo dnf repolist;
+  # TODO(chkumar246): Currently RHUI repos are disabled by default
+  # Once it is fixed, it will remove this.
+  sudo dnf config-manager --enable rhui-*;
   sudo dnf clean all;
+  sudo dnf repolist;
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y;
   {% endif %}
