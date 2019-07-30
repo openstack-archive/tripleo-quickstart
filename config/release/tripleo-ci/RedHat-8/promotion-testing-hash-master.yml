@@ -64,12 +64,18 @@ repos:
     baseurl: ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ distro_deps_repo_name }}/latest/
 
 repo_cmd_after: |
-  sudo dnf install -y chrony;
   # TODO(chkumar246): Currently RHUI repos are disabled by default
   # Once it is fixed, it will remove this.
   sudo dnf config-manager --enable rhui-*;
+  sudo dnf install -y chrony;
+  sudo dnf install -y mock;
+  sudo dnf install -y systemd-container;
+  # TODO(chkumar246): Currently RHEL-8 mock DLRN config needs
+  # /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT dummy file
+  # in order to build packages,
+  # https://softwarefactory-project.io/r/#/c/15950/
+  sudo touch /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT;
   sudo dnf clean all;
-  sudo dnf repolist;
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y;
   {% endif %}

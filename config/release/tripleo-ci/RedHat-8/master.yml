@@ -19,7 +19,7 @@ distro_ver: rhel8
 distro_deps_repo_name: deps
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
-dlrn_target: rhel8
+dlrn_target: redhat
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
 docker_registry_host: trunk.registry.rdoproject.org
 docker_registry_namespace: "tripleo{{ release }}"
@@ -90,11 +90,18 @@ repos:
     baseurl: ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ distro_deps_repo_name }}/latest/
 
 repo_cmd_after: |
-  sudo dnf install -y chrony;
-  sudo dnf repolist;
   # TODO(chkumar246): Currently RHUI repos are disabled by default
   # Once it is fixed, it will remove this.
   sudo dnf config-manager --enable rhui-*;
+  sudo dnf install -y chrony;
+  # TODO(chkumar246): Currently RHEL-8 mock DLRN config needs
+  # /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT dummy file
+  # in order to build packages,
+  # https://softwarefactory-project.io/r/#/c/15950/
+  sudo touch /usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT;
+  sudo dnf install -y mock;
+  sudo dnf install -y systemd-container;
+  sudo dnf repolist;
   sudo dnf clean all;
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y;
