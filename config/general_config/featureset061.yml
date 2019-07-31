@@ -1,0 +1,101 @@
+#######################################
+# FEATURESET061 - Undercloud + Minion #
+#######################################
+
+extra_args: ''
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+undercloud_check_sanity: true
+
+# containers config
+containerized_overcloud: false
+containerized_undercloud: true
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+# TODO(aschultz): fix with ssl
+# undercloud_undercloud_public_host: "{{ ansible_fqdn }}-unique"
+# tripleo_set_unique_hostname: true
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
+
+# turn off image prep
+step_overcloud_image: false
+step_glance_upload: false
+step_register: false
+step_root_device_size: false
+step_root_device_hints: false
+step_introspect: false
+
+# TODO(aschultz): enable ssl once it works
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: false
+undercloud_enable_swift_encryption: false
+
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-deploy
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - tempest-setup
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - undercloud-deploy
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - tempest-setup
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
+
+# Tempest configuration, keep always at the end of the file
+# If `run_tempest` is `true`, run tempests tests, otherwise do not
+# run them.
+test_ping: false
+run_tempest: true
+test_regex: ''
+# Enable tempest container
+undercloud_enable_tempest: true
+
+# Run tempest in containers when at least undercloud is containerized
+tempest_format: container
+
+tempest_undercloud: true
+tempest_overcloud: false
+# default tempest tests for UC
+tempest_whitelist:
+  - 'tempest.api.identity'
+  - 'tempest.api.image.v2.test_images.BasicOperationsImagesTest'
+  - 'tempest.api.image.v2.test_images_tags_negative.ImagesTagsNegativeTest'
+  - 'tempest.api.image.v2.test_images_member_negative.ImagesMemberNegativeTest'
+  - 'tempest.api.compute.admin.test_flavors'
+  - 'tempest.api.compute.flavors'
+  - 'tempest.api.compute.keypairs'
+  - 'tempest.api.compute.admin.test_quotas'
+  - 'tempest.api.compute.admin.test_aggregates_negative'
+  - 'tempest.api.compute.security_groups'
+  - 'tempest.api.network.test_networks'
+  - 'tempest.api.network.test_networks_negative'
+  - 'tempest.api.network.test_security_groups_negative'
+  - 'tempest.api.network.test_ports'
+  - 'tempest.api.network.test_routers_negative'
+
+
+test_black_regex: []
+
+undercloud_container_cli: podman
+minion_container_cli: podman

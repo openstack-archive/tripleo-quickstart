@@ -1,0 +1,12 @@
+# Define an undercloud minion config
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    default_name: undercloud-minion-0
+    hostnamemap_override: "{{ hostvars[groups['overcloud'][0]].ansible_hostname }}"
+
+node_count: 1
+
+deployed_server_overcloud_roles:
+  - name: UndercloudMinion
+    hosts: "$(sed -n 1,1p /etc/nodepool/sub_nodes_private)"
