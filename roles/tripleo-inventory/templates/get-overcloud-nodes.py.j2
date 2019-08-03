@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,10 @@ from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from novaclient import __version__ as nc_version
 from novaclient import client
-from urlparse import urljoin
+try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
 
 # We can remove this logic when newton (novaclient 6) is EOL
 if LooseVersion(nc_version) <= LooseVersion("6.0.2"):
