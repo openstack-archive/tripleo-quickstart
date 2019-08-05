@@ -76,6 +76,7 @@ repos:
       - puppet-*
       - python*-tripleo*
       - python*-paunch*
+      - paunch-services
 
   - type: generic
     reponame: "delorean-{{ release }}-deps"

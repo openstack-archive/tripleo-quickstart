@@ -73,6 +73,7 @@ repos:
       - puppet-*
       - python*-tripleo*
       - python*-paunch*
+      - paunch-services
       - tripleo-ansible
       - ansible-config_template
 
