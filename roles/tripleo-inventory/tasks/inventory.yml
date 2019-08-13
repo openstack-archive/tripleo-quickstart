@@ -13,7 +13,7 @@
     - name: fetch overcloud node names and IPs
       shell: >
           source {{ working_dir }}/stackrc;
-          $(command -v python || command -v python3) {{ working_dir }}/get-overcloud-nodes.py
+          $(command -v python3 || command -v python2) {{ working_dir }}/get-overcloud-nodes.py
       register: registered_overcloud_nodes
 
     - name: list the overcloud nodes
