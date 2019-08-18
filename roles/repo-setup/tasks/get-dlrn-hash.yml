@@ -16,11 +16,17 @@
   block:
 
     - name: Get DLRN hash - passed tag
-      shell: >
-        curl -s {{ dlrn_baseurl }}/{{ dlrn_hash_tag }}/delorean.repo \
+      shell: |
+        dlrn_base={{ dlrn_baseurl }}
+        if [ -e /etc/ci/mirror_info.sh ]; then
+          source /etc/ci/mirror_info.sh
+          NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY:-https://trunk.rdoproject.org}
+          dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+        fi
+        curl -s ${dlrn_base}/{{ dlrn_hash_tag }}/delorean.repo \
         | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
       register: full_hash_result
-      retries: 3
+      retries: 5
 
     - name: Set fact for dlrn_hash
       set_fact:
@@ -32,11 +38,17 @@
   block:
 
     - name: Get DLRN overcloud hash
-      shell: >
-        curl -s https://trunk.rdoproject.org/centos7-{{ overcloud_release }}/{{ dlrn_hash_tag }}/delorean.repo \
+      shell: |
+        dlrn_base=https://trunk.rdoproject.org/centos7-{{ overcloud_release }}
+        if [ -e /etc/ci/mirror_info.sh ]; then
+          source /etc/ci/mirror_info.sh
+          NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY:-https://trunk.rdoproject.org}
+          dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+        fi
+        curl -s ${dlrn_base}/{{ dlrn_hash_tag }}/delorean.repo \
         | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
       register: full_overcloud_hash_result
-      retries: 3
+      retries: 5
 
     - name: Set fact for overcloud dlrn_hash
       set_fact:
