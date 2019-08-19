@@ -37,6 +37,8 @@ supplemental_base_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x
 * `supplemental_user` -- <stack> The user which is used to deploy the supplemental node
 * `supplemental_tls_everywhere_dns_server` -- <192.168.23.1> DNS server for eth0 on the supplemental
   node hosting the FreeIPA server
+* `supplemental_tls_everywhere_gateway` -- <192.168.23.1> Default gateway for eth0 on the supplemental
+  node hosting the FreeIPA server
 
 Example Playbook
 ----------------
