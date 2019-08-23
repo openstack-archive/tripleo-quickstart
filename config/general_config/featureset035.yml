@@ -41,8 +41,18 @@ network_isolation_args: >-
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics-ipv6/network-environment.yaml
   -e {{ working_dir }}/network-environment.yaml
 
+# This featureset is extremely resource intensive, so we disable telemetry
+# in order to reduce the overall memory footprint
+# This is not required in newton
+telemetry_args: >-
+   {% if release != 'newton' %}
+   -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
+   {% endif %}
+
 extra_args: >-
   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+
+undercloud_ntp_servers: pool.ntp.org
 
 undercloud_enable_routed_networks: >-
   {% if release not in ['newton','ocata','pike'] -%}
@@ -50,6 +60,15 @@ undercloud_enable_routed_networks: >-
   {%- else -%}
   false
   {%- endif -%}
+
+undercloud_clean_nodes: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_inspection_extras: false
 
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
@@ -86,6 +105,12 @@ deploy_steps_ansible_workflow: >-
   true
   {%- else -%}
   false
+  {%- endif -%}
+config_download_args: >-
+  {% if release in ['queens'] -%}
+  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
+  --config-download
+  --verbose
   {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file
