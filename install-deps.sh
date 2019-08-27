@@ -159,17 +159,6 @@ install_deps () {
     fi
 }
 
-copy_selinux_to_venv() {
-    : ${LIBSELINUX_PYTHON_PATH:=lib64/python`$(python_cmd) -c "from sys import version_info as v; print('%s.%s' % (v[0], v[1]))"`/site-packages}
-
-    for FILE in /usr/$LIBSELINUX_PYTHON_PATH/_selinux* /usr/$LIBSELINUX_PYTHON_PATH/selinux ; do
-        ln -sf $FILE $VIRTUAL_ENV/$LIBSELINUX_PYTHON_PATH/
-    done
-
-    # validate that selinux import really works
-    $(python_cmd) -c "import sys; print(sys.path); import selinux; print('selinux.is_selinux_enabled: %s' % selinux.is_selinux_enabled())"
-}
-
 install_virtual_env(){
     # Activate the virtualenv only when it is not already activated otherwise
     # It create the virtualenv and then activate it.
@@ -198,12 +187,10 @@ install_virtual_env(){
     $(python_cmd) -m pip install bindep --upgrade
 
     # In order to do any filesystem operations on the system running ansible (if it has SELinux installed)
-    # we need the python bindings in the venv. Unfortunately, it is not available on pypi, so we need to
-    # pull it from the system site packages. This is needed only if they are not already present there,
-    # for example creating the virtualenv using --system-site-packages on a system that has the
-    # libselinux python bidings does not need it, so we detect it first.
+    # we need the python bindings in the venv. The pypi version of the module is a shim that loads
+    # the original version from outside the virtualenv.
     $(python_cmd) -c "import selinux" 2>/dev/null ||
-        copy_selinux_to_venv
+        $(python_cmd) -m pip install selinux --upgrade
 }
 
 install_bindep(){
