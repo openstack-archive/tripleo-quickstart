@@ -97,5 +97,4 @@ tempest_whitelist:
 
 test_black_regex: []
 
-undercloud_container_cli: podman
 minion_container_cli: podman

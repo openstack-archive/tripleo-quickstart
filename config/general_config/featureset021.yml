@@ -179,10 +179,3 @@ tempest_workers: 3
 
 # Install the latest unlreleased packages from CentOS
 enable_centos_cr_repo: true
-
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
