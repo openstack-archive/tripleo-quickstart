@@ -2,13 +2,16 @@
 
 set -eux
 
+POOL_NAME={{ libvirt_volume_pool }}
+POOL_PATH={{ libvirt_volume_path }}
 CLONEFROM={{ image_cache_dir }}/supplemental_base.qcow2
 VMSSHKEY={{ working_dir }}/id_rsa_supplemental.pub
 VMDISKADD=30G
-WORKDIR=/tmp/virt-undercloud-$(date +%s)
 
-VMIMGIPA={{ working_dir }}/ipa.qcow2
-VMIMGIPACOPY={{ working_dir }}/ORIG-ipa.qcow2
+IMG_NAME=ipa.qcow2
+VMIMGIPA={{ working_dir }}/$IMG_NAME
+VMIMGIPACOPY={{ working_dir }}/ORIG-$IMG_NAME
+VOL_IMG_PATH=$POOL_PATH/$IMG_NAME
 
 # Copy qcow2 base image
 cp -v $CLONEFROM $VMIMGIPA
@@ -65,12 +68,28 @@ virt-customize -a $VMIMGIPA \
     --ssh-inject {{ supplemental_user }}:file:$VMSSHKEY \
     --selinux-relabel
 
+# We want the supplemental node to be a member of the correct volume
+# pool. If we provide virt-install with just a path to the image
+# then virt-install will create a pool and volumne for the image
+# and we will have lost knowledge of where virsh is maintaining
+# the image. So create a volume in the desired pool of the correct
+# size and then upload our image into that pool/volume. Then tell
+# virt-install what the path is to the volume. virt-install will be
+# able to determine the volume and pool from the path.
+
+VOL_SIZE=`qemu-img info --output=json $VMIMGIPA | \
+          python -c "import sys,json; \
+          info=json.load(sys.stdin); print(info['virtual-size'])"`
+
+virsh vol-create-as $POOL_NAME $IMG_NAME $VOL_SIZE --format qcow2
+virsh vol-upload --pool $POOL_NAME $IMG_NAME $VMIMGIPA
+
 # Deploy the ipa vm
 virt-install \
     --import \
     --name ipa \
     --ram 8086 \
-    --disk path=$VMIMGIPA \
+    --disk path=$VOL_IMG_PATH,format=qcow2 \
     --vcpus 4 \
     --os-type linux \
     --os-variant generic \
