@@ -27,10 +27,3 @@ run_tempest: false
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: true
 undercloud_enable_swift_encryption: true
-
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}

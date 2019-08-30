@@ -162,10 +162,3 @@ grafana_enabled: false
 statsd_enabled: false
 rsyslog_forwarding: false
 browbeat_config_file: browbeat-minimal-ci.yaml.j2
-
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}

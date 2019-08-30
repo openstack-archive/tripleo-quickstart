@@ -156,10 +156,3 @@ undercloud_enable_tempest: >-
   {%- endif -%}
 
 tempest_extra_config: {'compute_feature_enabled.config_drive': 'True'}
-
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}

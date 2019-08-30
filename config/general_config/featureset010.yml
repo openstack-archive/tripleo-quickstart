@@ -111,14 +111,3 @@ undercloud_enable_tempest: >-
   {%- else -%}
   false
   {%- endif -%}
-
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
-# the variable is only used in overcloud-deploy role
-# for stein and beyond, so it's safe to set it to podman,
-# as for stable branches the variable won't be used.
-overcloud_container_cli: podman

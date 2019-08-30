@@ -154,10 +154,3 @@ test_black_regex:
 test_ping: false
 # For full tempest run we need to make sure concurrency is not too high
 tempest_workers: 3
-
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
