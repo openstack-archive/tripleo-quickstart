@@ -3,14 +3,14 @@
   fail:
     msg: "The newest DLRN hash or tag is not recognized. The hash or tag should not contain path slashes."
   when:
-    - not dlrn_hash_tag_newest | match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+    - dlrn_hash_tag_newest is not match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
     - dlrn_hash_tag_newest not in known_hash_tags
 
 - name: Check DLRN hash newest - passed ready hash
   set_fact:
     dlrn_hash_newest: "{{ dlrn_hash_tag_newest }}"
     cacheable: true
-  when: dlrn_hash_tag_newest | match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+  when: dlrn_hash_tag_newest is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
 
 - when: dlrn_hash_tag_newest in known_hash_tags
   block:
