@@ -17,13 +17,14 @@
 
     - name: Get DLRN hash newest - passed tag
       shell: |
+        set -euo pipefail
         dlrn_base={{ dlrn_baseurl }}
         if [ -e /etc/ci/mirror_info.sh ]; then
           source /etc/ci/mirror_info.sh
           NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY:-https://trunk.rdoproject.org}
           dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
         fi
-        curl -s ${dlrn_base}/{{ dlrn_hash_tag_newest }}/delorean.repo \
+        curl -s --fail --show-error ${dlrn_base}/{{ dlrn_hash_tag_newest }}/delorean.repo \
         | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
       register: full_hash_newest_result
       retries: 5
