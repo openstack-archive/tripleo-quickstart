@@ -1,3 +1,4 @@
+---
 # Error out early if the `virthost` variable is not set.
 - name: Check that virthost is set
   fail:

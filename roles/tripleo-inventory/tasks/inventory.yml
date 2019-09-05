@@ -1,5 +1,4 @@
 ---
-
 - when: inventory == 'all'
   block:
     # required for liberty based deployments

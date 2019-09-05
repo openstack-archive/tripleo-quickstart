@@ -1,3 +1,4 @@
+---
 # This layered system specific config loading pattern alllows us to minimize
 # configuration changes by defining var in optimal location. Each more
 # specific config file can override variables from previous ones. Keep in mind

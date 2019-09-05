@@ -1,3 +1,4 @@
+---
 # Fetching the undercloud images can take a long time.  This
 # role caches images in `{{ image_cache_dir }}` if an image is
 # (a) downloaded successfully and (b) successfully verifies against

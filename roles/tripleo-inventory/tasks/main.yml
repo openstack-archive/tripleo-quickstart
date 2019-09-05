@@ -1,5 +1,4 @@
 ---
-
 - name: Ensure gather_facts has been run against localhost
   setup:
     filter: "*"

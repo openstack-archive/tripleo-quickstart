@@ -1,3 +1,4 @@
+---
 - name: generate convert script
   template:
     src: "{{ convert_image_template }}"

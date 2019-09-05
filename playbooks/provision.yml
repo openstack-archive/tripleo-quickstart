@@ -1,3 +1,4 @@
+---
 # This playbooks is responsible for preparing a target host.
 #
 # Create an inventory entry for the target host

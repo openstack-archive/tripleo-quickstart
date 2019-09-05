@@ -1,3 +1,4 @@
+---
 # Include settings from the libvirt role, and include all the
 # `teardown/*` roles.  This means that when your playbook has:
 #

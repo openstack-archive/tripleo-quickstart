@@ -1,3 +1,4 @@
+---
 - name: Install Openvswitch package
   package:
     name: "{{ ovs_package }}"

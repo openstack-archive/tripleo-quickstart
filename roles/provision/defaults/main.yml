@@ -1,3 +1,4 @@
+---
 # The path to an ssh key (that we will generate) that can be used to
 # log in to the virt host.
 virt_host_key: "{{ local_working_dir }}/id_rsa_virt_host"

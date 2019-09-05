@@ -1,3 +1,4 @@
+---
 # Create a non-root user on the target host.  This is the user that
 # will own the virtual infrastructure on which we deploy openstack.
 - name: Create non-root group

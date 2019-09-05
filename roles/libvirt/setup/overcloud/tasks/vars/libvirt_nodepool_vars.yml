@@ -1,3 +1,4 @@
+---
 # vars required to run playbooks/libvirt-nodepool.yml
 
 libvirt_volume_pool: oooq_pool

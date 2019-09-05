@@ -1,3 +1,4 @@
+---
 # Include settings from the libvirt role, and include all the
 # `setup/*` roles.  This means that when your playbook has:
 #

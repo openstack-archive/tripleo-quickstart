@@ -1,5 +1,4 @@
 ---
-
 # We're going to try putting files in `local_working_dir`, so make
 # sure it exists first.
 - name: Ensure local working dir exists

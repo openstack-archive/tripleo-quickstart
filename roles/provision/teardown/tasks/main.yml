@@ -1,3 +1,4 @@
+---
 # Check that the non-root user exists.
 - name: Get UID of non-root user
   command: >

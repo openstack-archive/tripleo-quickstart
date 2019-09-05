@@ -1,3 +1,4 @@
+---
 - name: Create overcloud customize script
   template:
     src: "{{ overcloud_customize_script }}"

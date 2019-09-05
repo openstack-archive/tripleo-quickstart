@@ -1,3 +1,4 @@
+---
 # NB: We use `virsh` here instead of the `virt` module because
 # these tasks may be called before the dependencies of the `virt`
 # module are satisfied.

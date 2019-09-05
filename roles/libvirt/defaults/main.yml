@@ -1,3 +1,4 @@
+---
 # Which image should we download?
 release: queens
 undercloud_image_url: http://artifacts.ci.centos.org/rdo/images/{{ release }}/delorean/consistent/stable/undercloud.qcow2

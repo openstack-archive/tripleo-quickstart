@@ -1,3 +1,4 @@
+---
 # Also make sure `local_working_dir` exists.  This is a directory on
 # the ansible control host.
 - name: Ensure local working dir exists

@@ -1,3 +1,4 @@
+---
 - name: Include vars for libvirt-libvirt-nodepool
   include_vars:
     file: libvirt_nodepool_vars.yml
