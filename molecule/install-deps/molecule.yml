@@ -15,13 +15,6 @@ platforms:
       http_proxy: "{{ lookup('env', 'http_proxy') }}"
       https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
-  - name: fedora28-master
-    hostname: fedora28-master
-    image: fedora:28
-    dockerfile: ../Dockerfile.j2
-    pkg_extras: python*-setuptools
-    environment:
-      <<: *env
 
 provisioner:
   name: ansible
