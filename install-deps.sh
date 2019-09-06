@@ -123,8 +123,6 @@ install_deps () {
                                             $VIRTUALENV_PACKAGE \
                                             $PIP_PACKAGE
 
-        sudo $(package_manager) install python2-libselinux || true
-
         check_python_module virtualenv &> /dev/null || \
             PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
 
@@ -164,6 +162,8 @@ install_virtual_env(){
     # It create the virtualenv and then activate it.
     export PYTHONWARNINGS=ignore:DEPRECATION::pip._internal.cli.base_command
     export PIP_DISABLE_PIP_VERSION_CHECK=1
+    # Avoids WARNING: The script ... is installed in '/home/zuul/.local/bin' which is not on PATH.
+    export PIP_OPTS="${PIP_OPTS:---no-warn-script-location}"
 
     if [[ -z ${VIRTUAL_ENV+x} ]]; then
 
