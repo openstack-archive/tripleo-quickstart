@@ -75,6 +75,9 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
+   {% if release not in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+   --disable-validations
+   {%- endif -%}
 
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
@@ -162,3 +165,10 @@ grafana_enabled: false
 statsd_enabled: false
 rsyslog_forwarding: false
 browbeat_config_file: browbeat-minimal-ci.yaml.j2
+
+baremetal_provision: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
