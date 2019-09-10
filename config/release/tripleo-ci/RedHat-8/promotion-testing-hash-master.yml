@@ -81,5 +81,7 @@ repo_cmd_after: |
   {% endif %}
   sudo dnf clean metadata
 
-undercloud_rpm_dependencies: python3-tripleoclient
+undercloud_rpm_dependencies: >-
+  python3-tripleoclient
+  ceph-ansible
 ansible_python_interpreter: /usr/bin/python3
