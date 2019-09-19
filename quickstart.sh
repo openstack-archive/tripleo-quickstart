@@ -494,6 +494,11 @@ else
     VIRTHOST=$1
 fi
 
+if [ $VIRTHOST == "127.0.0.1" ] || [ $VIRTHOST == "localhost" ]; then
+    echo "ERROR: Please use 127.0.0.2 to deploy to localhost" >&2
+    exit 2
+fi
+
 if [ "$#" -gt 2 ]; then
     usage >&2
     exit 2
