@@ -127,6 +127,11 @@ undercloud_rpm_dependencies: >-
   python-tripleoclient
   ceph-ansible
 
+# Setting base_image_url and base_image_path to overwrite DIB_LOCAL_IMAGE in
+# the diskimage-builder
+base_image_url: https://images.rdoproject.org/base/centos7/CentOS-7-x86_64-GenericCloud-1901.qcow2
+base_image_path: "{{ ansible_user_dir }}/Centos-7-x86_64-GenericCloud-1901.qcow2"
+
 # baseos settings
 baseos_undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1901.qcow2
 baseos_image: centos
