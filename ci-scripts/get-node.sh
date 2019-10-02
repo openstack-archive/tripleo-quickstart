@@ -14,7 +14,7 @@ pushd $WORKSPACE/tripleo-quickstart
     --requirements quickstart-extras-requirements.txt \
     --requirements ci-scripts/ci-base-requirements.txt \
     --playbook noop.yml \
-    localhost
+    127.0.0.2
 popd
 
 $WORKSPACE/bin/cico node get \
