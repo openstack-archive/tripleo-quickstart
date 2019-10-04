@@ -50,4 +50,4 @@ bash quickstart.sh \
     --playbook collect-logs.yml \
     --extra-vars @$WORKSPACE/config/general_config/${LOG_ENV}-logs.yml \
     --extra-vars artcl_verify_sphinx_build=$VERIFY_SPHINX \
-    localhost
+    127.0.0.2
