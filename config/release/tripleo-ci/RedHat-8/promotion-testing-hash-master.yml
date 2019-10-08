@@ -85,3 +85,4 @@ undercloud_rpm_dependencies: >-
   python3-tripleoclient
   ceph-ansible
 ansible_python_interpreter: /usr/bin/python3
+overcloud_selinux_enabled: permissive
