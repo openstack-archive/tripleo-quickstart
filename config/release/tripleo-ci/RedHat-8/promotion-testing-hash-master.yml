@@ -86,3 +86,4 @@ repo_cmd_after: |
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
 ansible_python_interpreter: /usr/bin/python3
+overcloud_selinux_enabled: permissive
