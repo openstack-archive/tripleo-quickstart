@@ -108,10 +108,11 @@ repo_cmd_after: |
   sudo dnf update -y;
   {% endif %}
   sudo dnf clean metadata
+  # workaround LP 1841941 until StorageSIG supports CentOS8
+  sudo dnf install -y ${NODEPOOL_RDO_PROXY}/rhel8-master/deps/latest/Packages/ceph-ansible-4.0.0-0.1.rc16.1.el8.noarch.rpm
 
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
-  ceph-ansible
 ansible_python_interpreter: /usr/bin/python3
 # used for container updates
 standalone_container_prep_update_repo: >-
