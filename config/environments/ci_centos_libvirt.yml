@@ -24,3 +24,7 @@ run_tempest: false
 # standalone interface
 standalone_interface: eth1
 standalone_ip: 192.168.24.2
+
+# timeout overrides due to slow hardware
+# default is 90
+deploy_timeout: 120
