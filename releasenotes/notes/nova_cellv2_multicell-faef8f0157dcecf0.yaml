@@ -1,0 +1,16 @@
+---
+features:
+  - |
+    This introduce needed changes to be able to deploy an additional
+    cell via oooq. If additional_cell is set to true after the
+    overcloud got deployed the additional cell gets deployed. Todo
+    this information gets extracted from the overcloud stack, which
+    is requried as input to the second heat stack, where the additional
+    cell is managed with. As a reference [1] is the scenario which
+    is installed adding a single additional cell.
+
+    config/general_config/featureset063.yml is used for the configuration
+    and config/nodes/1ctlr_1cellctrl_1comp.yml has a nova config
+    example.
+
+    [1] https://docs.openstack.org/project-deploy-guide/tripleo-docs/latest/features/deploy_cellv2_basic.html

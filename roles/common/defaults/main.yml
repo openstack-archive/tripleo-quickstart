@@ -73,6 +73,11 @@ flavors:
     disk: '{{ control_disk|default(default_disk) }}'
     vcpu: '{{ control_vcpu|default(default_vcpu) }}'
 
+  cellcontrol:
+    memory: '{{ cellcontrol_memory|default(default_memory) }}'
+    disk: '{{ cellcontrol_disk|default(default_disk) }}'
+    vcpu: '{{ cellcontrol_vcpu|default(default_vcpu) }}'
+
   ceph:
     memory: '{{ ceph_memory|default(default_memory) }}'
     disk: '{{ ceph_disk|default(default_disk) }}'
@@ -180,6 +185,16 @@ ssl_overcloud: false
 # to be set accordingly with the `undercloud_external_network_cidr`.
 overcloud_public_vip: 10.0.0.5
 overcloud_public_vip6: 2001:db8:fd00:1000::14
+
+# This enables the deployment of an additonal nova cellv2
+additional_cell: false
+# name of the cell
+cell_name: cell1
+# If ssl_overcloud and additional_cell is True, then the cell public vip must be
+# explicitly specified as part of the deployment configuration. Note that the
+# VIP used has to be set accordingly with the `undercloud_external_network_cidr`.
+cell_public_vip: 10.0.0.6
+cell_public_vip6: 2001:db8:fd00:1000::15
 
 # Enable the virt_bmc ( virtual baremetal controllers )
 enable_vbmc: true
