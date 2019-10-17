@@ -572,7 +572,7 @@ Access the undercloud by:
 Follow the documentation in the link below to complete your deployment.
 Note, by default only the undercloud has been installed.
 
-    https://docs.openstack.org/tripleo-docs/latest/install/basic_deployment/basic_deployment_cli.html#upload-images
+    https://docs.openstack.org/project-deploy-guide/tripleo-docs/latest/deployment/install_overcloud.html#upload-images
 
 For fully automated deployments please refer to:
 
