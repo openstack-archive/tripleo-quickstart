@@ -35,8 +35,10 @@ repos:
         files: \.(yaml|yml)$
         types: [file, yaml]
         entry: yamllint --strict -f parsable
-  - repo: https://github.com/ansible/ansible-lint
-    rev: v4.0.1
+  # Revert to upstream branch fix for bug below is released (tagged)
+  # https://github.com/ansible/ansible-lint/issues/595
+  - repo: https://github.com/ansible/ansible-lint.git
+    rev: 0523c63f193d65313dcd743686d7fb0623a72ee8
     hooks:
       - id: ansible-lint
         files: \.(yaml|yml)$
