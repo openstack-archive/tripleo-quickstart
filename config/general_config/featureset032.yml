@@ -24,7 +24,6 @@ multinode_args: >-
     -e {{ overcloud_templates_path }}/environments/deployed-server-environment.yaml
     -e {{ overcloud_templates_path }}/ci/environments/multinode-3nodes-registry.yaml
     -r {{ overcloud_templates_path }}/ci/environments/multinode-3nodes.yaml
-    -e {{ overcloud_templates_path }}/environments/deployed-server-bootstrap-environment-centos.yaml
     --overcloud-ssh-user {{ undercloud_user }}
 
 deploy_steps_ansible_workflow: >-
