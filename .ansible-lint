@@ -6,7 +6,6 @@ skip_list:
   - ANSIBLE0012
   - ANSIBLE0016
   - '204'  # [E204] Lines should be no longer than 120 chars
-  - '306'  # [E306] Shells that use pipes should set the pipefail option
   # E602 https://github.com/ansible/ansible-lint/issues/450
   - '602'  # [E602] Don't compare to empty string
   # E405 is too new and we need to enable it in a separate change

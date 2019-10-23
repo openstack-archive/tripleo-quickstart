@@ -22,7 +22,9 @@
     cacheable: true
 
 - name: Remove previous KVM modprobe configs
-  shell: find /etc/modprobe.d/ -type f -print0| xargs -r -0 sed -i '/^options kvm_intel/d;/^options kvm_amd/d'
+  shell: |
+    set -o pipefail
+    find /etc/modprobe.d/ -type f -print0 | xargs -r -0 sed -i '/^options kvm_intel/d;/^options kvm_amd/d'
   become: true
   changed_when: true
 

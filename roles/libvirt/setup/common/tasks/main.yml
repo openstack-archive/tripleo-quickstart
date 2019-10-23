@@ -42,6 +42,7 @@
 # In this case it is required to dump the xml and redefine the pool.
 - name: ensure tripleo-quickstart volume pool is defined
   shell: >
+    set -o pipefail;
     virsh pool-dumpxml {{ libvirt_volume_pool }} |
     virsh pool-define /dev/stdin
   changed_when: true

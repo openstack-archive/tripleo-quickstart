@@ -44,7 +44,8 @@
 
 - name: Resize undercloud image (call virt-resize)
   shell: >
-    source {{ working_dir }}/libguestf-env.sh &&
+    set -eo pipefail;
+    source {{ working_dir }}/libguestf-env.sh;
     virt-resize -x --verbose --expand /dev/sda1
     '{{ working_dir }}/undercloud.qcow2'
     '{{ working_dir }}/undercloud-resized.qcow2'
