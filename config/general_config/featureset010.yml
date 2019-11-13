@@ -114,3 +114,5 @@ undercloud_enable_tempest: >-
 
 # https://launchpad.net/bugs/1844446
 undercloud_enable_validations: false
+
+undercloud_enable_paunch: false
