@@ -131,7 +131,66 @@ tempest_format: >-
   packages
   {%- endif -%}
 
-run_tempest: true
 test_white_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+# Settings for os_tempest
+run_tempest: >-
+  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+use_os_tempest: >-
+  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+# It is the regex for IPv6 tempest tests
+tempest_test_whitelist:
+  - 'test_network_v6'
+  - 'ipv6'
+
+# It will create a public network name 'public' using os_tempest
+tempest_interface_name: public
+
+# In order to have a public network with external connectivity, we need to use
+# flat network type
+tempest_public_net_provider_type: flat
+
+# It is the physical network name through which public network will be created
+# having connectivity with external world.
+tempest_public_net_physical_name: datacentre
+
+# Setting the tempest_cidr as it is required while creating public subnet from which
+# floating IPs gets assigned
+tempest_cidr: '10.0.0.0/24'
+
+# In order to create a private network, fs01 is based on OVN, geneve should be used
+# as private network type
+tempest_private_net_provider_type: geneve
+
+tempest_private_net_seg_id: ''
+
+tempest_install_method: distro
+
+# Having tempest_network_ping_gateway set to true allows to ping any of the IP from
+# router to find out network related issue in the deployment early
+tempest_network_ping_gateway: true
+
+# It is the python-tempestconf profile which also consumes tempest-deployer-input file
+tempest_tempestconf_profile:
+  debug: true
+  create: true
+  deployer-input: "{{ ansible_user_dir }}/tempest-deployer-input.conf"
+  os-cloud: "{{ tempest_cloud_name }}"
+  out: "{{ tempest_workspace }}/etc/tempest.conf"
+  network-id: "{{ tempest_neutron_public_network_id }}"
+  overrides: "{{ tempest_tempest_conf_overrides | default('omit') }}"
+
+tempest_tempest_conf_overrides:
+  auth.use_dynamic_credentials: 'True'
