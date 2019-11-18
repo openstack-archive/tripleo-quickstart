@@ -71,7 +71,28 @@ artcl_create_docs_payload:
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
-run_tempest: true
+# os_tempest configuration
+run_tempest: >-
+  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+use_os_tempest: >-
+  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+tempest_install_method: distro
+tempest_cloud_name: 'undercloud'
+# There is no external network used for so disabling neutron
+tempest_service_available_neutron: false
+
+tempest_test_whitelist: "{{ tempest_whitelist }}"
+tempest_test_blacklist: "{{ test_black_regex }}"
 test_regex: ''
 # Enable tempest container
 undercloud_enable_tempest: true
@@ -83,6 +104,12 @@ tempest_format: >-
   {%- else -%}
   packages
   {%- endif -%}
+
+# Enable mistral tempest plugin
+tempest_service_available_mistral: >-
+   {% if lookup('env', 'ZUUL_PROJECT') == "openstack/mistral" -%}
+   true
+   {%- endif -%}
 
 tempest_undercloud: true
 tempest_overcloud: false
@@ -115,9 +142,19 @@ tempest_whitelist_uc:
 tempest_whitelist_mistral:
   - 'mistral_tempest_tests'
 
+# Retrive tempest skip list for undercloud
+skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
+skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
+
+# This filter the known_failures where the undercloud value is true
+# and return a list
+undercloud_blacklist: "{{ skip_list_tests.known_failures | json_query('[?undercloud == `true`]') }}"
+
 test_black_regex: >-
    {% if lookup('env', 'ZUUL_PROJECT') == "openstack/mistral" -%}
    {{ mistral_test_black_regex }}
+   {%- else -%}
+   {{ undercloud_blacklist }}
    {%- endif -%}
 
 # skip list for mistral tempest plugin
