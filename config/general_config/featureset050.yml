@@ -6,8 +6,21 @@
 ssl_overcloud: false
 undercloud_check_sanity: true
 undercloud_upgrade_cleanup: true
-containerized_undercloud: false
-containerized_overcloud: false
+
+containerized_undercloud: >-
+  {% if release not in ['newton','ocata','pike','queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+containerized_overcloud: >-
+  {% if release in ['newton', 'ocata', 'pike'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
 containerized_overcloud_upgrade: false
 containerized_undercloud_upgrade: true
 
@@ -27,3 +40,6 @@ run_tempest: false
 # configured public-vip and admin-vip.
 undercloud_generate_service_certificate: true
 undercloud_enable_swift_encryption: true
+
+# There is not enough space in the Undercloud <20GB
+undercloud_enable_validations: false
