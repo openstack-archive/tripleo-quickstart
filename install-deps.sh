@@ -88,6 +88,11 @@ check_python_module () {
 
 
 install_deps () {
+    # zuul no longer provides the git hash for checked out repos.
+    # tell me the hash of tripleo-quickstart that is running
+    echo "Print out the commit hash of the git repo"
+    git show --summary 2>/dev/null || true
+
     # If sudo isn't installed assume we already are a super user
     # install it anyways so that the install of the other deps succeeds
 
