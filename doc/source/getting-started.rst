@@ -76,6 +76,43 @@ Example::
     bash quickstart.sh -R master --no-clone --tags all --nodes config/nodes/1ctlr_1comp.yml \
         -I --teardown none -p quickstart-extras-undercloud.yml $VIRTHOST
 
+Backup your environment ( optional )
+------------------------------------
+
+When working with the overcloud deployment only many people find
+it more efficient to backup the undercloud install versus reinstalling
+and starting from the beginning
+
+In this example the libvirt configurations, images and ssh keys will be
+backed up and restored.  Thus allowing someone to start with a known
+good undercloud without resetting up the undercloud and nodes.
+
+Backup Example::
+
+    # logged in as the stack user
+    virsh autostart --disable undercloud
+    virsh shutdown undercloud
+    cd /home/stack/
+    tar -cvf qs_backup.tar .config/libvirt/ pool/ volume_pool.xml id_rsa*
+
+    # backup complete, now restart the environment
+    sudo systemctl start libvirtd
+    sudo chown stack:stack /run/user/  < need to fix >
+    virsh start undercloud
+    ssh -F ~/.quickstart/ssh.config.ansible undercloud
+
+Restore Example::
+
+    # logged in as the stack user
+    virsh destroy undercloud
+    virsh destroy compute_0
+    virsh destroy control_0
+    sudo systemctl stop libvirtd
+    tar -xvf qs_backup.tar
+    sudo systemctl start libvirtd
+    sudo chown stack:stack /run/user/  < need to fix >
+    virsh start undercloud
+
 Prepare the TripleO Overcloud for deployment
 --------------------------------------------
 
