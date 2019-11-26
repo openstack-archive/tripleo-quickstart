@@ -46,3 +46,4 @@
     echo "append domain-name-servers {{ custom_nameserver }};" >> /etc/dhcp/dhclient.conf
     {% endif %}
   become: true
+  changed_when: true

@@ -31,6 +31,7 @@
   command: id -u {{ non_root_user }}
   register: non_root_user_uid
   delegate_to: virthost
+  changed_when: false
 
 - name: set fact on non_root_user_uid
   set_fact:

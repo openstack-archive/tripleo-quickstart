@@ -20,6 +20,7 @@
     chdir: '{{ local_working_dir }}'
   register: registered_nodes_output
   no_log: true
+  changed_when: false
 
 - name: set_fact for filtered openstack inventory nodes by types
   set_fact:
