@@ -153,7 +153,7 @@ undercloud_blacklist: "{{ skip_list_tests.known_failures | json_query('[?undercl
 test_black_regex: >-
    {% if lookup('env', 'ZUUL_PROJECT') == "openstack/mistral" -%}
    {{ mistral_test_black_regex }}
-   {%- else -%}
+   {%- elif release not in ['pike', 'queens', 'rocky', 'stein'] -%}
    {{ undercloud_blacklist }}
    {%- endif -%}
 
