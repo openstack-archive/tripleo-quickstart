@@ -19,7 +19,9 @@ sudo rm -rf /tmp/repo_role_tmp && mkdir -p /tmp/repo_role_tmp
 ## * Prepare repositories
 ## ::
 
-{% for repo in repos + add_repos %}
+# Repos can be defined in repos, add_repos (used mostly in
+# featuresets and in the job itself
+{% for repo in repos + add_repos + job.add_repos|default([]) %}
 {% if repo.releases is not defined or release in repo.releases %}
 
 {% if repo.type == 'file' %}
