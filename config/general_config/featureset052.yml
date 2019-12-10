@@ -24,7 +24,6 @@ standalone_custom_env_files:
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
-run_tempest: true
 # Running only smoke tests and a few scenarios
 test_white_regex: '\[.*\bsmoke\b.*\]'
 # NOTE(aschultz): containers assume RC at the moment
@@ -36,6 +35,31 @@ tempest_whitelist:
   - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario'
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
+
+# Settings for os_tempest
+run_tempest: >-
+  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+use_os_tempest: >-
+  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+tempest_test_whitelist: >-
+  {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
+  {{ test_white_regex }}
+  {%- endif -%}
+  {{ tempest_whitelist }}
+
+tempest_run_concurrency: 2
+tempest_tempest_conf_overrides:
+  auth.use_dynamic_credentials: true
 
 standalone_container_cli: >-
   {% if release in ['rocky'] -%}
