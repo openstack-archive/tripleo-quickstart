@@ -7,6 +7,7 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 undercloud_check_idempotency: true
 undercloud_check_sanity: true
+containerized_undercloud: false
 containerized_overcloud: false
 containerized_overcloud_upgrade: false
 
