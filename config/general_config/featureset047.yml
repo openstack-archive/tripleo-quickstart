@@ -7,31 +7,8 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 undercloud_check_idempotency: true
 undercloud_check_sanity: true
-
-containerized_undercloud: >-
-  {% if release in ['newton','ocata','pike','queens'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-containerized_overcloud: >-
-  {% if release in ['newton', 'ocata', 'pike'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-containerized_undercloud_upgrade: >-
-  {% if release in ['newton', 'ocata', 'pike', 'queens'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-containerized_overcloud_upgrade: >-
-  {% if release in ['newton', 'ocata', 'pike'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
+containerized_overcloud: false
+containerized_overcloud_upgrade: false
 
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
