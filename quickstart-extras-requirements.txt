@@ -5,6 +5,7 @@ git+https://opendev.org/openstack/openstack-ansible-os_tempest/#egg=openstack-an
 git+https://opendev.org/openstack/ansible-role-python_venv_build/#egg=ansible-role-python_venv_build
 git+https://opendev.org/openstack/ansible-config_template/#egg=ansible-config_template
 git+https://opendev.org/openstack/ansible-role-collect-logs/#egg=ansible-role-collect-logs
+git+https://opendev.org/openstack/tripleo-operator-ansible/#egg=tripleo-operator-ansible
 # let's experiment with an alternative method to include the role
 # See:
 # https://review.opendev.org/673926

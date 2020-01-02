@@ -139,17 +139,31 @@ bootstrap () {
             mkdir -p .tmp
             EXTRAS_DIR=$(/bin/mktemp -d -p $(pwd)/.tmp)
             pushd $EXTRAS_DIR
+                # pull in tripleo-operator-ansible from source
                 $ZUUL_CLONER --cache-dir \
                     /opt/git \
                     https://opendev.org \
-                    openstack/tripleo-quickstart-extras
-                cd openstack/tripleo-quickstart-extras
+                    openstack/tripleo-operator-ansible
+                pushd openstack/tripleo-operator-ansible
                 if [ $OPT_CLEAN == 1 ]; then
                     $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
                 else
                     $(python_cmd) -m pip install --force-reinstall .
                 fi
-        exit
+                popd
+
+                # pull in tripleo-quickstart-extras from source
+                $ZUUL_CLONER --cache-dir \
+                    /opt/git \
+                    https://opendev.org \
+                    openstack/tripleo-quickstart-extras
+                pushd openstack/tripleo-quickstart-extras
+                if [ $OPT_CLEAN == 1 ]; then
+                    $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
+                else
+                    $(python_cmd) -m pip install --force-reinstall .
+                fi
+                popd
             popd
         fi
     popd
@@ -516,6 +530,7 @@ activate_venv
 
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
+export ANSIBLE_COLLECTIONS_PATH="$OPT_WORKDIR/share/ansible/collections:~/.ansible/collections:/usr/share/ansible/collections"
 export ARA_DATABASE="sqlite:///${OPT_WORKDIR}/ara.sqlite"
 
 #set the ansible ssh.config options if not already set.
