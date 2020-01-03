@@ -147,9 +147,6 @@ use_os_tempest: >-
   false
   {%- endif -%}
 
-tempest_test_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-
 # It will create a public network name 'public' using os_tempest
 tempest_interface_name: public
 
@@ -193,6 +190,20 @@ tempest_tempest_conf_overrides:
 test_white_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+# For periodic pipeline run tempest *.api tests in fs001
+# See https://tree.taiga.io/project/tripleo-ci-board/task/1383
+tempest_periodic_whitelist:
+  - 'tempest.api'
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+
+tempest_test_whitelist: >-
+  {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
+  {{ tempest_periodic_whitelist }}
+  {%- else -%}
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+  {%- endif -%}
+
 tempest_format: >-
   {% if containerized_undercloud|bool -%}
   container
