@@ -185,3 +185,46 @@ supplemental_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_resource_registry_args:
   "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
+
+### Keycloak IdP ###
+
+# Turn on federation support
+enable_federation: true
+
+# For simplicity in development and testing scenarios share the admin
+# password with IPA. Do not do this in a production environment!
+keycloak_admin_password: "{{ freeipa_admin_password }}"
+
+# Locate the Keycloak cert/key on the supplemental node, this offers
+# the potential for certmonger to manage cert renewal and simplifies
+# obtaining the cert from IPA.
+keycloak_tls_files_on_target: true
+
+# Download the keycloak archive directly to the supplemental node as
+# opposed to caching it on the host running oooq which then incurs the
+# penalty of Ansible unpacking it over a (typically) slow SSH connection.
+keycloak_archive_on_target: true
+
+# Both the PKI certificate server in IPA and Keycloak default their
+# http and https port to 8080 and 8443 respectively. Because IPA is
+# installed first ports 8080 and 8443 are already in use, bump the
+# Keycloak ports by 1 to avoid port conflicts.
+keycloak_http_port: 8081
+keycloak_https_port: 8444
+
+# IPA installs first on the supplemental and does not enable the
+# firewall. If keycloak were to install later and enabled the
+# firewall opening only the Keycloak ports then the IPA ports would
+# be blocked. Therefore turn off Keycloak's configuration of the
+# firewall. The IPA install should enable the firewall but when this
+# was attempted a bug in Ansible prevented it from working. If the IPA
+# install gains the ability to enable the firewall then
+# keycloak_configure_firewall should be turned on.
+keycloak_configure_firewall: false
+
+# Limit the JVM max heap size to 512 MB
+keycloak_java_opts: "-Xms64m -Xmx512m"
+
+# Extend the CLI connect timeout to account for slow startup of Keycloak
+# with our small heap size.
+keycloak_jboss_config_connect_timeout: 90000
