@@ -51,6 +51,7 @@ Role Variables
                             packages) (optional)
     * `repos.enabled` - 0/1 whether the repo is enabled or not (default: 1 - enabled)
     * `repos.gpgcheck` - whether to check GPG keys for repo (default: 0 - don't check)
+    * `repos.module_hotfixes` - whether to make all RPMs from the repository available (default: 0)
 
   *Package*
   ------
@@ -97,6 +98,7 @@ Settings example for repositories:
           - type: file
             filename: delorean.repo
             down_url: https://trunk.rdoproject.org/centos7-{{ release }}/current/delorean.repo
+            module_hotfixes=1
 
           # In case of stable release
           - type: generic

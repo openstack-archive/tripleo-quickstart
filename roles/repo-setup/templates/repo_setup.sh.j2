@@ -69,6 +69,9 @@ gpgcheck={{ repo.gpgcheck|default('0') }}
 enabled={{ repo.enabled|default('1') }}
 {% if repo.priority is defined %}priority={{ repo.priority }}
 {% endif %}
+{% if repo.module_hotfixes is defined %}
+module_hotfixes={{ repo.module_hotfixes|default('0') }}
+{% endif %}
 {% if repo.exclude is defined %}exclude={{ repo.exclude|join(",") }}
 {% endif %}
 {% if repo.includepkgs is defined %}includepkgs={{ repo.includepkgs|join(",") }}
