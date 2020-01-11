@@ -53,7 +53,7 @@
     '{{ working_dir }}/undercloud-resized.qcow2'
     2>&1 | tee -a {{ working_dir }}/virt-resize.log
   register: result
-  no_log: result is success
+  no_log: true
   changed_when: true
 
 - name: Rename resized image to original name
@@ -66,9 +66,9 @@
   no_log: true
   shell: >
     import crypt;
-    print crypt.crypt("{{ vm_pass }}", "$1$SecretSalt$")
+    print(crypt.crypt("{{ vm_pass }}", "$1$SecretSalt$"))
   args:
-    executable: /usr/bin/python
+    executable: "/usr/bin/python{{ ansible_python['version']['major'] }}"
   register: hash
   changed_when: false
 
