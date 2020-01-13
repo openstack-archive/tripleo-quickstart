@@ -41,7 +41,6 @@ libselinux-python [platform:centos-7]
 python-netaddr [platform:centos-7]
 python-setuptools [platform:centos-7]
 python-virtualenv [platform:centos-7]
-python-pip [platform:centos-7]
 #
 redhat-rpm-config [platform:rpm]
 
