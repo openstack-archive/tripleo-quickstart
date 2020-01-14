@@ -13,7 +13,7 @@ repos:
           - texttable
           - pyyaml
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.1.0
+    rev: v2.4.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -24,30 +24,31 @@ repos:
       - id: check-symlinks
       - id: debug-statements
       - id: flake8
-        additional_dependencies:
-          - hacking<1.2.0,>=1.1.0
       - id: check-yaml
         files: .*\.(yaml|yml)$
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.14.0
+    rev: v1.20.0
     hooks:
       - id: yamllint
         files: \.(yaml|yml)$
         types: [file, yaml]
         entry: yamllint --strict -f parsable
-  # Revert to upstream branch fix for bug below is released (tagged)
-  # https://github.com/ansible/ansible-lint/issues/595
   - repo: https://github.com/ansible/ansible-lint.git
-    rev: 0523c63f193d65313dcd743686d7fb0623a72ee8
+    rev: v4.2.0
     hooks:
       - id: ansible-lint
-        files: \.(yaml|yml)$
-        entry: env ANSIBLE_LIBRARY=./library ansible-lint --force-color -v
+        always_run: true
+        pass_filenames: false
+        # do not add file filters here as ansible-lint does not give reliable
+        # results when called with individual files.
+        # https://github.com/ansible/ansible-lint/issues/611
+        verbose: true
+        entry: env ANSIBLE_LIBRARY=library ansible-lint --force-color -p -v
   - repo: https://github.com/openstack-dev/bashate.git
     rev: 0.6.0
     hooks:
       - id: bashate
-        entry: bashate --error . --verbose --ignore=E006,E040
+        entry: bashate --error . --ignore=E006,E040
         # Run bashate check for all bash scripts
         # Ignores the following rules:
         # E006: Line longer than 79 columns (as many scripts use jinja

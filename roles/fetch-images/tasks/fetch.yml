@@ -69,6 +69,7 @@
 
     # Get the expected checksum for the remote image.
     - name: Get image expected checksum
+      # noqa: 303
       command: >
         curl -skfL {{ image.url }}.md5
       register: md5_expected
@@ -109,6 +110,7 @@
     # use an ansible `until` loop, combined with curl's `-C-` option
     # to continue interrupted downloads.
     - name: Get image
+      # noqa: 303
       command: >
         curl -skfL -C- -o _{{ image.name }}.{{ image.type }} {{ image.url }}
       args:
@@ -202,3 +204,4 @@
     {% if not image_cache_dir_cleanup|bool %}
     -mtime +{{ image_cache_expire_days|int - 1 }} {% endif %} |
     xargs --no-run-if-empty -t rm -rf
+  changed_when: true

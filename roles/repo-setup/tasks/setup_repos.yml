@@ -7,3 +7,4 @@
   become: true
   register: result
   no_log: result.rc == 0
+  changed_when: true
