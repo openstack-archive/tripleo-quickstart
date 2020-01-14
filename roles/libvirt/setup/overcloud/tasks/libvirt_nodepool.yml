@@ -96,7 +96,11 @@
   shell: >
     source {{ working_dir }}/libguestf-env.sh &&
     virt-customize -v -a {{ working_dir }}/undercloud.qcow2
-    --run-command 'xfs_growfs /'
+    --run-command 'FS_TYPE=`findmnt -o FSTYPE -fn /`;
+    if [ "$FS_TYPE" = "xfs" ]; then xfs_growfs /;
+    elif [ "$FS_TYPE" = "ext4" ]; then resize2fs /dev/sda1;
+    else echo "ERROR: Unknown filesystem $FSTYPE, cannot resize.";
+    exit 1; fi'
     >> {{ working_dir }}/virt-customize.log 2>&1
   when: resize_qcow_filesystem|default(true)|bool
   changed_when: true
