@@ -21,7 +21,9 @@ distro_deps_repo_name: deps
 dlrn_hash_tag: tripleo-ci-testing
 delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 dlrn_hash_tag_newest: current
-docker_registry_host: trunk.registry.rdoproject.org
+docker_registry_host: "{{ 'trunk.registry-vexxhost.rdoproject.org'
+      if 'vexxhost' in job.nodepool_provider|default('rdo-cloud')
+      else 'trunk.registry.rdoproject.org' }}"
 docker_registry_namespace: "tripleo{{ release }}"
 docker_image_tag: *promotion-testing-tag
 undercloud_docker_insecure_registries: "{{ docker_registry_host }}"
