@@ -32,20 +32,8 @@ step_introspect: false
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.
-# FIX-ME https://bugs.launchpad.net/tripleo/+bug/1860354
-# disable TLS due to bug ^, set back to true
-undercloud_generate_service_certificate: >-
-  {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-undercloud_enable_swift_encryption: >-
-  {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+undercloud_generate_service_certificate: true
+undercloud_enable_swift_encryption: true
 
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false
