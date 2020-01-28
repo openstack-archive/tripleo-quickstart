@@ -26,7 +26,10 @@ for node in data['nodes']:
         node_name = node['name']
         # NOTE: `nodes` and `network_details` dictionaries
         # vary node name by swapping the final '-' for a '_'
-        corrected_name = right_replace(node_name, '-', '_', 1)
+        corrected_name = right_replace(
+            node_name, '-', '_', 4).replace(
+                "_extra", "-extra").replace(
+            'baremetal_', 'baremetal-')
         extra_node_networks = data['network_details'][
             corrected_name]['ips'].keys()
         for network in extra_node_networks:
