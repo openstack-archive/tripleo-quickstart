@@ -52,6 +52,7 @@ Role Variables
     * `repos.enabled` - 0/1 whether the repo is enabled or not (default: 1 - enabled)
     * `repos.gpgcheck` - whether to check GPG keys for repo (default: 0 - don't check)
     * `repos.module_hotfixes` - whether to make all RPMs from the repository available (default: 0)
+    * `repos.sslverify` - whether to use a cert to use repo metadata (default: 1)
 
   *Package*
   ------
