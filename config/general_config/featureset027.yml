@@ -97,6 +97,14 @@ test_regex: ''
 # Enable tempest container
 undercloud_enable_tempest: true
 
+# Run an undercloud without glance or nova
+undercloud_enable_nova: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 # Run tempest in containers when at least undercloud is containerized
 tempest_format: >-
   {% if containerized_undercloud|bool -%}
@@ -123,15 +131,6 @@ tempest_whitelist: >-
 # default tempest tests for UC
 tempest_whitelist_uc:
   - 'tempest.api.identity'
-  - 'tempest.api.image.v2.test_images.BasicOperationsImagesTest'
-  - 'tempest.api.image.v2.test_images_tags_negative.ImagesTagsNegativeTest'
-  - 'tempest.api.image.v2.test_images_member_negative.ImagesMemberNegativeTest'
-  - 'tempest.api.compute.admin.test_flavors'
-  - 'tempest.api.compute.flavors'
-  - 'tempest.api.compute.keypairs'
-  - 'tempest.api.compute.admin.test_quotas'
-  - 'tempest.api.compute.admin.test_aggregates_negative'
-  - 'tempest.api.compute.security_groups'
   - 'tempest.api.network.test_networks'
   - 'tempest.api.network.test_networks_negative'
   - 'tempest.api.network.test_security_groups_negative'

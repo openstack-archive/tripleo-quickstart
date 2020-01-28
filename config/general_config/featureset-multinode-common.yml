@@ -1,9 +1,22 @@
+# Run an undercloud without glance or nova
+undercloud_enable_nova: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein', 'train'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+step_glance_upload: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein', 'train'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 # general multinode job configuration
 enable_vbmc: false
 gating_repo_enabled: true
 deploy_multinode: true
 step_overcloud_image: false
-step_glance_upload: true
 step_register: false
 hypervisor_wait: false
 network_isolation: false
