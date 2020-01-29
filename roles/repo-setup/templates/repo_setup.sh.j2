@@ -78,6 +78,9 @@ module_hotfixes={{ repo.module_hotfixes|default('0') }}
 {% endif %}
 {% if repo.down_url is defined %}# trunk_hash=${HASH:-}
 {% endif %}
+{% if repo.sslverify is defined %}
+sslverify={{ repo.sslverify|default('1') }}
+{% endif %}
 EOF
 sudo cp -f /tmp/repo_role_tmp/{{ repo.filename }} /etc/yum.repos.d/
 {% endif %}
