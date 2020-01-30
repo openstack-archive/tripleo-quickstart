@@ -216,7 +216,9 @@ tempest_test_whitelist:
   - 'cinder_tempest_plugin'
 
 # Set tempest concurrency
-tempest_run_concurrency: 3
+# Only in this particular featureset we are setting concurrency to 4 because it
+# runs full tempest and it's timeing out. Usually we set concurrency to 2
+tempest_run_concurrency: 4
 
 # List of tempest plugins to install
 tempest_services:
