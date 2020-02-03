@@ -109,6 +109,8 @@
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 061_  |       |   ❍   |   ❍   |   ◉   |       |       |   ❍   |       |   ❍   |   ❍   |       |   ❍   |       |       |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+| 063_  |       |   ❍   |   ◉   |   ◉   |       |       |   ❍   |       |   ❍   |   ◉   |   ☰   |   ❍   |   ❍   |       |       |   ◉   |       |       |       |       |       |
++-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 099_  |       |       |       |       |       |       |       |       |       |       |       |   ❍   |       |       |   ◉   |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 
@@ -231,4 +233,5 @@
 .. _058: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset058.yml
 .. _060: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset060.yml
 .. _061: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset061.yml
+.. _063: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset063.yml
 .. _099: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset099.yml

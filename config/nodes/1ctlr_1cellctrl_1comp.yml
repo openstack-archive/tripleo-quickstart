@@ -1,0 +1,34 @@
+# This config file is used to deploy an additional cell containing
+# a cell controller and a compute
+
+# Define a controller node, a cell controller, and a compute node.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    virtualbmc_port: 6230
+
+  - name: cellcontrol_0
+    flavor: control
+    virtualbmc_port: 6231
+
+  - name: compute_0
+    flavor: compute
+    virtualbmc_port: 6232
+
+
+node_count: 3
+
+# Tell tripleo which nodes to deploy. Compute and CellController set to
+# 0 for initial overcloud deploy as they will be part of an additional
+# stack for the cell
+topology_map:
+  Compute:
+    scale: 0
+  CellController:
+    scale: 0
+
+cell_topology_map:
+  CellController:
+    scale: 1
+  Compute:
+    scale: 1
