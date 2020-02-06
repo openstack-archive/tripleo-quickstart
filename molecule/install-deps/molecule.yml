@@ -15,7 +15,6 @@ platforms:
       http_proxy: "{{ lookup('env', 'http_proxy') }}"
       https_proxy: "{{ lookup('env', 'https_proxy') }}"
 
-
 provisioner:
   name: ansible
   env:
@@ -27,5 +26,3 @@ scenario:
     - prepare
     - converge
     - destroy
-lint:
-  enabled: false
