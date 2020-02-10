@@ -3,7 +3,7 @@ overcloud_as_undercloud: true
 use_specific_hash: true
 # Ocata doesn't have container support, is it necessary to have this here ?
 docker_registry_host: "{{ 'trunk.registry-vexxhost.rdoproject.org'
-      if 'vexxhost' in job.nodepool_provider|default('rdo-cloud')
+      if 'vexxhost-nodepool-tripleo' in job.nodepool_provider|default('rdo-cloud')
       else 'trunk.registry.rdoproject.org' }}"
 docker_registry_namespace: tripleoocata
 delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
