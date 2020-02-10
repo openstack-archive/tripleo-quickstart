@@ -22,7 +22,7 @@ dlrn_hash_tag_newest: current
 dlrn_target: redhat
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
 docker_registry_host: "{{ 'trunk.registry-vexxhost.rdoproject.org'
-      if 'vexxhost' in job.nodepool_provider|default('rdo-cloud')
+      if 'vexxhost-nodepool-tripleo' in job.nodepool_provider|default('rdo-cloud')
       else 'trunk.registry.rdoproject.org' }}"
 docker_registry_namespace: "tripleo{{ release }}"
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
