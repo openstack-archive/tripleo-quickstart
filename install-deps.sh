@@ -176,6 +176,12 @@ install_virtual_env(){
             echo "Warning: $OPT_WORKDIR virtualenv already exists, just activating it."
         else
             echo "Creating virtualenv at $OPT_WORKDIR"
+            # TODO(chkumar): virtualenv:20.0.1 is broken due to
+            # https://github.com/pypa/virtualenv/issues/1551 and installing lower version
+            # will fix the issue. It will be removed in future once it gets fixed.
+            sudo $(package_manager) remove -y $VIRTUALENV_PACKAGE
+            sudo $(python_cmd) -m pip uninstall -y virtualenv
+            sudo $(python_cmd) -m pip install "virtualenv<20.0.0"
             $(python_cmd) -m virtualenv \
                 $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
                 $OPT_WORKDIR
