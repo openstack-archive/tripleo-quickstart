@@ -75,6 +75,9 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
+   {% if release not in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+   --disable-validations
+   {%- endif -%}
 
 undercloud_ntp_servers: pool.ntp.org
 # keep the doc gen settings at the bottom of the config file.
@@ -219,3 +222,10 @@ undercloud_enable_tempest: >-
 
 
 tempest_extra_config: {'compute_feature_enabled.config_drive': 'True'}
+
+baremetal_provision: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
