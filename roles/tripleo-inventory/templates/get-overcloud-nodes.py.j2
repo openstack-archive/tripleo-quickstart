@@ -19,6 +19,9 @@ import os
 from distutils.version import LooseVersion
 from keystoneauth1.identity import v3
 from keystoneauth1 import session
+{% if baremetal_provision|default(false)|bool %}
+from metalsmith import Provisioner
+{% endif %}
 from novaclient import __version__ as nc_version
 from novaclient import client
 try:
@@ -55,7 +58,15 @@ else:
     session = session.Session(auth=auth, verify=False)
     nova = client.Client(2, session=session)
 
+{% if baremetal_provision|default(false)|bool %}
+provisioner = Provisioner(session=session)
+servers_list = provisioner.list_instances()
+oc_servers = {server.hostname: server.ip_addresses()['ctlplane'][0]
+              for server in servers_list
+              if server.ip_addresses().get('ctlplane')}
+{% else %}
 oc_servers = {server.name: server.networks['ctlplane'][0]
               for server in nova.servers.list()
               if server.networks.get('ctlplane')}
+{% endif %}
 print(json.dumps(oc_servers, indent=4))
