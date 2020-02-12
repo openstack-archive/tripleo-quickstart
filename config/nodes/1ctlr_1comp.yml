@@ -13,3 +13,10 @@ overcloud_nodes:
     hostnamemap_override: overcloud-novacompute-bar-0
 
 node_count: 2
+
+# Tell tripleo which nodes to deploy.
+topology_map:
+  Controller:
+    scale: 1
+  Compute:
+    scale: 1
