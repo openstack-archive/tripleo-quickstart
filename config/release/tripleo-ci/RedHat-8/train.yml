@@ -30,8 +30,8 @@ undercloud_docker_insecure_registries: "{{ docker_registry_host }}"
 docker_prep_prefix: rhel-binary
 docker_ceph_namespace: docker.io/ceph
 docker_openshift_tag: v3.11.0
-overcloud_image_url: "http://38.145.34.141/rcm-guest/images/rhel8/{{ release }}/rdo_trunk/current-tripleo/overcloud-full.tar"
-ipa_image_url: "http://38.145.34.141/rcm-guest/images/rhel8/{{ release }}/rdo_trunk/current-tripleo/ironic-python-agent.tar"
+overcloud_image_url: "https://images-vexxhost.rdoproject.org:4433/rcm-guest/images/rhel8/{{ release }}/rdo_trunk/current-tripleo/overcloud-full.tar"
+ipa_image_url: "https://images-vexxhost.rdoproject.org:4433/rcm-guest/images/rhel8/{{ release }}/rdo_trunk/current-tripleo/ironic-python-agent.tar"
 repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
