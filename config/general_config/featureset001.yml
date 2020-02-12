@@ -200,11 +200,14 @@ tempest_periodic_whitelist:
   - 'tempest.api'
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
 
+tempest_check_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+
 tempest_test_whitelist: >-
   {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
   {{ tempest_periodic_whitelist }}
   {%- else -%}
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+  {{ tempest_check_whitelist }}
   {%- endif -%}
 
 tempest_format: >-
