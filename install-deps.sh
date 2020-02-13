@@ -127,7 +127,8 @@ install_deps () {
                                             $SETUPTOOLS_PACKAGE \
                                             $VIRTUALENV_PACKAGE \
                                             $PIP_PACKAGE
-
+        # workaround for lp #1862941
+        sudo $(python_cmd) -m pip install -U --force-reinstall "six>=1.14.0"
         check_python_module virtualenv &> /dev/null || \
             PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
 
