@@ -223,6 +223,7 @@ undercloud_enable_tempest: >-
   false
   {%- endif -%}
 
+tempest_run_concurrency: 4
 
 tempest_extra_config: {'compute_feature_enabled.config_drive': 'True'}
 
