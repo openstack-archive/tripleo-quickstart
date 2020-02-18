@@ -9,13 +9,6 @@
     LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
   block:
 
-    # ensure python-netaddr is installed for next task
-    - name: ensure python-netaddr
-      become: true
-      package:
-        name: python-netaddr
-        state: present
-
     # Generate MAC addresses that we'll use for the overcloud nodes.
     # By generating these in advance we can populate the
     # `instackenv.json` file with MAC addresses without running

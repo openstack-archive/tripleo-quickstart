@@ -26,7 +26,6 @@
     ansible_user: zuul
     subnode_private_ip: "{{ ip_result.stdout_lines[0] }}"
     subnode_public_ip: "{{ ip_result.stdout_lines[0] }}"
-    ansible_python_interpreter: "{{ python_interpreter|default('/usr/bin/python') }}"
 
 - name: Add {{ item.name }} to known_hosts
   known_hosts:

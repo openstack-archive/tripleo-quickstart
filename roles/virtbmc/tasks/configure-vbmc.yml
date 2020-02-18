@@ -27,15 +27,23 @@
       session_timout=20
   become: true
 
-- name: get virthost non_root_user userid
-  command: id -u {{ non_root_user }}
-  register: non_root_user_uid
-  delegate_to: virthost
-  changed_when: false
-
-- name: set fact on non_root_user_uid
-  set_fact:
-    non_root_user_uid: "{{ non_root_user_uid.stdout }}"
+# when running with 127.0.0.2 as
+# the virthost ensure
+- name: get the non_root_user_uuid
+  block:
+    - name: get virthost non_root_user userid
+      command: id -u {{ non_root_user }}
+      register: non_root_user_uid
+      delegate_to: virthost
+      changed_when: false
+    - name: set fact on non_root_user_uid
+      set_fact:
+        non_root_user_uid: "{{ non_root_user_uid.stdout }}"
+  rescue:
+    # set in roles/provision/local
+    - name: set fact on non_root_user_uid
+      set_fact:
+        non_root_user_uid: "{{ hostvars['localhost']['non_root_user_uid'] }}"
 
 # The first network defined with an address will be used for vbmc access.
 - name: set vbmc address if there is a (nat) network defined with an address
