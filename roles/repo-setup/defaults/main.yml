@@ -11,6 +11,7 @@ stable:
   - queens
   - rocky
   - stein
+  - train
 repo_cmd_before: |
   {% if ansible_pkg_mgr == "yum" %}
   sudo {{ ansible_pkg_mgr }} install -y yum-plugin-priorities;
@@ -59,3 +60,5 @@ known_hash_tags:
   - current-tripleo-rdo
   - current-tripleo-rdo-internal
   - current-passed-ci
+  - promoted-components
+  - component-ci-testing
