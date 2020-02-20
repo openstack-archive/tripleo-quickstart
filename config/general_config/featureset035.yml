@@ -19,17 +19,34 @@ containerized_undercloud: >-
   false
   {%- endif -%}
 
-undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
-undercloud_cloud_domain: "localdomain"
-undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
-undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
 ctlplane_masquerade: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
+
+undercloud_enable_routed_networks: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_clean_nodes: >-
+  {% if release not in ['newton','ocata','pike'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+undercloud_inspection_extras: false
+
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+undercloud_resource_registry_args:
+  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
 
 # Tell tripleo about our environment.
 overcloud_ipv6: true
@@ -50,26 +67,14 @@ telemetry_args: >-
    {% endif %}
 
 extra_args: >-
-  -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+   {% if release not in ['newton', 'ocata', 'pike'] %}
+   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+   {% endif %}
+   {% if release not in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+   --disable-validations
+   {%- endif -%}
 
 undercloud_ntp_servers: pool.ntp.org
-
-undercloud_enable_routed_networks: >-
-  {% if release not in ['newton','ocata','pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
-undercloud_clean_nodes: >-
-  {% if release not in ['newton','ocata','pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
-undercloud_inspection_extras: false
-
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
@@ -77,31 +82,33 @@ artcl_create_docs_payload:
   included_deployment_scripts:
     - undercloud-install
     - overcloud-custom-tht-script
-    - overcloud-prep-containers
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - tempest-setup
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
   included_static_docs:
     - env-setup-virt
   table_of_contents:
     - env-setup-virt
     - undercloud-install
     - overcloud-custom-tht-script
-    - overcloud-prep-containers
+    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - tempest-setup
+    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
+    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 deploy_steps_ansible_workflow: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
+  {% if release not in ['newton','ocata','pike'] -%}
   true
   {%- else -%}
   false
@@ -115,25 +122,6 @@ config_download_args: >-
 
 # Tempest configuration, keep always at the end of the file
 test_ping: false
-
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-
-test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
 
 # Settings for os_tempest
 run_tempest: >-
@@ -149,11 +137,6 @@ use_os_tempest: >-
   {%- else -%}
   false
   {%- endif -%}
-
-# It is the regex for IPv6 tempest tests
-tempest_test_whitelist:
-  - 'test_network_v6'
-  - 'ipv6'
 
 # It will create a public network name 'public' using os_tempest
 tempest_interface_name: public
@@ -194,3 +177,42 @@ tempest_tempestconf_profile:
 
 tempest_tempest_conf_overrides:
   auth.use_dynamic_credentials: 'True'
+
+test_white_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+# For periodic pipeline run tempest *.api tests in fs035
+# And regex for IPv6 tempest tests
+tempest_periodic_whitelist:
+  - 'test_network_v6'
+  - 'ipv6'
+  - 'tempest.api'
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+
+tempest_check_whitelist:
+  - 'test_network_v6'
+  - 'ipv6'
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+
+tempest_test_whitelist: >-
+  {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
+  {{ tempest_periodic_whitelist }}
+  {%- else -%}
+  {{ tempest_check_whitelist }}
+  {%- endif -%}
+
+tempest_format: >-
+  {% if containerized_undercloud|bool -%}
+  container
+  {%- else -%}
+  packages
+  {%- endif -%}
+undercloud_enable_tempest: >-
+  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+tempest_run_concurrency: 4
