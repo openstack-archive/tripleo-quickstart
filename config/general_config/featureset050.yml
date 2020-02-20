@@ -43,3 +43,5 @@ undercloud_enable_swift_encryption: true
 
 # There is not enough space in the Undercloud <20GB
 undercloud_enable_validations: false
+
+undercloud_enable_paunch: false
