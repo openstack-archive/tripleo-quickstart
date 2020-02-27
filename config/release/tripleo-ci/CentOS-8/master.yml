@@ -6,7 +6,10 @@ distro_ver: centos8
 distro_deps_repo_name: deps
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
-docker_registry_host: docker.io
+# TODO - Change this to docker.io when the containers are pushed there
+docker_registry_host: "{{ 'trunk.registry-vexxhost.rdoproject.org'
+      if 'vexxhost-nodepool-tripleo' in job.nodepool_provider|default('rdo-cloud')
+      else 'trunk.registry.rdoproject.org' }}"
 docker_registry_namespace: "tripleo{{ release }}"
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 docker_openshift_tag: v3.11.0
@@ -64,7 +67,7 @@ repos:
   - type: file
     reponame: delorean-current
     filename: delorean-current.repo
-    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/components/tripleo/current/delorean.repo"
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/component/tripleo/current/delorean.repo"
     priority: 10
     includepkgs:
       - ansible-role-container-registry
