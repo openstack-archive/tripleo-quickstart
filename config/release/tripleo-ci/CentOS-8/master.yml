@@ -34,7 +34,7 @@ ipa_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ promote
 # repo setup
 repo_cmd_before: |
   # ensure mock is installed
-  sudo dnf install epel-release
+  sudo dnf -y install epel-release
   sudo dnf config-manager --enable --save epel
   sudo dnf -y install mock
   # the additional rpm files may also be needed
