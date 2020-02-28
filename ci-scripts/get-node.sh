@@ -3,6 +3,48 @@
 
 set -eux
 
+function usage {
+    echo "get-node.sh args"
+    echo ""
+    echo "./get-node.sh"
+    echo "-h --help"
+    echo "-r --centos-release=$CENTOS_RELEASE ( defaults to $CENTOS_RELEASE)"
+    echo ""
+}
+
+# set a reasonable default
+CENTOS_RELEASE=7
+
+PARAMS=""
+while (( "$#" )); do
+    case "$1" in
+        -r|--centos-release)
+            # default centos-7
+            CENTOS_RELEASE=${2:-$CENTOS_RELEASE}
+            shift 2
+            ;;
+        --) # end argument parsing
+            shift
+            break
+            ;;
+        -h|--help)
+            usage
+            break
+            ;;
+        -*|--*=) # unsupported flags
+            echo "Error: Unsupported flag $1" >&2
+            usage
+            exit 1
+            ;;
+        *) # preserve positional arguments
+            PARAMS="$PARAMS $1"
+            shift
+            ;;
+    esac
+done
+# set positional arguments in their proper place
+eval set -- "$PARAMS"
+
 pushd $WORKSPACE/tripleo-quickstart
 # (trown) Use quickstart.sh to set up the environment.
 # This serves as a fail-fast syntax check for quickstart gates.
@@ -19,7 +61,7 @@ popd
 
 $WORKSPACE/bin/cico node get \
     --arch x86_64 \
-    --release 7 \
+    --release $CENTOS_RELEASE \
     --count 1 \
     --retry-count 6 \
     --retry-interval 60 \
