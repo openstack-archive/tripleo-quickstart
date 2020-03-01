@@ -127,8 +127,6 @@ install_deps () {
                                             $SETUPTOOLS_PACKAGE \
                                             $VIRTUALENV_PACKAGE \
                                             $PIP_PACKAGE
-        # workaround for lp #1862941
-        sudo $(python_cmd) -m pip install -U --force-reinstall "six>=1.14.0"
         check_python_module virtualenv &> /dev/null || \
             PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
 
@@ -177,13 +175,6 @@ install_virtual_env(){
             echo "Warning: $OPT_WORKDIR virtualenv already exists, just activating it."
         else
             echo "Creating virtualenv at $OPT_WORKDIR"
-            # TODO(chkumar): virtualenv:20.0.1 is broken due to
-            # https://github.com/pypa/virtualenv/issues/1551 and installing lower version
-            # will fix the issue. It will be removed in future once it gets fixed.
-            if [ "$(python_cmd)" != "python3" ]; then
-                sudo $(python_cmd) -m pip uninstall -y virtualenv
-                sudo $(python_cmd) -m pip install "virtualenv<20.0.0"
-            fi
             $(python_cmd) -m virtualenv \
                 $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
                 $OPT_WORKDIR
