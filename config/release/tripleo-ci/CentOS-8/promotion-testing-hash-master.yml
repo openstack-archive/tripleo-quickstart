@@ -125,8 +125,6 @@ repo_cmd_after: |
   {% if repo_setup_run_update|default(true)|bool %}
   # Openvswitch workaround
   sudo dnf update -y --exclude *openvswitch*
-  # TODO(chkumar): Remove once ceph-ansible supports 2.9
-  sudo dnf install -y https://cbs.centos.org/kojifiles/packages/ansible/2.8.8/1.el8/noarch/ansible-2.8.8-1.el8.noarch.rpm
   {% endif %}
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
