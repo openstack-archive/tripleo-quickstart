@@ -227,6 +227,13 @@ tempest_run_concurrency: 4
 
 tempest_extra_config: {'compute_feature_enabled.config_drive': 'True'}
 
+# Run an undercloud without glance or nova
+undercloud_enable_nova: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein', 'train'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
 baremetal_provision: >-
   {% if release in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
   false
