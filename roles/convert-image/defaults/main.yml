@@ -13,9 +13,8 @@ convert_image_remove_pkgs:
   - openstack-dashboard
 
 # List of packages that should be installed to convert overcloud to undercloud
-# <wes> notes this was a list, but is now a string
-# still should work w/ https://opendev.org/openstack/tripleo-quickstart/src/branch/master/roles/convert-image/templates/convert_image.sh.j2#L24
-convert_image_install_pkgs: "{{ 'python3-tripleoclient' if ansible_distribution_major_version|int >= 8 else 'python-tripleoclient' }}"
+convert_image_install_pkgs:
+  - "{{ 'python3-tripleoclient' if ansible_distribution_major_version is version(8, '>=') else 'python-tripleoclient' }}"
 
 convert_image_tempest_plugins: []
 convert_image_host_memory: 2048
