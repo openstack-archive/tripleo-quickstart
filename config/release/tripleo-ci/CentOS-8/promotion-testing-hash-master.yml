@@ -68,6 +68,28 @@ repos:
   # However for consistency w/ what is merged. removing
   # See config/release/tripleo-ci/CentOS-7/promotion-testing-hash-master.yml#L48-L64
   # "https://trunk.rdoproject.org/centos8-master/component/tripleo/current/delorean.repo"
+  - type: file
+    reponame: delorean-current
+    filename: delorean-current.repo
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/component/tripleo/current/delorean.repo"
+    priority: 10
+    includepkgs:
+      - ansible-role-container-registry
+      - ansible-role-tripleo*
+      - ansible-tripleo-ipsec
+      - instack
+      - instack-undercloud
+      - openstack-tripleo-*
+      - os-apply-config
+      - os-collect-config
+      - os-net-config
+      - os-refresh-config
+      - puppet-*
+      - python*-tripleo*
+      - python*-paunch*
+      - paunch-services
+      - tripleo-ansible
+      - ansible-config_template
 
   - type: file
     filename: delorean-master-deps.repo
