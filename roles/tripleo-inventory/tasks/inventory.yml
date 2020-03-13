@@ -68,9 +68,15 @@
 - when: inventory == 'extra_node'
   block:
 
+    - name: Set fact for python executable to use for python scripts
+      set_fact:
+        python_exe: "python{{ ansible_python['version']['major'] }}"
+
     - name: Get IP of extra node in OVB stack
       script: get_extra_node.py {{ working_dir }}
       register: node_ip
+      args:
+        executable: "{{ python_exe }}"
 
     - name: Set fact for private supplemental ip
       set_fact:
@@ -92,6 +98,8 @@
 
     - name: Remove extra node
       script: remove_extra_node.py {{ working_dir }}
+      args:
+        executable: "{{ python_exe }}"
 
 # readd the undercloud to reset the ansible_ssh parameters set in quickstart
 - name: Add undercloud vm to inventory
