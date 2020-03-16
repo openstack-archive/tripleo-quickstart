@@ -3,16 +3,19 @@
   fail:
     msg: "The newest DLRN hash or tag is not recognized. The hash or tag should not contain path slashes."
   when:
-    - dlrn_hash_tag_newest is not match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+    - (not dlrn_hash_tag is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")) or (not dlrn_hash_tag is match("[a-zA-Z0-9]{32}"))
     - dlrn_hash_tag_newest not in known_hash_tags
 
 - name: Check DLRN hash newest - passed ready hash
   set_fact:
     dlrn_hash_newest: "{{ dlrn_hash_tag_newest }}"
     cacheable: true
-  when: dlrn_hash_tag_newest is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+  when: dlrn_hash_tag_newest is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}") or dlrn_hash_tag is match("[a-zA-Z0-9]{32}")
 
-- when: dlrn_hash_tag_newest in known_hash_tags
+- when:
+    - dlrn_hash_tag_newest in known_hash_tags
+    - ((ansible_distribution == "CentOS" and ansible_distribution_major_version is version(8, '<')) or (ansible_distribution != "CentOS"))
+
   block:
 
     - name: Get DLRN hash newest - passed tag
@@ -32,6 +35,33 @@
     - name: Set fact for dlrn_hash_newest
       set_fact:
         dlrn_hash_newest: "{{ full_hash_newest_result.stdout }}"
+        cacheable: true
+
+# when running a component job, the containers and images
+# come from a promoted current-tripleo pin.  Therefore the md5
+# of the known hash_tag (e..g. current tripleo) is the cricital hash to know.
+# components for OSP will be built on OSP-16, 17 # TO-DO
+- when:
+    - dlrn_hash_tag_newest in known_hash_tags
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version is version(8, '>=')
+  block:
+    - name: Get DLRN hash newest - passed tag - component-based
+      shell: |
+        set -euo pipefail
+        dlrn_base={{ dlrn_baseurl }}
+        if [ -e /etc/ci/mirror_info.sh ]; then
+          source /etc/ci/mirror_info.sh
+          NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY:-https://trunk.rdoproject.org}
+          dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+        fi
+        curl -s --fail --show-error ${dlrn_base}/{{ dlrn_hash_tag_newest }}/delorean.repo.md5
+      register: full_hash_result
+      retries: 5
+
+    - name: Set fact for dlrn_hash_newest
+      set_fact:
+        dlrn_hash_newest: "{{ full_hash_result.stdout }}"
         cacheable: true
 
 - name: Set fact for dlrn_hash_path_newest
