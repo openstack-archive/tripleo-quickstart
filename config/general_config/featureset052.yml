@@ -64,6 +64,7 @@ tempest_test_whitelist: >-
 tempest_run_concurrency: 2
 tempest_tempest_conf_overrides:
   auth.use_dynamic_credentials: true
+  image.image_path: http://images.rdoproject.org/cirros/cirros-0.4.0-x86_64-disk.img
 
 standalone_container_cli: >-
   {% if release in ['rocky'] -%}
