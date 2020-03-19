@@ -115,6 +115,10 @@ install_deps () {
             SETUPTOOLS_PACKAGE=python3-setuptools
             VIRTUALENV_PACKAGE=python3-virtualenv
             PIP_PACKAGE=python3-pip
+            if [ -e "/usr/bin/pip3" ] && [ ! -e "/usr/bin/pip" ]; then
+                # centos-8 installs pip as pip3
+                sudo alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+            fi
         else
             PYTHON_PACKAGES+=("libselinux-python")
             SETUPTOOLS_PACKAGE=python2-setuptools
@@ -144,8 +148,6 @@ install_deps () {
     check_python_module pip &> /dev/null || {
         if yum provides pip 2>&1 | grep 'No matches found' >/dev/null; then
             sudo easy_install pip
-        else
-            sudo $(package_manager) install $PIP_PACKAGE
         fi
     }
 
@@ -247,14 +249,6 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     # This is not meant be an interactive script
     # however, if users want to install by hand
     # the option is provided.
-
-    # Allow to user to override the python version
-    export USER_PYTHON_OVERRIDE=python2
-
-    # This will allow the user to be prompted for commands
-    # requiring sudo vs. skipping the install assuming the
-    # requirements are already installed.
-    export USER_OVERRIDE_SUDO_CHECK="1"
 
     # install just enough python
     install_deps
