@@ -12,7 +12,11 @@
     - name: fetch overcloud node names and IPs
       shell: >
           source {{ working_dir }}/stackrc;
+          {%- if ansible_distribution_major_version|int == 7 -%}
+          python2 {{ working_dir }}/get-overcloud-nodes.py
+          {% else %}
           $(command -v python3 || command -v python2) {{ working_dir }}/get-overcloud-nodes.py
+          {% endif %}
       register: registered_overcloud_nodes
 
     - name: list the overcloud nodes
