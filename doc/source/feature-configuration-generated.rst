@@ -39,9 +39,9 @@
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 019_  |       |       |   ◉   |   ◍   |       |       |   ❍   |       |   ❍   |   ❍   |       |   ◍   |   ❍   |  004  |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 020_  |       |   ❍   |   ◍   |   ◍   |       |       |       |   ◍   |   ◉   |   ◉   |   ☰   |   ❍   |   ❍   |       |       |   ◉   |       |       |       |       |       |
+| 020_  |       |   ❍   |   ◍   |   ◍   |       |       |       |   ◍   |   ◉   |   ◉   |   ☰   |   ❍   |   ❍   |       |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 021_  |       |   ❍   |   ◍   |   ◍   |       |       |       |       |   ◉   |   ◉   |   ☰   |   ❍   |   ❍   |       |       |   ◉   |       |       |       |       |       |
+| 021_  |       |   ❍   |   ◍   |   ◍   |       |       |       |       |   ◉   |   ◉   |   ☰   |   ❍   |   ❍   |       |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 022_  |       |   ❍   |   ◉   |       |       |       |   ❍   |       |   ◉   |   ❍   |       |   ◉   |   ❍   |       |       |   ❍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
@@ -53,11 +53,11 @@
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 026_  |       |   ❍   |   ◉   |       |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  006  |       |   ❍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 027_  |       |   ❍   |   ❍   |   ◉   |       |       |   ❍   |       |   ❍   |   ❍   |       |   ❍   |   ❍   |       |       |   ◉   |       |       |       |       |       |
+| 027_  |       |   ❍   |   ❍   |   ◉   |       |       |   ❍   |       |   ❍   |   ❍   |       |   ❍   |   ❍   |       |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 028_  |       |   ❍   |   ❍   |       |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  007  |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 030_  |       |   ◍   |   ◉   |   ◍   |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  007  |       |   ◉   |       |       |       |       |       |
+| 030_  |       |   ◍   |   ◉   |   ◍   |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  007  |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 031_  |       |   ❍   |   ◉   |       |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  008  |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
@@ -65,13 +65,13 @@
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 033_  |       |   ❍   |   ◉   |   ◉   |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  009  |       |   ❍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 035_  |       |   ❍   |   ◉   |   ◍   |       |       |   ◉   |       |   ◉   |   ◉   |   ☰   |   ❍   |   ◉   |       |       |   ◉   |       |       |       |       |       |
+| 035_  |       |   ❍   |   ◉   |   ◍   |       |       |   ◉   |       |   ◉   |   ◉   |   ☰   |   ❍   |   ◉   |       |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 036_  |       |       |       |       |       |       |       |       |       |       |       |   ❍   |       |  002  |       |   ❍   |       |   ◉   |   ◉   |       |   ❍   |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 037_  |       |       |   ◉   |   ◍   |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  000  |       |   ❍   |   ◉   |       |       |       |   ❍   |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 038_  |       |       |   ◉   |   ◍   |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  010  |       |   ❍   |       |       |       |       |       |
+| 038_  |       |       |   ◉   |   ◍   |       |       |   ❍   |       |       |   ❍   |       |   ❍   |   ❍   |  010  |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 039_  |       |   ◍   |   ◍   |   ◍   |       |       |       |       |   ◉   |   ◉   |   ☰   |   ◍   |   ◉   |       |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
@@ -81,19 +81,21 @@
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 042_  |       |   ❍   |   ◉   |       |       |       |       |       |   ◉   |   ◉   |   ☰   |   ❍   |   ◉   |       |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+| 043_  |       |   ◍   |   ◍   |   ◍   |       |       |       |       |   ◉   |   ◉   |   ─   |   ◍   |   ◉   |       |       |   ◍   |       |       |       |       |       |
++-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 045_  |       |       |   ◉   |       |       |       |   ❍   |       |   ❍   |       |       |   ◉   |   ❍   |  000  |       |   ❍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 047_  |       |       |   ❍   |       |       |       |       |   ◉   |       |       |       |   ❍   |   ❍   |       |       |   ❍   |       |       |   ❍   |   ◉   |       |
+| 047_  |       |       |   ❍   |   ❍   |       |       |       |   ◉   |       |       |       |   ❍   |   ❍   |       |       |   ❍   |       |       |   ❍   |   ◉   |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 048_  |       |   ❍   |   ◍   |       |       |       |       |       |   ◉   |   ❍   |       |   ❍   |   ❍   |       |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 049_  |       |   ◉   |   ◉   |       |       |       |       |       |   ❍   |   ◉   |   ─   |   ❍   |   ❍   |       |       |   ❍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 050_  |       |       |   ❍   |   ❍   |       |       |       |       |       |       |       |   ❍   |   ❍   |       |       |   ❍   |       |       |   ❍   |   ◉   |       |
+| 050_  |       |       |   ◍   |   ◍   |       |       |       |       |       |       |       |   ❍   |   ❍   |       |       |   ❍   |       |       |   ❍   |   ◉   |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 051_  |       |       |   ◉   |   ◍   |       |       |   ❍   |       |   ❍   |   ❍   |       |   ❍   |   ❍   |  000  |       |   ❍   |       |       |   ◉   |       |   ❍   |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 052_  |       |       |       |       |       |       |       |       |       |       |       |   ❍   |       |       |   ◉   |   ◉   |       |       |       |       |       |
+| 052_  |       |       |       |       |       |       |       |       |       |       |       |   ❍   |       |       |   ◉   |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 053_  |   ◉   |   ◍   |   ◍   |   ◍   |       |       |       |       |   ◉   |   ◉   |   ☰   |   ◍   |   ❍   |       |       |   ◍   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
@@ -109,7 +111,9 @@
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 061_  |       |   ❍   |   ❍   |   ◉   |       |       |   ❍   |       |   ❍   |   ❍   |       |   ❍   |       |       |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
-| 063_  |       |   ❍   |   ◉   |   ◉   |       |       |   ❍   |       |   ❍   |   ◉   |   ☰   |   ❍   |   ❍   |       |       |   ◉   |       |       |       |       |       |
+| 062_  |       |       |       |       |       |       |       |       |       |       |       |   ❍   |       |       |   ◉   |   ◉   |       |       |       |       |       |
++-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
+| 063_  |       |   ◍   |   ◍   |   ◍   |       |       |       |       |   ◉   |   ◉   |   ☰   |   ❍   |   ◉   |       |       |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
 | 099_  |       |       |       |       |       |       |       |       |       |       |       |   ❍   |       |       |   ◉   |   ◉   |       |       |       |       |       |
 +-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+-------+
@@ -179,59 +183,61 @@
 +--------+---------------------------------------------------+
 
 
-.. _001: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset001.yml
-.. _002: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset002.yml
-.. _003: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset003.yml
-.. _004: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset004.yml
-.. _005: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset005.yml
-.. _006: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset006.yml
-.. _007: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset007.yml
-.. _008: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset008.yml
-.. _009: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset009.yml
-.. _010: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset010.yml
-.. _011: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset011.yml
-.. _012: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset012.yml
-.. _013: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset013.yml
-.. _014: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset014.yml
-.. _015: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset015.yml
-.. _016: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset016.yml
-.. _017: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset017.yml
-.. _018: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset018.yml
-.. _019: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset019.yml
-.. _020: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset020.yml
-.. _021: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset021.yml
-.. _022: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset022.yml
-.. _023: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset023.yml
-.. _024: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset024.yml
-.. _025: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset025.yml
-.. _026: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset026.yml
-.. _027: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset027.yml
-.. _028: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset028.yml
-.. _030: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset030.yml
-.. _031: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset031.yml
-.. _032: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset032.yml
-.. _033: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset033.yml
-.. _035: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset035.yml
-.. _036: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset036.yml
-.. _037: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset037.yml
-.. _038: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset038.yml
-.. _039: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset039.yml
-.. _040: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset040.yml
-.. _041: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset041.yml
-.. _042: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset042.yml
-.. _045: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset045.yml
-.. _047: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset047.yml
-.. _048: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset048.yml
-.. _049: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset049.yml
-.. _050: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset050.yml
-.. _051: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset051.yml
-.. _052: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset052.yml
-.. _053: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset053.yml
-.. _054: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset054.yml
-.. _055: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset055.yml
-.. _056: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset056.yml
-.. _058: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset058.yml
-.. _060: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset060.yml
-.. _061: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset061.yml
-.. _063: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset063.yml
-.. _099: https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/general_config/featureset099.yml
+.. _001: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset001.yml
+.. _002: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset002.yml
+.. _003: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset003.yml
+.. _004: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset004.yml
+.. _005: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset005.yml
+.. _006: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset006.yml
+.. _007: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset007.yml
+.. _008: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset008.yml
+.. _009: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset009.yml
+.. _010: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset010.yml
+.. _011: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset011.yml
+.. _012: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset012.yml
+.. _013: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset013.yml
+.. _014: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset014.yml
+.. _015: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset015.yml
+.. _016: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset016.yml
+.. _017: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset017.yml
+.. _018: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset018.yml
+.. _019: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset019.yml
+.. _020: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset020.yml
+.. _021: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset021.yml
+.. _022: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset022.yml
+.. _023: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset023.yml
+.. _024: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset024.yml
+.. _025: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset025.yml
+.. _026: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset026.yml
+.. _027: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset027.yml
+.. _028: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset028.yml
+.. _030: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset030.yml
+.. _031: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset031.yml
+.. _032: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset032.yml
+.. _033: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset033.yml
+.. _035: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset035.yml
+.. _036: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset036.yml
+.. _037: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset037.yml
+.. _038: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset038.yml
+.. _039: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset039.yml
+.. _040: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset040.yml
+.. _041: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset041.yml
+.. _042: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset042.yml
+.. _043: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset043.yml
+.. _045: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset045.yml
+.. _047: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset047.yml
+.. _048: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset048.yml
+.. _049: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset049.yml
+.. _050: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset050.yml
+.. _051: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset051.yml
+.. _052: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset052.yml
+.. _053: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset053.yml
+.. _054: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset054.yml
+.. _055: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset055.yml
+.. _056: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset056.yml
+.. _058: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset058.yml
+.. _060: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset060.yml
+.. _061: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset061.yml
+.. _062: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset062.yml
+.. _063: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset063.yml
+.. _099: https://opendev.org/openstack/tripleo-quickstart/config/general_config/src/branch/master/featureset099.yml
