@@ -25,11 +25,11 @@ add_repos:
   - type: generic
     reponame: quickstart-centos-paas
     filename: quickstart-centos-paas.repo
-    baseurl: https://cbs.centos.org/repos/paas7-openshift-origin311-candidate/x86_64/os/
+    baseurl: https://buildlogs.centos.org/centos/7/paas/x86_64/openshift-origin311/
   - type: generic
     reponame: quickstart-centos-virt-container
     filename: quickstart-centos-virt-container.repo
-    baseurl: https://cbs.centos.org/repos/virt7-container-common-candidate/x86_64/os/
+    baseurl: https://buildlogs.centos.org/centos/7/virt/x86_64/container/
     includepkgs:
       - atomic
     priority: 1
