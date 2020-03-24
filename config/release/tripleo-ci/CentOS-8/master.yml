@@ -28,8 +28,8 @@ inject_images:
   - "overcloud-full.vmlinuz"
 
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
-overcloud_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ promote_source }}/overcloud-full.tar"
-ipa_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ promote_source }}/ironic-python-agent.tar"
+overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/overcloud-full.tar"
+ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/ironic-python-agent.tar"
 
 # repo setup
 repo_cmd_before: |
