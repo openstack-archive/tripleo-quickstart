@@ -1,13 +1,18 @@
 cmd2==0.8.5
-ara<1.0
 ansible>=2.9,<2.10
 jmespath
 netaddr>=0.7.18
 os-client-config
 pbr>=1.6
 setuptools>=11.3
-shade>=1.8.0
-python-neutronclient
-python-openstackclient
-python-heatclient
 warlock!=1.3.2
+futurist<=1.10.0;python_version=='2.7' # Apache-2.0
+futurist;python_version>='3.6' # Apache-2.0
+cliff<=2.18.0;python_version=='2.7' # Apache-2.0
+clif;python_version>='3.6' # Apache-2.0
+oslo.serialization<=2.29.2;python_version=='2.7' # Apache-2.0
+oslo.serialization;python_version>='3.6' # Apache-2.0
+oslo.utils<=3.42.1;python_version=='2.7' # Apache-2.0
+oslo.utils;python_version>='3.6' # Apache-2.0
+oslo.config<=7.0.0;python_version=='2.7' # Apache-2.0
+oslo.config;python_version>='3.6' # Apache-2.0
