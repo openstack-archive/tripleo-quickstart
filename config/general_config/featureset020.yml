@@ -205,7 +205,7 @@ tempest_tempestconf_profile:
   os-cloud: "{{ tempest_cloud_name }}"
   out: "{{ tempest_workspace }}/etc/tempest.conf"
   network-id: "{{ tempest_neutron_public_network_id }}"
-  overrides: "{{ tempest_tempest_conf_overrides | default('omit') }}"
+  overrides: "{{ tempest_tempest_conf_overrides | default({}) }}"
 
 check_test_whitelist:
   - 'tempest.scenario'
