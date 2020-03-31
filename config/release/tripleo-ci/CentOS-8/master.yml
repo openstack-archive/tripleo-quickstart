@@ -44,6 +44,8 @@ repo_cmd_before: |
 
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo rm -rf /etc/yum.repos.d/epel*;
+
   sudo dnf clean all;
   sudo dnf config-manager --disable "*"
   if [ -e /etc/ci/mirror_info.sh ]; then
