@@ -3,7 +3,8 @@
   fail:
     msg: "The DLRN hash or tag is not recognized. The hash or tag should not contain path slashes."
   when:
-    - (not dlrn_hash_tag is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")) or (not dlrn_hash_tag is match("[a-zA-Z0-9]{32}"))
+    - not dlrn_hash_tag is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
+    - not dlrn_hash_tag is match("[a-zA-Z0-9]{32}")
     - dlrn_hash_tag not in known_hash_tags
 
 - name: Check DLRN hash - passed ready hash
