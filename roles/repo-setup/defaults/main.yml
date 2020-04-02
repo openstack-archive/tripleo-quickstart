@@ -62,3 +62,5 @@ known_hash_tags:
   - current-passed-ci
   - promoted-components
   - component-ci-testing
+expected_commit_distro_hash_regex: "[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}$"
+expected_aggregate_hash_regex: "^[a-zA-Z0-9]{32}$"

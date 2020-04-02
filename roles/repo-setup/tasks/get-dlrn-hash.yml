@@ -3,15 +3,15 @@
   fail:
     msg: "The DLRN hash or tag is not recognized. The hash or tag should not contain path slashes."
   when:
-    - not dlrn_hash_tag is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
-    - not dlrn_hash_tag is match("[a-zA-Z0-9]{32}")
+    - not dlrn_hash_tag is match(expected_commit_distro_hash_regex)
+    - not dlrn_hash_tag is match(expected_aggregate_hash_regex)
     - dlrn_hash_tag not in known_hash_tags
 
 - name: Check DLRN hash - passed ready hash
   set_fact:
     dlrn_hash: "{{ dlrn_hash_tag }}"
     cacheable: true
-  when: dlrn_hash_tag is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}") or dlrn_hash_tag is match("[a-zA-Z0-9]{32}")
+  when: dlrn_hash_tag is match(expected_commit_distro_hash_regex) or dlrn_hash_tag is match(expected_aggregate_hash_regex)
 
 # full_hash_result is used to help find the
 # correctly tagged containers and images
@@ -30,7 +30,7 @@
           dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
         fi
         curl -s --fail --show-error ${dlrn_base}/{{ dlrn_hash_tag }}/delorean.repo \
-        | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
+        | grep baseurl | grep -Eo {{ expected_commit_distro_hash_regex | quote }}
       register: full_hash_result
       retries: 5
 
@@ -81,7 +81,7 @@
           dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
         fi
         curl -s --fail --show-error ${dlrn_base}/{{ dlrn_hash_tag }}/delorean.repo \
-        | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
+        | grep baseurl | grep -Eo {{ expected_commit_distro_hash_regex }}
       register: full_overcloud_hash_result
       retries: 5
 

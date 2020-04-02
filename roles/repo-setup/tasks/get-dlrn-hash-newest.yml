@@ -3,15 +3,15 @@
   fail:
     msg: "The newest DLRN hash or tag is not recognized. The hash or tag should not contain path slashes."
   when:
-    - not dlrn_hash_tag_newest is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}")
-    - not dlrn_hash_tag_newest is match("[a-zA-Z0-9]{32}")
+    - not dlrn_hash_tag_newest is match(expected_commit_distro_hash_regex)
+    - not dlrn_hash_tag_newest is match(expected_aggregate_hash_regex)
     - dlrn_hash_tag_newest not in known_hash_tags
 
 - name: Check DLRN hash newest - passed ready hash
   set_fact:
     dlrn_hash_newest: "{{ dlrn_hash_tag_newest }}"
     cacheable: true
-  when: dlrn_hash_tag_newest is match("[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}") or dlrn_hash_tag is match("[a-zA-Z0-9]{32}")
+  when: dlrn_hash_tag_newest is match(expected_commit_distro_hash_regex) or dlrn_hash_tag is match(expected_aggregate_hash_regex)
 
 - when:
     - dlrn_hash_tag_newest in known_hash_tags
@@ -29,7 +29,7 @@
           dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
         fi
         curl -s --fail --show-error ${dlrn_base}/{{ dlrn_hash_tag_newest }}/delorean.repo \
-        | grep baseurl | grep -Eo '[a-zA-Z0-9]{40}_[a-zA-Z0-9]{8}'
+        | grep baseurl | grep -Eo {{ expected_commit_distro_hash_regex | quote }}
       register: full_hash_newest_result
       retries: 5
 
