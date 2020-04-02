@@ -73,9 +73,9 @@
 - name: Install VirtualBMC package
   when: release not in ['newton']
   package:
-    name: "python2-virtualbmc"
+    name: "{{ virtualbmc_packages }}"
     state: present
-    use: yum
+    use: "{{ ansible_pkg_mgr }}"
   become: true
 
 - name: Start the Virtual BMCs (virtualbmc >= 1.4.0+)

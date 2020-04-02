@@ -14,4 +14,7 @@ libvirt_packages:
   - python3-devel
   - python3-libvirt
 
+virtualbmc_packages:
+  - python3-virtualbmc
+
 ansible_pkg_mgr: dnf
