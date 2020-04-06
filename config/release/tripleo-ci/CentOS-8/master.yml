@@ -79,7 +79,19 @@ repos:
       - os-collect-config
       - os-net-config
       - os-refresh-config
-      - puppet-*
+      - puppet-cinder
+      - puppet-heat
+      - puppet-neutron
+      - puppet-nova
+      - puppet-glance
+      - puppet-horizon
+      - puppet-ironic
+      - puppet-keystone
+      - puppet-mistral
+      - puppet-openstacklib
+      - puppet-swift
+      - puppet-tripleo
+      - puppet-zaqar
       - python*-tripleo*
       - python*-paunch*
       - paunch-services
