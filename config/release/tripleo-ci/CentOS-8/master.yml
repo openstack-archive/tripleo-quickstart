@@ -33,15 +33,6 @@ ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo
 
 # repo setup
 repo_cmd_before: |
-  # ensure mock is installed
-  sudo dnf -y install epel-release
-  sudo dnf config-manager --enable --save epel
-  sudo dnf -y install mock
-  # the additional rpm files may also be needed
-  # createrepo redhat-rpm-config rpmdevtools spectool
-  sudo dnf config-manager --disable --save epel
-  sudo rpm -e epel-release || true;
-
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo rm -rf /etc/yum.repos.d/epel*;
