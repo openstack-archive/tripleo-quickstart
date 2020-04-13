@@ -25,18 +25,28 @@ standalone_custom_env_files:
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
-run_tempest: true
-# Running only smoke tests and a few scenarios
-test_white_regex: '\[.*\bsmoke\b.*\]'
+run_tempest: false
+use_os_tempest: true
 # NOTE(aschultz): containers assume RC at the moment
 tempest_undercloud: true
 tempest_overcloud: false
-tempest_workers: 2
+tempest_services:
+  - neutron
+  - ironic
+tempest_tempestconf_profile_overrides:
+  auth.create_isolated_networks: 'False'
+  validation.connect_method: 'fixed'
+  validation.network_for_ssh: 'provisioning'
+  baremetal.use_provision_network: 'True'
+tempest_run_concurrency: 2
 tempest_os_cloud: standalone
-tempest_whitelist:
-  - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario'
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
-  - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
+tempest_test_whitelist:
+  #  - 'ironic_tempest_plugin.tests.scenario.test_baremetal_multitenancy.BaremetalMultitenancy.test_baremetal_multitenancy'
+  - 'ironic_tempest_plugin.tests.api.admin.test_api_discovery.TestApiDiscovery'
+  - 'ironic_tempest_plugin.tests.api.admin.test_conductor.TestConductors'
+  - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplates'
+  - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplatesNegative'
+  - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplatesOldAPI'
 
 standalone_container_cli: >-
   {% if release in ['rocky'] -%}
