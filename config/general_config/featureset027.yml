@@ -17,7 +17,7 @@ undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 # Prevent regression as described in https://bugs.launchpad.net/tripleo/+bug/1869360
 undercloud_cloud_domain: "localDomain"
-undercloud_undercloud_hostname: "underClou.{{ undercloud_cloud_domain }}"
+undercloud_undercloud_hostname: "underCloud.{{ undercloud_cloud_domain }}"
 undercloud_undercloud_public_host: "{{ ansible_hostname }}-unique"
 tripleo_set_unique_hostname: true
 undercloud_resource_registry_args:
