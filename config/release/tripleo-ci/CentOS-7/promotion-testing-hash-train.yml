@@ -77,6 +77,9 @@ repos:
     reponame: quickstart-centos-extras
     filename: quickstart-centos-extras.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/7/extras/x86_64/
+    exclude:
+      - podman
+      - buildah
 
   - type: generic
     reponame: quickstart-centos-qemu
