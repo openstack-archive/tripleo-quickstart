@@ -10,6 +10,7 @@ delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag)
 docker_image_tag: *promotion-testing-tag
 dlrn_hash_tag_newest: current
 promote_source: tripleo-ci-testing
+validate_on: rdo
 
 # images
 images:
