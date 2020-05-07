@@ -1,0 +1,147 @@
+# name and tags
+devmode: true
+release: train
+distro_ver: centos8
+overcloud_as_undercloud: true
+use_specific_hash: true
+docker_registry_host: trunk.registry.rdoproject.org
+docker_registry_namespace: tripleotraincentos8
+delorean_hash_label: &promotion-testing-tag "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+docker_image_tag: *promotion-testing-tag
+dlrn_hash_tag_newest: current
+promote_source: tripleo-ci-testing
+validate_on: rdo
+
+# images
+images:
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+inject_images:
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
+
+dlrn_baseurl: https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}
+dlrn_hash_tag: tripleo-ci-testing
+overcloud_image_url: https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/overcloud-full.tar
+ipa_image_url: https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/ironic-python-agent.tar
+
+# repo setup
+# optimize with mirros after we have
+# something working..  IMHO may be replaced w/ tripleo-repos setup
+# https://review.opendev.org/#/c/709254/
+repo_cmd_before: |
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo dnf clean all;
+  sudo yum-config-manager --disable "*"
+  if [ -e /etc/ci/mirror_info.sh ]; then
+    source /etc/ci/mirror_info.sh
+  else
+    # Otherwise, fallback to official mirrors provided by CentOS.
+    export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
+    export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
+  fi
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
+  if [[ -z "$rdo_dlrn" ]]; then
+    echo "Failed to parse dlrn hash"
+    exit 1
+  fi
+  export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+
+repos:
+  - type: generic
+    reponame: delorean
+    filename: delorean.repo
+    priority: 20
+    baseurl: $RDO_DLRN_REPO
+
+  - type: generic
+    reponame: "delorean-{{ release }}-deps"
+    filename: "delorean-{{ release }}-deps.repo"
+    baseurl: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/deps/latest/"
+
+  - type: generic
+    reponame: "delorean-{{ release }}-build-deps"
+    filename: "delorean-{{ release }}-build-deps.repo"
+    baseurl: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/build-deps/latest/"
+
+  # CentOS related repos
+  - type: generic
+    reponame: quickstart-centos-base
+    filename: quickstart-centos-base.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/BaseOS/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-appstreams
+    filename: quickstart-centos-appstreams.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/AppStream/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-powertools
+    filename: quickstart-centos-powertools.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/PowerTools/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-highavailability
+    filename: quickstart-centos-highavailability.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/HighAvailability/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-extras
+    filename: quickstart-centos-extras.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/extras/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-ceph-nautilus
+    filename: quickstart-centos-ceph-nautilus.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/storage/x86_64/ceph-nautilus/
+
+  - type: generic
+    reponame: quickstart-centos-opstools
+    filename: quickstart-centos-opstools.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/opstools/x86_64/collectd-5/
+
+  - type: generic
+    reponame: quickstart-centos-cr
+    filename: quickstart-centos-cr.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/cr/x86_64/
+    enabled: 0
+
+
+repo_cmd_after: |
+  {% if not enable_opstools_repo|default(false)|bool %}sudo dnf config-manager --set-enabled quickstart-centos-opstools;
+  {%endif %}
+  {% if enable_centos_cr_repo|default(false)|bool %}
+  dnf config-manager  --set-enabled quickstart-centos-cr
+  {% endif %}
+  sudo rpm -e epel-release || true;
+  sudo dnf remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
+  sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo dnf repolist;
+  sudo dnf clean metadata
+  {% if repo_setup_run_update|default(true)|bool %}
+  # Openvswitch workaround
+  sudo dnf update -y --exclude *openvswitch*
+  {% endif %}
+undercloud_rpm_dependencies: >-
+  python3-tripleoclient
+  ceph-ansible
+# Setting base_image_url and base_image_path to overwrite DIB_LOCAL_IMAGE in
+# the diskimage-builder
+## was https://images.rdoproject.org/base/centos7/CentOS-7-x86_64-GenericCloud-1901.qcow2 - 8 doesn't exit yet
+base_image_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2
+base_image_path: "{{ ansible_user_dir }}/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
+
+# baseos settings
+baseos_undercloud_image_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2
+baseos_image: centos
+baseos_image_type: qcow2
+baseos_md5sum: "d89eb49f2c264d29225cecf2b6c83322  CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
