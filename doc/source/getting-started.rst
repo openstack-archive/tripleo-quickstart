@@ -1,4 +1,4 @@
-.. _node-configuration:
+.. _getting_started:
 
 Getting started with TripleO-Quickstart
 =======================================
