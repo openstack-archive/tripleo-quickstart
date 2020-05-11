@@ -21,6 +21,12 @@ standalone_role: Standalone.yaml
 standalone_custom_env_files:
   - /usr/share/openstack-tripleo-heat-templates/environments/low-memory-usage.yaml
 
+standalone_container_cli: >-
+  {% if release in ['rocky'] -%}
+  docker
+  {%- else -%}
+  podman
+  {%- endif -%}
 # We need to selectively re-enable the globally blacklisted octavia tempest
 # plugin.
 skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
@@ -28,30 +34,21 @@ skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
 skip_file_src: ''
 tempest_black: "{{ skip_list_tests.known_failures | json_query('[?test != `octavia_tempest_plugin`].test') }}"
 test_black_regex: "{{ tempest_black }}"
+tempest_private_net_seg_id: ''
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 test_ping: false
-run_tempest: true
-tempest_undercloud: true
-download_amphora: true
-# XXX: current amphora image is broken. Use Stein's
-amphora_url: 'https://images.rdoproject.org/octavia/stein/amphora-x64-haproxy-centos.qcow2'
-tempest_overcloud: false
-tempest_workers: 2
-test_white_regex: ''
-tempest_whitelist:
+
+# os_tempest config
+run_tempest: false
+use_os_tempest: true
+tempest_test_whitelist:
   - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer.LoadBalancerScenarioTest'
-tempest_plugins:
-  - python-octavia-tests-tempest
-tempest_extra_config:
+tempest_services:
+  - octavia
+  - neutron
+tempest_run_concurrency: 2
+download_amphora: true
+amphora_url: 'https://images.rdoproject.org/octavia/stein/amphora-x64-haproxy-centos.qcow2'
+tempest_tempest_conf_overrides:
   load_balancer.member_role: '"Member"'
   load_balancer.test_with_ipv6: false
-tempest_os_cloud: standalone
-
-standalone_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
