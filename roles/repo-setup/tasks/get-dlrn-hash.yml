@@ -13,12 +13,16 @@
     cacheable: true
   when: dlrn_hash_tag is match(expected_commit_distro_hash_regex) or dlrn_hash_tag is match(expected_aggregate_hash_regex)
 
+- name: print out the release name
+  debug:
+    msg: "the tq release is: {{ release }}"
+
 # full_hash_result is used to help find the
 # correctly tagged containers and images
 # components for OSP will be built on OSP-16, 17 # TO-DO
 - when:
     - dlrn_hash_tag in known_hash_tags
-    - ((ansible_distribution == "CentOS" and ansible_distribution_major_version is version(8, '<')) or (ansible_distribution != "CentOS"))
+    - release is search("queens|rocky|stein|train")
   block:
     - name: Get DLRN hash - passed tag - non-component
       shell: |
@@ -45,8 +49,7 @@
 # components for OSP will be built on OSP-16, 17 # TO-DO
 - when:
     - dlrn_hash_tag in known_hash_tags
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version is version(8, '>=')
+    - not release is search("queens|rocky|stein|train")
   block:
     - name: Get DLRN hash - passed tag - component-based
       shell: |

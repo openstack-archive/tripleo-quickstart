@@ -7,6 +7,10 @@
     - not dlrn_hash_tag_newest is match(expected_aggregate_hash_regex)
     - dlrn_hash_tag_newest not in known_hash_tags
 
+- name: print out the release name
+  debug:
+    msg: "the tq release is: {{ release }}"
+
 - name: Check DLRN hash newest - passed ready hash
   set_fact:
     dlrn_hash_newest: "{{ dlrn_hash_tag_newest }}"
@@ -15,7 +19,7 @@
 
 - when:
     - dlrn_hash_tag_newest in known_hash_tags
-    - ((ansible_distribution == "CentOS" and ansible_distribution_major_version is version(8, '<')) or (ansible_distribution != "CentOS"))
+    - release is search("queens|rocky|stein|train")
 
   block:
 
@@ -44,8 +48,7 @@
 # components for OSP will be built on OSP-16, 17 # TO-DO
 - when:
     - dlrn_hash_tag_newest in known_hash_tags
-    - ansible_distribution == "CentOS"
-    - ansible_distribution_major_version is version(8, '>=')
+    - not release is search("queens|rocky|stein|train")
   block:
     - name: Get DLRN hash newest - passed tag - component-based
       shell: |
