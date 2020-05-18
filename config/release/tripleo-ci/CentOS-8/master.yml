@@ -133,6 +133,7 @@ repo_cmd_after: |
   # Replace trunk.rdoproject.org to nodepool proxy
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean.repo
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-master-deps.repo
+  sudo sed -i -e "s|http://mirror.centos.org/centos|$NODEPOOL_CENTOS_MIRROR|g" /etc/yum.repos.d/delorean-master-deps.repo
   # note potential name change - FIX ME
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-current.repo
   sudo sed -i -e "s|priority=1|priority=20|g" /etc/yum.repos.d/delorean.repo
