@@ -48,7 +48,7 @@ tempest_services:
   - neutron
 tempest_run_concurrency: 2
 download_amphora: true
-amphora_url: 'https://images.rdoproject.org/octavia/stein/amphora-x64-haproxy-centos.qcow2'
+amphora_url: 'https://images.rdoproject.org/octavia/{{ release }}/amphora-x64-haproxy-centos.qcow2'
 tempest_tempest_conf_overrides:
   load_balancer.member_role: '"Member"'
   load_balancer.test_with_ipv6: false
