@@ -103,6 +103,9 @@
 # even unused variables will overwrite each other.
 - when: image_exists is defined and (image_exists is failed or base_image_exists is failed)
   block:
+    - name: Display the image url
+      debug:
+        msg: "will download {{ image.url }} with md5sum of {{ md5_expected }}"
 
     # This task will download the image.  We're using `curl` here
     # rather than `wget` because while `wget` has built-in retry
