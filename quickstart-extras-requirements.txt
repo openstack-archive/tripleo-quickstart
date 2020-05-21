@@ -8,6 +8,7 @@ git+https://opendev.org/openstack/ansible-role-collect-logs/#egg=ansible-role-co
 git+https://opendev.org/openstack/openstack-tempest-skiplist/#egg=openstack-tempest-skiplist
 git+https://opendev.org/openstack/tripleo-operator-ansible/#egg=tripleo-operator-ansible
 git+https://opendev.org/openstack/tripleo-ci/#egg=tripleo-ci
+git+https://opendev.org/openstack/tripleo-ansible/#egg=tripleo-ansible
 # NOTE: tripleo-ansible, tripleo-ipa are required for some jobs
 # (including standalone deployed with TLS).
 # The user is expected to install those repos manually as they are
