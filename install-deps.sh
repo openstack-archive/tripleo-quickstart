@@ -176,10 +176,12 @@ install_virtual_env(){
         if [[ -f $OPT_WORKDIR/bin/activate ]]; then
             echo "Warning: $OPT_WORKDIR virtualenv already exists, just activating it."
         else
-            echo "Creating virtualenv at $OPT_WORKDIR"
-            $(python_cmd) -m virtualenv \
-                $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
-                $OPT_WORKDIR
+            echo "Creating virtualenv at ${OPT_WORKDIR}"
+            [ "${OPT_SYSTEM_PACKAGES:0}" -eq "1" ] && OPTS='--system-site-packages'
+            # venv is part of python3
+            if ! $(python_cmd) -m venv ${OPTS:-} ${OPT_WORKDIR}; then
+                $(python_cmd) -m virtualenv ${OPTS:-} ${OPT_WORKDIR}
+            fi
         fi
 
         . $OPT_WORKDIR/bin/activate
