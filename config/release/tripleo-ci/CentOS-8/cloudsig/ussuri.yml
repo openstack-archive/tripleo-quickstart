@@ -108,8 +108,7 @@ repo_cmd_after: |
   {%endif %}
   # sudo dnf config-manager --disable rdo-qemu-ev;
   sudo rpm -e epel-release || true;
-  sudo dnf remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
-  sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo;
+  sudo dnf remove -y rdo-release || true;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo dnf repolist;
   sudo dnf clean metadata
