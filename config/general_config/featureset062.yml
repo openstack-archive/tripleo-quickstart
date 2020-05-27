@@ -40,7 +40,14 @@ test_ping: false
 
 # os_tempest config
 run_tempest: false
-use_os_tempest: true
+
+use_os_tempest: >-
+  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 tempest_test_whitelist:
   - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer.LoadBalancerScenarioTest'
 tempest_services:
@@ -52,3 +59,4 @@ amphora_url: 'https://images.rdoproject.org/octavia/{{ release }}/amphora-x64-ha
 tempest_tempestconf_profile_overrides:
   load_balancer.member_role: '"Member"'
   load_balancer.test_with_ipv6: false
+tempest_os_cloud: standalone
