@@ -165,7 +165,7 @@ def acronyms_and_symbols():
     print('\n')
 
     baseurl = 'https://opendev.org/openstack/tripleo-quickstart'
-    path = 'config/general_config/src/branch/master'
+    path = 'src/branch/master/config/general_config/'
     for f in fs_list:
         print(".. _{0}: {1}/{2}/featureset{0}.yml".format(f, baseurl, path))
 
