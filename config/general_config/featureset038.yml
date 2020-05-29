@@ -142,6 +142,8 @@ tempest_plugins:
 tempest_extra_config:
   load_balancer.member_role: '"Member"'
   load_balancer.test_with_ipv6: false
+  load_balancer.region: 'regionOne'
+  load_balancer.enabled_provider_drivers: '"amphora:The Octavia Amphora driver.,octavia:Deprecated alias of the Octavia Amphora driver.,ovn:Octavia OVN driver."'
 
 undercloud_container_cli: >-
   {% if release in ['rocky'] -%}
