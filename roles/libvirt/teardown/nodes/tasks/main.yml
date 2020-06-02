@@ -151,3 +151,13 @@
         path: "/run/user/{{ pool_uid.stdout }}/libvirt/storage/run/{{ libvirt_volume_pool }}.xml"
         state: absent
       when: pool_check is success
+
+    - name: Bring down the NetworkManager connections
+      when:
+        - ansible_distribution in ['RedHat', 'CentOS']
+        - ansible_distribution_major_version|int >= 8
+      become: true
+      shell: |
+         nmcli c down brovc;
+         nmcli c down bridge-slave-{{ virthost_provisioning_interface }}
+      ignore_errors: true
