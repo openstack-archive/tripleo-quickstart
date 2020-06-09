@@ -129,6 +129,10 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
+        if [ "$(python_cmd)" == "python2" ]; then
+            export TARGET_RELEASE=$(awk '/^release:/ { print $2}' config/release/$OPT_RELEASE.yml)
+            export PIP_CONSTRAINT=${PIP_CONSTRAINT:-https://opendev.org/openstack/requirements/raw/branch/stable/${TARGET_RELEASE}/upper-constraints.txt}
+        fi
         $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR
         if [ $OPT_CLEAN == 1 ]; then
             $(python_cmd) -m pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
