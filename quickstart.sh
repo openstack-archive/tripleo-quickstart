@@ -155,7 +155,18 @@ bootstrap () {
                     $(python_cmd) -m pip install --force-reinstall .
                 fi
                 popd
-
+                # pull in ansible-collections-openstack from source
+                $ZUUL_CLONER --cache-dir \
+                    /opt/git \
+                    https://opendev.org \
+                    openstack/ansible-collections-openstack
+                pushd openstack/ansible-collections-openstack
+                if [ $OPT_CLEAN == 1 ]; then
+                    $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
+                else
+                    $(python_cmd) -m pip install --force-reinstall .
+                fi
+                popd
                 # pull in tripleo-quickstart-extras from source
                 $ZUUL_CLONER --cache-dir \
                     /opt/git \
