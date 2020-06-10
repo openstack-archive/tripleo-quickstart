@@ -70,7 +70,7 @@ tempest_periodic_regex:
   - 'smoke'
 
 tempest_test_whitelist: >-
-  {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
+  {% if (('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool)) and not tempest_run_skipped | default(false) | bool -%}
   {{ tempest_periodic_regex }}
   {%- else -%}
   {{ tempest_whitelist }}
