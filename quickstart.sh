@@ -129,9 +129,11 @@ bootstrap () {
     fi
 
     pushd $OOOQ_DIR
+        # use stable/train as the latest known good python2 upper constraints
+        # tq can use the last known good for train in virt environments and
+        # execute against any openstack wth --release
         if [ "$(python_cmd)" == "python2" ]; then
-            export TARGET_RELEASE=$(awk '/^release:/ { print $2}' config/release/$OPT_RELEASE.yml)
-            export PIP_CONSTRAINT=${PIP_CONSTRAINT:-https://opendev.org/openstack/requirements/raw/branch/stable/${TARGET_RELEASE}/upper-constraints.txt}
+            export PIP_CONSTRAINT=${PIP_CONSTRAINT:-https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt}
         fi
         $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR
         if [ $OPT_CLEAN == 1 ]; then
