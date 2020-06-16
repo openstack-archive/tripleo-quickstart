@@ -49,8 +49,7 @@ use_os_tempest: >-
   {%- endif -%}
 
 tempest_test_whitelist:
-  - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer.LoadBalancerScenarioTest'
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+  - 'octavia_tempest_plugin.tests.scenario'
 tempest_services:
   - octavia
   - neutron
