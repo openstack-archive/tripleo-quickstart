@@ -6,7 +6,7 @@ distro_ver: centos8
 distro_deps_repo_name: deps
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
-docker_registry_host: docker.io
+docker_registry_host: "{{ job.build_container_images|default(false)|bool | ternary('127.0.0.1:5001', 'docker.io') }}"
 # note.. namespace tripleoussuri has been
 # squatted on by another owner
 # for ussuri release please use 'tripleou'

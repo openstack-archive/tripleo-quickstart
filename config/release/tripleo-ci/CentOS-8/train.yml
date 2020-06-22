@@ -5,7 +5,7 @@ release: train
 distro_ver: centos8
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
-docker_registry_host: docker.io
+docker_registry_host: "{{ job.build_container_images|default(false)|bool | ternary('127.0.0.1:5001', 'docker.io') }}"
 docker_registry_namespace: tripleotraincentos8
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 promote_source: current-tripleo
