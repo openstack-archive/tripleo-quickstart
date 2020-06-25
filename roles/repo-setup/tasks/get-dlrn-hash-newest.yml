@@ -19,7 +19,7 @@
 
 - when:
     - dlrn_hash_tag_newest in known_hash_tags
-    - release is search("queens|rocky|stein|train")
+    - ansible_distribution_major_version is version(8, '<')
 
   block:
 
@@ -48,7 +48,7 @@
 # components for OSP will be built on OSP-16, 17 # TO-DO
 - when:
     - dlrn_hash_tag_newest in known_hash_tags
-    - not release is search("queens|rocky|stein|train")
+    - ansible_distribution_major_version is version(8, '>=')
   block:
     - name: Get DLRN hash newest - passed tag - component-based
       shell: |
