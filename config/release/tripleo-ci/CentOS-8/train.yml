@@ -43,26 +43,17 @@ repo_cmd_before: |
     export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
-  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
-  tripleo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_path_newest|default(dlrn_hash_tag_newest, true) }}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | cut -d= -f2`
-  if [[ -z "$rdo_dlrn" || -z "$tripleo_dlrn" ]]; then
-    echo "Failed to parse dlrn hash"
-    exit 1
-  fi
-  export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
-  export TRIPLEO_DLRN_REPO=${tripleo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
 
 repos:
-  - type: generic
-    reponame: delorean
+  - type: file
     filename: delorean.repo
-    priority: 20
-    baseurl: $RDO_DLRN_REPO
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_tag }}/delorean.repo"
 
-  - type: generic
+  # name of delorean-tripleo-component-current? naming is hard
+  - type: file
     reponame: delorean-current
     filename: delorean-current.repo
-    baseurl: $TRIPLEO_DLRN_REPO
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/component/tripleo/current/delorean.repo"
     priority: 10
     includepkgs:
       - ansible-role-container-registry
@@ -94,15 +85,9 @@ repos:
       - tripleo-ansible
       - ansible-config_template
 
-  - type: generic
-    reponame: "delorean-{{ release }}-deps"
-    filename: "delorean-{{ release }}-deps.repo"
-    baseurl: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/deps/latest/"
-
-  - type: generic
-    reponame: "delorean-{{ release }}-build-deps"
-    filename: "delorean-{{ release }}-build-deps.repo"
-    baseurl: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/build-deps/latest/"
+  - type: file
+    filename: delorean-{{ release }}-deps.repo
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/delorean-deps.repo"
 
   # CentOS related repos
   - type: generic
@@ -146,8 +131,15 @@ repos:
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/cr/x86_64/
     enabled: 0
 
-
 repo_cmd_after: |
+  # Replace trunk.rdoproject.org to nodepool proxy
+  sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean.repo
+  sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-{{ release }}-deps.repo
+  sudo sed -i -e "s|http://mirror.centos.org/centos|$NODEPOOL_CENTOS_MIRROR|g" /etc/yum.repos.d/delorean-{{ release }}-deps.repo
+  # note potential name change - FIX ME
+  sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-current.repo
+  sudo sed -i -e "s|priority=1|priority=20|g" /etc/yum.repos.d/delorean.repo
+
   {% if not enable_opstools_repo|default(false)|bool %}sudo dnf config-manager --set-enabled quickstart-centos-opstools;
   {%endif %}
   {% if enable_centos_cr_repo|default(false)|bool %}
