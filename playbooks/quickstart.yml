@@ -62,6 +62,15 @@
   roles:
     - tripleo-inventory
 
+# Make sure the undercloud is up before we collect facts
+- name: Wait until ssh is available on undercloud node
+  gather_facts: false
+  hosts: undercloud
+  tasks:
+    - name: Wait for undercloud to be ssh-able
+      wait_for_connection:
+        timeout: 300
+
 # Setup the virtual bmc
 # This must be done after inventory is run for the first time
 - name: Create the virtual BMC
