@@ -43,7 +43,7 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/epel*;
 
   sudo dnf clean all;
-  sudo dnf config-manager --disable "*"
+  sudo dnf config-manager --disable "*" || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else
