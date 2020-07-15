@@ -35,14 +35,26 @@
 
 - name: Set hostname correctly for {{ item.name }}
   delegate_to: "{{ item.name }}"
-  shell: >
-    echo "127.0.0.1  {{ item.name }} localhost" > /etc/hosts;
-    echo "HOSTNAME={{ item.name }}" >> /etc/sysconfig/network;
-    echo "{{ item.name }}" > /etc/hostname;
-    hostnamectl set-hostname {{ item.name }};
-    {% if custom_nameserver is defined and custom_nameserver %}
-    echo "nameserver {{ custom_nameserver }} " >> /etc/resolv.conf;
-    echo "append domain-name-servers {{ custom_nameserver }};" >> /etc/dhcp/dhclient.conf
-    {% endif %}
+  shell: |
+    echo "127.0.0.1  {{ item.name }} localhost" > /etc/hosts
+    echo "HOSTNAME={{ item.name }}" >> /etc/sysconfig/network
+    echo "{{ item.name }}" > /etc/hostname
+    hostnamectl set-hostname {{ item.name }}
   become: true
   changed_when: true
+
+- name: Set resolv.conf for {{ item.name }}
+  delegate_to: "{{ item.name }}"
+  shell: |
+    echo "nameserver {{ custom_nameserver }}" > /etc/resolv.conf
+    echo "prepend domain-name-servers {{ custom_nameserver }};" >> /etc/dhcp/dhclient.conf
+  become: true
+  changed_when: true
+  when: custom_nameserver is defined
+
+- name: Ensure resolv.conf is immutable.
+  delegate_to: "{{ item.name }}"
+  become: true
+  file:
+    path: /etc/resolv.conf
+    attr: +i
