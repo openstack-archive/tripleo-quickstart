@@ -154,6 +154,7 @@
     --run-command 'systemctl enable qemu-guest-agent'
     >> {{ working_dir }}/virt-customize.log 2>&1
   changed_when: true
+  failed_when: false
 
 - debug:
     msg: "Add basic packages we need to the image"
