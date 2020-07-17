@@ -49,20 +49,36 @@ repo_cmd_before: |
     export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
+  {% if dlrn_hash_path_newest is defined and dlrn_hash_path_newest %}
+    export DLRN_PATH_TAG_NEWEST="current/{{ dlrn_hash_path_newest }}"
+  {% else %}
+    export DLRN_PATH_TAG_NEWEST="{{ dlrn_hash_tag_newest }}"
+  {% endif %}
+  {% if dlrn_hash_path is defined and dlrn_hash_path %}
+    export DLRN_PATH_TAG="{{ promote_source }}/{{ dlrn_hash_path }}"
+  {% else %}
+    export DLRN_PATH_TAG="{{ dlrn_hash_tag }}"
+  {% endif %}
+  rdo_dlrn=`curl --silent https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG_NEWEST}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | grep "component/tripleo" | cut -d= -f2`
+  if [[ -z "$rdo_dlrn" ]]; then
+    echo "Failed to parse dlrn hash"
+    exit 1
+  fi
+  export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
 
 repos:
   - type: file
     filename: delorean.repo
-    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/{{ promote_source }}/delorean.repo"
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG}/delorean.repo"
 
   # ATM current is not used in promotion jobs, this is a bug.
   # However for consistency w/ what is merged. removing
   # See config/release/tripleo-ci/CentOS-7/promotion-testing-hash-master.yml#L48-L64
   # "https://trunk.rdoproject.org/centos8-master/component/tripleo/current/delorean.repo"
-  - type: file
+  - type: generic
     reponame: delorean-current
     filename: delorean-current.repo
-    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/component/tripleo/current/delorean.repo"
+    baseurl: $RDO_DLRN_REPO
     priority: 10
     includepkgs:
       - ansible-role-container-registry
