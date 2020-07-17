@@ -150,7 +150,7 @@
   shell: >
     source {{ working_dir }}/libguestf-env.sh &&
     virt-customize -a {{ working_dir }}/undercloud.qcow2
-    --run-command 'yum install -y qemu-guest-agent'
+    --run-command '$(command -v dnf || command -v yum) install -y qemu-guest-agent'
     --run-command 'systemctl enable qemu-guest-agent'
     >> {{ working_dir }}/virt-customize.log 2>&1
   changed_when: true
