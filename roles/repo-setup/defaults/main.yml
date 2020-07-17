@@ -24,7 +24,7 @@ repo_cmd_after: |
   sudo {{ ansible_pkg_mgr }} update -y
 
 # Repositories definitions
-dlrn_baseurl: https://trunk.rdoproject.org/centos7-{{ release }}
+dlrn_baseurl: "https://trunk.rdoproject.org/centos{{ ansible_distribution_major_version | default('7') }}-{{ release }}"
 repos:
   - type: file
     filename: delorean.repo
