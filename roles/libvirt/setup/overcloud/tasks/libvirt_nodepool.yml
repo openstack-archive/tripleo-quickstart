@@ -62,27 +62,34 @@
           '{{ working_dir }}/undercloud.qcow2'
   changed_when: true
 
-- name: Calculate password hash
-  no_log: true
-  shell: >
-    import crypt;
-    print(crypt.crypt("{{ vm_pass }}", "$1$SecretSalt$"))
-  args:
-    executable: "/usr/bin/python{{ ansible_python['version']['major'] }}"
-  register: hash
-  changed_when: false
+- name: Manage password file
+  when: modify_image_vc_root_password is not defined
+  block:
+    - name: Calculate password hash
+      no_log: true
+      shell: >
+        import crypt;
+        print(crypt.crypt("{{ vm_pass }}", "$1$SecretSalt$"))
+      args:
+        executable: "/usr/bin/python{{ ansible_python['version']['major'] }}"
+      register: hash
+      changed_when: false
 
-- name: Copy generated password to file
-  copy:
-    content: "{{ hash.stdout }}"
-    dest: "{{ working_dir }}/pwtemp"
-    mode: 0600
+    - name: Copy generated password to file
+      copy:
+        content: "{{ hash.stdout }}"
+        dest: "{{ working_dir }}/pwtemp"
+        mode: 0600
 
 - name: Inject password into the image
   shell: >
     source {{ working_dir }}/libguestf-env.sh &&
     virt-customize -v -a {{ working_dir }}/undercloud.qcow2
+    {% if modify_image_vc_root_password is defined -%}
+    --root-password password:{{ modify_image_vc_root_password }}
+    {% else -%}
     --root-password file:"{{ working_dir }}/pwtemp"
+    {% endif -%}
     >> {{ working_dir }}/virt-customize.log 2>&1
   register: root_password
   changed_when: true
