@@ -56,6 +56,13 @@ tempest_services:
 tempest_run_concurrency: 2
 download_amphora: true
 amphora_url: 'https://images.rdoproject.org/octavia/{{ release }}/amphora-x64-haproxy-centos.qcow2'
-tempest_tempestconf_profile_overrides:
+
+tempestconf_override:
   load_balancer.test_with_ipv6: false
+
+tempestconf_train_override:
+  load_balancer.member_role: '"Member"'
+  load_balancer.test_with_ipv6: false
+
+tempest_tempestconf_profile_overrides: "{{ tempestconf_train_override if release in ['train'] else tempestconf_override }}"
 tempest_os_cloud: standalone
