@@ -89,11 +89,8 @@ test_white_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
 overcloud_container_cli: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein', 'rocky', 'train'] -%}
-  podman
-  {%- else -%}
-  docker
-  {%- endif -%}
+  {%- if ansible_distribution in ["RedHat", "CentOS"] and ansible_distribution_major_version|int >= 8 %}podman
+  {%- else %}docker{% endif -%}
 
 # os_tempest setting
 # Settings for os_tempest
