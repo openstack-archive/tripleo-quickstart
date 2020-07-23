@@ -70,7 +70,6 @@ config_download_args: >-
   {% if release not in ['newton','ocata','pike'] -%}
   -e {{ working_dir }}/config-download.yaml
   --disable-validations
-  --verbose
   {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file
