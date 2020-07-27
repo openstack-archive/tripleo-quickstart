@@ -6,7 +6,20 @@ distro_ver: centos8
 distro_deps_repo_name: deps
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
-docker_registry_host: "{{ job.build_container_images|default(false)|bool | ternary('127.0.0.1:5001', 'docker.io') }}"
+
+# job.build_container_images is defined in zuul as a
+# direct var.  adding build_container_images as tqe
+# var so that we can turn this on/off per release w/o
+# changing zuul and breaking jobs via inheritance.
+docker_registry_host: >-
+  {% if job is defined and
+  job.build_container_images is defined and
+  job.build_container_images|default(false)|bool or
+  build_container_images|default(false)|bool -%}
+  127.0.0.1:5001
+  {%- else -%}
+  docker.io
+  {%- endif -%}
 docker_registry_namespace: "tripleo{{ release }}"
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 docker_openshift_tag: v3.11.0
