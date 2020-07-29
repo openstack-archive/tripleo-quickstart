@@ -188,7 +188,13 @@ install_virtual_env(){
         echo "Warning: VIRTUAL_ENV=$VIRTUAL_ENV was found active and is being reused."
     fi
 
-    $(python_cmd) -m pip install pip --upgrade
+    # Latest pip break Centos7 details in Bug: #1889357, Pin pip to last good version - 20.1.1 for C7
+    if [[ $(python_cmd) == 'python2' ]]; then
+        $(python_cmd) -m pip install pip==20.1.1
+    else
+        $(python_cmd) -m pip install pip --upgrade
+    fi
+
     echo "Installing bindep"
     $(python_cmd) -m pip install bindep --upgrade
 
