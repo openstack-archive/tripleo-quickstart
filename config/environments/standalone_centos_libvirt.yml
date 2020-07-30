@@ -2,15 +2,14 @@
 # instead of the default pre-built undercloud qcow2
 
 # baseos undercloud settings
-undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1805.qcow2
+undercloud_image_url: https://images.rdoproject.org/CentOS-8-x86_64-GenericCloud.qcow2
 
 # this must be named undercloud
 images:
     - name: undercloud
       url: "{{ undercloud_image_url }}"
       type: qcow2
-      md5sum: "3bb5a5fd550980aa4bf3c80071f8cbb0  CentOS-7-x86_64-GenericCloud-1805.qcow2"
-
+      md5sum: "d89eb49f2c264d29225cecf2b6c83322  CentOS-8-x86_64-GenericCloud.qcow2"
 
 inject_images: []
 
@@ -27,3 +26,45 @@ hostname_correction: true
 # standalone interface
 standalone_interface: eth1
 standalone_ip: 192.168.24.2
+local_docker_registry_host: 192.168.24.2
+overcloud_nodes: []
+node_count: 0
+tripleo_generate_scripts: true
+standalone_neutron_bridge_mappings: "datacentre:br-ctlplane"
+standalone_libvirt_type: qemu
+
+# having connectivity with external world.
+tempest_public_net_physical_name: datacentre
+
+# Setting the tempest_cidr as it is required while creating public subnet from which
+# floating IPs gets assigned
+tempest_cidr: '192.168.24.0/24'
+
+# In order to create a private network, fs01 is based on OVN, geneve should be used
+# as private network type
+tempest_private_net_provider_type: geneve
+
+tempest_private_net_seg_id: ''
+
+tempest_install_method: distro
+
+# Having tempest_network_ping_gateway set to true allows to ping any of the IP from
+# router to find out network related issue in the deployment early
+tempest_network_ping_gateway: true
+
+# It is the python-tempestconf profile which also consumes tempest-deployer-input file
+tempest_tempestconf_profile:
+    debug: true
+    create: true
+    deployer-input: "{{ ansible_user_dir }}/tempest-deployer-input.conf"
+    os-cloud: "{{ tempest_cloud_name }}"
+    out: "{{ tempest_workspace }}/etc/tempest.conf"
+    network-id: "{{ tempest_neutron_public_network_id }}"
+    overrides: "{{ tempest_tempest_conf_overrides | default({}) }}"
+
+# looking for a small set of tempest tests to validate
+# tempest config and execution are working
+test_white_regex: 'tempest.api.compute.admin'
+
+tempest_test_whitelist:
+    - 'tempest.api.compute.admin'

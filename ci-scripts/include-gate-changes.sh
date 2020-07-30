@@ -10,7 +10,7 @@ if [ "$JOB_TYPE" = "gate" ] || \
 
     pushd $WORKSPACE/tripleo-quickstart
     sed -i.bak '/extras/d' $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt
-    echo "file://$WORKSPACE/tripleo-quickstart-extras/#egg=tripleo-quickstart-extras" >> $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt
+    echo "file://$WORKSPACE/tripleo-quickstart-extras" >> $WORKSPACE/tripleo-quickstart/quickstart-extras-requirements.txt
     popd
 
     bash quickstart.sh \

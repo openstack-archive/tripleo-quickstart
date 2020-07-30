@@ -93,6 +93,7 @@ case "$JOB_TYPE" in
             --no-clone \
             --bootstrap \
             --extra-vars artg_compressed_gating_repo="/home/stack/gating_repo.tar.gz" \
+            --extra-vars virthost_repo_setup=true \
             --playbook build-test-packages.yml \
             --tags all \
             --teardown all \
