@@ -74,6 +74,9 @@ repos:
 
 repo_cmd_after: |
   sudo dnf repolist;
+  sudo dnf module list;
+  sudo dnf module disable container-tools:rhel8 -y;
+  sudo dnf module enable container-tools:2.0 -y;
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y
   {% endif %}
