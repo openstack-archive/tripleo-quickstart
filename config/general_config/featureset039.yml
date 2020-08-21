@@ -77,8 +77,8 @@ artcl_gen_docs: true
 artcl_create_docs_payload:
   included_deployment_scripts:
     - undercloud-install
-    - novajoin_prep
-    - install_novajoin
+    - "{% if release not in ['queens', 'rocky', 'stein', 'train'] -%}ipa_prep{%- else -%}novajoin_prep{%- endif -%}"
+    - "{% if release not in ['queens', 'rocky', 'stein', 'train'] -%}install_ipa{%- else -%}install_novajoin{%- endif -%}"
     - overcloud-custom-tht-script
     - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
     - overcloud-prep-flavors
@@ -93,8 +93,8 @@ artcl_create_docs_payload:
     - env-setup-virt
   table_of_contents:
     - env-setup-virt
-    - novajoin_prep
-    - install_novajoin
+    - "{% if release not in ['queens', 'rocky', 'stein', 'train'] -%}ipa_prep{%- else -%}novajoin_prep{%- endif -%}"
+    - "{% if release not in ['queens', 'rocky', 'stein', 'train'] -%}install_ipa{%- else -%}install_novajoin{%- endif -%}"
     - undercloud-install
     - overcloud-custom-tht-script
     - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
@@ -205,6 +205,15 @@ undercloud_enable_tempest: >-
 enable_tls_everywhere: true
 novajoin_connect_timeout: 60
 novajoin_read_timeout: 60
+
+# This switches between a deployment with novajoin or using ansible-tripleo-ipa
+undercloud_enable_novajoin: >-
+  {% if release in ['queens', 'rocky', 'stein', 'train'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 external_network_cidr: 10.0.0.0/24
 
 freeipa_admin_password: fce95318204114530f31f885c9df588f
