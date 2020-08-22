@@ -142,33 +142,6 @@ bootstrap () {
             $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
         fi
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
-            mkdir -p .tmp
-            EXTRAS_DIR=$(/bin/mktemp -d -p $(pwd)/.tmp)
-            pushd $EXTRAS_DIR
-                # pull in tripleo-operator-ansible from source
-                $ZUUL_CLONER --cache-dir \
-                    /opt/git \
-                    https://opendev.org \
-                    openstack/tripleo-operator-ansible
-                pushd openstack/tripleo-operator-ansible
-                if [ $OPT_CLEAN == 1 ]; then
-                    $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
-                else
-                    $(python_cmd) -m pip install --force-reinstall .
-                fi
-                popd
-                # pull in ansible-collections-openstack from source
-                $ZUUL_CLONER --cache-dir \
-                    /opt/git \
-                    https://opendev.org \
-                    openstack/ansible-collections-openstack
-                pushd openstack/ansible-collections-openstack
-                if [ $OPT_CLEAN == 1 ]; then
-                    $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
-                else
-                    $(python_cmd) -m pip install --force-reinstall .
-                fi
-                popd
                 # pull in tripleo-quickstart-extras from source
                 $ZUUL_CLONER --cache-dir \
                     /opt/git \
@@ -181,10 +154,8 @@ bootstrap () {
                     $(python_cmd) -m pip install --force-reinstall .
                 fi
                 popd
-            popd
         fi
     popd
-
 }
 
 activate_venv() {
