@@ -17,6 +17,8 @@ docker_registry_host: >-
   job.build_container_images|default(false)|bool or
   build_container_images|default(false)|bool -%}
   127.0.0.1:5001
+  {% elif job.registry_ip_address is defined %}
+  {{ job.registry_ip_address }}:5001
   {%- else -%}
   docker.io
   {%- endif -%}
@@ -52,6 +54,7 @@ repo_cmd_before: |
 
   sudo dnf clean all;
   sudo dnf config-manager --disable "*" || true;
+  sudo dnf config-manager --enable gating-repo || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else
