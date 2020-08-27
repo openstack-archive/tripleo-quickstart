@@ -91,6 +91,7 @@ repos:
       - os-collect-config
       - os-net-config
       - os-refresh-config
+      - puppet-oslo
       - puppet-cinder
       - puppet-heat
       - puppet-neutron
