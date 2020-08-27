@@ -17,7 +17,7 @@ docker_registry_host: >-
   job.build_container_images|default(false)|bool or
   build_container_images|default(false)|bool -%}
   127.0.0.1:5001
-  {% elif job.registry_ip_address is defined %}
+  {%- elif job.registry_ip_address is defined -%}
   {{ job.registry_ip_address }}:5001
   {%- else -%}
   docker.io
