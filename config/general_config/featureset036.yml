@@ -57,13 +57,10 @@ use_oooq: true
 # Run prep container before upgrade.
 prep_container_upgrade_run: true
 containerized_overcloud_upgrade: true
-# Need to update once stein is released
-container_registry_file: >-
-  {% if release not in ['ocata','pike','queens','rocky'] -%}
-  containers-prepare-parameter.yaml
-  {%- else -%}
-  containers-default-parameters.yaml
-  {%- endif -%}
+# container_registry_file is used pre-rocky, after rocky
+# is uc_containers_prepare_file the one used to identify
+# the containers file (defaults to: containers-prepare-parameter.yaml)
+container_registry_file: containers-default-parameters.yaml
 
 # Adjust user to CI
 overcloud_ssh_user: "zuul"

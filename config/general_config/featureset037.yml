@@ -12,13 +12,10 @@ overcloud_update: true
 # updating the container images too. (This might have to be paired
 # with some work on the image building side to get meaningful
 # from-to combination of images.
-# Need to update once stein is released
-container_registry_file: >-
-  {% if release not in ['ocata','pike','queens','rocky'] -%}
-  containers-prepare-parameter.yaml
-  {%- else -%}
-  containers-default-parameters.yaml
-  {%- endif -%}
+# container_registry_file is used pre-rocky, after rocky
+# is uc_containers_prepare_file the one used to identify
+# the containers file (defaults to: containers-prepare-parameter.yaml)
+container_registry_file: containers-default-parameters.yaml
 tripleo_upgrade_validations_non_fatal: true
 tripleo_upgrade_debug: true
 # Reduce CI wall time

@@ -37,13 +37,10 @@ create_container_images_download_script: false
 # do not run workload test
 launch_sanity_workload: false
 
-# Need to update once stein is released
-container_registry_file: >-
-  {% if release not in ['ocata','pike','queens','rocky'] -%}
-  containers-prepare-parameter.yaml
-  {%- else -%}
-  containers-default-parameters.yaml
-  {%- endif -%}
+# container_registry_file is used pre-rocky, after rocky
+# is uc_containers_prepare_file the one used to identify
+# the containers file (defaults to: containers-prepare-parameter.yaml)
+container_registry_file: containers-default-parameters.yaml
 tripleo_ci: true
 use_oooq: true
 tripleo_upgrade_debug: true
