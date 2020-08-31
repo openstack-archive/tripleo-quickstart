@@ -116,3 +116,4 @@ undercloud_rpm_dependencies: >-
 standalone_container_prep_update_repo: >-
   {{ gating_repo_name }},delorean-current
 overcloud_selinux_enabled: permissive
+undercloud_selinux_enabled: false
