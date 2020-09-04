@@ -201,6 +201,8 @@ undercloud_enable_tempest: >-
   false
   {%- endif -%}
 
+undercloud_enable_nova: true
+
 # TLS everywhere related vars. #
 enable_tls_everywhere: true
 novajoin_connect_timeout: 60
