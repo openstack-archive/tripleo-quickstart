@@ -50,7 +50,7 @@ launch_sanity_workload: false
 container_registry_file: containers-default-parameters.yaml
 tripleo_ci: true
 use_oooq: true
-tripleo_upgrade_debug: true
+tripleo_upgrade_debug: false
 overcloud_ssh_user: >-
   {% if release in ['queens'] -%}
   "tripleo-admin"

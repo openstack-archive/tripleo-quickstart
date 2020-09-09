@@ -43,7 +43,7 @@ launch_sanity_workload: false
 container_registry_file: containers-default-parameters.yaml
 tripleo_ci: true
 use_oooq: true
-tripleo_upgrade_debug: true
+tripleo_upgrade_debug: false
 overcloud_ssh_user: "zuul"
 # Mandatory for deployed_servers
 tripleo_upgrade_validations_non_fatal: true

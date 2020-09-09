@@ -17,7 +17,7 @@ overcloud_update: true
 # the containers file (defaults to: containers-prepare-parameter.yaml)
 container_registry_file: containers-default-parameters.yaml
 tripleo_upgrade_validations_non_fatal: true
-tripleo_upgrade_debug: true
+tripleo_upgrade_debug: false
 # Reduce CI wall time
 tripleo_upgrade_converge_plan_only: true
 tripleo_ci: true
