@@ -5,6 +5,9 @@
 - include_tasks: get-dlrn-hash-newest.yml
   when: dlrn_hash_tag_newest is defined and dlrn_task_run_newest is not defined
 
+- include_tasks: set-dependency-repo-vars.yml
+  when: job.dependency is defined or dependency is defined
+
 - include_tasks: create-repo-script.yml
 
 - include_tasks: setup_repos.yml
