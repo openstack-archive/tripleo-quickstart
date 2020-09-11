@@ -12,10 +12,13 @@ overcloud_update: true
 # updating the container images too. (This might have to be paired
 # with some work on the image building side to get meaningful
 # from-to combination of images.
-# container_registry_file is used pre-rocky, after rocky
-# is uc_containers_prepare_file the one used to identify
-# the containers file (defaults to: containers-prepare-parameter.yaml)
-container_registry_file: containers-default-parameters.yaml
+container_registry_file: >-
+  {% if release in ['queens', 'rocky'] -%}
+  containers-default-parameters.yaml
+  {%- else -%}
+  containers-prepare-parameter.yaml
+  {%- endif -%}
+
 tripleo_upgrade_validations_non_fatal: true
 tripleo_upgrade_debug: false
 # Reduce CI wall time
