@@ -74,6 +74,13 @@ extra_args: >-
    --disable-validations
    {%- endif -%}
 
+baremetal_provision: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein','train', 'ussuri'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
 undercloud_ntp_servers: pool.ntp.org
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs

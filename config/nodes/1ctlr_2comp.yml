@@ -21,5 +21,7 @@ overcloud_nodes:
 node_count: 3
 
 topology_map:
+  Controller:
+    scale: 1
   Compute:
     scale: 2
