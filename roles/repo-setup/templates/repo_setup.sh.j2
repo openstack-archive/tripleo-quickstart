@@ -12,6 +12,7 @@ set -eux
 ## ::
 
 {{ repo_cmd_before|default('') }}
+{{ dep_repo_cmd_before|default('') }}
 
 # Make temp dir for files
 sudo rm -rf /tmp/repo_role_tmp && mkdir -p /tmp/repo_role_tmp
@@ -122,5 +123,6 @@ subscription-manager repos --enable={{ repo.name }}
 ## ::
 
 {{ repo_cmd_after|default('') }}
+{{ dep_repo_cmd_after|default('') }}
 
 ### --stop_docs
