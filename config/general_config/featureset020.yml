@@ -78,18 +78,9 @@ telemetry_args: >-
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
 
-extra_args: >-
-   {% if release not in ['newton','ocata','pike','queens','rocky','stein','train', 'ussuri'] -%}
-   --disable-validations
-   {%- endif -%}
+extra_args: ''
 
-baremetal_provision: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein','train', 'ussuri'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
+undercloud_enable_nova: true
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
