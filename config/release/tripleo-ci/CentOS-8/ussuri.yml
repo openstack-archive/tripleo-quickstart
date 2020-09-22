@@ -7,11 +7,11 @@ distro_deps_repo_name: deps
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
 docker_registry_host: >-
-  {% if job is defined and
-  job.build_container_images is defined and
-  job.build_container_images|default(false)|bool or
+  {% if job.build_container_images|default(false)|bool or
   build_container_images|default(false)|bool -%}
   127.0.0.1:5001
+  {%- elif cloudenv is defined and cloudenv in ['rdo', 'vexxhost'] -%}
+  trunk.registry.rdoproject.org
   {%- else -%}
   docker.io
   {%- endif -%}
@@ -19,7 +19,14 @@ docker_registry_host: >-
 # squatted on by another owner
 # for ussuri release please use 'tripleou'
 # instead of 'tripleoussuri'
-docker_registry_namespace: "tripleou"
+# for rdo-cloud & vexxhost based check jobs, set 'tripleoussuri'
+# as docker_registry_namespace.
+docker_registry_namespace: >-
+  {% if cloudenv is defined and cloudenv in ['rdo', 'vexxhost'] -%}
+  tripleoussuri
+  {%- else -%}
+  tripleou
+  {%- endif -%}
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 docker_openshift_tag: v3.11.0
 promote_source: current-tripleo
