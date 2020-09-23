@@ -19,6 +19,13 @@ standalone_container_cli: >-
   podman
   {%- endif -%}
 
+# NOTE(mwhahaha): we only care about ha -> ha upgrades. We switched to
+# pacemaker enabled in Ussuri, so the upgrade from Train -> Ussuri is non-HA
+# to HA. We should just test HA always in the upgrade
+standalone_control_virtual_ip: 192.168.24.3
+standalone_custom_env_files:
+  - /usr/share/openstack-tripleo-heat-templates/environments/docker-ha.yaml
+
 standalone_upgrade: true
 # validation
 
