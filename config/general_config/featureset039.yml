@@ -211,9 +211,9 @@ novajoin_read_timeout: 60
 # This switches between a deployment with novajoin or using ansible-tripleo-ipa
 undercloud_enable_novajoin: >-
   {% if release in ['queens', 'rocky', 'stein', 'train'] -%}
-  true
+  True
   {%- else -%}
-  false
+  False
   {%- endif -%}
 
 external_network_cidr: 10.0.0.0/24
