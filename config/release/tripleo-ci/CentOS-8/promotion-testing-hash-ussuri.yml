@@ -168,8 +168,7 @@ repo_cmd_after: |
   sudo dnf module enable container-tools:2.0 -y;
   sudo dnf clean metadata
   {% if repo_setup_run_update|default(true)|bool %}
-  # Openvswitch workaround
-  sudo dnf update -y --exclude *openvswitch*
+  sudo dnf update -y
   {% endif %}
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
