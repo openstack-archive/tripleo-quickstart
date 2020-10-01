@@ -7,11 +7,15 @@ distro_deps_repo_name: deps
 dlrn_hash_tag: "{{ job.provider_dlrn_hash_tag_branch[release]|default('current-tripleo') }}"
 dlrn_hash_tag_newest: current
 docker_registry_host: >-
-  {% if job.build_container_images|default(false)|bool or
+  {% if job is defined and
+  job.build_container_images is defined and
+  job.build_container_images|default(false)|bool or
   build_container_images|default(false)|bool -%}
   127.0.0.1:5001
   {%- elif cloudenv is defined and cloudenv in ['rdo', 'vexxhost'] -%}
   trunk.registry.rdoproject.org
+  {%- elif job.consumer_job | default(false) | bool -%}
+  {{ job.registry_ip_address_branch[release] }}:5001
   {%- else -%}
   docker.io
   {%- endif -%}
