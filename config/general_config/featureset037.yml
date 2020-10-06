@@ -88,8 +88,6 @@ undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
-undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
 ctlplane_masquerade: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
   true

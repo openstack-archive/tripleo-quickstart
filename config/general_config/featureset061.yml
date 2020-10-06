@@ -19,8 +19,6 @@ undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 # TODO(aschultz): fix with ssl
 # undercloud_undercloud_public_host: "{{ ansible_fqdn }}-unique"
 # tripleo_set_unique_hostname: true
-undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
 
 # turn off image prep
 step_overcloud_image: false
