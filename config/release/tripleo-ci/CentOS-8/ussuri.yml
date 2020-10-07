@@ -4,7 +4,7 @@ overcloud_as_undercloud: true
 release: ussuri
 distro_ver: centos8
 distro_deps_repo_name: deps
-dlrn_hash_tag: current-tripleo
+dlrn_hash_tag: "{{ job.provider_dlrn_hash_tag_branch[release]|default('current-tripleo') }}"
 dlrn_hash_tag_newest: current
 docker_registry_host: >-
   {% if job.build_container_images|default(false)|bool or

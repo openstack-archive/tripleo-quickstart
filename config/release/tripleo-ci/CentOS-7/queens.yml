@@ -14,7 +14,7 @@ inject_images:
   - "overcloud-full.initrd"
   - "overcloud-full.vmlinuz"
 release: queens
-dlrn_hash_tag: current-tripleo
+dlrn_hash_tag: "{{ job.provider_dlrn_hash_tag_branch[release]|default('current-tripleo') }}"
 dlrn_hash_tag_newest: current
 docker_registry_host: "{{ job.build_container_images|default(false)|bool | ternary('127.0.0.1:5001', 'docker.io') }}"
 docker_registry_namespace: tripleoqueens
