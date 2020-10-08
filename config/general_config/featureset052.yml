@@ -32,24 +32,10 @@ tempest_overcloud: false
 tempest_workers: 2
 tempest_os_cloud: standalone
 
-# This is only if we want to execute the tests on the skiplist
-# TODO(arxcruz): This needs to be modified when we have the tempest skiplist
-# tool
-skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
-skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
-
-tempest_tests_skipped: "{{ skip_list_tests.known_failures | json_query('[?undercloud != `true`].test') }}"
-tempest_default_whitelist:
+tempest_whitelist:
   - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario'
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
-
-tempest_whitelist: >-
-  {% if tempest_run_skipped | default(false) | bool -%}
-  {{ tempest_tests_skipped }}
-  {%- else -%}
-  {{ tempest_default_whitelist }}
-  {%- endif -%}
 
 # Settings for os_tempest
 run_tempest: >-
