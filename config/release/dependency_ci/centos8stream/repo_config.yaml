@@ -1,38 +1,38 @@
 ---
 add_repos:
   - type: generic
-    reponame: centos8stream-base
-    filename: "centos8stream-base-dependency.repo"
+    reponame: quickstart-centos-centos8stream-base
+    filename: "quickstart-centos-centos8stream-base-dependency.repo"
     priority: 1
     baseurl: "http://mirror.den01.meanservers.net/centos/8-stream/BaseOS/x86_64/os/"
     update_container: false
   - type: generic
-    reponame: centos8stream-appstreams
-    filename: "centos8stream-appstreams-dependency.repo"
+    reponame: quickstart-centos-centos8stream-appstreams
+    filename: "quickstart-centos-centos8stream-appstreams-dependency.repo"
     priority: 1
     baseurl: "http://mirror.den01.meanservers.net/centos/8-stream/AppStream/x86_64/os/"
     update_container: false
   - type: generic
-    reponame: centos8stream-powertools
-    filename: "centos8stream-powertools-dependency.repo"
+    reponame: quickstart-centos-centos8stream-powertools
+    filename: "quickstart-centos-centos8stream-powertools-dependency.repo"
     priority: 1
     baseurl: "http://mirror.den01.meanservers.net/centos/8-stream/PowerTools/x86_64/os/"
     update_container: false
   - type: generic
-    reponame: centos8stream-highavailability
-    filename: "centos8stream-highavailability-dependency.repo"
+    reponame: quickstart-centos-centos8stream-highavailability
+    filename: "quickstart-centos-centos8stream-highavailability-dependency.repo"
     priority: 1
     baseurl: "http://mirror.den01.meanservers.net/centos/8-stream/HighAvailability/x86_64/os/"
     update_container: false
   - type: generic
-    reponame: centos8stream-extras
-    filename: "centos8stream-extras-dependency.repo"
+    reponame: quickstart-centos-centos8stream-extras
+    filename: "quickstart-centos-centos8stream-extras-dependency.repo"
     priority: 1
     baseurl: "http://mirror.den01.meanservers.net/centos/8-stream/extras/x86_64/os/"
     update_container: false
   - type: generic
-    reponame: centos8stream-cr
-    filename: "centos8stream-cr-dependency.repo"
+    reponame: quickstart-centos-centos8stream-cr
+    filename: "quickstart-centos-centos8stream-cr-dependency.repo"
     priority: 1
     baseurl: "http://mirror.den01.meanservers.net/centos/8-stream/cr/x86_64/os/"
     update_container: false
@@ -42,11 +42,22 @@ dependency_override_repos:
   - quickstart-centos-powertools
   - quickstart-centos-highavailability
   - quickstart-centos-extras
+base_os_repos:
+  - CentOS-Stream-BaseOS
+  - CentOS-Stream-AppStream
+  - CentOS-Stream-PowerTools
+  - CentOS-Stream-HighAvailability
+  - CentOS-Stream-Extras
 dep_repo_cmd_after: |
   {% if dependency_override_repos is defined %}
   {% for item in dependency_override_repos %}
   sudo sed -i -e "s|enabled=1|enabled=0|g" /etc/yum.repos.d/{{ item }}.repo;
   {% endfor %}
+  {% endif %}
+  {% if base_os_repos is defined %}
+  {% for item in base_os_repos %}
+  sudo sed -i -e "s|enabled=1|enabled=0|g" /etc/yum.repos.d/{{ item }}.repo;
+  {% endfor %}
+  {% endif %}
   sudo dnf clean all;
   sudo dnf update -y;
-  {% endif %}
