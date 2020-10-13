@@ -8,7 +8,7 @@ standalone_container_prep_updates: false
 # name and tags
 devmode: true
 overcloud_as_undercloud: true
-release: ussuri
+release: victoria
 distro_ver: centos8
 distro_deps_repo_name: deps
 dlrn_hash_tag: current-tripleo
