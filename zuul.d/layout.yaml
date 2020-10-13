@@ -1,19 +1,37 @@
 ---
 - project:
     templates:
-      - tripleo-undercloud-jobs
-      - tripleo-multinode-container-minimal
+      - tripleo-undercloud-jobs-pipeline
+      - tripleo-multinode-container-minimal-pipeline
       - tripleo-multinode-branchful
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
-      - tripleo-standalone-scenarios-full
+      - tripleo-standalone-scenarios-pipeline
       - openstack-tox-molecule
     check:
       jobs:
+        - tripleo-ci-centos-8-content-provider
         - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
             files:
               - config/general_config/featureset030.yml
         - tripleo-ci-centos-8-scenario007-multinode-oooq-container:
+            vars: &multi_consumer_vars
+              consumer_job: true
+              build_container_images: false
+              tags:
+                - undercloud-setup
+                - undercloud-scripts
+                - undercloud-install
+                - undercloud-post-install
+                - tripleo-validations
+                - overcloud-scripts
+                - overcloud-prep-config
+                - overcloud-prep-containers
+                - overcloud-deploy
+                - overcloud-post-deploy
+                - overcloud-validate
+            dependencies: &deps
+              - tripleo-ci-centos-8-content-provider
             files:
               - config/general_config/featureset030.yml
         - tripleo-ci-centos-7-standalone:
