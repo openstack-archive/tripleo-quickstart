@@ -182,5 +182,3 @@ supplemental_user: centos
 supplemental_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
 
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
-undercloud_resource_registry_args:
-  "OS::TripleO::Undercloud::Net::SoftwareConfig": "{{ undercloud_templates_path }}/net-config-undercloud.yaml"
