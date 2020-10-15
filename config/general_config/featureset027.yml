@@ -140,19 +140,9 @@ tempest_whitelist_uc:
 tempest_whitelist_mistral:
   - 'mistral_tempest_tests'
 
-# Retrive tempest skip list for undercloud
-skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
-skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
-
-# This filter the known_failures where the undercloud value is true
-# and return a list
-undercloud_blacklist: "{{ skip_list_tests.known_failures | json_query('[?undercloud == `true`]') }}"
-
 test_black_regex: >-
    {% if lookup('env', 'ZUUL_PROJECT') == "openstack/mistral" -%}
    {{ mistral_test_black_regex }}
-   {%- elif release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-   {{ undercloud_blacklist }}
    {%- endif -%}
 
 # skip list for mistral tempest plugin
