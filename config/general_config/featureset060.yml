@@ -43,8 +43,6 @@ tempest_run_concurrency: 2
 tempest_os_cloud: standalone
 tempest_public_net_name: "provisioning"
 tempest_public_subnet_name: "provision-subnet"
-tempest_public_subnet_cidr: 192.168.24.0/24
-tempest_public_subnet_allocation_pools: 192.168.24.41-192.168.24.100
 tempest_private_net_seg_id: ''
 tempest_test_whitelist:
   - 'ironic_tempest_plugin.tests.api.admin.test_chassis.TestChassis'
