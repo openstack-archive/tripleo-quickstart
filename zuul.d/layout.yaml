@@ -10,8 +10,12 @@
       - openstack-tox-molecule
     check:
       jobs:
-        - tripleo-ci-centos-8-content-provider
+        - openstack-tox-linters
+        - tripleo-ci-centos-8-content-provider:
+            dependencies: &deps_lint
+              - openstack-tox-linters
         - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
+            dependencies: *deps_lint
             files:
               - config/general_config/featureset030.yml
         - tripleo-ci-centos-8-scenario007-multinode-oooq-container:
@@ -30,16 +34,17 @@
                 - overcloud-deploy
                 - overcloud-post-deploy
                 - overcloud-validate
-            dependencies: &deps
+            dependencies: &deps_cprovider
               - tripleo-ci-centos-8-content-provider
             files:
               - config/general_config/featureset030.yml
         - tripleo-ci-centos-7-standalone:
+            dependencies: *deps_lint
             files:
               - config/general_config/featureset052.yml
               - requirements.txt
-        - openstack-tox-linters
         - tripleo-ci-centos-7-scenario010-multinode-oooq-container:
+            dependencies: *deps_lint
             files:
               - config/general_config/featureset038.yml
     gate:
@@ -47,10 +52,12 @@
       jobs:
         - openstack-tox-linters
         - tripleo-ci-centos-7-standalone:
+            dependencies: *deps_lint
             files:
               - config/general_config/featureset052.yml
     experimental:
       jobs:
         - tripleo-ci-centos-7-scenario006-multinode-oooq-container:
+            dependencies: *deps_lint
             files:
               - config/general_config/featureset026.yml
