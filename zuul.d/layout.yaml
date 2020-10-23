@@ -12,52 +12,19 @@
       jobs:
         - openstack-tox-linters
         - tripleo-ci-centos-8-content-provider:
-            dependencies: &deps_lint
+            dependencies:
               - openstack-tox-linters
-        - tripleo-ci-centos-7-scenario007-multinode-oooq-container:
-            dependencies: *deps_lint
-            files:
-              - config/general_config/featureset030.yml
         - tripleo-ci-centos-8-scenario007-multinode-oooq-container:
-            vars: &multi_consumer_vars
+            vars:
               consumer_job: true
               build_container_images: false
-              tags:
-                - undercloud-setup
-                - undercloud-scripts
-                - undercloud-install
-                - undercloud-post-install
-                - tripleo-validations
-                - overcloud-scripts
-                - overcloud-prep-config
-                - overcloud-prep-containers
-                - overcloud-deploy
-                - overcloud-post-deploy
-                - overcloud-validate
-            dependencies: &deps_cprovider
+              remove_tags:
+                - build
+            dependencies:
               - tripleo-ci-centos-8-content-provider
             files:
               - config/general_config/featureset030.yml
-        - tripleo-ci-centos-7-standalone:
-            dependencies: *deps_lint
-            files:
-              - config/general_config/featureset052.yml
-              - requirements.txt
-        - tripleo-ci-centos-7-scenario010-multinode-oooq-container:
-            dependencies: *deps_lint
-            files:
-              - config/general_config/featureset038.yml
     gate:
       queue: tripleo
       jobs:
         - openstack-tox-linters
-        - tripleo-ci-centos-7-standalone:
-            dependencies: *deps_lint
-            files:
-              - config/general_config/featureset052.yml
-    experimental:
-      jobs:
-        - tripleo-ci-centos-7-scenario006-multinode-oooq-container:
-            dependencies: *deps_lint
-            files:
-              - config/general_config/featureset026.yml
