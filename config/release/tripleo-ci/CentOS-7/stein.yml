@@ -19,7 +19,7 @@ distro_deps_repo_name: deps
 dlrn_hash_tag: current-tripleo
 dlrn_hash_tag_newest: current
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
-docker_registry_host: "{{ job.build_container_images|default(false)|bool | ternary('127.0.0.1:5001', 'docker.io') }}"
+docker_registry_host: "{{ job.build_container_images|default(false)|bool | ternary('127.0.0.1:5001', 'quay.io') }}"
 docker_registry_namespace: "tripleo{{ release }}"
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 docker_openshift_tag: v3.11.0
