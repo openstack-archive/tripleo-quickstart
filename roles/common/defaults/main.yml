@@ -137,6 +137,8 @@ overcloud_nodes:
 #   network will be attached to the undercloud. This is required to ssh from the
 #   virt host to the undercloud
 #   *  The first bridge network defined will be used for pxe booting
+#   *  Networks with forward_mode: 'nat' will not be attached to overcloud
+#   nodes unless force_ovc: true is used in network's definition.
 #
 external_network_cidr: 192.168.23.0/24
 networks:
@@ -146,6 +148,7 @@ networks:
   - name: external
     bridge: brext
     forward_mode: nat
+    force_ovc: false
     address: "{{ external_network_cidr|nthhost(1) }}"
     netmask: "{{ external_network_cidr|ipaddr('netmask') }}"
     dhcp_range:
