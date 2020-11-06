@@ -35,6 +35,14 @@ python_cmd() {
                 distribution="CentOS"
                 if [ "$distribution_major_version" -ge "8" ]; then
                     PYTHON_CMD=python3
+                elif [ "$distribution_major_version" -eq "7" ]; then
+                    release_val=$(cat /etc/centos-release | awk '{print $4 }' | grep '^7.8\|^7.9')
+                    python_val=$(rpm -q python3)
+                    if [ ! -z $release_val ] && [[ $python_val =~ "python3-" ]]; then
+                        # declare centos7 python3 variable:
+                        centos7py3=true
+                        PYTHON_CMD=python3
+                    fi
                 fi
                 ;;
             fedora)
@@ -107,19 +115,23 @@ install_deps () {
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [[ "$passwordless_sudo" == "1" ]] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
         if [ "$(python_cmd)" == "python3" ]; then
+            echo "setting up for python3"
             # possible bug in ansible, f29 python 3 env fails
             # w/o both python-libselinux packages installed
             # https://bugs.launchpad.net/tripleo/+bug/1812324
             PYTHON_PACKAGES+=("python3-libselinux")
             PYTHON_PACKAGES+=("python3-PyYAML")
             SETUPTOOLS_PACKAGE=python3-setuptools
-            VIRTUALENV_PACKAGE=python3-virtualenv
+            if [ -z $centos7py3 ]; then
+                VIRTUALENV_PACKAGE=python3-virtualenv
+            fi
             PIP_PACKAGE=python3-pip
-            if [ -e "/usr/bin/pip3" ] && [ ! -e "/usr/bin/pip" ]; then
+            if [ -e "/usr/bin/pip3" ]; then
                 # centos-8 installs pip as pip3
                 sudo alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
             fi
         else
+            echo "setting up for python2"
             PYTHON_PACKAGES+=("libselinux-python")
             SETUPTOOLS_PACKAGE=python2-setuptools
             VIRTUALENV_PACKAGE=python2-virtualenv
@@ -129,8 +141,14 @@ install_deps () {
         $VIRTUALENV_PACKAGE $PIP_PACKAGE" | tr -s [:space:]
         sudo $(package_manager) install $PYTHON_PACKAGES \
                                             $SETUPTOOLS_PACKAGE \
-                                            $VIRTUALENV_PACKAGE \
                                             $PIP_PACKAGE
+        # Install python3 virtualenv via pip on CentOS7
+        if [ -z $centos7py3 ]; then
+            sudo $(package_manager) install $VIRTUALENV_PACKAGE
+        else
+            sudo pip3 install virtualenv
+            sudo $(package_manager) install gcc python3-devel
+        fi
         check_python_module virtualenv &> /dev/null || \
             PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
 

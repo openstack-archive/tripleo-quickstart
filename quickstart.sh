@@ -136,11 +136,22 @@ bootstrap () {
             export PIP_CONSTRAINT=${PIP_CONSTRAINT:-https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt}
         fi
         $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR
-        if [ $OPT_CLEAN == 1 ]; then
-            $(python_cmd) -m pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
+
+        if  [ $OPT_RELEASE == "queens" ] || [ ! -z $centos7py3 ]; then
+            # Nb: We set upper constraints to stable/train for Queens and py3
+            echo "Set upper_contratints to stable/train for Queens release and Python3"
+            export UPPER_CONSTRAINTS_FILE="https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt"
+            export PIP_CONSTRAINT="https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt"
+            $(python_cmd) -m pip install --force-reinstall pbr==5.4.3
+            $(python_cmd) -m pip install "${OPT_REQARGS[@]}"
         else
-            $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
+            if [ $OPT_CLEAN == 1 ]; then
+                $(python_cmd) -m pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
+            else
+                $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
+            fi
         fi
+
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
                 # pull in tripleo-quickstart-extras from source
                 $ZUUL_CLONER --cache-dir \
