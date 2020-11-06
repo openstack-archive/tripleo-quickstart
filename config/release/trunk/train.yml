@@ -1,8 +1,12 @@
 release: train
+distro_ver: centos8
 dlrn_hash_tag: current-tripleo-rdo
+docker_registry_host: "{{ job.build_container_images|default(false)|bool | ternary('127.0.0.1:5001', 'docker.io') }}"
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
-overcloud_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar
-ipa_image_url: https://images.rdoproject.org/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar
+docker_registry_namespace: "tripleotraincentos8"
+dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
+overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
+ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
 validate_on: rdo
 overcloud_as_undercloud: true
 update_images: true
@@ -21,30 +25,61 @@ inject_images:
   - "overcloud-full.vmlinuz"
 
 repos:
-  - type: generic
-    reponame: delorean
+  - type: file
     filename: delorean.repo
-    baseurl: https://trunk.rdoproject.org/centos7-{{ release }}/{{ dlrn_hash_path|default(dlrn_hash_tag, true) }}/
-    priority: 20
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_tag }}/delorean.repo"
 
   - type: file
     filename: delorean-deps.repo
-    down_url: https://trunk.rdoproject.org/centos7-{{ release }}/delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/delorean-deps.repo
 
-  - type: package
-    pkg_name: centos-release-ceph-nautilus
-    custom_cmd: 'sudo yum install -y --enablerepo=extras'
+  - type: generic
+    reponame: quickstart-centos-base
+    filename: quickstart-centos-base.repo
+    baseurl: http://mirror.centos.org/centos/8/BaseOS/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-appstreams
+    filename: quickstart-centos-appstreams.repo
+    baseurl: http://mirror.centos.org/centos/8/AppStream/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-powertools
+    filename: quickstart-centos-powertools.repo
+    baseurl: http://mirror.centos.org/centos/8/PowerTools/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-highavailability
+    filename: quickstart-centos-highavailability.repo
+    baseurl: http://mirror.centos.org/centos/8/HighAvailability/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-extras
+    filename: quickstart-centos-extras.repo
+    baseurl: http://mirror.centos.org/centos/8/extras/x86_64/os/
+
+  # centos-release-ceph-nautilus rpm do not exist yet
+  - type: generic
+    reponame: quickstart-centos-ceph-nautilus
+    filename: quickstart-centos-ceph-nautilus.repo
+    baseurl: http://mirror.centos.org/centos/8/storage/x86_64/ceph-nautilus/
+
+  - type: generic
+    reponame: quickstart-centos-opstools
+    filename: quickstart-centos-opstools.repo
+    baseurl: http://mirror.centos.org/centos/8/opstools/x86_64/collectd-5/
 
 repo_cmd_after: |
-  sudo yum remove -y centos-release-ceph-hammer || true
-  sudo yum remove -y centos-release-ceph-jewel || true
-  sudo yum remove -y centos-release-ceph-luminous || true
-  sudo yum-config-manager --save --setopt centos-ceph-nautilus.gpgcheck=0
-  sudo yum repolist;
+  sudo dnf repolist;
   {% if repo_setup_run_update|default(true)|bool %}
-  sudo yum update -y
+  sudo dnf update -y
   {% endif %}
 
 undercloud_rpm_dependencies: >-
-  python-tripleoclient
+  python3-tripleoclient
   ceph-ansible
+# baseos settings
+baseos_undercloud_image_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2
+baseos_image: centos
+baseos_image_type: qcow2
+baseos_md5sum: "d89eb49f2c264d29225cecf2b6c83322  CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
