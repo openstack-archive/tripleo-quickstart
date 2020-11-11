@@ -58,6 +58,10 @@ enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
 network_isolation_args: >-
+  {% if not release in ['newton','ocata','pike','queens','rocky','stein','train','ussuri','victoria'] -%}
+  --networks-file {{ overcloud_templates_path }}/ci/network_data.yaml
+  -e {{ working_dir }}/overcloud-networks-deployed.yaml
+  {% endif %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
 
@@ -230,6 +234,14 @@ undercloud_enable_nova: >-
   {%- endif -%}
 baremetal_provision: >-
   {% if release in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+# Provision composable networks prior to creating the heat stack
+network_provision: >-
+  {% if release in ['newton','ocata','pike','queens','rocky','stein','train','ussuri','victoria'] -%}
   false
   {%- else -%}
   true
