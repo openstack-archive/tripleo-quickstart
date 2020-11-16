@@ -13,10 +13,10 @@ overcloud_update: true
 # with some work on the image building side to get meaningful
 # from-to combination of images.
 container_registry_file: >-
-  {% if release in ['queens', 'rocky'] -%}
-  containers-default-parameters.yaml
+  {% if release not in ['queens','rocky','stein'] -%}
+  ''
   {%- else -%}
-  containers-prepare-parameter.yaml
+  containers-default-parameters.yaml
   {%- endif -%}
 
 tripleo_upgrade_validations_non_fatal: true
