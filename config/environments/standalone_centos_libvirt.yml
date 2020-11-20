@@ -32,6 +32,9 @@ node_count: 0
 tripleo_generate_scripts: true
 standalone_neutron_bridge_mappings: "datacentre:br-ctlplane"
 standalone_libvirt_type: qemu
+build_container_images: true
+# https://bugs.launchpad.net/tripleo/+bug/1902846
+containers_base_image: "ubi8:8.2"
 
 # having connectivity with external world.
 tempest_public_net_physical_name: datacentre
