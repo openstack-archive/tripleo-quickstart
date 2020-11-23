@@ -24,6 +24,7 @@ ipa_image_url: https://images.rdoproject.org/queens/rdo_trunk/current-tripleo/ir
 repo_cmd_before: |
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
+  sudo yum-config-manager --enable gating-repo || true;
   sudo rm -rf /etc/yum.repos.d/delorean*;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   if [ -e /etc/ci/mirror_info.sh ]; then

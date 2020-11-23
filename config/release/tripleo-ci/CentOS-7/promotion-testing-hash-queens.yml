@@ -28,6 +28,7 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
+  sudo yum-config-manager --enable gating-repo || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else

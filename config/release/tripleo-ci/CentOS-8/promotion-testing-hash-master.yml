@@ -43,6 +43,7 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/epel*;
   sudo dnf clean all;
   sudo dnf config-manager --disable "*" || true;
+  sudo dnf config-manager --enable gating-repo || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else
