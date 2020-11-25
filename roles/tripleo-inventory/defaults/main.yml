@@ -11,3 +11,5 @@ inventory: undercloud
 undercloud_type: virtual
 # Admin/control network name for the openstack inventory provider
 openstack_private_network_name: private
+# Limit number of subnodes to add to overcloud group, 1000 is actual no limit
+subnodes_limit: "{{ job.subnodes_limit | default(1000) }}"
