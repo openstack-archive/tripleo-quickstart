@@ -1,4 +1,4 @@
-cmd2==0.8.5
+cmd2>=0.8.5
 ansible>=2.9,<2.10
 jmespath
 netaddr>=0.7.18

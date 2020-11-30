@@ -1,6 +1,7 @@
 git+https://opendev.org/openstack/tripleo-quickstart-extras/#egg=tripleo-quickstart-extras
 git+https://opendev.org/openstack/tripleo-ha-utils/#egg=tripleo-ha-utils
-git+https://opendev.org/x/browbeat/#egg=browbeat
+# browbeat is no longer supported integrated w/ tq
+#git+https://opendev.org/x/browbeat/#egg=browbeat
 git+https://opendev.org/openstack/openstack-ansible-os_tempest/#egg=openstack-ansible-os_tempest
 git+https://opendev.org/openstack/ansible-role-python_venv_build/#egg=ansible-role-python_venv_build
 git+https://opendev.org/openstack/ansible-config_template/#egg=ansible-config_template
