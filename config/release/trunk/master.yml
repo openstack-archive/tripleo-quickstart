@@ -6,6 +6,13 @@ dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
 overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
 ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
 
+docker_registry_host: >-
+  {% if build_container_images|default(false)|bool -%}
+  127.0.0.1:5001
+  {%- else -%}
+  docker.io
+  {%- endif -%}
+
 overcloud_as_undercloud: true
 update_images: true
 images:
