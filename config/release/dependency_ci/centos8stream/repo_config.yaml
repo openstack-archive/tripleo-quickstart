@@ -37,11 +37,11 @@ dependency_override_repos:
   - quickstart-centos-highavailability
   - quickstart-centos-extras
 base_os_repos:
-  - CentOS-Stream-BaseOS
-  - CentOS-Stream-AppStream
-  - CentOS-Stream-PowerTools
-  - CentOS-Stream-HighAvailability
-  - CentOS-Stream-Extras
+  - CentOS-Linux-BaseOS
+  - CentOS-Linux-AppStream
+  - CentOS-Linux-PowerTools
+  - CentOS-Linux-HighAvailability
+  - CentOS-Linux-Extras
 dep_repo_cmd_after: |
   {% if dependency_override_repos is defined %}
   {% for item in dependency_override_repos %}
@@ -53,5 +53,11 @@ dep_repo_cmd_after: |
   sudo sed -i -e "s|enabled=1|enabled=0|g" /etc/yum.repos.d/{{ item }}.repo;
   {% endfor %}
   {% endif %}
+  # enable conatiner tools rhel8
+  sudo dnf repolist;
+  sudo dnf module list;
+  sudo dnf module disable container-tools:2.0 -y;
+  sudo dnf module enable container-tools:rhel8 -y;
+  sudo dnf clean metadata;
   sudo dnf clean all;
   sudo dnf update -y;
