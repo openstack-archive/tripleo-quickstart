@@ -137,7 +137,7 @@ bootstrap () {
         fi
         $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR
 
-        if  [ $OPT_RELEASE == "queens" ] || [ ! -z $centos7py3 ]; then
+        if  [ ${QUICKSTART_RELEASE:-$OPT_RELEASE} == "queens" ] || [ ! -z $centos7py3 ]; then
             # Nb: We set upper constraints to stable/train for Queens and py3
             echo "Set upper_contratints to stable/train for Queens release and Python3"
             export UPPER_CONSTRAINTS_FILE="https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt"
