@@ -11,7 +11,6 @@ docker_image_tag: *promotion-testing-tag
 dlrn_hash_tag_newest: current
 promote_source: tripleo-ci-testing
 validate_on: rdo
-docker_prep_prefix: 'openstack-'
 
 # images
 images:
