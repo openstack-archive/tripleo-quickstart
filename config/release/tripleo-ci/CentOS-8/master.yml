@@ -163,10 +163,27 @@ repos:
     filename: quickstart-centos-extras.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/extras/x86_64/os/
 
+    # TODO: This is temporary and ideally we should use ceph octopus repository
+    # when the release is W+. Octopus repos doesn't have ceph-ansible. Revisit
+    # when switch from ceph-ansible to cephadm is complete (Ceph nautilus
+    # repos to be removed on W+.) For more detail see:
+    # https://bugs.launchpad.net/tripleo/+bug/1909191
   - type: generic
     reponame: quickstart-centos-ceph-nautilus
     filename: quickstart-centos-ceph-nautilus.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/storage/x86_64/ceph-nautilus/
+
+    # TODO: includepkgs is temporary and ideally we should use ceph octopus
+    # repository when the release is W+. Revisit when switch from ceph-ansible
+    # to cephadm is complete. After removal of ceph nautilus repos we can
+    # remove includepkgs to pull all package from octopus repository. For more
+    # detail see: https://bugs.launchpad.net/tripleo/+bug/1909191
+  - type: generic
+    reponame: quickstart-centos-ceph-octopus
+    filename: quickstart-centos-ceph-octopus.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/storage/x86_64/ceph-octopus/
+    includepkgs:
+      - cephadm
 
   - type: generic
     reponame: quickstart-centos-opstools
