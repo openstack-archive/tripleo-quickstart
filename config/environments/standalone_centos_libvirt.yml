@@ -9,7 +9,6 @@ images:
     - name: undercloud
       url: "{{ undercloud_image_url }}"
       type: qcow2
-      md5sum: "d89eb49f2c264d29225cecf2b6c83322  CentOS-8-x86_64-GenericCloud.qcow2"
 
 inject_images: []
 
