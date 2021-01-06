@@ -8,6 +8,7 @@
       - release-notes-jobs-python3
       - tripleo-standalone-scenarios-pipeline
       - openstack-tox-molecule
+      - tripleo-upgrades-master-pipeline
     check:
       jobs:
         - openstack-tox-linters
