@@ -76,7 +76,14 @@ telemetry_args: >-
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
 
-extra_args: ''
+# neutron_l3_qos.yaml sets correct L3 agent's extensions to run QoS related
+# tests. It is related only to the ML2/OVS case and featureset020 runs Neutron
+# with ML2/OVS only in queens. The template doesn't apply to newer branches
+# that aren't using ovs.
+extra_args: >-
+   {% if release == 'queens' -%}
+   -e {{ overcloud_templates_path }}/ci/environments/neutron_l3_qos.yaml
+   {% endif %}
 
 undercloud_enable_nova: true
 # keep the doc gen settings at the bottom of the config file.
