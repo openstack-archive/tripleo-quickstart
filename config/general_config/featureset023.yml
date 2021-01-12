@@ -3,6 +3,6 @@ ssl_overcloud: false
 step_overcloud_image: true
 step_glance_upload: false
 test_ping: false
-run_tempest: false
+use_os_tempest: false
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"

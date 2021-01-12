@@ -21,7 +21,7 @@ overcloud_ipv6: false
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: true
-run_tempest: false
+use_os_tempest: false
 
 # Tell tripleo how we want things done.
 # Note: The order of the templates and arguments passed to heat matters.

@@ -25,7 +25,6 @@ standalone_custom_env_files:
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
-run_tempest: false
 use_os_tempest: true
 # NOTE(aschultz): containers assume RC at the moment
 tempest_undercloud: true

@@ -122,7 +122,6 @@ tempest_black: "{{ skip_list_tests.known_failures | json_query('[?test != `octav
 test_black_regex: "{{ tempest_black }}"
 
 test_ping: false
-run_tempest: true
 test_white_regex: ''
 
 # Run tempest in containers when at least undercloud is containerized

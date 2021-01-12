@@ -33,8 +33,8 @@ tripleo_ci: true
 use_oooq: true
 
 # Deactivate validations as there is no overcloud
+use_os_tempest: false
 test_ping: false
-run_tempest: false
 
 # This enables TLS for the undercloud which will also make haproxy bind to the
 # configured public-vip and admin-vip.

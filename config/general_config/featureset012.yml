@@ -24,7 +24,7 @@ undercloud_generate_service_certificate: false
 ssl_overcloud: false
 
 test_ping: true
-run_tempest: false
+use_os_tempest: false
 step_introspect: false
 
 composable_scenario: scenario001-multinode.yaml

@@ -39,7 +39,6 @@ tempest_private_net_seg_id: ''
 test_ping: false
 
 # os_tempest config
-run_tempest: false
 
 use_os_tempest: >-
   {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}

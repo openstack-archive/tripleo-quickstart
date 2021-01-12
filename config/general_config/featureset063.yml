@@ -136,7 +136,6 @@ additional_cell: true
 # If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
-run_tempest: true
 test_regex: ''
 # Enable tempest container
 undercloud_enable_tempest: true

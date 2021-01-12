@@ -63,7 +63,7 @@ network_isolation_type: 'single-nic-vlans'
 extra_args: ''
 test_ping: true
 enable_pacemaker: true
-run_tempest: false
+use_os_tempest: false
 
 # Options below direct automatic doc generation by tripleo-collect-logs.
 artcl_gen_docs: true

@@ -107,4 +107,4 @@ tempest_format: >-
 # run them.
 tempest_config: false
 test_ping: false
-run_tempest: false
+use_os_tempest: false

@@ -22,4 +22,4 @@ use_oooq: true
 
 # Deactivate validations as there is no overcloud
 test_ping: false
-run_tempest: false
+use_os_tempest: false
