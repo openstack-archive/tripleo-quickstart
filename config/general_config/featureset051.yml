@@ -28,7 +28,7 @@ upgrade_composable_scenario: scenario000-multinode-containers.yaml
 deployed_server: true
 
 test_ping: false
-run_tempest: false
+use_os_tempest: false
 
 # Tripleo-upgrade role parameters
 # Major Upgrade: containers -> containers (keystone-only)

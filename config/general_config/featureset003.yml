@@ -29,7 +29,6 @@ undercloud_install_cli_options: >-
 # Tempest configuration, keep always at the end of the file
 tempest_cloud_name: 'undercloud'
 test_ping: false
-run_tempest: true
 test_regex: ''
 tempest_undercloud: true
 tempest_overcloud: false

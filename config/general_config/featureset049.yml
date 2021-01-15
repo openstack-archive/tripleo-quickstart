@@ -12,7 +12,7 @@ network_isolation: true
 network_isolation_type: 'single-nic-vlans'
 containerized_overcloud: true
 test_ping: false
-run_tempest: false
+use_os_tempest: false
 ssl_overcloud: false
 artcl_gen_docs: true
 artcl_create_docs_payload:

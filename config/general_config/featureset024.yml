@@ -35,7 +35,7 @@ extra_args: >-
   {% if release not in ['newton', 'ocata'] %}-e {{ overcloud_templates_path }}/ci/environments/ceph-min-osds.yaml{% endif %}
 test_ping: true
 
-run_tempest: false
+use_os_tempest: false
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true

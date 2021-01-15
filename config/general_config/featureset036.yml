@@ -6,7 +6,7 @@ enable_opstools_repo: false
 
 test_ping: false
 
-run_tempest: false
+use_os_tempest: false
 
 test_white_regex: ''
 
