@@ -60,8 +60,6 @@ overcloud_ssh_user: >-
 
 # Mandatory for deployed_servers
 tripleo_upgrade_validations_non_fatal: true
-# Reduce CI wall time
-tripleo_upgrade_converge_plan_only: true
 
 run_tripleo_validations: false
 run_tripleo_validations_negative_tests: false

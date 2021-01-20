@@ -47,8 +47,6 @@ tripleo_upgrade_debug: false
 overcloud_ssh_user: "zuul"
 # Mandatory for deployed_servers
 tripleo_upgrade_validations_non_fatal: true
-# Reduce CI wall time
-tripleo_upgrade_converge_plan_only: true
 
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
