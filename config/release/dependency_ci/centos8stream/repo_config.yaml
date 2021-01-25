@@ -37,11 +37,11 @@ dependency_override_repos:
   - quickstart-centos-highavailability
   - quickstart-centos-extras
 base_os_repos:
-  - CentOS-Linux-BaseOS
-  - CentOS-Linux-AppStream
-  - CentOS-Linux-PowerTools
-  - CentOS-Linux-HighAvailability
-  - CentOS-Linux-Extras
+  - CentOS-Stream-BaseOS
+  - CentOS-Stream-AppStream
+  - CentOS-Stream-PowerTools
+  - CentOS-Stream-HighAvailability
+  - CentOS-Stream-Extras
 dep_repo_cmd_after: |
   {% if dependency_override_repos is defined %}
   {% for item in dependency_override_repos %}
