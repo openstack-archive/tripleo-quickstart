@@ -1,0 +1,92 @@
+release: victoria
+distro_ver: centos8
+dlrn_hash_tag: current-tripleo-rdo
+docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
+overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
+ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
+
+docker_registry_host: >-
+  {% if build_container_images|default(false)|bool -%}
+  127.0.0.1:5001
+  {%- else -%}
+  docker.io
+  {%- endif -%}
+
+overcloud_as_undercloud: true
+update_images: true
+images:
+  - name: overcloud-full
+    url: "{{ overcloud_image_url }}"
+    type: tar
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+inject_images:
+  - "ironic-python-agent.initramfs"
+  - "ironic-python-agent.kernel"
+  - "overcloud-full.qcow2"
+  - "overcloud-full.initrd"
+  - "overcloud-full.vmlinuz"
+
+repos:
+  - type: file
+    filename: delorean.repo
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_tag }}/delorean.repo"
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/delorean-deps.repo
+
+  - type: generic
+    reponame: quickstart-centos-base
+    filename: quickstart-centos-base.repo
+    baseurl: http://mirror.centos.org/centos/8/BaseOS/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-appstreams
+    filename: quickstart-centos-appstreams.repo
+    baseurl: http://mirror.centos.org/centos/8/AppStream/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-powertools
+    filename: quickstart-centos-powertools.repo
+    baseurl: http://mirror.centos.org/centos/8/PowerTools/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-highavailability
+    filename: quickstart-centos-highavailability.repo
+    baseurl: http://mirror.centos.org/centos/8/HighAvailability/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-extras
+    filename: quickstart-centos-extras.repo
+    baseurl: http://mirror.centos.org/centos/8/extras/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-ceph-nautilus
+    filename: quickstart-centos-ceph-nautilus.repo
+    baseurl: http://mirror.centos.org/centos/8/storage/x86_64/ceph-nautilus/
+
+  - type: generic
+    reponame: quickstart-centos-opstools
+    filename: quickstart-centos-opstools.repo
+    baseurl: http://mirror.centos.org/centos/8/opstools/x86_64/collectd-5/
+
+repo_cmd_after: |
+  sudo dnf repolist;
+  sudo dnf module list;
+  sudo dnf module disable container-tools:rhel8 -y;
+  sudo dnf module enable container-tools:2.0 -y;
+  {% if repo_setup_run_update|default(true)|bool %}
+  sudo dnf update -y
+  {% endif %}
+
+undercloud_rpm_dependencies: >-
+  python3-tripleoclient
+  ceph-ansible
+# baseos settings
+baseos_undercloud_image_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2
+baseos_image: centos
+baseos_image_type: qcow2
+baseos_md5sum: "d89eb49f2c264d29225cecf2b6c83322  CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
