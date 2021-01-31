@@ -58,6 +58,9 @@ amphora_url: 'https://images.rdoproject.org/octavia/{{ release }}/amphora-x64-ha
 
 tempestconf_override:
   load_balancer.test_with_ipv6: false
+  network-feature-enabled.port_security: true
+  load_balancer.test_server_path: >-
+    "/usr/lib/python{{ [ansible_python.version.major, ansible_python.version.minor] | join('.') }}/site-packages/octavia_tempest_plugin/contrib/test_server/test_server.bin"
 
 tempestconf_train_override:
   load_balancer.member_role: '"Member"'
