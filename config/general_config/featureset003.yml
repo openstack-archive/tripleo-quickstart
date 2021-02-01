@@ -33,7 +33,7 @@ test_regex: ''
 tempest_undercloud: true
 tempest_overcloud: false
 # Basic set of tempest tests to validate undercloud
-tempest_whitelist:
+tempest_test_whitelist:
   - 'tempest.api.identity'
   - 'tempest.api.image.v2.test_images.BasicOperationsImagesTest'
   - 'tempest.api.image.v2.test_images_tags_negative.ImagesTagsNegativeTest'
