@@ -15,7 +15,7 @@ inject_images: []
 guest_partition: /dev/sda1
 baseos_as_undercloud: true
 overcloud_as_undercloud: false
-undercloud_setup: true
+undercloud_setup: false
 use_external_images: true
 ovb_setup_connectivity: false
 non_root_user_setup: true
