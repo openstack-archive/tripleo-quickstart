@@ -56,8 +56,6 @@ dep_repo_cmd_after: |
   # enable conatiner tools rhel8
   sudo dnf repolist;
   sudo dnf module list;
-  sudo dnf module disable container-tools:2.0 -y;
-  sudo dnf module enable container-tools:rhel8 -y;
   sudo dnf clean metadata;
   sudo dnf clean all;
   sudo dnf update -y;
