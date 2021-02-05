@@ -73,7 +73,7 @@ extra_args: >-
    {%- endif -%}
 
 baremetal_provision: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein','train', 'ussuri'] -%}
+  {% if release in ['queens','rocky','stein','train'] -%}
   false
   {%- else -%}
   true
@@ -217,3 +217,11 @@ undercloud_enable_tempest: >-
   {%- endif -%}
 
 tempest_run_concurrency: 4
+
+# Run an undercloud without glance or nova
+undercloud_enable_nova: >-
+  {% if release in ['queens','rocky','stein', 'train'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
