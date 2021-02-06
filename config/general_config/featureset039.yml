@@ -198,6 +198,7 @@ undercloud_enable_tempest: >-
   {%- endif -%}
 
 undercloud_enable_nova: true
+undercloud_enable_swift: true
 
 # TLS everywhere related vars. #
 enable_tls_everywhere: true
