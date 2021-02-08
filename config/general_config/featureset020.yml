@@ -84,6 +84,9 @@ extra_args: >-
    {% if release == 'queens' -%}
    -e {{ overcloud_templates_path }}/ci/environments/neutron_l3_qos.yaml
    {% endif %}
+   {% if release in ['ussuri', 'victoria'] -%}
+   --disable-validations
+   {% endif %}
 
 undercloud_enable_nova: true
 # keep the doc gen settings at the bottom of the config file.
