@@ -84,6 +84,9 @@ extra_args: >-
    {% if release == 'queens' -%}
    -e {{ overcloud_templates_path }}/ci/environments/neutron_l3_qos.yaml
    {% endif %}
+   {% if release in ['ussuri', 'victoria'] -%}
+   --disable-validations
+   {% endif %}
 
 # Run an undercloud without glance or nova
 undercloud_enable_nova: >-
