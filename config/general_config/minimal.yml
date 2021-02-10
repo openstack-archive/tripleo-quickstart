@@ -13,6 +13,11 @@ overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
 
+# Disable validations and its negative tests
+run_tripleo_validations: false
+run_tripleo_validations_negative_tests: false
+
+
 # This enables container deployements after Pike
 containerized_overcloud: >-
   {% if release in ['newton', 'ocata', 'pike'] -%}
