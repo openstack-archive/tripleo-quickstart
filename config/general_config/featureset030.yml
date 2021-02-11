@@ -50,6 +50,20 @@ extra_args: >-
   -e {{ overcloud_templates_path }}/environments/services/neutron-ovs.yaml
   {%- endif -%}
 
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
+
 deployed_server: >-
   {% if release in ['newton','ocata','pike','queens'] -%}
   true
