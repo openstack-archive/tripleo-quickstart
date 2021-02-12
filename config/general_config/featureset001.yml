@@ -58,11 +58,11 @@ enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
 network_isolation_args: >-
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
   {% if not release in ['newton','ocata','pike','queens','rocky','stein','train','ussuri','victoria'] -%}
   --networks-file {{ overcloud_templates_path }}/ci/network_data.yaml
   -e {{ working_dir }}/overcloud-networks-deployed.yaml
   {% endif %}
-  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
 
 # This featureset is extremely resource intensive, so we disable telemetry
