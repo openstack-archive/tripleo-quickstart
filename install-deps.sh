@@ -146,7 +146,7 @@ install_deps () {
         if [ -z $centos7py3 ]; then
             sudo $(package_manager) install $VIRTUALENV_PACKAGE
         else
-            sudo pip3 install virtualenv
+            sudo $(python_cmd) -m pip install virtualenv
             sudo $(package_manager) install gcc python3-devel
         fi
         check_python_module virtualenv &> /dev/null || \
