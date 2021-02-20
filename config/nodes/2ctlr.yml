@@ -15,5 +15,20 @@ deployed_server_overcloud_roles:
     hosts: "$(sed -n 1,1p /etc/nodepool/sub_nodes_private)"
 
 topology_map:
+  Controller:
+    scale: 2
+    networks:
+      - network: ctlplane
+        vif: true
+      - network: external
+        subnet: external_subnet
+      - network: internal_api
+        subnet: internal_api_subnet
+      - network: storage
+        subnet: storage_subnet
+      - network: storage_mgmt
+        subnet: storage_mgmt_subnet
+      - network: tenant
+        subnet: tenant_subnet
   Compute:
     scale: 0

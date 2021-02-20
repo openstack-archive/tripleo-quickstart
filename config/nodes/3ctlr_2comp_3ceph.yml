@@ -57,7 +57,36 @@ node_count: 8
 topology_map:
   Controller:
     scale: 3
+    networks:
+      - network: ctlplane
+        vif: true
+      - network: external
+        subnet: external_subnet
+      - network: internal_api
+        subnet: internal_api_subnet
+      - network: storage
+        subnet: storage_subnet
+      - network: storage_mgmt
+        subnet: storage_mgmt_subnet
+      - network: tenant
+        subnet: tenant_subnet
   Compute:
     scale: 2
+    networks:
+      - network: ctlplane
+        vif: true
+      - network: internal_api
+        subnet: internal_api_subnet
+      - network: tenant
+        subnet: tenant_subnet
+      - network: storage
+        subnet: storage_subnet
   CephStorage:
     scale: 3
+    networks:
+      - network: ctlplane
+        vif: true
+      - network: storage
+        subnet: storage_subnet
+      - network: storage_mgmt
+        subnet: storage_mgmt_subnet
