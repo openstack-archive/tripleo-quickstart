@@ -19,8 +19,8 @@ control_vcpu: 6
 control_memory: 16384
 images:
   - name: centos
-    url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1802.qcow2
+    url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.3.2011-20201204.2.x86_64.qcow2
     type: qcow2
-    md5sum: "b3ff9077d80b5f17bcbb7356f7982fd4 *CentOS-7-x86_64-GenericCloud-1802.qcow2"
+    md5sum: "bf653cc2b5becb29c6cf7c6f7ecaf70f  CentOS-8-GenericCloud-8.3.2011-20201204.2.x86_64.qcow2"
 libvirt_wait_retries: 30
 libvirt_wait_delay: 20
