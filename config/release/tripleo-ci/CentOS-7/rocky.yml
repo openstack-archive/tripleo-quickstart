@@ -26,6 +26,13 @@ repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo yum clean all;
   sudo yum-config-manager --disable "*"
+  # In https://review.opendev.org/c/765834 a release specific gating-repo is created.
+  # The release specifc gating repo is copied to gating.repo for consistency across ci
+  # The original file is backed up for logging purposes. Upgrade jobs will run with
+  # two releases.
+  sudo cp -f /etc/yum.repos.d/gating-repo-{{ release }}.repo /etc/yum.repos.d/gating.repo || true;
+  sudo sed -i -e "s/gating-repo-{{ release }}/gating-repo/" /etc/yum.repos.d/gating.repo || true;
+  sudo mv /etc/yum.repos.d/gating-repo-{{ release }}.repo /etc/yum.repos.d/gating-repo-{{ release }}.repo_previous || true;
   sudo yum-config-manager --enable gating-repo || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
