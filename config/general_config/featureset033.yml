@@ -95,16 +95,7 @@ overcloud_roles:
       - Tenant
 
 # Tempest configuration, keep always at the end of the file
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 tempest_config: false
 test_ping: false
 use_os_tempest: false

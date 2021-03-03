@@ -34,14 +34,6 @@ tempest_whitelist_new:
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern.test_volume_boot_pattern'
   - 'telemetry_tempest_plugin.scenario.test_telemetry_integration.TestTelemetryIntegration'
 
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-
 # Use the traditional ping test in newton and ocata
 # Run tempest in pike+
 
@@ -50,13 +42,6 @@ test_ping: >-
   true
   {%- else -%}
   false
-  {%- endif -%}
-
-run_tempest: >-
-  {% if release in ['newton', 'ocata'] -%}
-  false
-  {%- else -%}
-  true
   {%- endif -%}
 
 test_white_regex: ''

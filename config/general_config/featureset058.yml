@@ -14,8 +14,6 @@ standalone_role: Standalone.yaml
 standalone_update: true
 # validation
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 test_ping: false
 test_regex: ''
 # NOTE(aschultz): containers assume RC at the moment

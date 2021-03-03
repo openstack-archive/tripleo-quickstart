@@ -28,7 +28,6 @@ ssl_overcloud: false
 # If `test_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
-run_tempest: false
 enable_pacemaker: false
 composable_scenario: multinode_major_upgrade.yaml
 upgrade_composable_scenario: multinode_major_upgrade.yaml

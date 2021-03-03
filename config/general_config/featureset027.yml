@@ -51,7 +51,6 @@ artcl_create_docs_payload:
     - overcloud-prep-images
     - overcloud-prep-network
     - tempest-setup
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
   included_static_docs:
     - env-setup-virt
@@ -64,19 +63,10 @@ artcl_create_docs_payload:
     - overcloud-prep-images
     - overcloud-prep-network
     - tempest-setup
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 # Tempest configuration, keep always at the end of the file
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 test_ping: false
 # os_tempest configuration
-run_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
 
 use_os_tempest: >-
   {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
@@ -93,8 +83,6 @@ tempest_service_available_neutron: false
 tempest_test_whitelist: "{{ tempest_whitelist }}"
 tempest_test_blacklist: "{{ test_black_regex }}"
 test_regex: ''
-# Enable tempest container
-undercloud_enable_tempest: true
 
 # Run an undercloud without glance or nova
 undercloud_enable_nova: >-
@@ -102,14 +90,6 @@ undercloud_enable_nova: >-
   true
   {%- else -%}
   false
-  {%- endif -%}
-
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
   {%- endif -%}
 
 # Enable mistral tempest plugin

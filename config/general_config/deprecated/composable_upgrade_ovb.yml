@@ -18,7 +18,6 @@ undercloud_generate_service_certificate: true
 # This enables the deployment of the overcloud with SSL.
 ssl_overcloud: false
 
-run_tempest: false
 test_ping: false
 
 # overcloud network config

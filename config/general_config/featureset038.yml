@@ -19,12 +19,6 @@ undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
 ctlplane_masquerade: >-
   {% if release not in ['newton','ocata','pike','queens'] -%}
   true
@@ -73,8 +67,6 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-upgrade
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
     - overcloud-validate
   included_static_docs:
     - env-setup-virt
@@ -90,8 +82,6 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-upgrade
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 deployed_server: >-
   {% if release in ['newton','ocata','pike','queens'] -%}
@@ -112,8 +102,6 @@ config_download_args: >-
   --verbose
   {%- endif -%}
 
-# Tempest configuration, keep always at the end of the file If `run_tempest` is
-# `true`, run tempests tests, otherwise do not run them. We also need to
 # selectively re-enable the globally blacklist octavia tempest plugin.
 skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
 skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
@@ -123,14 +111,6 @@ test_black_regex: "{{ tempest_black }}"
 
 test_ping: false
 test_white_regex: ''
-
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
 
 tempest_whitelist:
   - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer.LoadBalancerScenarioTest'

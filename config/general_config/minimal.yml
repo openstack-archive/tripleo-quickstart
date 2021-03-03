@@ -141,29 +141,7 @@ test_ping: >-
   false
   {%- endif -%}
 
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
 # Settings for os_tempest
-run_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
 use_os_tempest: >-
   {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
   true

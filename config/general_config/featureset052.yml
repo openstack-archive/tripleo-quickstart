@@ -21,8 +21,6 @@ standalone_custom_env_files:
 
 # validation
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 test_ping: false
 # Running only smoke tests and a few scenarios
 test_white_regex: '\[.*\bsmoke\b.*\]'
@@ -38,13 +36,6 @@ tempest_whitelist:
   - 'tempest.scenario.test_volume_boot_pattern.TestVolumeBootPattern'
 
 # Settings for os_tempest
-run_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
 use_os_tempest: >-
   {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
   true

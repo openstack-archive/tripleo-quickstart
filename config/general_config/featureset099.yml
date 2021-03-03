@@ -24,7 +24,6 @@ standalone_custom_env_files:
 # validation
 standalone_ansible_lint: true
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
 # run them.
 test_ping: false
 # Running only smoke tests and a few scenarios

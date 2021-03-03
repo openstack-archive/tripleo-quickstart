@@ -70,15 +70,7 @@ test_ping: >-
   false
   {%- endif -%}
 
-run_tempest: >-
-  {% if release in ['newton', 'ocata'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
 test_white_regex: ''
-tempest_format: ''
 
 # Run RefStack tests
 tempest_run_refstack: true
