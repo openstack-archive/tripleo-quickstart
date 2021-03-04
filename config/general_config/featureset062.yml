@@ -29,23 +29,13 @@ standalone_container_cli: >-
   {%- endif -%}
 # We need to selectively re-enable the globally blacklisted octavia tempest
 # plugin.
-skip_test_file: "{{ playbook_dir | dirname }}/vars/tempest_skip_{{ release | default('master') }}.yml"
-skip_list_tests: "{{ lookup('file', skip_test_file) | from_yaml }}"
-skip_file_src: ''
-tempest_black: "{{ skip_list_tests.known_failures | json_query('[?test != `octavia_tempest_plugin`].test') }}"
-test_black_regex: "{{ tempest_black }}"
 tempest_private_net_seg_id: ''
 
 test_ping: false
 
 # os_tempest config
 
-use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+use_os_tempest: true
 
 tempest_test_whitelist:
   - 'octavia_tempest_plugin.tests.scenario'
