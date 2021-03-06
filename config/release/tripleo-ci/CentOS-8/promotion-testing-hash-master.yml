@@ -124,27 +124,27 @@ repos:
   - type: generic
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/BaseOS/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/BaseOS/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/AppStream/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/AppStream/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-powertools
     filename: quickstart-centos-powertools.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/PowerTools/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/PowerTools/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-highavailability
     filename: quickstart-centos-highavailability.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/HighAvailability/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/HighAvailability/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-extras
     filename: quickstart-centos-extras.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/extras/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/extras/x86_64/os/
 
     # TODO: This is temporary and ideally we should use ceph octopus repository
     # when the release is W+. Octopus repos doesn't have ceph-ansible. Revisit
@@ -199,11 +199,11 @@ undercloud_rpm_dependencies: >-
 # Setting base_image_url and base_image_path to overwrite DIB_LOCAL_IMAGE in
 # the diskimage-builder
 ## was https://images.rdoproject.org/base/centos7/CentOS-7-x86_64-GenericCloud-1901.qcow2 - 8 doesn't exit yet
-base_image_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2
-base_image_path: "{{ ansible_user_dir }}/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
+base_image_url: https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20201217.0.x86_64.qcow2
+base_image_path: "{{ ansible_user_dir }}/CentOS-Stream-GenericCloud-8-20201217.0.x86_64.qcow2"
 
 # baseos settings
-baseos_undercloud_image_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2
+baseos_undercloud_image_url: https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20201217.0.x86_64.qcow2
 baseos_image: centos
 baseos_image_type: qcow2
-baseos_md5sum: "d89eb49f2c264d29225cecf2b6c83322  CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
+baseos_md5sum: "70d5c374156f2ab92c058b6a6150f55e  CentOS-Stream-GenericCloud-8-20201217.0.x86_64.qcow2"
