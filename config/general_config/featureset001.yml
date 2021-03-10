@@ -62,6 +62,7 @@ network_isolation_args: >-
   {% if not release in ['newton','ocata','pike','queens','stein','train','ussuri','victoria'] -%}
   --networks-file {{ overcloud_templates_path }}/ci/network_data.yaml
   -e {{ working_dir }}/overcloud-networks-deployed.yaml
+  -e {{ working_dir }}/overcloud-vips-deployed.yaml
   {% endif %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
 
