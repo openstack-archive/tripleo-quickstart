@@ -43,7 +43,6 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
     - tempest-setup
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -58,17 +57,8 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
     - tempest-setup
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 # Tempest configuration, keep always at the end of the file
-# Tempest
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
 
 test_regex: '.*'
 test_ping: false

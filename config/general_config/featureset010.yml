@@ -71,17 +71,9 @@ config_download_args: >-
   {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 test_ping: false
 
 # Settings for os_tempest
-run_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
 
 use_os_tempest: >-
   {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
@@ -94,20 +86,6 @@ tempest_test_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
 
 test_white_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
 
 # https://launchpad.net/bugs/1844446
 undercloud_enable_validations: false

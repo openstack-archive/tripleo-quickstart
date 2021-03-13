@@ -12,8 +12,6 @@ extra_args: ''
 test_ping: true
 enable_pacemaker: true
 
-run_tempest: false
-
 artcl_gen_docs: true
 artcl_create_docs_payload:
   included_deployment_scripts:

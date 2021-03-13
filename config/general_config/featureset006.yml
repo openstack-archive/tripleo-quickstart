@@ -39,20 +39,6 @@ test_ping: >-
   false
   {%- endif -%}
 
-run_tempest: >-
-  {% if release in ['newton', 'ocata'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
 
 test_white_regex: ''
 tempest_whitelist_old:

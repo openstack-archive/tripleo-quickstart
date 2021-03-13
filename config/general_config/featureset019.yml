@@ -43,8 +43,6 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-upgrade
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
     - overcloud-validate
   included_static_docs:
     - env-setup-virt
@@ -60,8 +58,6 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-upgrade
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 composable_roles: true
 overcloud_roles:
   - name: Controller
@@ -98,12 +94,6 @@ config_download_args: >-
 # Tempest configuration, keep always at the end of the file
 # Use the traditional ping test in newton and ocata
 # Run tempest in pike+
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
 
 test_ping: >-
   {% if release in ['newton', 'ocata'] -%}
@@ -112,22 +102,7 @@ test_ping: >-
   false
   {%- endif -%}
 
-run_tempest: >-
-  {% if release in ['newton', 'ocata'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
 test_white_regex: ''
-
-# Run tempest in containers only when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
 
 tempest_whitelist_old:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'

@@ -108,9 +108,3 @@ undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 # Tempest configuration, keep always at the end of the file
 test_ping: false
 # Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}

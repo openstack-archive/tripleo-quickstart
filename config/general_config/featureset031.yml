@@ -56,24 +56,9 @@ undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
-undercloud_enable_tempest: >-
-  {% if release not in ['ocata', 'pike', 'queens', 'rocky'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file
-# Run tempest in containers when at least undercloud is containerized
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 test_ping: false
 test_white_regex: ''
 tempest_whitelist:

@@ -68,9 +68,6 @@ overcloud_roles:
 test_ping: >-
   false
 
-run_tempest: >-
-  true
-
 test_regex: ''
 tempest_whitelist:
   - 'ironic_tempest_plugin.tests.scenario.test_baremetal_multitenancy.BaremetalMultitenancy.test_baremetal_multitenancy'

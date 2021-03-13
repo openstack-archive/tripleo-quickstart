@@ -96,8 +96,6 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -111,8 +109,6 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - "{% if run_tempest|bool -%}tempest-setup{%- endif -%}"
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 deploy_steps_ansible_workflow: >-
   {% if release not in ['newton','ocata','pike'] -%}
@@ -138,13 +134,6 @@ test_ping: >-
   {%- endif -%}
 
 # Settings for os_tempest
-run_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
 use_os_tempest: >-
   {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
   true
@@ -206,19 +195,6 @@ tempest_test_whitelist: >-
   {{ tempest_periodic_whitelist }}
   {%- else -%}
   {{ tempest_check_whitelist }}
-  {%- endif -%}
-
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
   {%- endif -%}
 
 tempest_run_concurrency: 4

@@ -36,8 +36,6 @@ config_download_args: >-
   --disable-validations
   --verbose
 
-# If `run_tempest` is `true`, run tempests tests, otherwise do not
-# run them.
 test_ping: false
 use_os_tempest: false
 composable_roles: true

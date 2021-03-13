@@ -117,28 +117,6 @@ test_ping: >-
   false
   {%- endif -%}
 
-
-run_tempest: >-
-  {% if release in ['newton', 'ocata', 'pike'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-
 test_white_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'

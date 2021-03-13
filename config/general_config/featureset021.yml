@@ -89,7 +89,6 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
     - tempest-setup
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -104,7 +103,6 @@ artcl_create_docs_payload:
     - overcloud-deploy-post
     - overcloud-validate
     - tempest-setup
-    - "{% if run_tempest|bool and tempest_format|default('packages') == 'containers' -%}tempest_container{%- endif -%}"
 
 deploy_steps_ansible_workflow: >-
   {% if release not in ['newton','ocata','pike'] -%}
@@ -121,19 +119,6 @@ config_download_args: >-
 
 # Tempest configuration, keep always at the end of the file
 # Tempest
-# Run containerized tempest from master and ongoing
-tempest_format: >-
-  {% if containerized_undercloud|bool -%}
-  container
-  {%- else -%}
-  packages
-  {%- endif -%}
-undercloud_enable_tempest: >-
-  {% if release not in ['newton', 'ocata', 'pike', 'queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
 
 # Featureset 021 is a special case where we do not run full tempest
 # but just the tests on skiplist
@@ -177,13 +162,6 @@ tempest_workers: 3
 
 # Settings specific to os_tempest
 # Settings for os_tempest
-run_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-
 use_os_tempest: >-
   {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
   true

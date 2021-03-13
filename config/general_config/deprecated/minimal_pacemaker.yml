@@ -29,7 +29,6 @@ enable_pacemaker: true
 
 test_ping: false
 tempest_config: true
-run_tempest: true
 tempest_workers: 4
 test_white_regex: smoke|test_minimum_basic|test_network_basic_ops|test_snapshot_pattern|test_volume_boot_pattern
 
