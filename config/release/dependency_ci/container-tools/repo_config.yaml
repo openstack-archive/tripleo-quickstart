@@ -7,7 +7,7 @@
 dependency_modules:
   - module_name: container-tools
     control_version: 2.0
-    test_version: rhel8
+    test_version: 3.0
 
 dep_repo_cmd_after: |
   sudo dnf repolist;
