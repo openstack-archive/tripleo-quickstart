@@ -1,10 +1,11 @@
-release: master
+release: wallaby
 distro_ver: centos8
 dlrn_hash_tag: current-tripleo-rdo
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
 overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
 ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
+validate_on: rdo
 
 docker_registry_host: >-
   {% if build_container_images|default(false)|bool -%}
@@ -41,27 +42,27 @@ repos:
   - type: generic
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
-    baseurl: http://mirror.centos.org/centos/8/BaseOS/x86_64/os/
+    baseurl: http://mirror.centos.org/centos/8-stream/BaseOS/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
-    baseurl: http://mirror.centos.org/centos/8/AppStream/x86_64/os/
+    baseurl: http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-powertools
     filename: quickstart-centos-powertools.repo
-    baseurl: http://mirror.centos.org/centos/8/PowerTools/x86_64/os/
+    baseurl: http://mirror.centos.org/centos/8-stream/PowerTools/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-highavailability
     filename: quickstart-centos-highavailability.repo
-    baseurl: http://mirror.centos.org/centos/8/HighAvailability/x86_64/os/
+    baseurl: http://mirror.centos.org/centos/8-stream/HighAvailability/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-extras
     filename: quickstart-centos-extras.repo
-    baseurl: http://mirror.centos.org/centos/8/extras/x86_64/os/
+    baseurl: http://mirror.centos.org/centos/8-stream/extras/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-ceph-octopus
@@ -86,7 +87,7 @@ undercloud_rpm_dependencies: >-
   python3-tripleoclient
   ceph-ansible
 # baseos settings
-baseos_undercloud_image_url: https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2
+baseos_undercloud_image_url: https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20201217.0.x86_64.qcow2
 baseos_image: centos
 baseos_image_type: qcow2
-baseos_md5sum: "d89eb49f2c264d29225cecf2b6c83322  CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
+baseos_md5sum: "70d5c374156f2ab92c058b6a6150f55e  CentOS-Stream-GenericCloud-8-20201217.0.x86_64.qcow2"
