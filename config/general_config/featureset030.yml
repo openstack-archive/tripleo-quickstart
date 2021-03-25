@@ -38,7 +38,7 @@ telemetry_args: >-
 extra_args: >-
   {% if release == 'pike' -%}
   -e {{ overcloud_templates_path }}/environments/services-docker/neutron-ovn.yaml
-  {%- elif release in ['queens','rocky'] -%}
+  {%- elif release in ['queens'] -%}
   -e {{ overcloud_templates_path }}/environments/services/neutron-ovn-ha.yaml
   {%- else -%}
   -e {{ overcloud_templates_path }}/environments/services/neutron-ovs.yaml
@@ -93,7 +93,7 @@ overcloud_container_cli: >-
 # Settings for os_tempest
 
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  {% if release not in ['pike', 'queens', 'stein'] -%}
   true
   {%- else -%}
   false

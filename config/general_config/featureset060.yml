@@ -49,9 +49,4 @@ tempest_test_whitelist:
   - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplatesNegative'
   - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplatesOldAPI'
 
-standalone_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+standalone_container_cli: podman

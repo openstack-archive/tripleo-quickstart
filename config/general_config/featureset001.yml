@@ -59,7 +59,7 @@ network_isolation: true
 network_isolation_type: "multiple-nics"
 network_isolation_args: >-
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
-  {% if not release in ['newton','ocata','pike','queens','rocky','stein','train','ussuri','victoria'] -%}
+  {% if not release in ['newton','ocata','pike','queens','stein','train','ussuri','victoria'] -%}
   --networks-file {{ overcloud_templates_path }}/ci/network_data.yaml
   -e {{ working_dir }}/overcloud-networks-deployed.yaml
   {% endif %}
@@ -77,7 +77,7 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
-   {% if release not in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+   {% if release not in ['newton','ocata','pike','queens','stein','train'] -%}
    --disable-validations
    {%- endif -%}
 
@@ -135,7 +135,7 @@ test_ping: >-
 
 # Settings for os_tempest
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  {% if release not in ['pike', 'queens', 'stein'] -%}
   true
   {%- else -%}
   false
@@ -203,13 +203,13 @@ tempest_extra_config: {'compute_feature_enabled.config_drive': 'True'}
 
 # Run an undercloud without glance or nova
 undercloud_enable_nova: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein', 'train'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein', 'train'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
 baremetal_provision: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein','train'] -%}
   false
   {%- else -%}
   true
@@ -217,7 +217,7 @@ baremetal_provision: >-
 
 # Provision composable networks prior to creating the heat stack
 network_provision: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein','train','ussuri','victoria'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein','train','ussuri','victoria'] -%}
   false
   {%- else -%}
   true

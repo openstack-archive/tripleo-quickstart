@@ -283,7 +283,7 @@ RELEASE=$2
 # fact.
 if [ -z "$RELEASE" ]; then
 
-    RELEASE=rocky
+    RELEASE=train
 
 fi
 

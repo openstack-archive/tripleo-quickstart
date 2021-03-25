@@ -163,7 +163,7 @@ tempest_workers: 3
 # Settings specific to os_tempest
 # Settings for os_tempest
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  {% if release not in ['pike', 'queens', 'stein'] -%}
   true
   {%- else -%}
   false

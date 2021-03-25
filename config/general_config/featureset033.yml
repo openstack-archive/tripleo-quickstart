@@ -40,7 +40,7 @@ container_args: >-
   {% if release in ['pike','queens'] -%}
   -e {{ overcloud_templates_path }}/environments/docker.yaml
   {%- endif -%}
-  {% if release in ['ocata', 'pike', 'queens', 'rocky'] %}
+  {% if release in ['ocata', 'pike', 'queens'] %}
   -e {{ working_dir }}/containers-default-parameters.yaml
   {% else %}
   -e {{ working_dir }}/containers-prepare-parameter.yaml

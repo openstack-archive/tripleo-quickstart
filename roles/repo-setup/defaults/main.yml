@@ -9,7 +9,6 @@ stable:
   - pike
   - ocata
   - queens
-  - rocky
   - stein
   - train
 repo_cmd_before: |

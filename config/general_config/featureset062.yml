@@ -21,12 +21,7 @@ standalone_role: Standalone.yaml
 standalone_custom_env_files:
   - /usr/share/openstack-tripleo-heat-templates/environments/low-memory-usage.yaml
 
-standalone_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+standalone_container_cli: podman
 # We need to selectively re-enable the globally blacklisted octavia tempest
 # plugin.
 tempest_private_net_seg_id: ''

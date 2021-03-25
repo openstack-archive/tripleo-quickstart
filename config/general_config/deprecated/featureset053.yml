@@ -73,7 +73,7 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
-   {% if release not in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+   {% if release not in ['newton','ocata','pike','queens','stein','train'] -%}
    --disable-validations
    {%- endif -%}
 
@@ -143,7 +143,7 @@ rsyslog_forwarding: false
 browbeat_config_file: browbeat-minimal-ci.yaml.j2
 
 baremetal_provision: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein','train'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein','train'] -%}
   false
   {%- else -%}
   true
