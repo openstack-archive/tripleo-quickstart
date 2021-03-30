@@ -1,10 +1,11 @@
-release: master
+release: wallaby
 distro_ver: centos8
 dlrn_hash_tag: current-tripleo-rdo
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
 overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
 ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
+validate_on: rdo
 
 docker_registry_host: >-
   {% if build_container_images|default(false)|bool -%}
