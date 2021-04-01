@@ -12,8 +12,8 @@ exec &> >(tee -i -a _quickstart.log )
 # or even ansible modules
 LANG=C
 
-DEFAULT_OPT_TAGS="untagged,provision,environment,libvirt,undercloud-scripts,undercloud-inventory,overcloud-scripts,undercloud-setup,undercloud-install,undercloud-post-install,tripleoui-validate,notest"
-DEFAULT_OPT_OVERCLOUD_PREP_TAGS="overcloud-prep-config,overcloud-prep-images,overcloud-prep-flavors,overcloud-prep-containers,overcloud-prep-network,overcloud-scripts,overcloud-ssl"
+DEFAULT_OPT_TAGS="untagged,provision,environment,libvirt,undercloud-scripts,undercloud-inventory,overcloud-scripts,undercloud-setup,undercloud-install,undercloud-post-install,tripleoui-validate,notest,nested_virt"
+DEFAULT_OPT_OVERCLOUD_PREP_TAGS="overcloud-prep-config,overcloud-prep-images,overcloud-prep-flavors,overcloud-prep-containers,overcloud-prep-network,overcloud-scripts,overcloud-ssl,nested_virt"
 ZUUL_CLONER=/usr/zuul-env/bin/zuul-cloner
 
 : ${OPT_BOOTSTRAP:=0}
