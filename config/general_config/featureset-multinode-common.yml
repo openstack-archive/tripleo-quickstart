@@ -1,12 +1,12 @@
 # Run an undercloud without glance or nova
 undercloud_enable_nova: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein', 'train'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein', 'train'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
 step_glance_upload: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein', 'train'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein', 'train'] -%}
   true
   {%- else -%}
   false

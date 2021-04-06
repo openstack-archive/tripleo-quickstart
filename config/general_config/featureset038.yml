@@ -122,12 +122,7 @@ tempest_extra_config:
   load_balancer.region: 'regionOne'
   load_balancer.enabled_provider_drivers: '"amphora:The Octavia Amphora driver.,octavia:Deprecated alias of the Octavia Amphora driver.,ovn:Octavia OVN driver."'
 
-undercloud_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+undercloud_container_cli: podman
 
 # the variable is only used in overcloud-deploy role
 # for stein and beyond, so it's safe to set it to podman,

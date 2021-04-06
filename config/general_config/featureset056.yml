@@ -12,12 +12,7 @@ vxlan_networking: false
 standalone_role: Standalone.yaml
 
 # docker / podman configuration
-standalone_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+standalone_container_cli: podman
 
 # NOTE(mwhahaha): we only care about ha -> ha upgrades. We switched to
 # pacemaker enabled in Ussuri, so the upgrade from Train -> Ussuri is non-HA
@@ -32,7 +27,7 @@ standalone_upgrade: true
 test_ping: false
 
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  {% if release not in ['pike', 'queens', 'stein'] -%}
   true
   {%- else -%}
   false

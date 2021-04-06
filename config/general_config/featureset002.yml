@@ -53,7 +53,7 @@ undercloud_clean_nodes: >-
   {%- endif -%}
 
 baremetal_provision: >-
-  {% if release in ['newton','ocata','pike','queens','rocky','stein','train', 'ussuri'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
   false
   {%- else -%}
   true
@@ -85,7 +85,7 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
-   {% if release not in ['newton','ocata','pike','queens','rocky','stein','train', 'ussuri'] -%}
+   {% if release not in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
    --disable-validations
    {%- endif -%}
 # keep the doc gen settings at the bottom of the config file.
@@ -145,7 +145,7 @@ test_ping: >-
 # Settings for os_tempest
 
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  {% if release not in ['pike', 'queens', 'stein'] -%}
   true
   {%- else -%}
   false

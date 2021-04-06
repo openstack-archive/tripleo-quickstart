@@ -8,22 +8,17 @@ containerized_undercloud: false
 # to specify a different install command for >= Stein since we dropped the
 # python-tripleoclient integration
 undercloud_install_cmd: >-
-  {% if containerized_undercloud|bool or release in ['ocata', 'pike', 'queens', 'rocky'] -%}
+  {% if containerized_undercloud|bool or release in ['ocata', 'pike', 'queens'] -%}
   openstack undercloud install
   {%- else -%}
   instack-undercloud
   {%- endif -%}
 
 undercloud_rpm_dependencies: >-
-  {% if containerized_undercloud|bool or release in ['ocata', 'pike', 'queens', 'rocky'] -%}
+  {% if containerized_undercloud|bool or release in ['ocata', 'pike', 'queens'] -%}
   python-tripleoclient
   {%- else -%}
   instack-undercloud python-tripleoclient
-  {%- endif -%}
-
-undercloud_install_cli_options: >-
-  {% if release in ['rocky'] -%}
-  --use-heat=False
   {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file

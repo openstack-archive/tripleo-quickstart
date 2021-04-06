@@ -37,7 +37,7 @@ tempest_whitelist:
 
 # Settings for os_tempest
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  {% if release not in ['pike', 'queens', 'stein'] -%}
   true
   {%- else -%}
   false
@@ -54,10 +54,4 @@ tempest_test_whitelist: >-
   {%- endif -%}
 
 tempest_run_concurrency: 2
-
-standalone_container_cli: >-
-  {% if release in ['rocky'] -%}
-  docker
-  {%- else -%}
-  podman
-  {%- endif -%}
+standalone_container_cli: podman

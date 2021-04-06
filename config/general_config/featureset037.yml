@@ -13,7 +13,7 @@ overcloud_update: true
 # with some work on the image building side to get meaningful
 # from-to combination of images.
 container_registry_file: >-
-  {% if release not in ['queens','rocky','stein'] -%}
+  {% if release not in ['queens','stein'] -%}
   ''
   {%- else -%}
   containers-default-parameters.yaml

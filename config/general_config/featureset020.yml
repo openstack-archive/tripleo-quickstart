@@ -22,7 +22,7 @@ containerized_overcloud: >-
   true
   {%- endif -%}
 undercloud_check_idempotency: >-
-  {% if release not in ['ocata','pike','queens', 'rocky'] -%}
+  {% if release not in ['ocata','pike','queens'] -%}
   false
   {%- else -%}
   true
@@ -90,14 +90,14 @@ extra_args: >-
 
 # Run an undercloud without glance or nova
 undercloud_enable_nova: >-
-  {% if release in ['queens','rocky','stein', 'train'] -%}
+  {% if release in ['queens','stein', 'train'] -%}
   true
   {%- else -%}
   false
   {%- endif -%}
 
 baremetal_provision: >-
-  {% if release in ['queens','rocky','stein','train'] -%}
+  {% if release in ['queens','stein','train'] -%}
   false
   {%- else -%}
   true
@@ -166,7 +166,7 @@ tempest_workers: 3
 # Settings for os_tempest
 
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'rocky', 'stein'] -%}
+  {% if release not in ['pike', 'queens', 'stein'] -%}
   true
   {%- else -%}
   false
