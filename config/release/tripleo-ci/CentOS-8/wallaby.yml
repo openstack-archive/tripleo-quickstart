@@ -163,9 +163,9 @@ repos:
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/extras/x86_64/os/
 
   - type: generic
-    reponame: quickstart-centos-ceph-octopus
-    filename: quickstart-centos-ceph-octopus.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/storage/x86_64/ceph-octopus/
+    reponame: quickstart-centos-ceph-pacific
+    filename: quickstart-centos-ceph-pacific.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/storage/x86_64/ceph-pacific
 
   - type: generic
     reponame: quickstart-centos-opstools
@@ -190,7 +190,7 @@ repo_cmd_after: |
   sudo dnf repolist;
   sudo dnf module list;
   sudo dnf module disable container-tools:rhel8 -y;
-  sudo dnf module enable container-tools:2.0 -y;
+  sudo dnf module enable container-tools:3.0 -y;
   sudo dnf clean metadata
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y
