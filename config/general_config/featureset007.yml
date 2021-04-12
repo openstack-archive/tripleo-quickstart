@@ -1,13 +1,5 @@
 undercloud_generate_service_certificate: false
 
-# This enables the run of several tripleo-validations tests through Mistral
-run_tripleo_validations: true
-# This enables the run of tripleo-validations negative tests through shell
-# scripts
-run_tripleo_validations_negative_tests: true
-# Exit tripleo-quickstart on validations failure
-exit_on_validations_failure: false
-
 # pacemaker settings are configured in the scenario template
 # do not set `enable_pacemaker` in the featureset
 

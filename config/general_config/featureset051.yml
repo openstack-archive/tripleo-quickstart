@@ -61,9 +61,6 @@ overcloud_ssh_user: >-
 # Mandatory for deployed_servers
 tripleo_upgrade_validations_non_fatal: true
 
-run_tripleo_validations: false
-run_tripleo_validations_negative_tests: false
-exit_on_validations_failure: false
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
 artcl_create_docs_payload:
