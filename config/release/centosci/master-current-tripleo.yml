@@ -57,9 +57,9 @@ repos:
     baseurl: http://mirror.centos.org/centos/8/extras/x86_64/os/
 
   - type: generic
-    reponame: quickstart-centos-ceph-octopus
-    filename: quickstart-centos-ceph-octopus.repo
-    baseurl: http://mirror.centos.org/centos/8/storage/x86_64/ceph-octopus/
+    reponame: quickstart-centos-ceph-pacific
+    filename: quickstart-centos-ceph-pacific.repo
+    baseurl: http://mirror.centos.org/centos/8/storage/x86_64/ceph-pacific
 
   - type: generic
     reponame: quickstart-centos-opstools
