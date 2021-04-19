@@ -32,8 +32,46 @@ test_ping: false
 
 use_os_tempest: true
 
-tempest_test_whitelist:
-  - 'octavia_tempest_plugin.tests.scenario'
+# Tests for train release
+# octavia-tempest-plugin is pinned to a particular hash, not all
+# tests can be runned there, so we are trimming it
+tempest_test_train:
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_healthmonitor'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_l7policy'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_pool'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_listener'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_l7rule'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_member'
+
+# In Integration line, we run only smoke tests
+tempest_test_integration:
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_traffic_ops.TrafficOperationsScenarioTest.test_basic_http_traffic'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_pool'
+
+tempest_test_periodic: >-
+  {% if 'train' in release -%}
+  {{ tempest_test_train }}
+  {%- else -%}
+  {{ tempest_test_integration }}
+  {%- endif -%}
+
+# As the whole test suite take time, so we are trimming the testlist
+tempest_test_check:
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_healthmonitor'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_listener'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_member'
+  - 'octavia_tempest_plugin.tests.scenario.v2.test_load_balancer'
+
+tempest_test_whitelist: >-
+  {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
+  {{ tempest_test_periodic }}
+  {%- elif 'train' not in release -%}
+  {{ tempest_test_check }}
+  {%- else -%}
+  {{ tempest_test_train }}
+  {%- endif -%}
+
 tempest_services:
   - octavia
   - neutron
