@@ -243,14 +243,6 @@ non_root_chown: false
 # This variable is set to true in config/environments/default_libvirt.yml
 enable_port_forward_for_tripleo_ui: false
 
-# This enables the run of several tripleo-validations tests through Mistral
-run_tripleo_validations: false
-# This enables the run of tripleo-validations negative tests through shell
-# scripts
-run_tripleo_validations_negative_tests: false
-# Exit tripleo-quickstart on validations failures
-exit_on_validations_failure: false
-
 # Update undercloud and overcloud images with the repos provided via the
 # release config.
 update_images: false

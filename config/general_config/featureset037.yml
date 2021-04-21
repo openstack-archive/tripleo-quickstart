@@ -38,10 +38,6 @@ containerized_overcloud: true
 undercloud_generate_service_certificate: false
 ssl_overcloud: false
 
-run_tripleo_validations: false
-run_tripleo_validations_negative_tests: false
-exit_on_validations_failure: false
-
 # extra testing disabled for now, may be enabled later depending on
 # job run time
 test_ping: false

@@ -56,7 +56,6 @@ features_map = {
     'ffu_overcloud_upgrade': ['true', 'UPGff',
                               'Fast-forward Overcloud Upgrade'],
     'standalone_role': ['Standalone.yaml', 'Stdln', 'Standalone Deploy'],
-    'run_tripleo_validations': ['true', 'Valid', 'Validations'],
     'test_ping': ['true', 'PingT', 'Ping and ssh tests'],
     'run_tempest': ['true', 'Temps', 'run Tempest'],
     'composable_scenario': ['', 'Scen#', 'Scenario ###'],
