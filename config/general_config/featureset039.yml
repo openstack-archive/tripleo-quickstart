@@ -69,6 +69,9 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
+   {% if release in ['ussuri', 'victoria'] -%}
+   --disable-validations
+   {% endif %}
 
 undercloud_ntp_servers: pool.ntp.org
 # keep the doc gen settings at the bottom of the config file.
@@ -174,8 +177,20 @@ tempest_whitelist:
 
 tempest_test_whitelist: "{{ tempest_whitelist }}"
 
-undercloud_enable_nova: true
-undercloud_enable_swift: true
+# Run an undercloud without glance or nova
+undercloud_enable_nova: >-
+  {% if release in ['queens', 'stein', 'train'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
+baremetal_provision: >-
+  {% if release in ['queens', 'stein', 'train'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
 
 # TLS everywhere related vars. #
 enable_tls_everywhere: true
