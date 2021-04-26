@@ -1,4 +1,4 @@
-release: master
+release: wallaby
 distro_ver: centos8
 dlrn_hash_tag: current-tripleo
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
@@ -56,10 +56,11 @@ repos:
     filename: quickstart-centos-extras.repo
     baseurl: http://mirror.centos.org/centos/8-stream/extras/x86_64/os/
 
+  # centos-release-ceph-nautilus rpm do not exist yet
   - type: generic
-    reponame: quickstart-centos-ceph-pacific
-    filename: quickstart-centos-ceph-pacific.repo
-    baseurl: http://mirror.centos.org/centos/8/storage/x86_64/ceph-pacific
+    reponame: quickstart-centos-ceph-nautilus
+    filename: quickstart-centos-ceph-nautilus.repo
+    baseurl: http://mirror.centos.org/centos/8/storage/x86_64/ceph-nautilus/
 
   - type: generic
     reponame: quickstart-centos-opstools
