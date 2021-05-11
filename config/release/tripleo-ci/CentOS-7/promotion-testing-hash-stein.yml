@@ -130,6 +130,7 @@ repo_cmd_after: |
 undercloud_rpm_dependencies: >-
   python-tripleoclient
   ceph-ansible
+  tripleo-operator-ansible
 
 # Setting base_image_url and base_image_path to overwrite DIB_LOCAL_IMAGE in
 # the diskimage-builder

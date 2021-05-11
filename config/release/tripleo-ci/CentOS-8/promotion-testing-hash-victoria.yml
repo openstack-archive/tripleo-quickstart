@@ -173,6 +173,7 @@ repo_cmd_after: |
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
   ceph-ansible
+  tripleo-operator-ansible
 # Setting base_image_url and base_image_path to overwrite DIB_LOCAL_IMAGE in
 # the diskimage-builder
 ## was https://images.rdoproject.org/base/centos7/CentOS-7-x86_64-GenericCloud-1901.qcow2 - 8 doesn't exit yet
