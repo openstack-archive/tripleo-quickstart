@@ -167,6 +167,8 @@ bootstrap () {
                 popd
         fi
     popd
+
+    install_ansible_collections
 }
 
 activate_venv() {
@@ -529,7 +531,6 @@ activate_venv
 
 export ANSIBLE_CONFIG=$OOOQ_DIR/ansible.cfg
 export ANSIBLE_INVENTORY=$OPT_WORKDIR/hosts
-export ANSIBLE_COLLECTIONS_PATHS="$OPT_WORKDIR/share/ansible/collections:~/.ansible/collections:/usr/share/ansible/collections"
 export ARA_DATABASE="sqlite:///${OPT_WORKDIR}/ara.sqlite"
 
 #set the ansible ssh.config options if not already set.

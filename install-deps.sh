@@ -267,6 +267,19 @@ bootstrap_ansible_via_rpm(){
     fi
 }
 
+install_ansible_collections(){
+    echo "Installing Ansible Collections"
+    if [[ -d ../tripleo-repos ]]; then
+        echo "Installing tripleo.repos from local clone"
+        # Replace with single step install once we have ansible>=2.10
+        ansible-galaxy collection build ../tripleo-repos
+        ansible-galaxy collection install -f ./tripleo-repos-*.tar.gz
+        rm ./tripleo-repos-*.tar.gz
+    else
+        ansible-galaxy collection install -v "tripleo.repos:>=0.0.4"
+    fi
+}
+
 # This enables a user to install rpm dependencies directly
 # from this script.
 
