@@ -88,3 +88,6 @@ ctlplane_masquerade: >-
   {%- else -%}
   false
   {%- endif -%}
+
+ephemeral_heat: "{{ (release not in ['queens', 'stein','train','ussuri','victoria']) | bool }}"
+ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
