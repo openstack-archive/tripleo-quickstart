@@ -189,7 +189,9 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo;
   # Disable delorean repo if a similar component repo exists
   {% if job.component is defined %}
-  dnf config-manager --disable delorean-component-{{ job.component }};
+  if [ -f "/etc/yum.repos.d/{{ job.component }}-component.repo" ]; then
+      dnf config-manager --disable delorean-component-{{ job.component }};
+  fi
   {% endif %}
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   sudo dnf repolist;
