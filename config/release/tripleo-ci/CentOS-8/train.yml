@@ -137,6 +137,8 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/AppStream/x86_64/os/
+    exclude:
+      - edk2-ovmf-20200602gitca407c7246bf-5*
 
   - type: generic
     reponame: quickstart-centos-powertools
