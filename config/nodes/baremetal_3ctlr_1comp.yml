@@ -21,6 +21,10 @@ topology_map:
         subnet: storage_mgmt_subnet
       - network: tenant
         subnet: tenant_subnet
+    network_config:
+      template: templates/multiple_nics/multiple_nics_dvr.j2
+      default_route_network:
+        - external
   Compute:
     scale: 1
     networks:
@@ -32,3 +36,5 @@ topology_map:
         subnet: tenant_subnet
       - network: storage
         subnet: storage_subnet
+    network_config:
+      template: templates/multiple_nics/multiple_nics_dvr.j2
