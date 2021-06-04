@@ -73,10 +73,13 @@ repos:
     filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/BaseOS/x86_64/os/
 
+  # Remove the exclude once https://bugzilla.redhat.com/show_bug.cgi?id=1961562 is fixed.
   - type: generic
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/AppStream/x86_64/os/
+    exclude:
+      - edk2-ovmf-20200602gitca407c7246bf-5*
 
   - type: generic
     reponame: quickstart-centos-powertools
