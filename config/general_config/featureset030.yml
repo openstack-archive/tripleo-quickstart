@@ -85,6 +85,7 @@ test_ping: false
 test_white_regex: ''
 tempest_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+  - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario.test_minimum_basic_scenario'
 overcloud_container_cli: >-
   {%- if ansible_distribution in ["RedHat", "CentOS"] and ansible_distribution_major_version|int >= 8 %}podman
   {%- else %}docker{% endif -%}
