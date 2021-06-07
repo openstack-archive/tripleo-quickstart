@@ -144,7 +144,7 @@ repos:
   - type: generic
     reponame: quickstart-centos-ceph-pacific
     filename: quickstart-centos-ceph-pacific.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/storage/x86_64/ceph-pacific
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/storage/x86_64/ceph-pacific
 
   - type: generic
     reponame: quickstart-centos-opstools
