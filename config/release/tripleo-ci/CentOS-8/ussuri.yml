@@ -200,7 +200,7 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo;
   # Disable delorean repo if a similar component repo exists
   {% if job is defined and job.component is defined %}
-  if [ -f "/etc/yum.repos.d/{{ job.component }}-component.repo" ]; then
+  if [ -f "/etc/yum.repos.d/{{ job.component }}-component.repo" ] && sudo cat /etc/yum.repos.d/{{ job.component }}-component.repo | grep 'enabled=1'; then
       dnf config-manager --disable delorean-component-{{ job.component }};
   fi
   {% endif %}
