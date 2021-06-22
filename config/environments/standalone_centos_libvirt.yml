@@ -2,7 +2,7 @@
 # instead of the default pre-built undercloud qcow2
 
 # baseos undercloud settings
-undercloud_image_url: https://images.rdoproject.org/CentOS-8-x86_64-GenericCloud.qcow2
+undercloud_image_url: https://images.rdoproject.org/CentOS-8-Stream-x86_64-GenericCloud.qcow2
 
 # this must be named undercloud
 images:
