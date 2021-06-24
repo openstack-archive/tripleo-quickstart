@@ -111,7 +111,6 @@ repo_cmd_after: |
 
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
-  ceph-ansible
 # used for container updates
 standalone_container_prep_update_repo: >-
   {{ gating_repo_name }},delorean-current

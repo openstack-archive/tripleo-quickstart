@@ -83,6 +83,5 @@ repo_cmd_after: |
 
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
-  ceph-ansible
 overcloud_selinux_enabled: permissive
 undercloud_selinux_enabled: false
