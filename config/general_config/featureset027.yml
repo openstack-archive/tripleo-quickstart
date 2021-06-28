@@ -75,6 +75,8 @@ use_os_tempest: >-
   false
   {%- endif -%}
 
+ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
+
 tempest_install_method: distro
 tempest_cloud_name: 'undercloud'
 # There is no external network used for so disabling neutron

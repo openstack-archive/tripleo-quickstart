@@ -12,7 +12,13 @@ step_introspect: true
 # TODO(gcerami) tripleo-ci specific content. This has to be implemented in another way
 to_build: true
 # Delete the overcloud after deployment
-step_delete_overcloud: true
+step_delete_overcloud: >-
+  {% if release in ['train','ussuri','victoria'] -%}
+  true
+  {%- else -%}
+  false
+  {%- endif -%}
+
 undercloud_check_idempotency: false
 
 # This enables container deployements after Pike
@@ -116,7 +122,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - overcloud-delete
+    - "{% if release in ['train','ussuri','victoria'] -%}overcloud-delete{%- endif -%}"
   included_static_docs:
     - env-setup-virt
   table_of_contents:
@@ -130,7 +136,7 @@ artcl_create_docs_payload:
     - overcloud-deploy
     - overcloud-deploy-post
     - overcloud-validate
-    - overcloud-delete
+    - "{% if release in ['train','ussuri','victoria'] -%}overcloud-delete{%- endif -%}"
 
 deploy_steps_ansible_workflow: >-
   {% if release not in ['newton','ocata','pike'] -%}
@@ -144,6 +150,9 @@ config_download_args: >-
   --config-download
   --verbose
   {%- endif -%}
+
+ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
+ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 
 # Tempest configuration, keep always at the end of the file
 # Use the traditional ping test in newton, ocata and pike
