@@ -5,9 +5,8 @@ undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 step_introspect: false
 extra_args: >-
-  -e {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-ansible.yaml
-  -e {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-mds.yaml
-  -e {{ overcloud_templates_path }}/environments/ceph-ansible/ceph-rgw.yaml
+  -e {{ overcloud_templates_path }}/environments/cephadm/cephadm.yaml
+  -e {{ overcloud_templates_path }}/environments/cephadm/ceph-mds.yaml
 network_isolation: true
 network_isolation_type: 'single-nic-vlans'
 containerized_overcloud: true
