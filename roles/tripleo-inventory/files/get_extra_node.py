@@ -17,22 +17,9 @@ import sys
 data = json.load(open(sys.argv[1] + '/instackenv.json'))
 
 
-def right_replace(source, target, substitute, times):
-    return substitute.join(source.rsplit(target, times))
-
-
-for node in data['nodes']:
-    if 'extra' in node['name']:
-        node_name = node['name']
-        # NOTE: `nodes` and `network_details` dictionaries
-        # vary node name by swapping the final '-' for a '_'
-        corrected_name = right_replace(
-            node_name, '-', '_', 4).replace(
-                "_extra", "-extra").replace(
-            'baremetal_', 'baremetal-')
-        extra_node_networks = data['network_details'][
-            corrected_name]['ips'].keys()
-        for network in extra_node_networks:
-            if 'private' in network:
-                print(data['network_details'][
-                    corrected_name]['ips'][network][0]['addr'].strip())
+for node_name, node_networks in data['network_details'].items():
+    if 'extra' in node_name:
+        for net_name, ip_data in node_networks['ips'].items():
+            if 'private' in net_name:
+                print(ip_data[0]['addr'].strip())
+                sys.exit(0)
