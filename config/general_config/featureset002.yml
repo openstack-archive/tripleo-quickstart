@@ -89,9 +89,9 @@ network_isolation_args: >-
 
 # This featureset is extremely resource intensive, so we disable telemetry
 # in order to reduce the overall memory footprint
-# This is not required in newton
+# Disabled by default in ussuri
 telemetry_args: >-
-   {% if release != 'newton' %}
+   {% if release in ['queens', 'stein', 'train'] %}
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
 
