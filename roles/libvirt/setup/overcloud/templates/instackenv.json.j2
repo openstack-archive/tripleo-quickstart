@@ -28,9 +28,15 @@
         "pm_addr": "{{ undercloud_local_ip|default(undercloud_network_cidr)|nthhost(1) }}",
         "pm_port": "{{ node.virtualbmc_port }}",
       {% endif %}
-      "mac": [
-        "{{ node_mac_map.get(node.name).get(lvars['pxe_network']) }}"
-      ],
+      {% if release not in ['queens', 'stein', 'train', 'ussuri', 'victoria', 'wallaby'] %}
+        "ports": [
+          {"address": "{{ node_mac_map.get(node.name).get(lvars['pxe_network']) }}"}
+        ],
+      {% else %}
+        "mac": [
+          "{{ node_mac_map.get(node.name).get(lvars['pxe_network']) }}"
+        ],
+      {% endif %}
       "cpu": "{{ flavors[node.flavor].vcpu }}",
       "memory": "{{ flavors[node.flavor].memory }}",
       "disk": "{{ flavors[node.flavor].disk }}",
