@@ -5,7 +5,7 @@
   retries: "{{ libvirt_wait_retries }}"
   delay: "{{ libvirt_wait_delay }}"
 
-- name: Set_fact for undercloud ip
+- name: Set_fact for undercloud ip  # noqa: var-naming
   set_fact:
     "{{ item.name.replace('-', '_') }}_ip": "{{ ip_result.stdout_lines[0] }}"
     cacheable: true

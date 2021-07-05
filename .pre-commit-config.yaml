@@ -26,15 +26,8 @@ repos:
       - id: flake8
       - id: check-yaml
         files: .*\.(yaml|yml)$
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.20.0
-    hooks:
-      - id: yamllint
-        files: \.(yaml|yml)$
-        types: [file, yaml]
-        entry: yamllint --strict -f parsable
-  - repo: https://github.com/ansible/ansible-lint.git
-    rev: 9da220ae3a11c10c10ee43284ad6cad6d8ba52b7
+  - repo: https://github.com/ansible-community/ansible-lint.git
+    rev: v5.1.0a1
     hooks:
       - id: ansible-lint
         always_run: true
@@ -44,8 +37,11 @@ repos:
         # https://github.com/ansible/ansible-lint/issues/611
         verbose: true
         entry: env ANSIBLE_LIBRARY=library ansible-lint --force-color -p -v
+        additional_dependencies:
+          - ansible-core
+          - yamllint
   - repo: https://github.com/openstack-dev/bashate.git
-    rev: 0.6.0
+    rev: 2.0.0
     hooks:
       - id: bashate
         entry: bashate --error . --ignore=E006,E040

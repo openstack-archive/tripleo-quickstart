@@ -3,6 +3,9 @@ parseable: true
 exclude_paths:
   - config/
   - releasenotes/
+  # this file tries to execute a file that is part of tripleo-quickstart-extras
+  # so it will never pass.
+  - playbooks/build-images-and-quickstart.yml
 skip_list:
   # One two excuses for adding skips: bugs in linter and recent linter bumping
   - '204'  # [E204] Lines should be no longer than 120 chars
@@ -12,3 +15,13 @@ skip_list:
   - '208'  # [E208] File permissions unset or incorrect
   - '106'  # [E106] Role name {} does not match ^[a-z][a-z0-9_]+$ pattern
   - '303'  # [E303] Using command rather than module
+mock_roles:
+  - extras-common
+  - image-build
+mock_modules:
+  - authorized_key
+  - modprobe
+  - openvswitch_bridge
+  - virt
+  - virt_net
+  - virt_pool

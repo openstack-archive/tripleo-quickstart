@@ -4,4 +4,6 @@
 - name: noop playbook
   hosts: localhost
   tasks:
-    - debug: msg="noop"
+    - name: display noop
+      debug:
+        msg: noop
