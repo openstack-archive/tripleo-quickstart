@@ -54,7 +54,13 @@ enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
 network_isolation_args: >-
+  {% if not release in ['train','ussuri','victoria'] -%}
+  --networks-file {{ overcloud_templates_path }}/ci/network_data.yaml
+  -e {{ working_dir }}/overcloud-networks-deployed.yaml
+  -e {{ working_dir }}/overcloud-vips-deployed.yaml
+  {% else %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
+  {% endif %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
 
 # This featureset is extremely resource intensive, so we disable telemetry
@@ -118,6 +124,9 @@ config_download_args: >-
   --config-download
   --verbose
   {%- endif -%}
+
+ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
+ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 
 # Tempest configuration, keep always at the end of the file
 # Use the traditional ping test in newton, ocata and pike
@@ -187,6 +196,14 @@ undercloud_enable_nova: >-
 
 baremetal_provision: >-
   {% if release in ['queens', 'stein', 'train'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+# Provision composable networks prior to creating the heat stack
+network_provision: >-
+  {% if release in ['train','ussuri','victoria'] -%}
   false
   {%- else -%}
   true
