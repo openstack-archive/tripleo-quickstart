@@ -33,9 +33,10 @@ overcloud_cloud_name_storage: "overcloud.storage.{{ tripleo_domain }}"
 overcloud_cloud_name_storage_management: "overcloud.storagemgmt.{{ tripleo_domain }}"
 overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
 
-# Define FreeIPA server as DNS server for under/overcloud.
+# custom_nameserver is used to set forwarders for FreeIPA
 custom_nameserver:
-  - "{{ freeipa_internal_ip }}"
+  - 1.1.1.1
+# Define FreeIPA server as DNS server for under/overcloud.
 undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
 overcloud_dns_servers: ["{{ freeipa_internal_ip }}"]
 
