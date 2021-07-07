@@ -29,6 +29,19 @@ fi
 
 {% endif %}
 
+{% if overcloud_as_undercloud|bool and ansible_distribution_major_version is version(8, '<=') %}
+# Create ifcfg file if not exist, as it's removed in overcloud prep
+# https://review.opendev.org/q/I3b8cb5f8c413c109da1228878db9cff4d439273b
+if [ ! -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
+cat >/etc/sysconfig/network-scripts/ifcfg-eth0<<EOF
+DEVICE="eth0"
+BOOTPROTO="dhcp"
+ONBOOT="yes"
+TYPE="Ethernet"
+EOF
+fi
+{% endif %}
+
 useradd {{ undercloud_user }}
 echo "{{ undercloud_user }} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/{{ undercloud_user }}
 chmod 0440 /etc/sudoers.d/{{ undercloud_user }}
