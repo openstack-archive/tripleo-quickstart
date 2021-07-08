@@ -69,7 +69,7 @@ test_ping: false
 # os_tempest configuration
 
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'stein'] -%}
+  {% if release in ['train', 'ussuri', 'victoria', 'wallaby'] -%}
   true
   {%- else -%}
   false
