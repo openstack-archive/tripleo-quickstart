@@ -139,7 +139,7 @@ The pattern and layout for baremetal hardware configuration can be found
 in `this doc <https://images.rdoproject.org/docs/baremetal/environment-settings-structure.html>`_
 
 For additional support with baremetal deployments please visit the #oooq
-channel on freenode irc.
+channel on OFTC irc.
 
 OpenStack Virtual Baremetal Node Configuration
 ----------------------------------------------
