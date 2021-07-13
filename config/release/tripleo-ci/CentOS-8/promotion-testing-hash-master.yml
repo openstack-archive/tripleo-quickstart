@@ -107,6 +107,7 @@ repos:
       - puppet-keystone
       - puppet-mistral
       - puppet-openstacklib
+      - puppet-placement
       - puppet-swift
       - puppet-tripleo
       - puppet-zaqar
