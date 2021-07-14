@@ -163,7 +163,8 @@
   changed_when: true
   failed_when: false
 
-- debug:
+- name: Display message
+  debug:
     msg: "Add basic packages we need to the image"
 
 - environment:

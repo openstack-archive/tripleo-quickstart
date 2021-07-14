@@ -1,6 +1,0 @@
-#Set ansible environmental variables
-export ANSIBLE_HOST_KEY_CHECKING=False
-export ANSIBLE_FORCE_COLOR=1
-export ANSIBLE_INVENTORY=$HOME/.quickstart/hosts
-export SSH_CONFIG=$HOME/.quickstart/ssh.config.local.ansible
-export ANSIBLE_SSH_ARGS="-F ${SSH_CONFIG}"

@@ -1,7 +1,0 @@
-# General requirements
-ansible==2.2.0.0
-netaddr>=0.7.18
-pbr>=1.6
-setuptools>=11.3
-
-# Roles
