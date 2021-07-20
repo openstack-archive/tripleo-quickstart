@@ -28,7 +28,7 @@ docker_openshift_tag: v3.11.0
 promote_source: current-tripleo
 
 # images
-whole_disk_images: false
+whole_disk_images: true
 overcloud_image: >-
   {% if whole_disk_images -%}
   overcloud-hardened-uefi-full
