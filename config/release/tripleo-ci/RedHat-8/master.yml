@@ -1,19 +1,26 @@
 overcloud_as_undercloud: true
 # limits validation on a specific enviroment due to restricted access
 validate_on: rdo
+whole_disk_images: false
+overcloud_image: >-
+  {% if whole_disk_images -%}
+  overcloud-hardened-uefi-full
+  {%- else -%}
+  overcloud-full
+  {%- endif -%}
+overcloud_image_type: >-
+  {% if whole_disk_images -%}
+  qcow2
+  {%- else -%}
+  tar
+  {%- endif -%}
 images:
-  - name: overcloud-full
+  - name: "{{ overcloud_image }}"
     url: "{{ overcloud_image_url }}"
-    type: tar
+    type: "{{ overcloud_image_type }}"
   - name: ipa_images
     url: "{{ ipa_image_url }}"
     type: tar
-inject_images:
-  - "ironic-python-agent.initramfs"
-  - "ironic-python-agent.kernel"
-  - "overcloud-full.qcow2"
-  - "overcloud-full.initrd"
-  - "overcloud-full.vmlinuz"
 release: master
 distro_ver: rhel8
 distro_deps_repo_name: deps
@@ -28,7 +35,7 @@ undercloud_docker_insecure_registries: "{{ docker_registry_host }}"
 docker_prep_prefix: rhel-binary
 docker_ceph_namespace: quay.ceph.io/ceph-ci
 docker_openshift_tag: v3.11.0
-overcloud_image_url: "https://images.rdoproject.org:4433/rcm-guest/images/rhel8/master/rdo_trunk/current-tripleo/overcloud-full.tar"
+overcloud_image_url: "https://images.rdoproject.org:4433/rcm-guest/images/rhel8/master/rdo_trunk/current-tripleo/{{ overcloud_image }}.{{ overcloud_image_type }}"
 ipa_image_url: "https://images.rdoproject.org:4433/rcm-guest/images/rhel8/master/rdo_trunk/current-tripleo/ironic-python-agent.tar"
 repo_cmd_before: |
   sudo rm -rf /etc/yum.repos.d/delorean*;

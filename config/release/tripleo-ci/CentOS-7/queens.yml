@@ -7,12 +7,6 @@ images:
   - name: ipa_images
     url: "{{ ipa_image_url }}"
     type: tar
-inject_images:
-  - "ironic-python-agent.initramfs"
-  - "ironic-python-agent.kernel"
-  - "overcloud-full.qcow2"
-  - "overcloud-full.initrd"
-  - "overcloud-full.vmlinuz"
 release: queens
 dlrn_hash_tag: "{{ job.provider_dlrn_hash_tag_branch[release]|default('current-tripleo') }}"
 dlrn_hash_tag_newest: current

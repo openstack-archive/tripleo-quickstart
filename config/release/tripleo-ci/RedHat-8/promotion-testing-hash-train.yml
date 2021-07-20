@@ -8,12 +8,6 @@ images:
   - name: ipa_images
     url: "{{ ipa_image_url }}"
     type: tar
-inject_images:
-  - "ironic-python-agent.initramfs"
-  - "ironic-python-agent.kernel"
-  - "overcloud-full.qcow2"
-  - "overcloud-full.initrd"
-  - "overcloud-full.vmlinuz"
 release: train
 use_specific_hash: true
 distro_ver: rhel8
