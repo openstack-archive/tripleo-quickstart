@@ -49,11 +49,11 @@
     - include_tasks: inject_gating_repo.yml
       when: compressed_gating_repo is defined and compressed_gating_repo
 
-    # Converts an overcloud-full.qcow2 into a undercloud.qcow2
+    # Converts an {{ overcloud_image }}.qcow2 into a undercloud.qcow2
     - include_tasks: convert_image.yml
       when: overcloud_as_undercloud|bool or baseos_as_undercloud|bool
 
-    # Update images after we have converted the overcloud-full to an
+    # Update images after we have converted the overcloud to an
     # undercloud image when using devmode. This also clones tripleo-ci
     # on the undercloud image.
     - include_tasks: update_image.yml
@@ -271,14 +271,14 @@
         cacheable: true
       when: ssh_user != "root"
 
-    # NOTE(trown) We use the overcloud-full initramfs and kernel as DIB
+    # NOTE(trown) We use the overcloud initramfs and kernel as DIB
     # seems a bit smarter about extracting them than virt-get-kernel and
-    # the partition image is simply a converted overcloud-full
+    # the partition image is simply a converted overcloud
     - name: Extract the kernel and initramfs from the undercloud image
       command: >
         virt-copy-out -a '{{ working_dir }}/undercloud.qcow2'
-        '/home/{{ undercloud_user }}/overcloud-full.vmlinuz'
-        '/home/{{ undercloud_user }}/overcloud-full.initrd'
+        '/home/{{ undercloud_user }}/{{ overcloud_image }}.vmlinuz'
+        '/home/{{ undercloud_user }}/{{ overcloud_image }}.initrd'
         '{{ working_dir }}'
       environment: "{{ libvirt_environment }}"
       when: not undercloud_use_custom_boot_images|bool
@@ -297,20 +297,20 @@
         LIBVIRT_DEFAULT_URI: "{{ libvirt_uri }}"
 
     # NOTE(trown) The undercloudvm template expects this to be
-    # named overcloud-full.vmlinuz. We can update the devmode case
+    # named {{ overcloud_image }}.vmlinuz. We can update the devmode case
     # to not require this step
     - name: rename undercloud kernel
       command: >
         mv '{{ working_dir }}/vmlinuz'
-        '{{ working_dir }}/overcloud-full.vmlinuz'
+        '{{ working_dir }}/{{ overcloud_image }}.vmlinuz'
 
     # NOTE(trown) The undercloudvm template expects this to be
-    # named overcloud-full.initrd. We can update the devmode case
+    # named {{ overcloud_image }}.initrd. We can update the devmode case
     # to not require this step
     - name: rename undercloud initramfs
       command: >
         mv '{{ working_dir }}/initramfs'
-        '{{ working_dir }}/overcloud-full.initrd'
+        '{{ working_dir }}/{{ overcloud_image }}.initrd'
 
     # NOTE(trown): This is a bit of a hack to get the undercloud vm
     # template to use the external kernel and initrd. We should

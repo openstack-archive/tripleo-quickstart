@@ -13,23 +13,23 @@
     # so we can inject the gating repo into it.
     - name: check if overcloud image is already extracted
       stat:
-        path: '{{ working_dir }}/overcloud-full.qcow2'
+        path: '{{ working_dir }}/{{ overcloud_image }}.qcow2'
       register: overcloud_image_stat_for_customize
 
-    - name: Extract overcloud-full image
+    - name: Extract {{ overcloud_image }} image
       command: >
         virt-copy-out -a {{ working_dir }}/undercloud.qcow2
-        /home/{{ undercloud_user }}/overcloud-full.qcow2 {{ working_dir }}
+        /home/{{ undercloud_user }}/{{ overcloud_image }}.qcow2 {{ working_dir }}
       when: not overcloud_image_stat_for_customize.stat.exists
 
-    # only customize overcloud-full image if that is not going to be
+    # only customize {{ overcloud_image }} image if that is not going to be
     # used as undercloud
     - name: Perform extra overcloud customizations
       command: >
-        virt-customize -a {{ working_dir }}/overcloud-full.qcow2
+        virt-customize -a {{ working_dir }}/{{ overcloud_image }}.qcow2
         --run '{{ working_dir }}/overcloud-customize.sh'
 
-    - name: Copy updated overcloud-full image back to undercloud
+    - name: Copy updated {{ overcloud_image }} image back to undercloud
       command: >
         virt-copy-in -a {{ working_dir }}/undercloud.qcow2
-        {{ working_dir }}/overcloud-full.qcow2 /home/{{ undercloud_user }}/
+        {{ working_dir }}/{{ overcloud_image }}.qcow2 /home/{{ undercloud_user }}/

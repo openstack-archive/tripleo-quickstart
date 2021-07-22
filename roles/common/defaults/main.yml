@@ -23,7 +23,7 @@ image_cache_dir: "/var/cache/tripleo-quickstart/images/{{ release }}"
 image_fetch_dir: "{{ working_dir }}"
 
 # This determines whether to download a pre-built undercloud.qcow2 or
-# whether to instead use an overcloud-full.qcow2 and convert it on
+# whether to instead use an overcloud qcow2 and convert it on
 # the fly. The default is to use a pre-built undercloud.qcow2.
 overcloud_as_undercloud: false
 

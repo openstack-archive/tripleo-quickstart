@@ -1,6 +1,6 @@
 # Convert an overcloud-full.qcow2 into an image to boot an undercloud from
 
-The `convert-image` role transforms an overcloud-full image into one which an
+The `convert-image` role transforms an overcloud image into one which an
 undercloud can be booted from in order to save time on package installs, while
 not needing to maintain/host a specific undercloud image.
 
@@ -19,6 +19,6 @@ not needing to maintain/host a specific undercloud image.
   separate from the install list so that it can be allowed to fail without
   failing the conversion)
 * `overcloud_full_root_pwd`: If set the defined password will
-  set for the root user on the overcloud-full image.  The
+  set for the root user on the overcloudl image.  The
   resulting overcloud and undercloud instances will have
   the password set.
