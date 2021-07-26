@@ -22,7 +22,7 @@
     - name: Kill (SIGTERM) all processes owned by non-root user
       command: >
         pkill -u {{ non_root_user }}
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors
       become: true
       when: proc_exist is success
 
@@ -41,7 +41,7 @@
       command: >
         pkill -9 -u {{ non_root_user }}
       when: proc_exist is success
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors
       become: true
 
     # Now that we have taken care of any processes owned by this user

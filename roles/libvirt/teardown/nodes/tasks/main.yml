@@ -94,7 +94,7 @@
       command: >
         virsh destroy "{{ undercloud_node.name }}"
       when: undercloud_check is success
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors
 
     - name: Undefine undercloud vm
       command: >
@@ -107,7 +107,7 @@
           '{{ undercloud_node.name }}'.qcow2 2>&1 > /dev/null
         virsh vol-delete --pool '{{ libvirt_volume_pool }}' \
           '{{ undercloud_node.name }}'.qcow2
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors
 
     - name: Destroy intermediate disk image
       file:
@@ -133,7 +133,7 @@
       command: >
         virsh pool-destroy "{{ libvirt_volume_pool }}"
       when: pool_check is success
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors
 
     - name: Undefine volume pool
       command: >
@@ -160,4 +160,4 @@
       shell: |
          nmcli c down brovc;
          nmcli c down bridge-slave-{{ virthost_provisioning_interface }}
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors

@@ -9,4 +9,4 @@
     manage_dir: true
   with_file:
     - "{{ virt_power_key }}.pub"
-  ignore_errors: true
+  ignore_errors: true  # noqa ignore-errors

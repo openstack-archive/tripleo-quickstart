@@ -33,7 +33,7 @@
         virsh net-destroy "{{ item.item.name }}"
       when: libvirt_check is success and item is success
       with_items: "{{ network_check.results }}"
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors
       become: true
 
     - name: Undefine libvirt networks
@@ -41,7 +41,7 @@
         virsh net-undefine "{{ item.item.name }}"
       when: libvirt_check is success and item is success
       with_items: "{{ network_check.results }}"
-      ignore_errors: true
+      ignore_errors: true  # noqa ignore-errors
       become: true
 
     - name: Remove bridge whitelisting from qemu bridge helper
