@@ -210,6 +210,7 @@ install_virtual_env(){
     if [[ $(python_cmd) == 'python2' ]]; then
         $(python_cmd) -m pip install pip==20.1.1
     else
+        export LANG=en_US.UTF8  # https://bugs.launchpad.net/tripleo/+bug/1938079
         $(python_cmd) -m pip install pip --upgrade
     fi
 
