@@ -17,7 +17,7 @@ docker_registry_host: >-
   {%- elif job.consumer_job | default(false) | bool -%}
   {{ job.registry_ip_address_branch[release] }}:5001
   {%- else -%}
-  {{ job.alt_container_registry|default('docker.io') }}
+  {{ job.alt_container_registry|default('quay.io') }}
   {%- endif -%}
 # note.. namespace tripleoussuri has been
 # squatted on by another owner
