@@ -180,7 +180,7 @@ repo_cmd_after: |
   # note potential name change - FIX ME
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-current.repo
   sudo sed -i -e "s|priority=1|priority=20|g" /etc/yum.repos.d/delorean.repo
-  {% if not enable_opstools_repo|default(false)|bool %}sudo yum-config-manager --save --setopt quickstart-centos-opstools.enabled=0;
+  {% if not enable_opstools_repo|default(false)|bool %}sudo dnf config-manager --save --setopt quickstart-centos-opstools.enabled=0;
   {%endif %}
   # sudo dnf config-manager --disable rdo-qemu-ev;
   sudo rpm -e epel-release || true;
