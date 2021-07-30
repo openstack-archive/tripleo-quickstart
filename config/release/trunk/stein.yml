@@ -48,3 +48,4 @@ repo_cmd_after: |
 undercloud_rpm_dependencies: >-
   python-tripleoclient
   ceph-ansible
+  tripleo-operator-ansible

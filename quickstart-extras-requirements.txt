@@ -7,7 +7,6 @@ git+https://opendev.org/openstack/ansible-role-python_venv_build/#egg=ansible-ro
 git+https://opendev.org/openstack/ansible-config_template/#egg=ansible-config_template
 git+https://opendev.org/openstack/ansible-role-collect-logs/#egg=ansible-role-collect-logs
 git+https://opendev.org/openstack/openstack-tempest-skiplist/#egg=openstack-tempest-skiplist
-git+https://opendev.org/openstack/tripleo-operator-ansible/#egg=tripleo-operator-ansible
 git+https://opendev.org/openstack/ansible-collections-openstack/#egg=ansible-collections-openstack.cloud
 git+https://opendev.org/openstack/tripleo-ci/#egg=tripleo-ci
 # NOTE: tripleo-ansible, tripleo-ipa are required for some jobs
