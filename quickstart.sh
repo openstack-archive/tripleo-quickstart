@@ -397,7 +397,7 @@ done
 if [ -z "$OPT_REQARGS" ]; then
     OPT_REQARGS=("-r"  "$OOOQ_BASE_REQUIREMENTS" "-r" "$OOOQ_EXTRA_REQUIREMENTS")
 else
-    OPT_REQARGS+=("-r"  "$OOOQ_BASE_REQUIREMENTS")
+    OPT_REQARGS+=("-r"  "$OOOQ_BASE_REQUIREMENTS" "-r" "$OOOQ_EXTRA_REQUIREMENTS")
 fi
 
 if [ "$PRINT_LOGO" = 1 ]; then
