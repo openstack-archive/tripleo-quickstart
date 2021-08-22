@@ -101,6 +101,7 @@ repos:
       - puppet-ironic
       - puppet-keystone
       - puppet-openstacklib
+      - puppet-placement
       - puppet-swift
       - puppet-tripleo
       - python*-tripleo*
