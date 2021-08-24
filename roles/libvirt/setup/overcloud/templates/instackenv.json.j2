@@ -41,7 +41,8 @@
       "memory": "{{ flavors[node.flavor].memory }}",
       "disk": "{{ flavors[node.flavor].disk }}",
       "arch": "{{ libvirt_arch }}",
-      "capabilities": "profile:{{ node.flavor }},boot_option:local"
+      "capabilities": "profile:{{ node.flavor }},boot_option:local",
+      "root_device": { "name": "/dev/{{ libvirt_diskdev }}" }
     }
     {% if not loop.last %}
     ,
