@@ -182,24 +182,14 @@ tempest_tempestconf_profile:
 tempest_tempest_conf_overrides:
   auth.use_dynamic_credentials: 'True'
 
-test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+tempest_allowed_group_check: "featureset001"
+tempest_allowed_group_periodic: "featureset001_periodic"
 
-# For periodic pipeline run tempest *.api tests in fs001
-# See https://tree.taiga.io/project/tripleo-ci-board/task/1383
-tempest_periodic_whitelist:
-  - 'tempest.api'
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
-
-tempest_check_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
-
-tempest_test_whitelist: >-
+tempest_allowed_group: >-
   {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
-  {{ tempest_periodic_whitelist }}
+  {{ tempest_allowed_group_periodic }}
   {%- else -%}
-  {{ tempest_check_whitelist }}
+  {{ tempest_allowed_group_check }}
   {%- endif -%}
 
 tempest_run_concurrency: 4
