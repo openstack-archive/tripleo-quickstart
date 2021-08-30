@@ -59,10 +59,17 @@ undercloud_clean_nodes: >-
   {%- endif -%}
 
 baremetal_provision: >-
-  {% if release in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
+  {% if release in ['newton','ocata','pike','queens','stein','train'] -%}
   false
   {%- else -%}
   true
+  {%- endif -%}
+
+undercloud_enable_nova: >-
+  {% if release in ['train'] -%}
+  true
+  {%- else -%}
+  false
   {%- endif -%}
 
 # Provision composable networks prior to creating the heat stack
@@ -105,7 +112,7 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
-   {% if release not in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
+   {% if release not in ['newton','ocata','pike','queens','stein','train'] -%}
    --disable-validations
    {%- endif -%}
 # keep the doc gen settings at the bottom of the config file.
