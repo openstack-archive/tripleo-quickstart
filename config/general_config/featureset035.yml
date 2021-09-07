@@ -71,6 +71,9 @@ extra_args: >-
    {% endif %}
    {% if release not in ['newton','ocata','pike','queens','stein','train'] -%}
    --disable-validations
+   {% endif %}
+   {%- if release not in ['train','ussuri','victoria'] -%}
+   --disable-protected-resource-types
    {%- endif -%}
 
 baremetal_provision: >-
