@@ -207,8 +207,23 @@ repo_cmd_after: |
   sudo dnf module disable container-tools:rhel8 -y;
   sudo dnf module enable container-tools:3.0 -y;
   sudo dnf clean metadata
+
+  # print openvswitch version
+  sudo ovs-ofctl --version
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y
+  {% endif %}
+
+  # https://bugs.launchpad.net/tripleo/+bug/1940844
+  # repo_setup_run_update is false for upgrades, to allow
+  # upgrade role to handle. Only upgrade openvswitch
+  # and restart openvswitch
+  # IF the upgrade repo-setup is executing, then
+  # update and restart openvswitch
+  {% if repo_setup_script == "repo_setup_upgrade.sh" %}
+  sudo dnf -y upgrade openvswitch
+  sudo systemctl restart openvswitch
+  sudo ovs-ofctl --version
   {% endif %}
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
