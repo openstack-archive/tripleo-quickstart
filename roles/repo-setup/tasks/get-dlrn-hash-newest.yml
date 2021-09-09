@@ -7,10 +7,6 @@
     - not dlrn_hash_tag_newest is match(expected_aggregate_hash_regex)
     - dlrn_hash_tag_newest not in known_hash_tags
 
-- name: print out the release name
-  debug:
-    msg: "the tq release is: {{ release }}"
-
 - name: Check DLRN hash newest - passed ready hash
   set_fact:
     dlrn_hash_newest: "{{ dlrn_hash_tag_newest }}"
