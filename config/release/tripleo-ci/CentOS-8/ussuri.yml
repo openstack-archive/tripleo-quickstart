@@ -208,8 +208,11 @@ repo_cmd_after: |
   sudo dnf module enable container-tools:3.0 -y;
   sudo dnf clean metadata
 
-  # print openvswitch version
-  sudo ovs-ofctl --version
+  # Make sure ovs-ofctl exist on the nodes
+  # then print the openvswitch version
+  if command -v ovs-ofctl >/dev/null; then
+    sudo ovs-ofctl --version;
+  fi
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y
   {% endif %}
