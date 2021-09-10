@@ -12,8 +12,6 @@
     check:
       jobs:
         - openstack-tox-linters
-        - openstack-tox-molecule:
-            voting: false
         - tripleo-ci-centos-8-content-provider:
             dependencies:
               - openstack-tox-linters
@@ -30,6 +28,4 @@
     gate:
       queue: tripleo
       jobs:
-        - openstack-tox-molecule:
-            voting: false
         - openstack-tox-linters
