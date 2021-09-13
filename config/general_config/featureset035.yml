@@ -65,6 +65,7 @@ telemetry_args: >-
    {% endif %}
 
 extra_args: >-
+   -e {{ overcloud_templates_path }}/environments/memcached-use-ips.yaml
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
