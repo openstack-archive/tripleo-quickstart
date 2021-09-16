@@ -13,10 +13,6 @@
     cacheable: true
   when: dlrn_hash_tag is match(expected_commit_distro_hash_regex) or dlrn_hash_tag is match(expected_aggregate_hash_regex)
 
-- name: print out the release name
-  debug:
-    msg: "the tq release is: {{ release }}"
-
 - include_tasks: tripleo-get-hash-set-fact.yml
   vars:
     search_tag: "{{ dlrn_hash_tag }}"
