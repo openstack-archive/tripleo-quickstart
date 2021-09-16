@@ -17,64 +17,11 @@
     cacheable: true
   when: dlrn_hash_tag_newest is match(expected_commit_distro_hash_regex) or dlrn_hash_tag is match(expected_aggregate_hash_regex)
 
-- when:
-    - dlrn_hash_tag_newest in known_hash_tags
-    - ansible_distribution_major_version is version(8, '<')
-
-  block:
-
-    - name: Get DLRN hash newest - passed tag
-      shell: |
-        set -euo pipefail
-        dlrn_base={{ dlrn_baseurl }}
-        if [ -e /etc/ci/mirror_info.sh ]; then
-          source /etc/ci/mirror_info.sh
-          NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY:-https://trunk.rdoproject.org}
-          dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
-        fi
-        curl -s --fail --show-error ${dlrn_base}/{{ dlrn_hash_tag_newest }}/delorean.repo \
-        | grep baseurl | grep -Eo {{ expected_commit_distro_hash_regex | quote }}
-      register: full_hash_newest_result
-      retries: 5
-
-    - name: Set fact for dlrn_hash_newest
-      set_fact:
-        dlrn_hash_newest: "{{ full_hash_newest_result.stdout }}"
-        cacheable: true
-
-# when running a component job, the containers and images
-# come from a promoted current-tripleo pin.  Therefore the md5
-# of the known hash_tag (e..g. current tripleo) is the cricital hash to know.
-# components for OSP will be built on OSP-16, 17 # TO-DO
-- when:
-    - dlrn_hash_tag_newest in known_hash_tags
-    - ansible_distribution_major_version is version(8, '>=')
-  block:
-    - block:
-        - name: Get DLRN hash newest - passed tag - component-based - not use mirror url
-          shell: |
-            set -euo pipefail
-            curl -s --fail --show-error {{ dlrn_baseurl }}/{{ dlrn_hash_tag_newest }}/delorean.repo.md5
-          register: full_hash_result
-          retries: 5
-      rescue:
-        - name: Get DLRN hash newest - passed tag - component-based - use mirror url
-          shell: |
-            set -euo pipefail
-            dlrn_base={{ dlrn_baseurl }}
-            if [ -e /etc/ci/mirror_info.sh ]; then
-              source /etc/ci/mirror_info.sh
-              NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY:-https://trunk.rdoproject.org}
-              dlrn_base=${dlrn_base/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
-            fi
-            curl -s --fail --show-error ${dlrn_base}/{{ dlrn_hash_tag_newest }}/delorean.repo.md5
-          register: full_hash_result
-          retries: 5
-
-    - name: Set fact for dlrn_hash_newest
-      set_fact:
-        dlrn_hash_newest: "{{ full_hash_result.stdout }}"
-        cacheable: true
+- include_tasks: tripleo-get-hash-set-fact.yml
+  vars:
+    search_tag: "{{ dlrn_hash_tag_newest }}"
+    fact_name: "dlrn_hash_newest"
+  when: dlrn_hash_tag_newest in known_hash_tags
 
 - name: Set fact for dlrn_hash_path_newest
   set_fact:

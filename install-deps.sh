@@ -273,10 +273,19 @@ install_ansible_collections(){
         echo "Installing tripleo.repos from local clone"
         # Replace with single step install once we have ansible>=2.10
         ansible-galaxy collection build ../tripleo-repos
-        ansible-galaxy collection install -f ./tripleo-repos-*.tar.gz
+        # Currently without -p, ansible collection is getting installed in
+        # $OPT_WORKDIR/collections (where tripleo-quickstart repo is getting clonned)
+        # ansible looks for ansible collections at two default paths
+        # 1. ~/.ansible/collections and 2. /usr/share/ansible/collections
+        # Above $OPT_WORKDIR/collections path is not discoved by ansible so we are installing
+        # the collection at user level in ~/.ansible/collections, so that ansible can discover
+        # it and will avoid usage of custom path.
+        # https://docs.ansible.com/ansible/latest/reference_appendices/config.html#collections-paths
+        ansible-galaxy collection install -f ./tripleo-repos-*.tar.gz -p ~/.ansible/collections
         rm ./tripleo-repos-*.tar.gz
     else
         ansible-galaxy collection install -v "tripleo.repos:>=0.0.4"
+        ansible-galaxy collection install -v "tripleo.repos:>=0.0.4" -p ~/.ansible/collections
     fi
 }
 
