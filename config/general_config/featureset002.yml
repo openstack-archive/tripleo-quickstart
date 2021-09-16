@@ -12,12 +12,7 @@ step_introspect: true
 # TODO(gcerami) tripleo-ci specific content. This has to be implemented in another way
 to_build: true
 # Delete the overcloud after deployment
-step_delete_overcloud: >-
-  {% if release in ['train','ussuri','victoria'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+step_delete_overcloud: true
 
 undercloud_check_idempotency: false
 
