@@ -4,7 +4,7 @@
     src: "{{ convert_image_template }}"
     dest: "{{ convert_image_working_dir }}/convert_image.sh"
 
-- name: check if we have an {{ overcloud_image }}.qcow2 to start from
+- name: "check if we have an {{ overcloud_image }}.qcow2 to start from"
   stat:
     path: "{{ convert_image_working_dir }}/{{ overcloud_image }}.qcow2"
   register: overcloud_full_qcow2
@@ -20,7 +20,7 @@
     - overcloud_full_root_pwd is defined
     - overcloud_full_qcow2.stat.exists
 
-- name: copy {{ overcloud_image }}.qcow2 to undercloud.qcow2
+- name: "copy {{ overcloud_image }}.qcow2 to undercloud.qcow2"
   command: >
     cp {{ convert_image_working_dir }}/{{ overcloud_image }}.qcow2
        {{ convert_image_working_dir }}/undercloud.qcow2
