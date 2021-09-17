@@ -252,3 +252,4 @@ chrooted: false
 
 # moved from tqe
 undercloud_generate_service_certificate: true
+overcloud_image: overcloud-full
