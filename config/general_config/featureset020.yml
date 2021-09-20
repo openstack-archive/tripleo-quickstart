@@ -65,7 +65,13 @@ enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
 network_isolation_args: >-
+  {% if not release in ['train','ussuri','victoria'] -%}
+  --networks-file {{ overcloud_templates_path }}/ci/network_data.yaml
+  -e {{ working_dir }}/overcloud-networks-deployed.yaml
+  -e {{ working_dir }}/overcloud-vips-deployed.yaml
+  {% else %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-isolation-absolute.yaml
+  {% endif %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/network-environment.yaml
 
 # This featureset is extremely resource intensive, so we disable telemetry
@@ -75,6 +81,9 @@ telemetry_args: >-
    {% if release in ['queens', 'stein', 'train'] %}
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
+
+ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
+ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 
 # neutron_l3_qos.yaml sets correct L3 agent's extensions to run QoS related
 # tests. It is related only to the ML2/OVS case and featureset020 runs Neutron
@@ -101,6 +110,14 @@ undercloud_enable_nova: >-
 
 baremetal_provision: >-
   {% if release in ['queens','stein','train'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+# Provision composable networks prior to creating the heat stack
+network_provision: >-
+  {% if release in ['train','ussuri','victoria'] -%}
   false
   {%- else -%}
   true
