@@ -22,6 +22,7 @@ inject_images:
   - "overcloud-full.initrd"
   - "overcloud-full.vmlinuz"
 release: train
+distro_ver: centos7
 dlrn_hash_tag: tripleo-ci-testing
 overcloud_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/current-tripleo/overcloud-full.tar"
 ipa_image_url: "https://images.rdoproject.org/{{ release }}/rdo_trunk/current-tripleo/ironic-python-agent.tar"
