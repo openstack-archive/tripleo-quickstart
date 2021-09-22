@@ -81,6 +81,9 @@ extra_args: >-
    {% if release not in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
    --disable-validations
    {%- endif -%}
+   {%- if release not in ['train','ussuri','victoria'] -%}
+   --disable-protected-resource-types
+   {%- endif -%}
 
 # keep the doc gen settings at the bottom of the config file.
 # options below direct automatic doc generation by tripleo-collect-logs
