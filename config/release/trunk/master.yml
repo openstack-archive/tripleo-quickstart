@@ -15,19 +15,26 @@ docker_registry_host: >-
 
 overcloud_as_undercloud: true
 update_images: true
+whole_disk_images: false
+overcloud_image: >-
+  {% if whole_disk_images -%}
+  overcloud-hardened-uefi-full
+  {%- else -%}
+  overcloud-full
+  {%- endif -%}
+overcloud_image_type: >-
+  {% if whole_disk_images -%}
+  qcow2
+  {%- else -%}
+  tar
+  {%- endif -%}
 images:
-  - name: overcloud-full
+  - name: "{{ overcloud_image }}"
     url: "{{ overcloud_image_url }}"
-    type: tar
+    type: "{{ overcloud_image_type }}"
   - name: ipa_images
     url: "{{ ipa_image_url }}"
     type: tar
-inject_images:
-  - "ironic-python-agent.initramfs"
-  - "ironic-python-agent.kernel"
-  - "overcloud-full.qcow2"
-  - "overcloud-full.initrd"
-  - "overcloud-full.vmlinuz"
 
 repos:
   - type: file

@@ -59,6 +59,30 @@
     - include_tasks: update_image.yml
       when: devmode|bool
 
+    - name: Set inject_images for partition image {{ overcloud_image }}
+      set_fact:
+        inject_images:
+          - "ironic-python-agent.initramfs"
+          - "ironic-python-agent.kernel"
+          - "{{ overcloud_image }}.qcow2"
+          - "{{ overcloud_image }}.initrd"
+          - "{{ overcloud_image }}.vmlinuz"
+      when:
+        - inject_images is not defined
+        - overcloud_as_undercloud|bool or use_external_images|bool
+        - not whole_disk_images|bool
+
+    - name: Set inject_images for whole-disk image {{ overcloud_image }}
+      set_fact:
+        inject_images:
+          - "ironic-python-agent.initramfs"
+          - "ironic-python-agent.kernel"
+          - "{{ overcloud_image }}.qcow2"
+      when:
+        - inject_images is not defined
+        - overcloud_as_undercloud|bool or use_external_images|bool
+        - whole_disk_images|bool
+
     # Inject updated overcloud and ipa images into our converted undercloud
     # image
     - name: Inject additional images
