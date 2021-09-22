@@ -46,13 +46,25 @@ undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.ya
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 
+ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
+ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
+
 # Tell tripleo about our environment.
 overcloud_ipv6: true
 enable_pacemaker: true
 network_isolation: true
 network_isolation_type: "multiple-nics"
+network_data_yaml: "{{ overcloud_templates_path }}/ci/network_data_v6.yaml"
+vip_data_yaml: "{{ overcloud_templates_path }}/ci/vip_data_v6.yaml"
 network_isolation_args: >-
+  {% if not release in ['train','ussuri','victoria'] -%}
+  --networks-file {{ overcloud_templates_path }}/ci/network_data_v6.yaml
+  --vip-file {{ overcloud_templates_path }}/ci/vip_data_v6.yaml
+  -e {{ working_dir }}/overcloud-networks-deployed.yaml
+  -e {{ working_dir }}/overcloud-vips-deployed.yaml
+  {%else%}
   -e {{ overcloud_templates_path }}/environments/network-isolation-v6.yaml
+  {% endif %}
   -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics-ipv6/network-environment.yaml
   -e {{ working_dir }}/network-environment.yaml
 
@@ -78,6 +90,14 @@ extra_args: >-
 
 baremetal_provision: >-
   {% if release in ['queens','stein','train'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+# Provision composable networks prior to creating the heat stack
+network_provision: >-
+  {% if release in ['train','ussuri','victoria'] -%}
   false
   {%- else -%}
   true
