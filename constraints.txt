@@ -10,7 +10,7 @@ ansi2html==1.6.0
     # via
     #   -r molecule-requirements.txt
     #   pytest-molecule
-ansible==2.9.25
+ansible==4.2.0
     # via
     #   -r molecule-requirements.txt
     #   molecule

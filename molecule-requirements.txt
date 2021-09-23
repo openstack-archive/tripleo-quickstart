@@ -1,5 +1,5 @@
 ansi2html
-ansible>=2.9,<2.10
+ansible>=2.9,<4.3
 docker>=4.0.1
 paramiko>=2.5.0
 pytest
