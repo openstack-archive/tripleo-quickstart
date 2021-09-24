@@ -58,3 +58,6 @@ extradisks_size: 8G
 
 # template for zuul-hosts file
 zuul_hosts_template: zuul-hosts.yaml.j2
+
+# Required for refactor inject_images for whole disk images
+whole_disk_images: false
