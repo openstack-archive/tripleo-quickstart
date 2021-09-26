@@ -80,8 +80,8 @@ extra_args: >-
    {% endif %}
    {% if release not in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
    --disable-validations
-   {%- endif -%}
-   {%- if release not in ['train','ussuri','victoria'] -%}
+   {% endif %}
+   {% if release not in ['train','ussuri','victoria'] -%}
    --disable-protected-resource-types
    {%- endif -%}
 
