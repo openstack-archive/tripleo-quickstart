@@ -36,12 +36,9 @@ telemetry_args: >-
    {% endif %}
 
 extra_args: >-
-  {% if release == 'pike' -%}
-  -e {{ overcloud_templates_path }}/environments/services-docker/neutron-ovn.yaml
-  {%- elif release in ['queens'] -%}
-  -e {{ overcloud_templates_path }}/environments/services/neutron-ovn-ha.yaml
-  {%- else -%}
   -e {{ overcloud_templates_path }}/environments/services/neutron-ovs.yaml
+  {% if release not in ['train','ussuri','victoria'] -%}
+  --disable-protected-resource-types
   {%- endif -%}
 
 composable_roles: true
