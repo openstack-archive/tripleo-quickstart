@@ -3,10 +3,10 @@ add_repos:
   - type: generic
     reponame: openvswitch-next
     filename: "openvswitch-next.repo"
-    baseurl: "https://buildlogs.centos.org/centos/8/nfv/x86_64/openvswitch-2/"
+    baseurl: "https://buildlogs.centos.org/centos/8-stream/nfv/x86_64/openvswitch-2/"
     update_container: false
 dependency_override_repos:
-  - centos-nfv-ovs,http://mirror.centos.org/centos/8/nfv/x86_64/openvswitch-2/
+  - centos-nfv-ovs,http://mirror.centos.org/centos/8-stream/nfv/x86_64/openvswitch-2/
 dep_repo_cmd_after: |
   {% if dependency_override_repos is defined %}
   {% for item in dependency_override_repos %}
