@@ -121,6 +121,7 @@ repos:
       - paunch-services
       - tripleo-ansible
       - ansible-config_template
+      - tripleo-operator-ansible
 
   - type: file
     filename: delorean-master-deps.repo

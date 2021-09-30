@@ -85,6 +85,7 @@ repos:
       - paunch-services
       - tripleo-ansible
       - ansible-config_template
+      - tripleo-operator-ansible
 
   - type: generic
     reponame: "delorean-{{ release }}-deps"
