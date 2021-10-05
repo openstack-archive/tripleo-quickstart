@@ -61,6 +61,24 @@ baremetal_provision: >-
   true
   {%- endif -%}
 
+# Provision composable networks prior to creating the heat stack
+network_provision: >-
+  {% if release in ['stein','train','ussuri','victoria'] -%}
+  false
+  {%- else -%}
+  true
+  {%- endif -%}
+
+network_data_yaml: "{{ overcloud_templates_path }}/network-data-samples/default-network-isolation.yaml"
+network_isolation_args: >-
+  {% if not release in ['train','ussuri','victoria'] -%}
+  --networks-file {{ overcloud_templates_path }}/network-data-samples/default-network-isolation.yaml
+  -e {{ working_dir }}/overcloud-networks-deployed.yaml
+  -e {{ working_dir }}/overcloud-vips-deployed.yaml
+  -e {{ overcloud_templates_path }}/environments/net-single-nic-with-vlans.yaml
+  -e {{ working_dir }}/network-environment.yaml
+  {% endif %}
+
 # Tell tripleo about our environment.
 enable_pacemaker: false
 network_isolation: true
