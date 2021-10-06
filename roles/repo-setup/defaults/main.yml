@@ -1,8 +1,17 @@
 ---
 repo_setup_dir: "{{ working_dir }}"
 repo_setup_script_source: repo_setup.sh.j2
-repo_setup_log: repo_setup.log
 repo_setup_script: repo_setup.sh
+repo_setup_log: repo_setup.log
+# New repo_setup based on triple-repos
+repo_cmd_before_setup_template: repo_cmd_before_setup.sh.j2
+repo_cmd_after_setup_template: repo_cmd_after_setup.sh.j2
+repo_cmd_before_setup_script: repo_cmd_before_setup.sh
+repo_cmd_after_setup_script: repo_cmd_after_setup.sh
+repo_setup_new_template: repo_setup_new.sh.j2
+repo_setup_new_script: repo_setup_new.sh
+# File to temporary store environment variables which will be loaded in repo_setup_newest.sh and repo_cmd_after_setup.sh
+repo_setup_env_filepath: "/tmp/repo_setup_env"
 repo_run_live: true
 # Releases shortcuts
 stable:
