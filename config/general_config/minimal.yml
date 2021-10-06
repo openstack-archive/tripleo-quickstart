@@ -13,49 +13,18 @@ overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
 step_introspect: true
 
-# This enables container deployements after Pike
-containerized_overcloud: >-
-  {% if release in ['newton', 'ocata', 'pike'] -%}
-  false
-  {%- else -%}
-  true
-  {%- endif -%}
-delete_docker_cache: true
-
-containerized_undercloud: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 
-ctlplane_masquerade: >-
-  {% if release not in ['newton','ocata','pike','queens'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+ctlplane_masquerade: true
 
-undercloud_enable_routed_networks: >-
-  {% if release not in ['newton','ocata','pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+undercloud_enable_routed_networks: true
 
-undercloud_clean_nodes: >-
-  {% if release not in ['newton','ocata','pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+undercloud_clean_nodes: true
 
 baremetal_provision: >-
-  {% if release in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
+  {% if release in ['train'] -%}
   false
   {%- else -%}
   true
@@ -63,7 +32,7 @@ baremetal_provision: >-
 
 # Provision composable networks prior to creating the heat stack
 network_provision: >-
-  {% if release in ['stein','train','ussuri','victoria'] -%}
+  {% if release in ['train','ussuri','victoria'] -%}
   false
   {%- else -%}
   true
@@ -88,7 +57,7 @@ network_isolation_type: "single-nic-vlans"
 # in order to reduce the overall memory footprint
 # Disabled by default from ussuri
 telemetry_args: >-
-   {% if release in ['queens', 'stein', 'train'] %}
+   {% if release in ['train'] %}
    -e {{ overcloud_templates_path }}/environments/disable-telemetry.yaml
    {% endif %}
 
@@ -96,10 +65,8 @@ ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
 ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 
 extra_args: >-
-   {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
-   {% endif %}
-   {% if release not in ['newton','ocata','pike','queens','stein','train', 'ussuri'] -%}
+   {% if release not in ['train', 'ussuri'] -%}
    --disable-validations
    {% endif %}
    {% if release not in ['train','ussuri','victoria'] -%}
@@ -113,7 +80,7 @@ artcl_create_docs_payload:
   included_deployment_scripts:
     - undercloud-install
     - overcloud-custom-tht-script
-    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
+    - overcloud-prep-containers
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
@@ -127,7 +94,7 @@ artcl_create_docs_payload:
     - env-setup-virt
     - undercloud-install
     - overcloud-custom-tht-script
-    - "{% if release not in ['newton', 'ocata', 'pike'] -%}overcloud-prep-containers{%- endif -%}"
+    - overcloud-prep-containers
     - overcloud-prep-flavors
     - overcloud-prep-images
     - overcloud-prep-network
@@ -136,37 +103,16 @@ artcl_create_docs_payload:
     - overcloud-validate
     - tempest-setup
 
-deploy_steps_ansible_workflow: >-
-  {% if release not in ['newton','ocata','pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
-config_download_args: >-
-  {% if release in ['queens'] -%}
-  -e /usr/share/openstack-tripleo-heat-templates/environments/config-download-environment.yaml
-  --config-download
-  --verbose
-  {%- endif -%}
+deploy_steps_ansible_workflow: true
 
 # Tempest configuration, keep always at the end of the file
 # Use the traditional ping test in newton, ocata and pike
 # Run tempest in queens+
 
-test_ping: >-
-  {% if release in ['newton', 'ocata', 'pike'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+test_ping: false
 
 # Settings for os_tempest
-use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'stein'] -%}
-  true
-  {%- else -%}
-  false
-  {%- endif -%}
+use_os_tempest: true
 
 # It will create a public network name 'public' using os_tempest
 tempest_interface_name: public
