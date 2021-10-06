@@ -89,6 +89,15 @@ repo_cmd_before: |
     exit 1
   fi
   export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
+
+  # Save environment variables, to be used afterwards
+  echo "export NODEPOOL_CENTOS_MIRROR=${NODEPOOL_CENTOS_MIRROR}" >> {{ repo_setup_env_filepath }}
+  echo "export NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY}" >> {{ repo_setup_env_filepath }}
+  echo "export RDO_DLRN_REPO=${RDO_DLRN_REPO}" >> {{ repo_setup_env_filepath }}
+  echo "export DLRN_PATH_TAG=${DLRN_PATH_TAG}" >> {{ repo_setup_env_filepath }}
+
+# Try to setup repos using yum-config module if available
+use_yum_config_module: true
 repos:
   # RDO repos
   - type: file
@@ -202,6 +211,7 @@ repo_cmd_after: |
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y
   {% endif %}
+
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
   ceph-ansible

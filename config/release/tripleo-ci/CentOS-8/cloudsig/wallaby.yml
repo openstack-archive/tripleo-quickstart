@@ -56,6 +56,12 @@ repo_cmd_before: |
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
 
+  # Save environment variables, to be used afterwards
+  echo "export NODEPOOL_CENTOS_MIRROR=${NODEPOOL_CENTOS_MIRROR}" >> {{ repo_setup_env_filepath }}
+  echo "export NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY}" >> {{ repo_setup_env_filepath }}
+
+# Try to setup repos using yum-config module if available
+use_yum_config_module: true
 repos:
   - type: package
     pkg_name: "centos-release-openstack-{{ release }}"
