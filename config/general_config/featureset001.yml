@@ -47,6 +47,13 @@ extra_args: >-
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% if release not in ['train'] -%}
    --disable-validations
+   {% endif %}
+   {% if release not in ['train','ussuri','victoria'] and
+   job is defined and
+   job.enable_secure_rbac is defined and
+   job.enable_secure_rbac|default(false)|bool or
+   enable_secure_rbac|default(false)|bool -%}
+   -e {{ overcloud_templates_path }}/environments/enable-secure-rbac.yaml
    {%- endif -%}
 
 undercloud_ntp_servers: pool.ntp.org
