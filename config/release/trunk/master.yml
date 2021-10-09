@@ -15,7 +15,7 @@ docker_registry_host: >-
 
 overcloud_as_undercloud: true
 update_images: true
-whole_disk_images: false
+whole_disk_images: true
 overcloud_image: >-
   {% if whole_disk_images -%}
   overcloud-hardened-uefi-full
