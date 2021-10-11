@@ -1,0 +1,51 @@
+---
+- name: Run commands before repo setup
+  shell: >
+    set -o pipefail &&
+    {{ repo_setup_dir }}/{{ repo_cmd_before_setup_script }} 2>&1 {{ timestamper_cmd }}
+    | tee -a {{ repo_setup_dir }}/{{ repo_setup_log }}
+  become: true
+  register: result
+  no_log: result.rc == 0
+  changed_when: true
+
+- name: Setup repos on live host
+  shell: >
+    set -o pipefail &&
+    {{ repo_setup_dir }}/{{ repo_setup_new_script }} 2>&1 {{ timestamper_cmd }}
+    | tee -a {{ repo_setup_dir }}/{{ repo_setup_log }}
+  become: true
+  register: result
+  no_log: result.rc == 0
+  changed_when: true
+
+- name: Configure 'generic' repos using yum-config module
+  become: true
+  tripleo.repos.yum_config:
+    type: repo
+    name: "{{ item.reponame }}"
+    enabled: "{{ item.enabled|default('true') }}"
+    environment_file: "{{ repo_setup_env_filepath }}"
+    file_path: "/etc/yum.repos.d/{{ item.filename }}"
+    set_options:
+      baseurl: "{{ item.baseurl|default(omit) }}"
+      priority: "{{ item.priority|default(omit) }}"
+      gpgcheck: "{{ item.gpgcheck|default('0') }}"
+      mirrorlist: "{{ item.mirrorlist|default(omit) }}"
+      module_hotfixes: "{{ item.module_hotfixes|default(omit) }}"
+      includepkgs: "{{ item.includepkgs|default(omit) }}"
+      exclude: "{{ item.exclude|default(omit) }}"
+      sslverify: "{{ item.sslverify|default(omit) }}"
+  with_items: "{{ repos + add_repos + job.add_repos|default([]) }}"
+  when:
+    - item.type == 'generic'
+
+- name: Run commands after repo setup
+  shell: >
+    set -o pipefail &&
+    {{ repo_setup_dir }}/{{ repo_cmd_after_setup_script }} 2>&1 {{ timestamper_cmd }}
+    | tee -a {{ repo_setup_dir }}/{{ repo_setup_log }}
+  become: true
+  register: result
+  no_log: result.rc == 0
+  changed_when: true

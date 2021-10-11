@@ -1,0 +1,89 @@
+#!/bin/bash
+set -eux
+
+### --start_docs
+
+## * Loading environment file to get previous defined variables
+## ::
+
+if [ -f {{ repo_setup_env_filepath }} ]; then
+    source {{ repo_setup_env_filepath }}
+fi
+
+## * Prepare repositories
+## ::
+
+# Repos can be defined in repos, add_repos (used mostly in
+# featuresets and in the job itself
+
+# creating the following repos
+{% for repo in repos + add_repos + job.add_repos|default([]) %}
+{% if repo.reponame is defined %}
+# repo = {{ repo.reponame }}
+{% else %}
+# repo.reponame is not defined
+{% endif %}
+{% endfor %}
+
+{% for repo in repos + add_repos + job.add_repos|default([]) %}
+{% if repo.releases is not defined or release in repo.releases %}
+
+{% if repo.type == 'file' %}
+
+## * Download and use file from {{ repo.down_url }}
+## ::
+
+curl -Lvo /tmp/repo_role_tmp/{{ repo.filename }} {{ repo.down_url }}
+{% if repo.priority is defined and repo.priority %}
+
+## * Change its priority to {{ repo.priority }}
+## ::
+
+if ! grep -q "priority" /tmp/repo_role_tmp/{{ repo.filename }}; then
+    sed -i "s/\(baseurl=.*\)/\1\npriority={{ repo.priority }}/g" /tmp/repo_role_tmp/{{ repo.filename }}
+else
+    sed -i "s/priority=.*/priority={{ repo.priority }}/g" /tmp/repo_role_tmp/{{ repo.filename }}
+fi
+{% endif %}
+{% if repo.reponame is defined %}
+sed -i "s/\[.*\]/[{{ repo.reponame }}]/" /tmp/repo_role_tmp/{{ repo.filename }}
+{% endif %}
+{% if repo.includepkgs is defined %}
+echo -e '\nincludepkgs={{ repo.includepkgs|join(",") }}' >> /tmp/repo_role_tmp/{{ repo.filename }}
+{% endif %}
+sudo cp -f /tmp/repo_role_tmp/{{ repo.filename }} /etc/yum.repos.d/
+{% endif %}
+
+{% if repo.type == 'package' %}
+
+## * Install repo from package {{ repo.pkg_name|default(repo.pkg_url) }}
+## ::
+
+{% if repo.custom_cmd is defined %}
+{{ repo.custom_cmd }} {{ repo.pkg_name|default(repo.pkg_url) }}
+{% else %}
+sudo  {{ ansible_pkg_mgr }} install -y {{ repo.pkg_name|default(repo.pkg_url) }}
+{% endif %}
+
+{% endif %}
+
+{% endif %}
+{% endfor %}
+
+{% if use_rhsm|bool  %}
+
+## * Install repo from rhsm subscription manager
+## ::
+
+subscription-manager register --username {{ rhsm_username | quote }} --password {{ rhsm_password | quote }}
+subscription-manager attach --pool={{ pool_id }}
+subscription-manager repos --disable=*
+
+{% for repo in rhsm_repos %}
+
+subscription-manager repos --enable={{ repo.name }}
+
+{% endfor %}
+{% endif %}
+
+### --stop_docs
