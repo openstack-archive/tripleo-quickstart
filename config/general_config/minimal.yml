@@ -44,9 +44,11 @@ network_isolation_args: >-
   --networks-file {{ overcloud_templates_path }}/network-data-samples/default-network-isolation.yaml
   -e {{ working_dir }}/overcloud-networks-deployed.yaml
   -e {{ working_dir }}/overcloud-vips-deployed.yaml
+  {% else %}
+  -e {{ overcloud_templates_path }}/environments/network-isolation.yaml
+  {% endif %}
   -e {{ overcloud_templates_path }}/environments/net-single-nic-with-vlans.yaml
   -e {{ working_dir }}/network-environment.yaml
-  {% endif %}
 
 # Tell tripleo about our environment.
 enable_pacemaker: false
