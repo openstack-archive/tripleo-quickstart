@@ -68,7 +68,7 @@ ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 
 extra_args: >-
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
-   {% if release not in ['train', 'ussuri'] -%}
+   {% if release not in ['train'] -%}
    --disable-validations
    {% endif %}
    {% if release not in ['train','ussuri','victoria'] -%}
