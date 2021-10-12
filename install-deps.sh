@@ -23,17 +23,24 @@ python_cmd() {
         distribution_major_version=${VERSION_ID%.*}
         distribution=${ID}
         PYTHON_CMD=python2
+        PYTHON_VIRTUALENV_CMD=virtualenv
         # check /etc/os-release to see how these variables are set
         case ${ID} in
             rhel)
                 distribution="RedHat"
-                if [ "$distribution_major_version" -ge "8" ]; then
+                if [ "$distribution_major_version" -ge "9" ]; then
+                    PYTHON_CMD=python3
+                    PYTHON_VIRTUALENV_CMD=venv
+                elif [ "$distribution_major_version" -eq "8" ]; then
                     PYTHON_CMD=python3
                 fi
                 ;;
             centos)
                 distribution="CentOS"
-                if [ "$distribution_major_version" -ge "8" ]; then
+                if [ "$distribution_major_version" -ge "9" ]; then
+                    PYTHON_CMD=python3
+                    PYTHON_VIRTUALENV_CMD=venv
+                elif [ "$distribution_major_version" -eq "8" ]; then
                     PYTHON_CMD=python3
                 elif [ "$distribution_major_version" -eq "7" ]; then
                     release_val=$(cat /etc/centos-release | awk '{print $4 }' | grep '^7.8\|^7.9')
@@ -110,7 +117,11 @@ install_deps () {
     python_cmd
     echo "Running install_deps"
     PYTHON_PACKAGES=()
-    MODULE_NAMES="pip virtualenv setuptools"
+    if [ "$PYTHON_VIRTUALENV_CMD" == "venv" ]; then
+        MODULE_NAMES="pip setuptools"
+    else
+        MODULE_NAMES="pip virtualenv setuptools"
+    fi
     rpm -q sudo || $(package_manager) install sudo
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [[ "$passwordless_sudo" == "1" ]] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
@@ -144,16 +155,13 @@ install_deps () {
                                             $PIP_PACKAGE
         # Install python3 virtualenv via pip on CentOS7
         if [ -z $centos7py3 ]; then
-            sudo $(package_manager) install $VIRTUALENV_PACKAGE
+            if [ "$PYTHON_VIRTUALENV_CMD" == "virtualenv" ]; then
+                sudo $(package_manager) install $VIRTUALENV_PACKAGE
+            fi
         else
             sudo $(python_cmd) -m pip install virtualenv
             sudo $(package_manager) install gcc python3-devel
         fi
-        check_python_module virtualenv &> /dev/null || \
-            PYTHON_PACKAGES+=($VIRTUALENV_PACKAGE)
-
-        check_python_module setuptools &> /dev/null || \
-            PYTHON_PACKAGES+=($SETUPTOOLS_PACKAGE)
 
     else
         print_sudo_warning
@@ -195,7 +203,7 @@ install_virtual_env(){
             echo "Warning: $OPT_WORKDIR virtualenv already exists, just activating it."
         else
             echo "Creating virtualenv at $OPT_WORKDIR"
-            $(python_cmd) -m virtualenv \
+            $(python_cmd) -m $PYTHON_VIRTUALENV_CMD \
                 $( [ "$OPT_SYSTEM_PACKAGES" = 1 ] && printf -- "--system-site-packages\n" )\
                 $OPT_WORKDIR
         fi
