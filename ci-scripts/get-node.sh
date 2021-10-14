@@ -59,6 +59,8 @@ pushd $WORKSPACE/tripleo-quickstart
     127.0.0.2
 popd
 
+$WORKSPACE/bin/cico inventory --all
+
 $WORKSPACE/bin/cico node get \
     --arch x86_64 \
     --release $CENTOS_RELEASE \
@@ -67,7 +69,7 @@ $WORKSPACE/bin/cico node get \
     --retry-interval 60 \
     -f csv | sed "1d" > $WORKSPACE/provisioned.csv
 
-$WORKSPACE/bin/cico inventory
+$WORKSPACE/bin/cico inventory --all
 if [ -s $WORKSPACE/provisioned.csv ]; then
     cat $WORKSPACE/provisioned.csv
 else
