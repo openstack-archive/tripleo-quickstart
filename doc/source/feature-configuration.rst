@@ -24,10 +24,10 @@ Follow `Updating Feature Configuration`_ to update the featureset configuration 
 
 .. include:: feature-configuration-generated.rst
 
-Note and Known limitation:
+Notes and known limitations:
 
- - Featureset037, Overcloud Update:
-    - this doesn't change the container image file.
+- Featureset037, Overcloud Update:
+   - this doesn't change the container image file.
 
 .. _MatrixUpdate:
 
