@@ -15,13 +15,13 @@ validate_on: rdo
 # images
 whole_disk_images: true
 overcloud_image: >-
-  {% if whole_disk_images -%}
+  {% if whole_disk_images|bool -%}
   overcloud-hardened-uefi-full
   {%- else -%}
   overcloud-full
   {%- endif -%}
 overcloud_image_type: >-
-  {% if whole_disk_images -%}
+  {% if whole_disk_images|bool -%}
   qcow2
   {%- else -%}
   tar
