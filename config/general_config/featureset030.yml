@@ -39,6 +39,7 @@ extra_args: >-
   -e {{ overcloud_templates_path }}/environments/services/neutron-ovs.yaml
   {% if release not in ['train','ussuri','victoria'] -%}
   --disable-protected-resource-types
+  --baremetal-deployment
   {%- endif -%}
 
 composable_roles: true
