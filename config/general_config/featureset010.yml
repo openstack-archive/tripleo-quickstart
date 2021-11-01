@@ -67,6 +67,7 @@ ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 extra_args: >-
    {%- if release not in ['train','ussuri','victoria'] -%}
    --disable-protected-resource-types
+   --baremetal-deployment
    {%- endif -%}
 
 # Tempest configuration, keep always at the end of the file
