@@ -35,7 +35,11 @@ def test_release_configs(testdata):
            # python interpreter, so we force it to use the same
            # interpreter
            '-eansible_python_interpreter=%s' % sys.executable,
-           'tests/validate-release-config.yml']
+           'tests/validate-release-config.yml',
+           # usually comes from extras-common role but not present here
+           # so we need to pass it explicitly for molecule
+           '-ewhole_disk_images=true']
+
     print("running: %s (from %s)" % (" " .join(cmd), os.getcwd()))
     # Workaround for STDOUT/STDERR line ordering issue:
     # https://github.com/pytest-dev/pytest/issues/5449

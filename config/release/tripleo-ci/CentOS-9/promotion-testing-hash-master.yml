@@ -13,7 +13,6 @@ promote_source: tripleo-ci-testing
 validate_on: rdo
 
 # images
-whole_disk_images: true
 overcloud_image: >-
   {% if whole_disk_images|bool -%}
   overcloud-hardened-uefi-full

@@ -1,7 +1,6 @@
 overcloud_as_undercloud: true
 # limits validation on a specific enviroment due to restricted access
 validate_on: rdo
-whole_disk_images: true
 overcloud_image: >-
   {% if whole_disk_images|bool -%}
   overcloud-hardened-uefi-full

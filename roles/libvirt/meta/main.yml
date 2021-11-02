@@ -3,3 +3,4 @@
 # variables defined in that role are available here.
 dependencies:
   - common
+  - extras-common
