@@ -135,6 +135,8 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: https://composes.stream.centos.org/production/latest-CentOS-Stream/compose/AppStream/x86_64/os/
+    module_hotfixes: true
+    # module_hotfixes workaround for https://bugs.launchpad.net/tripleo/+bug/1949601
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
