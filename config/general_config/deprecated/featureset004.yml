@@ -1,3 +1,5 @@
+#Warning: This feature set is deprecated
+
 undercloud_generate_service_certificate: false
 ssl_overcloud: false
 test_ping: true

@@ -2,6 +2,8 @@
 # Deploy an Openstack environment with a non-containerized overcloud,
 # and upgrade it to a containerized overcloud.
 
+# WARNING: This feature set is deprecated
+
 undercloud_setup: true
 network_isolation: false
 enable_pacemaker: false
