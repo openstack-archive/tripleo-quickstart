@@ -4,6 +4,10 @@
 # baseos undercloud settings
 undercloud_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1802.qcow2
 
+# Libvirt environments do not yet support whole-disk images, for example
+# https://bugs.launchpad.net/tripleo/+bug/1950383
+whole_disk_images: false
+
 images:
     - name: centos
       url: "{{ undercloud_image_url }}"
