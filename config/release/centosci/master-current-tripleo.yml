@@ -37,6 +37,10 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/
+    exclude:
+      - libvirt*
+      - python*libvirt*
+      - qemu*
 
   - type: generic
     reponame: quickstart-centos-powertools
