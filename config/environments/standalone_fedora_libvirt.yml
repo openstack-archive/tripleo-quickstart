@@ -4,6 +4,10 @@
 undercloud_image_url: https://images.rdoproject.org/fedora-stable/Fedora-Cloud-Base-RDO-28-latest.qcow2
 # https://download.fedoraproject.org/pub/fedora/linux/releases/28/Cloud/x86_64/images/Fedora-Cloud-Base-28-1.1.x86_64.qcow2
 
+# Libvirt environments do not yet support whole-disk images, for example
+# https://bugs.launchpad.net/tripleo/+bug/1950383
+whole_disk_images: false
+
 # the name should always be undercloud
 images:
     - name: undercloud
