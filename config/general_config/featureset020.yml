@@ -96,6 +96,10 @@ extra_args: >-
    {% if release in ['ussuri', 'victoria'] -%}
    --disable-validations
    {% endif %}
+   {% if release not in ['train','ussuri'] and
+   job is defined -%}
+   -e {{ overcloud_templates_path }}/ci/environments/neutron_dns_domain.yaml
+   {% endif %}
    {% if release not in ['train','ussuri','victoria'] and
    job is defined and
    job.enable_secure_rbac is defined and
