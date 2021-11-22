@@ -6,7 +6,13 @@
   {{baremetal_vm_xml|default('')}}
 
   <os>
+{% if libvirt_boot_mode == 'uefi' %}
+    <type arch='{{ libvirt_arch }}' machine ='q35'>hvm</type>
+    <loader readonly="yes" secure="no" type="pflash">/usr/share/edk2/ovmf/OVMF_CODE.secboot.fd</loader>
+    <nvram template='/usr/share/edk2/ovmf/OVMF_VARS.fd'/>
+{% else %}
     <type arch='{{ libvirt_arch }}'>hvm</type>
+{% endif %}
     <boot dev='network'/>
     <bootmenu enable='no'/>
   </os>
