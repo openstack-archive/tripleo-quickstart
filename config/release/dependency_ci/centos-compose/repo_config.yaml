@@ -1,0 +1,20 @@
+---
+# Try to setup repos using yum-config module if available
+use_yum_config_module: true
+compose_url: "{{ job.centos_compose_url|default('https://odcs.stream.centos.org/production/latest-CentOS-Stream/compose/') }}"
+
+add_repos:
+  - type: compose_repos
+    compose_url: "{{ compose_url }}"
+    release: centos-stream-9
+    disable_conflicting: true
+    variants:
+      - AppStream
+      - BaseOS
+      - CRB
+      - HighAvailability
+    disable_repos:
+      - quickstart-centos-appstreams.repo
+      - quickstart-centos-base.repo
+      - quickstart-centos-crb.repo
+      - quickstart-centos-highavailability.repo
