@@ -31,6 +31,16 @@
   when:
     - dlrn_hash_tag_newest in known_hash_tags
     - ansible_distribution_major_version is version(8, '>=')
+    - repo_setup_use_collections
+
+- include_tasks: tripleo-get-hash-set-fact-no-collections.yml
+  vars:
+    search_tag: "{{ dlrn_hash_tag_newest }}"
+    fact_name: "dlrn_hash_newest"
+  when:
+    - dlrn_hash_tag_newest in known_hash_tags
+    - ansible_distribution_major_version is version(8, '>=')
+    - not repo_setup_use_collections
 
 - name: Set fact for dlrn_hash_path_newest
   set_fact:

@@ -13,6 +13,7 @@ repo_setup_new_script: repo_setup_new.sh
 # File to temporary store environment variables which will be loaded in repo_setup_newest.sh and repo_cmd_after_setup.sh
 repo_setup_env_filepath: "/tmp/repo_setup_env"
 repo_run_live: true
+repo_setup_use_collections: true  # for zuul native cannot use this
 # Releases shortcuts
 stable:
   - pike

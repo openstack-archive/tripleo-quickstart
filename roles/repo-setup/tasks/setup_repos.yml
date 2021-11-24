@@ -7,4 +7,3 @@
   become: true
   register: result
   changed_when: true
-  no_log: true

@@ -31,6 +31,16 @@
   when:
     - dlrn_hash_tag in known_hash_tags
     - ansible_distribution_major_version is version(8, '>=')
+    - repo_setup_use_collections
+
+- include_tasks: tripleo-get-hash-set-fact-no-collections.yml
+  vars:
+    search_tag: "{{ dlrn_hash_tag }}"
+    fact_name: "dlrn_hash"
+  when:
+    - dlrn_hash_tag in known_hash_tags
+    - ansible_distribution_major_version is version(8, '>=')
+    - not repo_setup_use_collections
 
 # TODO: Fix for fedora
 - when: overcloud_release is defined and (overcloud_release | length != 0)
