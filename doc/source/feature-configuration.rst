@@ -26,6 +26,9 @@ Follow `Updating Feature Configuration`_ to update the featureset configuration 
 
 Notes and known limitations:
 
+- Featureset011, Featureset004:
+   - deprecated in favor of standalone jobs
+   - will most likely fail if used with recent release
 - Featureset037, Overcloud Update:
    - this doesn't change the container image file.
 
