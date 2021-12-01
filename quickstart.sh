@@ -99,6 +99,31 @@ EOBANNER
 fi
 }
 
+# This installs all required collections to quickstart virtualenv
+install_ansible_collections_deps(){
+    echo "Installing Ansible Collections dependencies"
+    # Check if we have collections cloned in CI job
+    if [[ -e "~/src/github.com/ansible-collections/ansible.utils" ]]; then
+        ansible-galaxy collection install --force \
+            ~/src/github.com/ansible-collections/ansible.posix \
+            ~/src/github.com/ansible-collections/ansible.utils \
+            ~/src/github.com/ansible-collections/ansible.netcommon \
+            ~/src/github.com/ansible-collections/community.general \
+            ~/src/github.com/ansible-collections/community.libvirt \
+            ~/src/github.com/ansible-collections/openvswitch.openvswitch \
+            -p $VIRTUAL_ENV/share/ansible/collections
+
+    else
+
+        ansible-galaxy collection install --force \
+            ansible.posix:=1.3.0 \
+            openvswitch.openvswitch:=2.0.2 \
+            community.general:=4.0.2 \
+            community.libvirt:=1.0.2 \
+            -p $VIRTUAL_ENV/share/ansible/collections
+    fi
+}
+
 # This creates a Python virtual environment and installs
 # tripleo-quickstart into that environment.  It only runs if
 # the local working directory does not exist, or if explicitly
@@ -150,6 +175,7 @@ bootstrap () {
             else
                 $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
             fi
+            install_ansible_collections_deps
         fi
 
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
