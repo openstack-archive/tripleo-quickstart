@@ -51,9 +51,13 @@ repo_cmd_before: |
   sudo dnf config-manager --enable gating-repo || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
+    #TODO(marios) workaround until https://review.opendev.org/c/opendev/base-jobs/+/820018
+    if [[ ( -n "$NODEPOOL_CENTOS_MIRROR" ) && ( "$NODEPOOL_CENTOS_MIRROR" != *-stream ) ]] ; then
+      export NODEPOOL_CENTOS_MIRROR="${NODEPOOL_CENTOS_MIRROR}-stream"
+    fi
   else
     # Otherwise, fallback to official mirrors provided by CentOS.
-    export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
+    export NODEPOOL_CENTOS_MIRROR={{ ansible_env['NODEPOOL_CENTOS_MIRROR']|default('http://mirror.stream.centos.org', true) }}
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
   {% if dlrn_hash_path_newest is defined and dlrn_hash_path_newest %}
@@ -128,12 +132,12 @@ repos:
   - type: generic
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
-    baseurl: https://composes.stream.centos.org/production/latest-CentOS-Stream/compose/BaseOS/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/BaseOS/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
-    baseurl: https://composes.stream.centos.org/production/latest-CentOS-Stream/compose/AppStream/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
     module_hotfixes: true
     # module_hotfixes workaround for https://bugs.launchpad.net/tripleo/+bug/1949601
 
@@ -141,12 +145,12 @@ repos:
   - type: generic
     reponame: quickstart-centos-crb
     filename: quickstart-centos-crb.repo
-    baseurl: https://composes.stream.centos.org/production/latest-CentOS-Stream/compose/CRB/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/CRB/x86_64/os/
 
   - type: generic
     reponame: quickstart-centos-highavailability
     filename: quickstart-centos-highavailability.repo
-    baseurl: https://composes.stream.centos.org/production/latest-CentOS-Stream/compose/HighAvailability/x86_64/os/
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/HighAvailability/x86_64/os/
 
   # Extras will be available once c9 get's released as this contains release rpms for SIG.
 #  - type: generic
@@ -159,7 +163,6 @@ repo_cmd_after: |
   # # Replace trunk.rdoproject.org to nodepool proxy
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean.repo
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-master-deps.repo
-  sudo sed -i -e "s|http://mirror.centos.org/centos|$NODEPOOL_CENTOS_MIRROR|g" /etc/yum.repos.d/delorean-master-deps.repo
   sudo sed -i -e "s|priority=1|priority=20|g" /etc/yum.repos.d/delorean.repo
   # continue from here
   sudo rpm -e epel-release || true;
