@@ -51,10 +51,6 @@ repo_cmd_before: |
   sudo dnf config-manager --enable gating-repo || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
-    #TODO(marios) workaround until https://review.opendev.org/c/opendev/base-jobs/+/820018
-    if [[ ( -n "$NODEPOOL_CENTOS_MIRROR" ) && ( "$NODEPOOL_CENTOS_MIRROR" != *-stream ) ]] ; then
-      export NODEPOOL_CENTOS_MIRROR="${NODEPOOL_CENTOS_MIRROR}-stream"
-    fi
   else
     # Otherwise, fallback to official mirrors provided by CentOS.
     export NODEPOOL_CENTOS_MIRROR={{ ansible_env['NODEPOOL_CENTOS_MIRROR']|default('http://mirror.stream.centos.org', true) }}
