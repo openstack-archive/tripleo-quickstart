@@ -175,8 +175,8 @@ bootstrap () {
             else
                 $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
             fi
-            install_ansible_collections_deps
         fi
+        install_ansible_collections_deps
 
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
                 # pull in tripleo-quickstart-extras from source
