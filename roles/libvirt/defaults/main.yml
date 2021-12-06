@@ -63,10 +63,10 @@ zuul_hosts_template: zuul-hosts.yaml.j2
 whole_disk_images: false
 
 # Set the libvirt_boot_mode to uefi or bios
-# On 'train', 'ussuri', 'victoria' and 'wallaby' set to bios
+# On 'train', 'ussuri', 'victoria' set to bios
 # otherwise uefi
 libvirt_boot_mode: >-
-  {% if release is defined and release not in ['train', 'ussuri', 'victoria', 'wallaby'] -%}
+  {% if release is defined and release not in ['train', 'ussuri', 'victoria'] -%}
   uefi
   {%- else -%}
   bios
