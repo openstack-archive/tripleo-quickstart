@@ -1,0 +1,262 @@
+# Summary of feature set
+# Deploy an HA OpenStack environment with an IPA server(fs039) + custom overcloud
+# networks + custom overcloud name.
+# We intend to run this featureset on wallaby+ only.
+
+# This enables TLS for the undercloud which will also make haproxy bind to the
+# configured public-vip and admin-vip.
+undercloud_generate_service_certificate: true
+ssl_overcloud: true
+overcloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+step_introspect: true
+
+# This enables container deployements after Pike
+containerized_overcloud: true
+delete_docker_cache: true
+
+containerized_undercloud: true
+
+ctlplane_masquerade: true
+
+undercloud_enable_routed_networks: true
+
+undercloud_clean_nodes: true
+
+undercloud_inspection_extras: false
+
+
+# Tell tripleo about our environment.
+enable_pacemaker: true
+network_isolation: true
+network_isolation_type: "multiple-nics"
+network_isolation_args: >-
+  --roles-file {{ overcloud_templates_path }}/ci/custom_ci_roles_data.yaml
+  --networks-file {{ overcloud_templates_path }}/ci/custom_names_network_data.yaml
+  -e {{ working_dir }}/overcloud-networks-deployed.yaml
+  -e {{ working_dir }}/overcloud-vips-deployed.yaml
+  -e {{ overcloud_templates_path }}/ci/environments/network/multiple-nics/custom-network-environment.yaml
+
+extra_args: >-
+   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+
+undercloud_ntp_servers: pool.ntp.org
+# keep the doc gen settings at the bottom of the config file.
+# options below direct automatic doc generation by tripleo-collect-logs
+artcl_gen_docs: true
+artcl_create_docs_payload:
+  included_deployment_scripts:
+    - undercloud-install
+    - ipa_prep
+    - install_ipa
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+  included_static_docs:
+    - env-setup-virt
+  table_of_contents:
+    - env-setup-virt
+    - ipa_prep
+    - install_ipa
+    - undercloud-install
+    - overcloud-custom-tht-script
+    - overcloud-prep-containers
+    - overcloud-prep-flavors
+    - overcloud-prep-images
+    - overcloud-prep-network
+    - overcloud-deploy
+    - overcloud-deploy-post
+    - overcloud-validate
+
+deploy_steps_ansible_workflow: true
+
+ephemeral_heat: true
+ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
+
+# Tempest configuration, keep always at the end of the file
+test_ping: false
+
+# Settings for os_tempest
+use_os_tempest: true
+
+# It will create a public network name 'public' using os_tempest
+tempest_interface_name: public
+
+tempest_run_concurrency: 4
+
+# In order to have a public network with external connectivity, we need to use
+# flat network type
+tempest_public_net_provider_type: flat
+
+# It is the physical network name through which public network will be created
+# having connectivity with external world.
+tempest_public_net_physical_name: datacentre
+
+# Setting the tempest_cidr as it is required while creating public subnet from which
+# floating IPs gets assigned
+tempest_cidr: '10.0.0.0/24'
+
+tempest_private_net_seg_id: ''
+
+tempest_install_method: distro
+
+# Having tempest_network_ping_gateway set to true allows to ping any of the IP from
+# router to find out network related issue in the deployment early
+tempest_network_ping_gateway: true
+
+# It is the python-tempestconf profile which also consumes tempest-deployer-input file
+tempest_tempestconf_profile:
+  debug: true
+  create: true
+  deployer-input: "{{ ansible_user_dir }}/tempest-deployer-input.conf"
+  os-cloud: "{{ tempest_cloud_name }}"
+  out: "{{ tempest_workspace }}/etc/tempest.conf"
+  network-id: "{{ tempest_neutron_public_network_id }}"
+  overrides: "{{ tempest_tempest_conf_overrides | default({}) }}"
+
+test_white_regex: ''
+tempest_whitelist:
+  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+tempest_test_whitelist: "{{ tempest_whitelist }}"
+
+# Run an undercloud without glance or nova
+undercloud_enable_nova: false
+
+baremetal_provision: true
+
+# Provision composable networks prior to creating the heat stack
+network_provision: true
+
+# TLS everywhere related vars. #
+enable_tls_everywhere: true
+novajoin_connect_timeout: 60
+novajoin_read_timeout: 60
+
+# This switches between a deployment with novajoin or using ansible-tripleo-ipa
+undercloud_enable_novajoin: false
+
+external_network_cidr: 10.0.0.0/24
+
+freeipa_admin_password: fce95318204114530f31f885c9df588f
+
+# Set node hostnames.
+freeipa_internal_ip: "{{ external_network_cidr|nthhost(250) }}"
+supplemental_node_ip: "{{ freeipa_internal_ip }}"
+undercloud_undercloud_nameservers: ["{{ freeipa_internal_ip }}"]
+overcloud_dns_servers: ["{{ freeipa_internal_ip }}", "8.8.8.8"]
+tripleo_domain: ooo.test
+undercloud_cloud_domain: "{{ tripleo_domain }}"
+freeipa_server_hostname: "ipa.{{ tripleo_domain }}"
+undercloud_undercloud_hostname: "undercloud.{{ tripleo_domain }}"
+overcloud_cloud_name: "overcloud1.{{ tripleo_domain }}"
+overcloud_cloud_domain: "{{ tripleo_domain }}"
+
+# Supplemental node related vars. #
+# Ensure that the FreeIPA server node is provisioned during deployment.
+deploy_supplemental_node: true
+supplemental_user: centos
+supplemental_image_url: https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20201217.0.x86_64.qcow2
+
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+
+### Keycloak IdP ###
+
+# Turn on federation support
+enable_federation: true
+
+# For simplicity in development and testing scenarios share the admin
+# password with IPA. Do not do this in a production environment!
+keycloak_admin_password: "{{ freeipa_admin_password }}"
+
+# Locate the Keycloak cert/key on the supplemental node, this offers
+# the potential for certmonger to manage cert renewal and simplifies
+# obtaining the cert from IPA.
+keycloak_tls_files_on_target: true
+
+# Download the keycloak archive directly to the supplemental node as
+# opposed to caching it on the host running oooq which then incurs the
+# penalty of Ansible unpacking it over a (typically) slow SSH connection.
+keycloak_archive_on_target: true
+
+# Both the PKI certificate server in IPA and Keycloak default their
+# http and https port to 8080 and 8443 respectively. Because IPA is
+# installed first ports 8080 and 8443 are already in use, bump the
+# Keycloak ports by 1 to avoid port conflicts.
+keycloak_http_port: 8081
+keycloak_https_port: 8444
+
+# IPA installs first on the supplemental and does not enable the
+# firewall. If keycloak were to install later and enabled the
+# firewall opening only the Keycloak ports then the IPA ports would
+# be blocked. Therefore turn off Keycloak's configuration of the
+# firewall. The IPA install should enable the firewall but when this
+# was attempted a bug in Ansible prevented it from working. If the IPA
+# install gains the ability to enable the firewall then
+# keycloak_configure_firewall should be turned on.
+keycloak_configure_firewall: false
+
+# Limit the JVM max heap size to 512 MB
+keycloak_java_opts: "-Xms64m -Xmx512m"
+
+# Extend the CLI connect timeout to account for slow startup of Keycloak
+# with our small heap size.
+keycloak_jboss_config_connect_timeout: 90000
+
+network_data_yaml: "{{ overcloud_templates_path }}/ci/custom_names_network_data.yaml"
+vip_data_yaml: "{{ overcloud_templates_path }}/ci/custom_names_vip_data.yaml"
+stack_name: "overcloud1"
+tempest_cloud_name: 'overcloud1'
+
+# we set this as false as we don't want to use the default
+# cloud-names.yaml created from cloud-names.yaml.j2 and instead use
+# the values we defined in ci tht templates for custom networks.
+non_custom_network: false
+
+topology_map:
+  Controller:
+    scale: 3
+    networks:
+      - network: ctlplane
+        vif: true
+      - network: external_cloud_1
+        subnet: external_cloud_1_subnet
+      - network: internal_api_cloud_1
+        subnet: internal_api_cloud_1_subnet
+      - network: storage_cloud_1
+        subnet: storage_cloud_1_subnet
+      - network: storage_mgmt_cloud_1
+        subnet: storage_mgmt_cloud_1_subnet
+      - network: tenant_cloud_1
+        subnet: tenant_cloud_1_subnet
+    network_config:
+      template: templates/ci/custom_network_multiple_nics.j2
+      default_route_network:
+        - external_cloud_1
+    # grow /srv to 50% of remaining disk space to store swift object content
+    growvols_args: >
+        /=8GB
+        /tmp=1GB
+        /var/log=10GB
+        /var/log/audit=2GB
+        /home=1GB
+        /var=50%
+        /srv=50%
+  Compute:
+    scale: 1
+    networks:
+      - network: ctlplane
+        vif: true
+      - network: internal_api_cloud_1
+        subnet: internal_api_cloud_1_subnet
+      - network: tenant_cloud_1
+        subnet: tenant_cloud_1_subnet
+      - network: storage_cloud_1
+        subnet: storage_cloud_1_subnet
+    network_config:
+      template: templates/ci/custom_network_multiple_nics.j2
