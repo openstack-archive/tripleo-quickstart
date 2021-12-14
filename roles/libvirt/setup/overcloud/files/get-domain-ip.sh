@@ -14,8 +14,12 @@ VMNAME=$1
 # confident that the formatting will remain the same).
 mac=$(virsh dumpxml $VMNAME | awk -F "'" '/mac address/ { print $2; exit }')
 
-# Look up the MAC address in the ARP table.
+# Look up the MAC address in the ARP table
+# Fallback to dhcp leases info
 ip=$(ip neigh | grep $mac | awk '{print $1;}')
+if [ -z "$ip" ]; then
+    ip=$(virsh net-dhcp-leases default --mac $mac 2>/dev/null | awk 'BEGIN {FS="ipv[46]|/"} {gsub(/ /,""); if ($2) print $2}')
+fi
 
 if [ -z "$ip" ]; then
     echo "undercloud ip is not available" >&2
