@@ -1,0 +1,21 @@
+---
+- name: Configure 'generic' repos using yum-config module
+  become: true
+  tripleo.repos.yum_config:
+    type: repo
+    name: "{{ item.reponame }}"
+    enabled: "{{ item.enabled|default('true') }}"
+    environment_file: "{{ repo_setup_env_filepath }}"
+    file_path: "/etc/yum.repos.d/{{ item.filename }}"
+    set_options:
+      baseurl: "{{ item.baseurl|default(omit) }}"
+      priority: "{{ item.priority|default(omit) }}"
+      gpgcheck: "{{ item.gpgcheck|default('0') }}"
+      mirrorlist: "{{ item.mirrorlist|default(omit) }}"
+      module_hotfixes: "{{ item.module_hotfixes|default(omit) }}"
+      includepkgs: "{{ item.includepkgs|default(omit) }}"
+      exclude: "{{ item.exclude|default(omit) }}"
+      sslverify: "{{ item.sslverify|default(omit) }}"
+  with_items: "{{ repos + add_repos + job.add_repos|default([]) }}"
+  when:
+    - item.type == 'generic'

@@ -109,6 +109,12 @@ repo_cmd_before: |
   fi
   export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
 
+  # Save environment variables, to be used afterwards
+  echo "export NODEPOOL_CENTOS_MIRROR=${NODEPOOL_CENTOS_MIRROR}" >> {{ repo_setup_env_filepath }}
+  echo "export NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY}" >> {{ repo_setup_env_filepath }}
+  echo "export RDO_DLRN_REPO=${RDO_DLRN_REPO}" >> {{ repo_setup_env_filepath }}
+  echo "export DLRN_PATH_TAG=${DLRN_PATH_TAG}" >> {{ repo_setup_env_filepath }}
+
 repos:
   # RDO repos
   - type: file

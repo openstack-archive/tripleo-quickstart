@@ -3,7 +3,7 @@
   set_fact:
     repo_config_path: "{{ working_dir }}/workspace/.quickstart/config/release/dependency_ci/{{ job.dependency|default(dependency) }}/repo_config.yaml"
 
-- name: check if we have a depednecy repo_config file
+- name: check if we have a dependency repo_config file
   stat:
     path: "{{ repo_config_path }}"
   register: repo_config_path_check
