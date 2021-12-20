@@ -49,23 +49,3 @@ access user name may be 'centos' or the like. And you may not be able to login
 as the root. The UC node name may be also prefixed with a given heat stack name,
 like `foo-undercloud`. The node also should be given a floating IP to serve as a
 bastion host proxying ansible/ssh to overcloud nodes.
-
-Access via the TripleO-UI
--------------------------
-
-With baremetal and ovb based deployments you can access the TripleO-UI via the
-undercloud's public ip address https://<virthost>
-
-Deploying TripleO in a libvirt based environment presents the additional
-challenge of accessing the isolated ovs networks on the undercloud. By default
-an ssh-tunnel service has been setup on the virthost by the tripleo-quickstart
-`enable_port_forward_for_tripleo_ui` variable.  Access the TripleO-UI with the following.
-
-From your workstation::
-
-    https://<virthost>
-
-By default a secure connection to the undercloud services has been configured
-in the /var/www/openstack-tripleo-ui-/dist/tripleo_ui_config.js file.  To use
-an insucure connections change the default variable
-``tripleo_ui_secure_access`` to false.
