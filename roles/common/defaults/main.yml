@@ -141,10 +141,9 @@ overcloud_nodes:
 #   nodes unless force_ovc: true is used in network's definition.
 #
 external_network_cidr: 192.168.23.0/24
-networks:
+default_networks:
   - name: overcloud
     bridge: brovc
-
   - name: external
     bridge: brext
     forward_mode: nat
@@ -157,6 +156,25 @@ networks:
     nat_port_range:
       - 1024
       - 65535
+
+extra_networks_count: >-
+  {% if network_isolation_type == 'multiple-nics-vlans' -%}
+  5
+  {%- else -%}
+  0
+  {%- endif %}
+
+extra_networks: |-
+   {%- set calc_extra_networks = namespace(value=[]) -%}
+   {% if network_isolation_type == 'multiple-nics-vlans' -%}
+   {%- for idx in range(extra_networks_count|int) -%}
+   {%- set nw = [{ "name": "overcloud" + idx|string, "bridge": "brovc" + idx|string }] -%}
+   {%- set calc_extra_networks.value = calc_extra_networks.value + nw -%}
+   {%- endfor -%}
+   {%- endif %}
+   {{ calc_extra_networks.value }}
+
+networks: "{{ default_networks + extra_networks }}"
 
 # Enable network isolation with single-nic-vlans for virtualized deployments
 undercloud_network_cidr: 192.168.24.0/24
