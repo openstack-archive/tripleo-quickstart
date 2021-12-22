@@ -1,7 +1,7 @@
-##################################################
-# FEATURESET050 - CONTAINERIZED UNDERCLOUD UPGRADE
-# Based on featureset047
-##################################################
+######################################################
+# FEATURESET065 - CONTAINERIZED UNDERCLOUD FFU UPGRADE
+# Based on featureset050
+######################################################
 
 ssl_overcloud: false
 undercloud_check_sanity: true
@@ -18,7 +18,7 @@ undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 
 # Tripleo-upgrade specific parameters
-undercloud_upgrade: true
+ffu_undercloud_upgrade: true
 tripleo_ci: true
 use_oooq: true
 
