@@ -89,7 +89,7 @@ python_cmd() {
 
 package_manager() {
     PKG="$(command -v dnf || command -v yum)"
-    if [ "$(python_cmd)" == "python3" ]; then
+    if [[ "$(python_cmd)" =~ "python3" ]]; then
         echo "${PKG} -y --exclude='python2*' $*"
     else
         echo "${PKG} -y --exclude='python3*' $*"
@@ -125,7 +125,7 @@ install_deps () {
     rpm -q sudo || $(package_manager) install sudo
     sudo -n true && passwordless_sudo="1" || passwordless_sudo="0"
     if [[ "$passwordless_sudo" == "1" ]] || [ "$USER_OVERRIDE_SUDO_CHECK" == "1" ]; then
-        if [ "$(python_cmd)" == "python3" ]; then
+        if [[ "$(python_cmd)" =~ "python3" ]]; then
             echo "setting up for python3"
             # possible bug in ansible, f29 python 3 env fails
             # w/o both python-libselinux packages installed
@@ -260,7 +260,7 @@ install_package_deps_via_bindep(){
 
 bootstrap_ansible_via_rpm(){
     echo "Running bootstrap_ansible_via_rpm"
-    if [ "$(python_cmd)" == "python3" ]; then
+    if [[ "$(python_cmd)" =~ "python3" ]]; then
         PACKAGES="python3-libselinux ansible ansible-python3 git rsync python3-netaddr"
     elif [ "$(python_cmd)" == "python2" ]; then
         PACKAGES=("python2-libselinux ansible git rsync python2-netaddr.noarch")
