@@ -104,6 +104,7 @@ install_ansible_collections_deps(){
     echo "Installing Ansible Collections dependencies"
     # Check if we have collections cloned in CI job
     if [[ -e ~/src/github.com/ansible-collections/ansible.utils ]]; then
+        echo "Installing collections from local directories"
         ansible-galaxy collection install --force \
             ~/src/github.com/ansible-collections/ansible.posix \
             ~/src/github.com/ansible-collections/ansible.utils \
@@ -115,6 +116,7 @@ install_ansible_collections_deps(){
 
     else
 
+        echo "Installing collections directly from Ansible Galaxy server"
         ansible-galaxy collection install --force \
             ansible.posix:=1.3.0 \
             openvswitch.openvswitch:=2.0.2 \
