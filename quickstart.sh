@@ -103,7 +103,7 @@ fi
 install_ansible_collections_deps(){
     echo "Installing Ansible Collections dependencies"
     # Check if we have collections cloned in CI job
-    if [[ -e "~/src/github.com/ansible-collections/ansible.utils" ]]; then
+    if [[ -e ~/src/github.com/ansible-collections/ansible.utils ]]; then
         ansible-galaxy collection install --force \
             ~/src/github.com/ansible-collections/ansible.posix \
             ~/src/github.com/ansible-collections/ansible.utils \
