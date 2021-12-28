@@ -132,11 +132,15 @@ install_ansible_collections_deps(){
 # requested via --bootstrap.
 bootstrap () {
     set -e
+    echo "Starting tripleo quickstart bootstrap..."
     # install required deps for a python virtual environment
+    echo "Run install_deps from bootstrap..."
     install_deps
     # setup the virtual environment
+    echo "Run install_virtual_env from bootstrap..."
     install_virtual_env
     # continue package installs with bindep
+    echo "Run install_package_deps_via_bindep from bootstrap..."
     install_package_deps_via_bindep
 
     if [ "$OPT_NO_CLONE" != 1 ]; then
@@ -162,6 +166,7 @@ bootstrap () {
         if [ "$(python_cmd)" == "python2" ]; then
             export PIP_CONSTRAINT=${PIP_CONSTRAINT:-https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt}
         fi
+        echo "Running in bootstrap: $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR"
         $(python_cmd) setup.py install egg_info --egg-base $OPT_WORKDIR
 
         if  [ ${QUICKSTART_RELEASE:-$OPT_RELEASE} == "queens" ] || [ ! -z $centos7py3 ]; then
@@ -170,32 +175,39 @@ bootstrap () {
             export UPPER_CONSTRAINTS_FILE="https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt"
             export PIP_CONSTRAINT="https://opendev.org/openstack/requirements/raw/branch/stable/train/upper-constraints.txt"
             $(python_cmd) -m pip install --force-reinstall pbr==5.4.3
+            echo "Running in bootstrap: $(python_cmd) -m pip install ${OPT_REQARGS[@]}"
             $(python_cmd) -m pip install "${OPT_REQARGS[@]}"
         else
             if [ $OPT_CLEAN == 1 ]; then
+                echo "Running in bootstrap: $(python_cmd) -m pip install --no-cache-dir --force-reinstall ${OPT_REQARGS[@]}"
                 $(python_cmd) -m pip install --no-cache-dir --force-reinstall "${OPT_REQARGS[@]}"
             else
+                echo "Running in bootstrap: $(python_cmd) -m pip install --force-reinstall ${OPT_REQARGS[@]}"
                 $(python_cmd) -m pip install --force-reinstall "${OPT_REQARGS[@]}"
             fi
         fi
+        echo "Running in bootstrap install_ansible_collections_deps..."
         install_ansible_collections_deps
 
         if [ -x "$ZUUL_CLONER" ] && [ ! -z "$ZUUL_BRANCH" ]; then
                 # pull in tripleo-quickstart-extras from source
+                echo "Clone tripleo-quickstart-extras in bootstrap and install..."
                 $ZUUL_CLONER --cache-dir \
                     /opt/git \
                     https://opendev.org \
                     openstack/tripleo-quickstart-extras
                 pushd openstack/tripleo-quickstart-extras
                 if [ $OPT_CLEAN == 1 ]; then
+                    echo "Running in bootstrap: $(python_cmd) -m pip install --no-cache-dir --force-reinstall ."
                     $(python_cmd) -m pip install --no-cache-dir --force-reinstall .
                 else
+                    echo "Running in bootstrap: $(python_cmd) -m pip install --force-reinstall ."
                     $(python_cmd) -m pip install --force-reinstall .
                 fi
                 popd
         fi
     popd
-
+    echo "Run install_ansible_collections from bootstrap..."
     install_ansible_collections
 }
 
