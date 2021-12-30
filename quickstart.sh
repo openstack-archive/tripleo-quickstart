@@ -456,7 +456,7 @@ else
     OOOQ_DIR=$OPT_WORKDIR/tripleo-quickstart
 fi
 
-if [ "$OPT_CLEAN" = 1 ]; then
+if [ "$OPT_CLEAN" = 1 -a "$OPT_RETAIN_INVENTORY_FILE" = 0 ]; then
     clean_virtualenv
 fi
 
