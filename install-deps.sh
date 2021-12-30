@@ -209,6 +209,13 @@ install_virtual_env(){
         fi
 
         . $OPT_WORKDIR/bin/activate
+        # With python3 native venv wheel is not installed by default,
+        # so let's install explicitly, without it uninstall/reinstall
+        # of a project may clean files in shared directories owned by
+        # other projects
+        if [[ "$PYTHON_VIRTUALENV_CMD" == "venv" ]]; then
+            $(python_cmd) -m pip install wheel
+        fi
 
     else
         echo "Warning: VIRTUAL_ENV=$VIRTUAL_ENV was found active and is being reused."
