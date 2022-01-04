@@ -118,10 +118,7 @@ install_ansible_collections_deps(){
 
         echo "Installing collections directly from Ansible Galaxy server"
         ansible-galaxy collection install --force \
-            ansible.posix:=1.3.0 \
-            openvswitch.openvswitch:=2.0.2 \
-            community.general:=4.0.2 \
-            community.libvirt:=1.0.2 \
+            -r ansible-role-requirements.yml \
             -p $VIRTUAL_ENV/share/ansible/collections
     fi
 }
