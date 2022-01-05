@@ -38,16 +38,30 @@ network_provision: >-
   true
   {%- endif -%}
 
+nic_environment_file: >-
+  {% if network_isolation_type == 'multiple-nics-vlans' -%}
+  {{ overcloud_templates_path }}/environments/net-multiple-nics-vlans.yaml
+  {%- else -%}
+  {{ overcloud_templates_path }}/environments/net-single-nic-with-vlans.yaml
+  {%- endif -%}
+
+external_interface: >-
+  {% if network_isolation_type == 'multiple-nics-vlans' -%}
+  eth{{ extra_networks|list|length + 1 }}
+  {%- else -%}
+  eth2
+  {%- endif -%}
+
 network_data_yaml: "{{ overcloud_templates_path }}/network-data-samples/default-network-isolation.yaml"
 network_isolation_args: >-
   {% if not release in ['train','ussuri','victoria'] -%}
-  --networks-file {{ overcloud_templates_path }}/network-data-samples/default-network-isolation.yaml
+  --networks-file {{ network_data_yaml }}
   -e {{ working_dir }}/overcloud-networks-deployed.yaml
   -e {{ working_dir }}/overcloud-vips-deployed.yaml
   {% else %}
   -e {{ overcloud_templates_path }}/environments/network-isolation.yaml
   {% endif %}
-  -e {{ overcloud_templates_path }}/environments/net-single-nic-with-vlans.yaml
+  -e {{ nic_environment_file }}
   -e {{ working_dir }}/network-environment.yaml
 
 # Tell tripleo about our environment.
@@ -120,8 +134,18 @@ use_os_tempest: true
 tempest_interface_name: public
 
 # In order to have a public network with external connectivity, we need to use
-# flat network type
-tempest_public_net_provider_type: flat
+# flat/vlan network type
+tempest_public_net_provider_type: >-
+  {% if network_isolation_type == 'multiple-nics-vlans' -%}
+  vlan
+  {%- else -%}
+  flat
+  {%- endif -%}
+
+tempest_public_net_seg_id: >-
+  {% if network_isolation_type == 'multiple-nics-vlans' -%}
+  10
+  {%- endif -%}
 
 # It is the physical network name through which public network will be created
 # having connectivity with external world.
@@ -129,7 +153,12 @@ tempest_public_net_physical_name: datacentre
 
 # Setting the tempest_cidr as it is required while creating public subnet from which
 # floating IPs gets assigned
-tempest_cidr: '192.168.24.0/24'
+tempest_cidr: >-
+  {% if network_isolation_type == 'multiple-nics-vlans' -%}
+  10.0.0.0/24
+  {%- else -%}
+  192.168.24.0/24
+  {%- endif -%}
 
 tempest_private_net_seg_id: ''
 
