@@ -26,7 +26,10 @@ docker_registry_host: >-
 # for rdo-cloud & vexxhost based check jobs, set 'tripleoussuri'
 # as docker_registry_namespace.
 docker_registry_namespace: >-
-  {% if cloudenv is defined and cloudenv in ['rdo', 'vexxhost', 'psi'] -%}
+  {% if job is defined and
+  job.alt_container_registry_namespace is defined -%}
+  {{ job.alt_container_registry_namespace }}
+  {% elif cloudenv is defined and cloudenv in ['rdo', 'vexxhost', 'psi'] -%}
   tripleoussuri
   {%- else -%}
   tripleou
