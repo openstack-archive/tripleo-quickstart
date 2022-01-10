@@ -27,7 +27,7 @@ repos:
       - id: check-yaml
         files: .*\.(yaml|yml)$
   - repo: https://github.com/ansible-community/ansible-lint.git
-    rev: v5.1.0a1
+    rev: v5.3.2
     hooks:
       - id: ansible-lint
         always_run: true
