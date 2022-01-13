@@ -40,7 +40,7 @@ repo_cmd_before: |
     source /etc/ci/mirror_info.sh
   else
     # Otherwise, fallback to official mirrors provided by CentOS.
-    export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
+    export NODEPOOL_CENTOS_MIRROR={{ ansible_env['NODEPOOL_CENTOS_MIRROR'])|default('http://mirror.centos.org/centos', true) }}
     export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
   fi
   {% if dlrn_hash_path_newest is defined and dlrn_hash_path_newest %}
