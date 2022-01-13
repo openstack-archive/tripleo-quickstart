@@ -244,7 +244,12 @@ overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
 # Supplemental node related vars. #
 # Ensure that the FreeIPA server node is provisioned during deployment.
 deploy_supplemental_node: true
-supplemental_user: centos
+supplemental_user: >-
+  {% if (ansible_distribution == "CentOS") and (ansible_distribution_major_version|int >= 9) -%}
+  cloud-user
+  {%- else -%}
+  centos
+  {%- endif -%}
 supplemental_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
 
 undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
