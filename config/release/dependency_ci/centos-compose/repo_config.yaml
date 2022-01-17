@@ -1,20 +1,44 @@
 ---
 # Try to setup repos using yum-config module if available
 use_yum_config_module: true
-compose_url: "{{ job.centos_compose_url|default('https://odcs.stream.centos.org/production/latest-CentOS-Stream/compose/') }}"
+compose_url: >-
+  {%- if (ansible_distribution_major_version|int == 8) -%}
+  https://composes.centos.org/latest-CentOS-Stream-8/compose/
+  {%- else -%}
+  https://odcs.stream.centos.org/production/latest-CentOS-Stream/compose/
+  {%- endif -%}
+compose_repo_variants:
+  common:
+    - AppStream
+    - BaseOS
+    - HighAvailability
+  centos_stream_8:
+    - PowerTools
+  centos_stream_9:
+    - CRB
+
+compose_repo_disable_repos:
+  common:
+    - quickstart-centos-appstreams.repo
+    - quickstart-centos-base.repo
+    - quickstart-centos-highavailability.repo
+  centos_stream_8:
+    - quickstart-centos-powertools.repo
+  centos_stream_9:
+    - quickstart-centos-crb.repo
 
 add_repos:
   - type: compose_repos
     compose_url: "{{ compose_url }}"
-    release: centos-stream-9
+    release: centos-stream-{{ ansible_distribution_major_version }}
     disable_conflicting: true
-    variants:
-      - AppStream
-      - BaseOS
-      - CRB
-      - HighAvailability
-    disable_repos:
-      - quickstart-centos-appstreams.repo
-      - quickstart-centos-base.repo
-      - quickstart-centos-crb.repo
-      - quickstart-centos-highavailability.repo
+    variants: "{{
+      compose_repo_variants['common'] +
+      compose_repo_variants['centos_stream_' +
+                            ansible_distribution_major_version]
+    }}"
+    disable_repos: "{{
+      compose_repo_disable_repos['common'] +
+      compose_repo_disable_repos['centos_stream_' +
+                                 ansible_distribution_major_version]
+    }}"
