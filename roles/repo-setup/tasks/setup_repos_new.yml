@@ -17,9 +17,19 @@
   register: result
   changed_when: true
 
-- include_tasks: yum-config-generic.yml
+- include_tasks: "{{ item }}"
+  loop:
+    - yum-config-generic.yml
+    - yum-config-compose.yml
+  when:
+    - repo_setup_use_collections
 
-- include_tasks: yum-config-compose.yml
+- include_tasks: "{{ item }}"
+  loop:
+    - yum-config-generic-no-collections.yml
+    - yum-config-compose-no-collections.yml
+  when:
+    - not repo_setup_use_collections
 
 - name: Run commands after repo setup
   shell: >

@@ -1,12 +1,18 @@
 ---
 # Try to setup repos using yum-config module if available
 use_yum_config_module: true
-compose_url: >-
-  {%- if (ansible_distribution_major_version|int == 8) -%}
+default_compose_url: >-
+  {%- if (ansible_distribution_major_version is version('8','==')) -%}
   https://composes.centos.org/latest-CentOS-Stream-8/compose/
   {%- else -%}
   https://odcs.stream.centos.org/production/latest-CentOS-Stream/compose/
   {%- endif -%}
+compose_url: >-
+  {{
+    centos_compose_url |
+      default(job.centos_compose_url) |
+      default(default_compose_url)
+  }}
 compose_repo_variants:
   common:
     - AppStream
