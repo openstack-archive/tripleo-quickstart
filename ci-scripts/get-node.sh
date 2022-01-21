@@ -65,7 +65,7 @@ $WORKSPACE/bin/cico node get \
     --arch x86_64 \
     --release $CENTOS_RELEASE \
     --count 1 \
-    --retry-count 6 \
+    --retry-count 15 \
     --retry-interval 60 \
     -f csv | sed "1d" > $WORKSPACE/provisioned.csv
 
