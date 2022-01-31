@@ -7,11 +7,11 @@
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
       - tripleo-standalone-scenarios-pipeline
-      - openstack-tox-molecule
       - tripleo-upgrades-master-pipeline
     check:
       jobs:
         - openstack-tox-linters
+        - tripleo-tox-molecule
         - tripleo-ci-centos-8-content-provider:
             dependencies:
               - openstack-tox-linters
@@ -28,4 +28,5 @@
     gate:
       queue: tripleo
       jobs:
+        - tripleo-tox-molecule
         - openstack-tox-linters
