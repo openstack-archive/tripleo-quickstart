@@ -148,7 +148,8 @@ repos:
   - type: generic
     reponame: quickstart-centos-opstools
     filename: quickstart-centos-opstools.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/opstools/x86_64/collectd-5/
+    baseurl: https://trunk.rdoproject.org/centos8-master/deps/collectd/
+    #TODO(marios): change when http://mirror.centos.org/centos/8-stream/opstools/x86_64/collectd-5/Packages/
 
 repo_cmd_after: |
 
