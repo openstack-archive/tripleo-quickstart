@@ -151,12 +151,13 @@ repos:
   - type: generic
     reponame: quickstart-centos-ceph-nautilus
     filename: quickstart-centos-ceph-nautilus.repo
-    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8/storage/x86_64/ceph-nautilus/
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos8-master/deps/storage/nautilus/
+    #TODO(marios) change when nautilus available in 8-stream mirrors
 
   - type: generic
     reponame: quickstart-centos-opstools
     filename: quickstart-centos-opstools.repo
-    baseurl: https://trunk.rdoproject.org/centos8-master/deps/collectd/
+    baseurl: ${NODEPOOL_RDO_PROXY}/centos8-master/deps/collectd/
     #TODO(marios): change when http://mirror.centos.org/centos/8-stream/opstools/x86_64/collectd-5/Packages/
 
   - type: generic
