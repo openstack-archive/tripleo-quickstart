@@ -103,7 +103,8 @@ repo_cmd_before: |
   echo "export DLRN_PATH_TAG=${DLRN_PATH_TAG}" >> {{ repo_setup_env_filepath }}
 
 # Try to setup repos using yum-config module if available
-use_yum_config_module: true
+#  TODO (rlandy) re-enable this later
+use_yum_config_module: false
 repos:
   # RDO repos
   - type: file
