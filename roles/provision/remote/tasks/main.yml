@@ -16,7 +16,10 @@
   block:
     - name: Ensure tuned is installed
       package:
-        name: "tuned"
+        # amoralej - we need to add subscription-manager after bz#2029405
+        name:
+          - tuned
+          - subscription-manager
         state: "present"
       become: true
 
