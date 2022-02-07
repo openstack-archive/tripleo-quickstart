@@ -13,6 +13,8 @@ HW_ENV_DIR=$6
 NETWORK_ISOLATION=$7
 CONFIG=$8
 
+: ${DISTRO_PATH:=""}
+
 # (trown) This is so that we ensure separate ssh sockets for
 # concurrent jobs. Without this, two jobs running in parallel
 # would try to use the same undercloud-stack socket.
@@ -38,5 +40,5 @@ bash quickstart.sh \
     --extra-vars undercloud_instackenv_template=$WORKSPACE/$HW_ENV_DIR/instackenv.json \
     --extra-vars network_environment_file=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/$NETWORK_ISOLATION.yml \
     --extra-vars nic_configs_dir=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/nic_configs/ \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST

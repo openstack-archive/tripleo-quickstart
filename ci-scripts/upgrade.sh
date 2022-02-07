@@ -13,6 +13,7 @@ MAJOR_UPGRADE=$6
 PACEMAKER=$7
 TARGET_VERSION=$8
 
+: ${DISTRO_PATH:=""}
 
 if [ "$JOB_TYPE" = "gate" ] || [ "$JOB_TYPE" = "periodic" ]; then
     unset REL_TYPE
@@ -42,5 +43,5 @@ bash quickstart.sh \
     --tags all \
     --teardown all \
     --playbook upgrade.yml \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST

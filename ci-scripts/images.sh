@@ -10,6 +10,8 @@ BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
+: ${DISTRO_PATH:=""}
+
 # These are set here to make it possible to locally reproduce the promote
 # image building job in the same way as the other jobs.
 PUBLISH=${PUBLISH:-"false"}
@@ -45,5 +47,5 @@ bash quickstart.sh \
     --extra-vars artib_image_stage_location="$REL_TYPE" \
     --bootstrap \
     --no-clone \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE \
+    --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE \
     $VIRTHOST

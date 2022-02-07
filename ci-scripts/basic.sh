@@ -5,6 +5,7 @@
 set -eux
 
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
+: ${DISTRO_PATH:=""}
 
 # CONFIG and JOB_TYPE are not used here, but kept for
 # consistency with other jobs to make JJB cleaner.
@@ -38,5 +39,5 @@ bash quickstart.sh \
     --no-clone \
     --bootstrap \
     -e virthost_user=$VIRTHOST_USER \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $VIRTHOST
