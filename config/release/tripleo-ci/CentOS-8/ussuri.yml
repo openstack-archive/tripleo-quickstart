@@ -184,8 +184,7 @@ repos:
   - type: generic
     reponame: quickstart-centos-ceph-nautilus
     filename: quickstart-centos-ceph-nautilus.repo
-    baseurl: ${NODEPOOL_RDO_PROXY}/centos8-master/deps/storage/nautilus/
-    #TODO(marios) change when nautilus available in 8-stream mirrors
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/storage/x86_64/ceph-nautilus/
 
 repo_cmd_after: |
   # Replace trunk.rdoproject.org to nodepool proxy
