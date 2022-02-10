@@ -45,3 +45,5 @@ undercloud_enable_swift_encryption: true
 undercloud_enable_validations: false
 
 undercloud_enable_paunch: false
+
+ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
