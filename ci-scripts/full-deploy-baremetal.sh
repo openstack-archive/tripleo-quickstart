@@ -11,6 +11,7 @@
 set -eux
 
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
+: ${DISTRO_PATH:=""}
 
 RELEASE=$1
 HW_ENV_DIR=$2
@@ -32,6 +33,6 @@ bash quickstart.sh \
     --extra-vars undercloud_instackenv_template=$WORKSPACE/$HW_ENV_DIR/instackenv.json \
     --extra-vars network_environment_file=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/${NETWORK_ISOLATION}.yml \
     --extra-vars nic_configs_dir=$WORKSPACE/$HW_ENV_DIR/network_configs/$NETWORK_ISOLATION/nic_configs/ \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     $OPT_ADDITIONAL_PARAMETERS \
     $VIRTHOST

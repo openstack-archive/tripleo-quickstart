@@ -2,6 +2,7 @@
 # functionality for quickstart and quickstart-extras
 
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
+: ${DISTRO_PATH:=""}
 
 # preparation steps to run with the gated changes
 if [ "$JOB_TYPE" = "gate" ] || \
@@ -18,7 +19,7 @@ if [ "$JOB_TYPE" = "gate" ] || \
         --no-clone \
         --bootstrap \
         --playbook gate-quickstart.yml \
-        --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+        --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
         $OPT_ADDITIONAL_PARAMETERS \
         $VIRTHOST
 fi

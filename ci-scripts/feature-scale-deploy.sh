@@ -10,6 +10,8 @@ BUILD_SYS=$2
 CONFIG=$3
 JOB_TYPE=$4
 
+: ${DISTRO_PATH:=""}
+
 # CI_ENV is set on the slave running the jobs
 # REL_TYPE can be specific release type like 'testing'
 
@@ -36,7 +38,7 @@ bash quickstart.sh \
     -e deploy_timeout=75 \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --tags all \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     --playbook scale_nodes.yml \
     $VIRTHOST
 
@@ -50,6 +52,6 @@ bash quickstart.sh \
     --retain-inventory \
     --config $WORKSPACE/config/general_config/$CONFIG.yml \
     --tags all \
-    --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+    --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
     --playbook scale_nodes_verify.yml \
     $VIRTHOST

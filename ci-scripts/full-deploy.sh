@@ -8,6 +8,7 @@ set -eux
 : ${OPT_ADDITIONAL_PARAMETERS:=""}
 : ${WORKSPACE:=$HOME/.quickstart}
 : ${VIRTHOST:=127.0.0.1}
+: ${DISTRO_PATH:=""}
 
 RELEASE=${1:-master-tripleo-ci}
 # unused variable in script, kept for consistency
@@ -70,7 +71,7 @@ case "$JOB_TYPE" in
             --playbook build-test-packages.yml \
             --tags all \
             --teardown all \
-            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
             $OPT_ADDITIONAL_PARAMETERS \
             $VIRTHOST
         # skip provisioning and run the gate using the previously built RPMs
@@ -83,7 +84,7 @@ case "$JOB_TYPE" in
             --skip-tags provision \
             --tags all \
             --teardown none \
-            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
             $OPT_ADDITIONAL_PARAMETERS \
             $VIRTHOST
         ;;
@@ -97,7 +98,7 @@ case "$JOB_TYPE" in
             --playbook build-test-packages.yml \
             --tags all \
             --teardown all \
-            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
             $OPT_ADDITIONAL_PARAMETERS \
             $VIRTHOST
 
@@ -111,7 +112,7 @@ case "$JOB_TYPE" in
             --tags all \
             --teardown none \
             --playbook quickstart-extras-standalone.yml \
-            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
             $OPT_ADDITIONAL_PARAMETERS \
             $VIRTHOST
         ;;
@@ -124,7 +125,7 @@ case "$JOB_TYPE" in
             --playbook build-test-packages.yml \
             --tags all \
             --teardown all \
-            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
             $OPT_ADDITIONAL_PARAMETERS \
             $VIRTHOST
 
@@ -149,7 +150,7 @@ case "$JOB_TYPE" in
             --config $WORKSPACE/config/general_config/$CONFIG.yml \
             --working-dir $WORKSPACE/ \
             --no-clone \
-            --release ${CI_ENV:+$CI_ENV/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
+            --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
             $OPT_ADDITIONAL_PARAMETERS \
             $VIRTHOST
 esac
