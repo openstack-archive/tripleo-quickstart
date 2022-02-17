@@ -55,6 +55,8 @@ features_map = {
     'overcloud_update': ['true', 'UPDoc', 'Overcloud Update (Minor Upgrade)'],
     'ffu_overcloud_upgrade': ['true', 'UPGff',
                               'Fast-forward Overcloud Upgrade'],
+    'ffu_undercloud_upgrade': ['true', 'UPGff',
+                               'Fast-forward Undercloud Upgrade'],
     'standalone_role': ['Standalone.yaml', 'Stdln', 'Standalone Deploy'],
     'test_ping': ['true', 'PingT', 'Ping and ssh tests'],
     'run_tempest': ['true', 'Temps', 'run Tempest'],
