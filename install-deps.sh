@@ -132,6 +132,7 @@ install_deps () {
             # https://bugs.launchpad.net/tripleo/+bug/1812324
             PYTHON_PACKAGES+=("python3-libselinux")
             PYTHON_PACKAGES+=("python3-PyYAML")
+            PYTHON_PACKAGES+=("python3-devel")
             SETUPTOOLS_PACKAGE=python3-setuptools
             if [ -z $centos7py3 ]; then
                 VIRTUALENV_PACKAGE=python3-virtualenv
@@ -148,9 +149,9 @@ install_deps () {
             VIRTUALENV_PACKAGE=python2-virtualenv
             PIP_PACKAGE=python-pip
         fi
-        echo "Installing RPM packages $PYTHON_PACKAGES $SETUPTOOLS_PACKAGE \
+        echo "Installing RPM packages ${PYTHON_PACKAGES[@]} $SETUPTOOLS_PACKAGE \
         $VIRTUALENV_PACKAGE $PIP_PACKAGE" | tr -s [:space:]
-        sudo $(package_manager) install $PYTHON_PACKAGES \
+        sudo $(package_manager) install ${PYTHON_PACKAGES[@]} \
                                             $SETUPTOOLS_PACKAGE \
                                             $PIP_PACKAGE
         # Install python3 virtualenv via pip on CentOS7
