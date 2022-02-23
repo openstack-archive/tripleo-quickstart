@@ -73,6 +73,10 @@ repos:
     pkg_name: "centos-release-openstack-{{ release }}"
     custom_cmd: 'sudo dnf install -y --enablerepo=extras'
 
+  - type: package
+    pkg_name: "centos-release-opstools"
+    custom_cmd: 'sudo dnf install -y --enablerepo=extras'
+
   # Needed for mock installation
   - type: generic
     reponame: "delorean-{{ release }}-build-deps"
