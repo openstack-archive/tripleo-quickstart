@@ -29,7 +29,7 @@ fi
 
 {% endif %}
 
-{% if overcloud_as_undercloud|bool and ansible_distribution_major_version is version(8, '<=') %}
+{% if overcloud_as_undercloud|bool %}
 # Create ifcfg file if not exist, as it's removed in overcloud prep
 # https://review.opendev.org/q/I3b8cb5f8c413c109da1228878db9cff4d439273b
 if [ ! -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
