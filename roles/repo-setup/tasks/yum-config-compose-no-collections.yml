@@ -1,0 +1,23 @@
+---
+- name: Configure 'compose' repos using yum-config cli tool
+  become: true
+  shell: >
+    export PATH=$PATH:/usr/local/bin && \
+    tripleo-yum-config enable-compose-repos \
+      --compose-url {{ item.compose_url|quote }} \
+      --release {{ item.release|quote }} \
+      {% if item.variants is defined -%}
+        --variants {{ item.variants|join(' ') }} \
+      {% endif -%}
+      {% if item.disable_conflicting is defined -%}
+        --disable-all-conflicting \
+      {% endif -%}
+      {% if item.arch is defined -%}
+        --arch {{ item.arch|quote }} \
+      {% endif -%}
+      {% if item.disable_repos is defined -%}
+        --disable-repos {{ item.disable_repos|join(' ') }} \
+      {%- endif -%}
+  with_items: "{{ repos + add_repos + job.add_repos|default([]) }}"
+  when:
+    - item.type == 'compose_repos'

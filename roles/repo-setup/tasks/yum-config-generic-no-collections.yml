@@ -1,0 +1,39 @@
+---
+- name: Define options that are optional in set-opts
+  set_fact:
+    optional_set_opts:
+      - baseurl
+      - priority
+      - mirrorlist
+      - module_hotfixes
+      - includepkgs
+      - exclude
+      - sslverify
+
+- name: Configure 'generic' repos using yum-config module
+  become: true
+  shell: >
+    export PATH=$PATH:/usr/local/bin && \
+    source {{ repo_setup_env_filepath }} && \
+    tripleo-yum-config repo \
+      --name {{ item.reponame }} \
+      --config-file-path "/etc/yum.repos.d/{{ item.filename }}" \
+      {% if item.enabled is defined and not item.enabled|bool -%}
+      --disable \
+      {% else -%}
+      --enable \
+      {% endif -%}
+      --set-opts \
+      {% for key,value in item.items() -%}
+        {%- if key in optional_set_opts -%}
+          {%- if value|type_debug == "list" -%}
+            {{ key }}={{ value|join(',') }} \
+          {% else -%}
+            {{ key }}={{ value }} \
+          {% endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      gpgcheck={{ item.gpgcheck|default(0) }}
+  with_items: "{{ repos + add_repos + job.add_repos|default([]) }}"
+  when:
+    - item.type == 'generic'
