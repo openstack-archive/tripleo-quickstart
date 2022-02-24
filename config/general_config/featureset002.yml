@@ -153,7 +153,7 @@ tempest_tempestconf_profile:
   os-cloud: "{{ tempest_cloud_name }}"
   out: "{{ tempest_workspace }}/etc/tempest.conf"
   network-id: "{{ tempest_neutron_public_network_id }}"
-  overrides: "{{ tempest_tempest_conf_overrides | default({}) }}"
+  overrides: "{{ tempest_tempest_conf_overrides | default({}) | combine(tempest_tempestconf_profile_overrides | default({}), recursive=True) }}"
 
 tempest_check_whitelist:
   - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
