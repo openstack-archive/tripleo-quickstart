@@ -144,6 +144,7 @@ repos:
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
     exclude:
       - openssl*-3.0.1-12.*
+      - flexiblas*-3.0.4-7.*
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
