@@ -135,15 +135,12 @@ repos:
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/BaseOS/x86_64/os/
-    exclude:
-      - openssl*-3.0.1-12.*
 
   - type: generic
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
     exclude:
-      - openssl*-3.0.1-12.*
       - flexiblas*-3.0.4-7.*
 
   # centos9 the equivalent to powertools is CRB
@@ -169,10 +166,6 @@ repo_cmd_after: |
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean.repo
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-master-deps.repo
   sudo sed -i -e "s|priority=1|priority=20|g" /etc/yum.repos.d/delorean.repo
-  # Temp downgrade openssl - https://bugs.launchpad.net/tripleo/+bug/1962298
-  if [[ "$(rpm  -qa | grep openssl)" ==  *"3.0.1-12"* ]]; then
-    sudo dnf downgrade openssl 1:3.0.1-5 -y;
-  fi
   # continue from here
   sudo rpm -e epel-release || true;
   sudo dnf remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
