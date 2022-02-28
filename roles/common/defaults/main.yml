@@ -248,6 +248,7 @@ non_root_group: "{{ non_root_user }}"
 libvirt_volume_path: "{{ working_dir }}/pool"
 
 libvirt_uri: qemu:///session
+libvirt_session_socket: libvirt-sock
 
 # Whether to give permissive access to files owned by the non_root_user.
 # This is required if the non_root_user is not used to run libvirt tasks.
