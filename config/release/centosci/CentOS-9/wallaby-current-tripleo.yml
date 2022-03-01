@@ -1,0 +1,82 @@
+release: wallaby
+distro_ver: centos9
+dlrn_hash_tag: current-tripleo
+docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
+dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
+overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
+ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
+
+docker_registry_host: trunk.registry.rdoproject.org
+docker_registry_namespace: tripleowallabycentos9
+
+overcloud_as_undercloud: true
+update_images: true
+
+libvirt_session_socket: virtqemud-sock
+
+overcloud_image: >-
+  {% if whole_disk_images|bool -%}
+  overcloud-hardened-uefi-full
+  {%- else -%}
+  overcloud-full
+  {%- endif -%}
+overcloud_image_type: >-
+  {% if whole_disk_images|bool -%}
+  qcow2
+  {%- else -%}
+  tar
+  {%- endif -%}
+images:
+  - name: "{{ overcloud_image }}"
+    url: "{{ overcloud_image_url }}"
+    type: "{{ overcloud_image_type }}"
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+
+repos:
+  - type: file
+    filename: delorean.repo
+    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/{{ dlrn_hash_tag }}/delorean.repo"
+
+  - type: file
+    filename: delorean-deps.repo
+    down_url: https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/delorean-deps.repo
+
+  - type: generic
+    reponame: quickstart-centos-base
+    filename: quickstart-centos-base.repo
+    baseurl: http://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-appstreams
+    filename: quickstart-centos-appstreams.repo
+    baseurl: http://mirror.stream.centos.org/9-stream/AppStream/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-crb
+    filename: quickstart-centos-crb.repo
+    baseurl: http://mirror.stream.centos.org/9-stream/CRB/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-highavailability
+    filename: quickstart-centos-highavailability.repo
+    baseurl: http://mirror.stream.centos.org/9-stream/HighAvailability/x86_64/os/
+
+
+repo_cmd_after: |
+  sudo dnf repolist;
+  sudo dnf module list;
+  {% if repo_setup_run_update|default(true)|bool %}
+  sudo dnf update -y
+  {% endif %}
+
+undercloud_rpm_dependencies: >-
+  python3-tripleoclient
+  tripleo-operator-ansible
+
+# baseos settings
+baseos_undercloud_image_url: https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20211020.0.x86_64.qcow2
+baseos_image: centos
+baseos_image_type: qcow2
+baseos_md5sum: "a42ef58319a546d038ea716dc693dda6  CentOS-Stream-GenericCloud-9-20211020.0.x86_64.qcow2"
