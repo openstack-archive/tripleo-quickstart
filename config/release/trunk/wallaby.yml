@@ -82,7 +82,7 @@ repos:
   - type: generic
     reponame: quickstart-centos-opstools
     filename: quickstart-centos-opstools.repo
-    baseurl: http://mirror.centos.org/centos/8/opstools/x86_64/collectd-5/
+    baseurl: http://mirror.centos.org/centos/8-stream/opstools/x86_64/collectd-5/
 
 repo_cmd_after: |
   sudo dnf repolist;
