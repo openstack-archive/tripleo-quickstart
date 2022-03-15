@@ -6,6 +6,7 @@ not needing to maintain/host a specific undercloud image.
 
 ## Variables
 
+* `convert_image_base`: -- base image to convert into an undercloud image
 * `convert_image_working_dir`: -- directory to be used for image conversion
 * `convert_image_template`: jinja template for the script which does the
   conversion
