@@ -3,13 +3,13 @@ distro_ver: centos9
 dlrn_hash_tag: current-tripleo
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
-overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
 ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
 
 docker_registry_host: trunk.registry.rdoproject.org
 docker_registry_namespace: tripleomastercentos9
 
 overcloud_as_undercloud: true
+whole_disk_images: true
 update_images: true
 
 libvirt_session_socket: virtqemud-sock
@@ -26,10 +26,20 @@ overcloud_image_type: >-
   {%- else -%}
   tar
   {%- endif -%}
+overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/{{ overcloud_image }}.{{ overcloud_image_type }}"
+
+# overcloud-hardened-uefi full can't currently be used as undercloud base
+undercloud_base_image: overcloud_full
+undercloud_base_image_type: tar
+undercloud_base_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/{{ undercloud_base_image }}.{{ undercloud_base_image_type }}"
+
 images:
   - name: "{{ overcloud_image }}"
     url: "{{ overcloud_image_url }}"
     type: "{{ overcloud_image_type }}"
+  - name: "{{ undercloud_base_image }}"
+    url: "{{ undercloud_base_image_url }}"
+    type: "{{ undercloud_base_image_type }}"
   - name: ipa_images
     url: "{{ ipa_image_url }}"
     type: tar
