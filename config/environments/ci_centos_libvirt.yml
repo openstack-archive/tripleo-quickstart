@@ -25,6 +25,9 @@ test_ping: true
 tempest_config: false
 run_tempest: false
 
+# undercloud settings
+undercloud_extra_grub_params: net.ifnames=0 biosdevname=0
+
 # standalone interface
 standalone_interface: eth1
 standalone_ip: 192.168.24.2
