@@ -91,3 +91,10 @@ test_white_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.t
 undercloud_enable_validations: false
 
 undercloud_enable_paunch: false
+
+undercloud_parameter_defaults_args: >-
+  {%- if ansible_distribution in ["RedHat", "CentOS"] and ansible_distribution_major_version|int < 8 %}
+  {'IronicIPXEUefiSnpOnly': 'false'}
+  {%- else -%}
+  {'IronicIPXEUefiSnpOnly': 'true'}
+  {%- endif -%}
