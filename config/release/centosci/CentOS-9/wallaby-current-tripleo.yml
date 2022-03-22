@@ -29,7 +29,7 @@ overcloud_image_type: >-
 overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/{{ overcloud_image }}.{{ overcloud_image_type }}"
 
 # overcloud-hardened-uefi full can't currently be used as undercloud base
-undercloud_base_image: overcloud_full
+undercloud_base_image: overcloud-full
 undercloud_base_image_type: tar
 undercloud_base_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/{{ undercloud_base_image }}.{{ undercloud_base_image_type }}"
 
