@@ -37,6 +37,9 @@ images:
   - name: "{{ overcloud_image }}"
     url: "{{ overcloud_image_url }}"
     type: "{{ overcloud_image_type }}"
+  - name: "{{ undercloud_base_image }}"
+    url: "{{ undercloud_base_image_url }}"
+    type: "{{ undercloud_base_image_type }}"
   - name: ipa_images
     url: "{{ ipa_image_url }}"
     type: tar

@@ -9,6 +9,7 @@ set -eux
 : ${WORKSPACE:=$HOME/.quickstart}
 : ${VIRTHOST:=127.0.0.1}
 : ${DISTRO_PATH:=""}
+: ${OPT_ENVIRONMENT:=/$WORKSPACE/config/environments/default_libvirt.yml}
 
 RELEASE=${1:-master-tripleo-ci}
 # unused variable in script, kept for consistency
@@ -148,6 +149,7 @@ case "$JOB_TYPE" in
             --bootstrap \
             --tags all \
             --config $WORKSPACE/config/general_config/$CONFIG.yml \
+            --environment $OPT_ENVIRONMENT \
             --working-dir $WORKSPACE/ \
             --no-clone \
             --release ${CI_ENV:+$CI_ENV/}${DISTRO_PATH:+$DISTRO_PATH/}$RELEASE${REL_TYPE:+-$REL_TYPE} \
