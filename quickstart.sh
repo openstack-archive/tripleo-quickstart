@@ -102,7 +102,7 @@ fi
 # This installs all required collections to quickstart virtualenv
 install_ansible_collections_deps(){
     echo "Installing Ansible Collections dependencies"
-    # Check if we have collections cloned in CI job
+    # Install ansible-collection collections cloned by CI if available
     if [[ -e ~/src/github.com/ansible-collections/ansible.utils ]]; then
         echo "Installing collections from local directories"
         ansible-galaxy collection install --force \
@@ -113,14 +113,38 @@ install_ansible_collections_deps(){
             ~/src/github.com/ansible-collections/community.libvirt \
             ~/src/github.com/ansible-collections/openvswitch.openvswitch \
             -p $VIRTUAL_ENV/share/ansible/collections
-
-    else
-
-        echo "Installing collections directly from Ansible Galaxy server"
-        ansible-galaxy collection install --force \
-            -r ansible-role-requirements.yml \
-            -p $VIRTUAL_ENV/share/ansible/collections
     fi
+
+    # Use collections already cloned by CI if they're available
+    OS_COLLECTIONS="ansible-config_template ansible-collections-openstack \
+        tripleo-operator-ansible"
+    for COLLECTION_REPO in $OS_COLLECTIONS; do
+        if [[ -d ~/src/opendev.org/openstack/$COLLECTION_REPO ]]; then
+            ansible-galaxy collection install --force \
+                ~/src/opendev.org/openstack/$COLLECTION_REPO \
+                -p $VIRTUAL_ENV/share/ansible/collections
+        fi
+    done
+
+    # Install collections that weren't caught above from the requirements file
+    ansible-galaxy collection install \
+        -r ansible-collection-requirements.yml \
+        -p $VIRTUAL_ENV/share/ansible/collections
+}
+
+install_ansible_roles(){
+    # Use roles already cloned by CI if they're available
+    OS_ROLES="openstack-ansible-os_tempest ansible-role-python_venv_build"
+    for ROLE_REPO in $OS_ROLES; do
+        if [[ -d ~/src/opendev.org/openstack/$ROLE_REPO ]]; then
+            ansible-galaxy role install --force \
+                git+file://$HOME/src/opendev.org/openstack/$ROLE_REPO \
+                -p $VIRTUAL_ENV/share/ansible/roles
+        fi
+    done
+    ansible-galaxy role install \
+        -r ansible-role-requirements.yml \
+        -p $VIRTUAL_ENV/share/ansible/roles
 }
 
 # This creates a Python virtual environment and installs
@@ -206,6 +230,8 @@ bootstrap () {
     popd
     echo "Run install_ansible_collections from bootstrap..."
     install_ansible_collections
+    echo "Run install_ansible_roles from bootstrap..."
+    install_ansible_roles
 }
 
 activate_venv() {

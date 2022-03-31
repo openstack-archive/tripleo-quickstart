@@ -2,13 +2,9 @@ git+https://opendev.org/openstack/tripleo-quickstart-extras/#egg=tripleo-quickst
 git+https://opendev.org/openstack/tripleo-ha-utils/#egg=tripleo-ha-utils
 # browbeat is no longer supported integrated w/ tq
 #git+https://opendev.org/x/browbeat/#egg=browbeat
-git+https://opendev.org/openstack/openstack-ansible-os_tempest/#egg=openstack-ansible-os_tempest
-git+https://opendev.org/openstack/ansible-role-python_venv_build/#egg=ansible-role-python_venv_build
-git+https://opendev.org/openstack/ansible-config_template/#egg=ansible-config_template
+# TODO(rcastillo): Install ansible-role-collect-log through galaxy
 git+https://opendev.org/openstack/ansible-role-collect-logs/#egg=ansible-role-collect-logs
 git+https://opendev.org/openstack/openstack-tempest-skiplist/#egg=openstack-tempest-skiplist
-git+https://opendev.org/openstack/ansible-collections-openstack/#egg=ansible-collections-openstack.cloud
-git+https://opendev.org/openstack/tripleo-operator-ansible/#egg=tripleo-operator-ansible
 git+https://opendev.org/openstack/tripleo-ci/#egg=tripleo-ci
 # NOTE: tripleo-ansible, tripleo-ipa are required for some jobs
 # (including standalone deployed with TLS).
