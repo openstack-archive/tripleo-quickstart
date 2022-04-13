@@ -8,14 +8,18 @@ docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 # instead of 'tripleoussuri'
 # docker_registry_namespace: "tripleou"
 dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
-overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/overcloud-full.tar"
-ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}/ironic-python-agent.tar"
+
+image_location: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ dlrn_hash|default(dlrn_hash_tag) }}"
+overcloud_image_url: "{{ image_location }}/overcloud-full.tar"
+ipa_image_url: "{{ image_location }}/ironic-python-agent.tar"
 
 docker_registry_host: trunk.registry.rdoproject.org
 docker_registry_namespace: "tripleo{{ release }}"
 
 overcloud_as_undercloud: true
 update_images: true
+whole_disk_images: true
+libvirt_boot_mode: bios
 images:
   - name: overcloud-full
     url: "{{ overcloud_image_url }}"
