@@ -79,8 +79,11 @@ ephemeral_heat: "{{ (release not in ['train','ussuri','victoria']) | bool }}"
 
 tempest_install_method: distro
 tempest_cloud_name: 'undercloud'
-# There is no external network used for so disabling neutron
-tempest_service_available_neutron: false
+# Enable neutron service to create public network
+tempest_service_available_neutron: true
+# Do not create private network and router on undercloud
+tempest_private_net_create: false
+tempest_router_create: false
 
 tempest_test_whitelist: "{{ tempest_whitelist }}"
 tempest_test_blacklist: "{{ test_black_regex }}"
