@@ -23,6 +23,12 @@ compose_repo_variants:
   centos_stream_9:
     - CRB
 
+compose_repo_variants_list:  "{{
+  compose_repo_variants['common'] +
+  compose_repo_variants['centos_stream_' +
+                        ansible_distribution_major_version]
+}}"
+
 compose_repo_disable_repos:
   common:
     - quickstart-centos-appstreams.repo
@@ -33,18 +39,19 @@ compose_repo_disable_repos:
   centos_stream_9:
     - quickstart-centos-crb.repo
 
+compose_repo_disable_repos_list: "{{
+  compose_repo_disable_repos['common'] +
+  compose_repo_disable_repos['centos_stream_' +
+                             ansible_distribution_major_version]
+}}"
+
+# remove '.repo' to get a dependency_override_repos list
+dependency_override_repos: "{{ compose_repo_disable_repos_list | map('regex_replace', '.repo$', '') | list }}"
+
 add_repos:
   - type: compose_repos
     compose_url: "{{ compose_url }}"
     release: centos-stream-{{ ansible_distribution_major_version }}
     disable_conflicting: true
-    variants: "{{
-      compose_repo_variants['common'] +
-      compose_repo_variants['centos_stream_' +
-                            ansible_distribution_major_version]
-    }}"
-    disable_repos: "{{
-      compose_repo_disable_repos['common'] +
-      compose_repo_disable_repos['centos_stream_' +
-                                 ansible_distribution_major_version]
-    }}"
+    variants: "{{ compose_repo_variants_list }}"
+    disable_repos: "{{ compose_repo_disable_repos_list }}"
