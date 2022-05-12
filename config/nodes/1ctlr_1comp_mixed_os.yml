@@ -1,0 +1,32 @@
+# Define a single controller node and a single compute node.
+overcloud_nodes:
+  - name: control_0
+    flavor: control
+    virtualbmc_port: 6230
+    default_name: overcloud-controller-0
+    hostnamemap_override: "{{ hostvars[groups['overcloud'][0]].ansible_hostname }}"
+
+  - name: compute_0
+    flavor: compute
+    virtualbmc_port: 6231
+    default_name: overcloud-compute-0
+    hostnamemap_override: "{{ hostvars[groups['overcloud'][1]].ansible_hostname }}"
+
+node_count: 2
+
+topology_map_control:
+  Controller:
+    scale: 1
+    # grow /srv to 50% of remaining disk space to store swift object content
+    growvols_args: >
+        /=8GB
+        /tmp=1GB
+        /var/log=10GB
+        /var/log/audit=2GB
+        /home=1GB
+        /var=50%
+        /srv=50%
+
+topology_map_compute:
+  Compute:
+    scale: 1

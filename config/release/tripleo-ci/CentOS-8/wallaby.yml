@@ -4,7 +4,13 @@ overcloud_as_undercloud: true
 release: wallaby
 distro_ver: centos8
 distro_deps_repo_name: deps
-dlrn_hash_tag: "{{ job.provider_dlrn_hash_tag_branch[release]|default('current-tripleo') }}"
+dlrn_hash_tag: >-
+  {% if registry_distro is defined and
+  registry_distro | default('') | length > 0 -%}
+  {{ job.provider_dlrn_hash_distro[registry_distro] }}
+  {%- else -%}
+  {{ job.provider_dlrn_hash_tag_branch[release]|default('current-tripleo') }}
+  {%- endif -%}
 dlrn_hash_tag_newest: current
 validate_on: rdo
 
@@ -19,7 +25,12 @@ docker_registry_host: >-
   build_container_images|default(false)|bool -%}
   127.0.0.1:5001
   {%- elif job.consumer_job | default(false) | bool -%}
+  {%- if registry_distro is defined and
+  registry_distro | default('') | length > 0 -%}
+  {{ job.registry_ip_address_distro[registry_distro] }}:5001
+  {%- else -%}
   {{ job.registry_ip_address_branch[release] }}:5001
+  {%- endif -%}
   {%- else -%}
   {{ job.alt_container_registry|default('quay.io') }}
   {%- endif -%}
