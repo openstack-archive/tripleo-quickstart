@@ -195,6 +195,8 @@ repo_cmd_after: |
   sudo dnf remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
   sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  # Save Compose-ID info
+  sudo curl -s -o /etc/yum.repos.d/COMPOSE_ID ${NODEPOOL_CENTOS_MIRROR}/8-stream/COMPOSE_ID
   sudo dnf repolist;
   sudo dnf module list;
   sudo dnf module disable container-tools:rhel8 -y;
