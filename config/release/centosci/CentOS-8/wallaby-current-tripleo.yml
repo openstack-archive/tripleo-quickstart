@@ -8,8 +8,8 @@ image_location: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rd
 overcloud_image_url: "{{ image_location }}/overcloud-full.tar"
 ipa_image_url: "{{ image_location }}/ironic-python-agent.tar"
 
-docker_registry_host: trunk.registry.rdoproject.org
-docker_registry_namespace: "tripleo{{ release }}"
+docker_registry_host: quay.rdoproject.org
+docker_registry_namespace: tripleowallabycentos8
 
 overcloud_as_undercloud: true
 update_images: true
