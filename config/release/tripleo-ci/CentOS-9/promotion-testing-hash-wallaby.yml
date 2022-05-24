@@ -157,6 +157,8 @@ repo_cmd_after: |
   # # Replace trunk.rdoproject.org to nodepool proxy
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean.repo
   sudo sed -i -e "s|https://trunk.rdoproject.org|$NODEPOOL_RDO_PROXY|g" /etc/yum.repos.d/delorean-wallaby-deps.repo
+  # Replace mirror.stream.centos.org to nodepool proxy
+  sudo sed -i -e "s|http://mirror.stream.centos.org|$NODEPOOL_CENTOS_MIRROR|g" /etc/yum.repos.d/delorean-wallaby-deps.repo
   sudo sed -i -e "s|priority=1|priority=20|g" /etc/yum.repos.d/delorean.repo
   # continue from here
   sudo rpm -e epel-release || true;
