@@ -115,6 +115,11 @@ install_ansible_collections_deps(){
             -p $VIRTUAL_ENV/share/ansible/collections
     fi
 
+    # Install collections from requirements file
+    ansible-galaxy collection install \
+        -r ansible-collection-requirements.yml \
+        -p $VIRTUAL_ENV/share/ansible/collections
+
     # Use collections already cloned by CI if they're available
     OS_COLLECTIONS="ansible-config_template ansible-collections-openstack \
         tripleo-operator-ansible"
@@ -125,11 +130,6 @@ install_ansible_collections_deps(){
                 -p $VIRTUAL_ENV/share/ansible/collections
         fi
     done
-
-    # Install collections that weren't caught above from the requirements file
-    ansible-galaxy collection install \
-        -r ansible-collection-requirements.yml \
-        -p $VIRTUAL_ENV/share/ansible/collections
 }
 
 install_ansible_roles(){
