@@ -64,25 +64,8 @@ test_regex: ''
 
 tempest_undercloud: true
 tempest_overcloud: false
-# default tempest tests for UC
-tempest_whitelist:
-  - 'tempest.api.identity'
-  - 'tempest.api.image.v2.test_images.BasicOperationsImagesTest'
-  - 'tempest.api.image.v2.test_images_tags_negative.ImagesTagsNegativeTest'
-  - 'tempest.api.image.v2.test_images_member_negative.ImagesMemberNegativeTest'
-  - 'tempest.api.compute.admin.test_flavors'
-  - 'tempest.api.compute.flavors'
-  - 'tempest.api.compute.keypairs'
-  - 'tempest.api.compute.admin.test_quotas'
-  - 'tempest.api.compute.admin.test_aggregates_negative'
-  - 'tempest.api.compute.security_groups'
-  - 'tempest.api.network.test_networks'
-  - 'tempest.api.network.test_networks_negative'
-  - 'tempest.api.network.test_security_groups_negative'
-  - 'tempest.api.network.test_ports'
-  - 'tempest.api.network.test_routers_negative'
-
-
-test_black_regex: []
+# Since tripleo-ci-centos-8-containers-undercloud-minion job is only runs for train
+# and will be removed in future. Below default tempest tests group does not run in this job.
+tempest_allowed_group: "featureset061"
 
 minion_container_cli: podman
