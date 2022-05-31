@@ -85,13 +85,12 @@ tempest_service_available_neutron: true
 tempest_private_net_create: false
 tempest_router_create: false
 
-tempest_test_whitelist: "{{ tempest_whitelist }}"
-tempest_test_blacklist: "{{ test_black_regex }}"
+tempest_allowed_group: "featureset027"
 test_regex: ''
 
 # Run an undercloud without glance or nova
 undercloud_enable_nova: >-
-  {% if release in ['newton','ocata','pike','queens','stein','train'] -%}
+  {% if release in ['train'] -%}
   true
   {%- else -%}
   false
@@ -105,37 +104,5 @@ tempest_service_available_mistral: >-
 
 tempest_undercloud: true
 tempest_overcloud: false
-tempest_whitelist: >-
-   {% if lookup('env', 'ZUUL_PROJECT') == "openstack/mistral" -%}
-   {{ tempest_whitelist_mistral }}
-   {%- else -%}
-   {{ tempest_whitelist_uc }}
-   {%- endif -%}
-
-# default tempest tests for UC
-tempest_whitelist_uc:
-  - 'tempest.api.identity'
-  - 'tempest.api.network.test_networks'
-  - 'tempest.api.network.test_networks_negative'
-  - 'tempest.api.network.test_security_groups_negative'
-  - 'tempest.api.network.test_ports'
-  - 'tempest.api.network.test_routers_negative'
-
-# tempest tests for Mistral
-tempest_whitelist_mistral:
-  - 'mistral_tempest_tests'
-
-test_black_regex: >-
-   {% if lookup('env', 'ZUUL_PROJECT') == "openstack/mistral" -%}
-   {{ mistral_test_black_regex }}
-   {%- endif -%}
-
-# skip list for mistral tempest plugin
-mistral_test_black_regex:
-  - 'mistral_tempest_tests.tests.scenario.engine.actions.v2.test_openstack_actions.OpenStackActionsTestsV2.test_cinder_actions'
-  - 'mistral_tempest_tests.tests.scenario.engine.actions.v2.test_ssh_actions.SSHActionsTestsV2.test_run_ssh_action'
-  - 'mistral_tempest_tests.tests.scenario.engine.actions.v2.test_ssh_actions.SSHActionsTestsV2.test_run_ssh_proxied_action'
-  - 'mistral_tempest_tests.tests.scenario.engine.actions.v2.test_openstack_actions.OpenStackActionsTestsV2.test_swift_actions'
-  - 'mistral_tempest_tests.tests.scenario.engine.actions.v2.test_multi_vim_authentication.MultiVimActionsTests.test_multi_vim_support_target_headers'
 
 undercloud_enable_paunch: false
