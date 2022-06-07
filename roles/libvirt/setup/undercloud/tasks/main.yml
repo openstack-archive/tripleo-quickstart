@@ -207,7 +207,7 @@
 - when:
     - undercloud_vol_check is failed
     - not overcloud_as_undercloud|bool
-    - undercloud_partitions.stdout=='/dev/sda1' or '/dev/sda3' in undercloud_partitions.stdout
+    - undercloud_partitions.stdout=='/dev/sda1' or '/dev/sda3' in undercloud_partitions.stdout or '/dev/sda4' in undercloud_partitions.stdout
   block:
 
     - name: set fact for partition - /dev/sda1
@@ -219,6 +219,11 @@
       set_fact:
         partition: '/dev/sda3'
       when: "'/dev/sda3' in undercloud_partitions.stdout"
+
+    - name: set fact for partition - /dev/sda4
+      set_fact:
+        partition: '/dev/sda4'
+      when: "'/dev/sda4' in undercloud_partitions.stdout"
 
     # Handle the resize for the whole disk image case
     - name: Resize undercloud image (create target image)
