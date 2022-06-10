@@ -109,19 +109,10 @@ repo_cmd_before: |
   fi
   export RDO_DLRN_REPO=${rdo_dlrn/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
 
-  # for common component
-  rdo_dlrn_common=`curl --silent https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG_NEWEST}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | grep "component/common" | cut -d= -f2`
-  if [[ -z "$rdo_dlrn_common" ]]; then
-    echo "Failed to parse dlrn hash"
-    exit 1
-  fi
-  export RDO_DLRN_COMMON_REPO=${rdo_dlrn_common/https:\/\/trunk.rdoproject.org/$NODEPOOL_RDO_PROXY}
-
   # Save environment variables, to be used afterwards
   echo "export NODEPOOL_CENTOS_MIRROR=${NODEPOOL_CENTOS_MIRROR}" >> {{ repo_setup_env_filepath }}
   echo "export NODEPOOL_RDO_PROXY=${NODEPOOL_RDO_PROXY}" >> {{ repo_setup_env_filepath }}
   echo "export RDO_DLRN_REPO=${RDO_DLRN_REPO}" >> {{ repo_setup_env_filepath }}
-  echo "export RDO_DLRN_COMMON_REPO=${RDO_DLRN_COMMON_REPO}" >> {{ repo_setup_env_filepath }}
   echo "export DLRN_PATH_TAG=${DLRN_PATH_TAG}" >> {{ repo_setup_env_filepath }}
 
 repos:
@@ -164,14 +155,6 @@ repos:
       - tripleo-ansible
       - ansible-config_template
       - tripleo-operator-ansible
-
-  - type: generic
-    reponame: delorean-common-current
-    filename: delorean-common-current.repo
-    baseurl: $RDO_DLRN_COMMON_REPO
-    priority: 10
-    includepkgs:
-      - openstack-selinux
 
   - type: file
     filename: delorean-master-deps.repo
