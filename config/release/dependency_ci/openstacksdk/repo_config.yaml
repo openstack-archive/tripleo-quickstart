@@ -1,0 +1,11 @@
+---
+add_repos:
+  - type: generic
+    reponame: openstacksdk-latest
+    filename: "openstacksdk-latest.repo"
+    baseurl: https://images.rdoproject.org/openstacksdk/latest/
+    priority: 1
+    update_container: false
+
+dep_repo_cmd_after: |
+  sudo dnf install --best -y python3-openstacksdk
