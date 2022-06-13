@@ -23,7 +23,12 @@ docker_registry_host: >-
   {%- else -%}
   {{ job.alt_container_registry|default('quay.io') }}
   {%- endif -%}
-docker_registry_namespace: "tripleo{{ release }}"
+docker_registry_namespace: >-
+  {%- if job is defined and job.component is defined -%}
+  tripleowallabycentos8
+  {%- else -%}
+  "tripleo{{ release }}"
+  {%- endif -%}
 docker_image_tag: "{{ dlrn_hash|default(dlrn_hash_tag) }}"
 docker_openshift_tag: v3.11.0
 promote_source: current-tripleo
