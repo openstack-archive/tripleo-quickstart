@@ -1,5 +1,6 @@
 ---
 - project:
+    queue: tripleo
     templates:
       - tripleo-undercloud-jobs-pipeline
       - tripleo-multinode-container-minimal-pipeline
@@ -26,7 +27,6 @@
             files:
               - config/general_config/featureset030.yml
     gate:
-      queue: tripleo
       jobs:
         - tripleo-tox-molecule
         - openstack-tox-linters
