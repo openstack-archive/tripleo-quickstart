@@ -189,9 +189,3 @@ undercloud_rpm_dependencies: >-
 # the diskimage-builder
 base_image_url: https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20211020.0.x86_64.qcow2
 base_image_path: "{{ ansible_user_dir }}/CentOS-Stream-GenericCloud-9-20211020.0.x86_64.qcow2"
-
-# baseos settings
-baseos_undercloud_image_url: https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20211020.0.x86_64.qcow2
-baseos_image: centos
-baseos_image_type: qcow2
-baseos_md5sum: "a42ef58319a546d038ea716dc693dda6  CentOS-Stream-GenericCloud-9-20211020.0.x86_64.qcow2"
