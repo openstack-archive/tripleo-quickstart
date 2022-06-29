@@ -82,10 +82,7 @@ use_os_tempest: >-
   false
   {%- endif -%}
 
-tempest_test_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
-
-test_white_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+tempest_allowed_group: "featureset010"
 
 # https://launchpad.net/bugs/1844446
 undercloud_enable_validations: false
