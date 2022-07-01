@@ -134,9 +134,6 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
-    exclude:
-      - libvirt*-8.4*
-      - python*libvirt-8.4*
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
