@@ -41,12 +41,5 @@ tempest_os_cloud: standalone
 tempest_public_net_name: "provisioning"
 tempest_public_subnet_name: "provision-subnet"
 tempest_private_net_seg_id: ''
-tempest_test_whitelist:
-  - 'ironic_tempest_plugin.tests.api.admin.test_chassis.TestChassis'
-  - 'ironic_tempest_plugin.tests.api.admin.test_api_discovery.TestApiDiscovery'
-  - 'ironic_tempest_plugin.tests.api.admin.test_conductor.TestConductors'
-  - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplates'
-  - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplatesNegative'
-  - 'ironic_tempest_plugin.tests.api.admin.test_deploy_templates.TestDeployTemplatesOldAPI'
-
+tempest_allowed_group: "featureset060"
 standalone_container_cli: podman
