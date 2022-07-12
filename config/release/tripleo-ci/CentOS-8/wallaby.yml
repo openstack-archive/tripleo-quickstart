@@ -24,7 +24,7 @@ docker_registry_host: >-
   {{ job.alt_container_registry|default('quay.io') }}
   {%- endif -%}
 docker_registry_namespace: >-
-  {%- if job is defined and job.component is defined -%}
+  {%- if docker_registry_host == 'quay.rdoproject.org' -%}
   tripleowallabycentos8
   {%- else -%}
   tripleo{{ release }}
