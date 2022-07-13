@@ -2,6 +2,8 @@
 collections:
   # FIXME(bogdando): LP#1954761: keep these in sync with:
   #   https://opendev.org/openstack/tripleo-ci/src/branch/master/zuul.d/base.yaml
+  #
+  # FIXME(jmeng): Keep these in sync with RDO RPMs which are installed by TripleO.
   - name: ansible.utils
     source: https://galaxy.ansible.com
     version: 2.4.2
@@ -26,6 +28,7 @@ collections:
   - name: openstack.cloud
     source: git+https://opendev.org/openstack/ansible-collections-openstack
     type: git
+    version: stable/1.0.0
   - name: tripleo.operator
     source: git+https://opendev.org/openstack/tripleo-operator-ansible/
     type: git
