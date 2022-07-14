@@ -63,7 +63,7 @@ Host supplemental
 Host {{ host }}
     ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ local_working_dir }}/ssh.config.ansible undercloud -W {{ hostvars[host].inventory_ip }}:22
     IdentityFile {{ hostvars[host].ansible_private_key_file }}
-    User {{ overcloud_user | default ('heat-admin') }}
+    User {{ overcloud_user | default ('tripleo-admin') }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 

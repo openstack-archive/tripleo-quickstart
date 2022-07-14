@@ -98,7 +98,7 @@ Nova servers pre-provisioned on openstack clouds may be consumed by
 quickstart ansible roles by specifying ``inventory: openstack``.
 
 You should also provide a valid admin user name, like 'centos' or
-'heat-admin', and paths to ssh keys in the ``overcloud_user``,
+'tripleo-admin', and paths to ssh keys in the ``overcloud_user``,
 ``overcloud_key``, ``undercloud_user``, ``undercloud_key`` variables.
 
 .. note:: The ``ssh_user`` should be refering to the same value as the

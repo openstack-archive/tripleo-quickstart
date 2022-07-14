@@ -20,7 +20,7 @@ Host {{ host }}
     Hostname {{ hostvars[host].ansible_host }}
     ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ local_working_dir }}/ssh.config.local.ansible undercloud -W {{ hostvars[host].inventory_ip }}:22
     IdentityFile {{ local_working_dir }}/id_rsa_overcloud
-    User {{ overcloud_user | default('heat-admin') }}
+    User {{ overcloud_user | default('tripleo-admin') }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
