@@ -17,6 +17,9 @@ collections:
   - name: community.libvirt
     source: https://galaxy.ansible.com
     version: 1.0.2
+  - name: community.docker
+    source: https://galaxy.ansible.com
+    version: 2.7.0
   - name: openvswitch.openvswitch
     source: https://galaxy.ansible.com
     version: 2.0.2
