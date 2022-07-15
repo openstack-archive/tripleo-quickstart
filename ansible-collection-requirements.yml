@@ -15,7 +15,7 @@ collections:
     version: 2.4.0
   - name: community.general
     source: https://galaxy.ansible.com
-    version: 4.0.2
+    version: 4.7.0
   - name: community.libvirt
     source: https://galaxy.ansible.com
     version: 1.0.2
