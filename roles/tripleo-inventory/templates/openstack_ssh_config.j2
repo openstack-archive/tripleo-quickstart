@@ -35,7 +35,7 @@ Host {{ host }}
     Hostname {{ hostvars[host].ansible_host }}
     ProxyCommand {{ ssh_proxy_command  }} -W {{ hostvars[host].private_v4 }}:22
     IdentityFile {{ hostvars[host].ansible_private_key_file }}
-    User {{ overcloud_user | default ('heat-admin') }}
+    User {{ overcloud_user | default ('tripleo-admin') }}
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 

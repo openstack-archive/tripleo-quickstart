@@ -42,11 +42,11 @@ host and figure out the ctlplane address of the deployed node::
 
 The address is randomly assigned and depends on the deployment environment. In
 this case the compute node has the address `192.168.24.8`. Logging in to any of
-the nodes is possible with the `heat-admin` user. This user has full sudo
+the nodes is possible with the `tripleo-admin` user. This user has full sudo
 rights on all the overcloud nodes and the undercloud is set up to login with
 public key authentication::
 
-    ssh heat-admin@192.168.24.8
+    ssh tripleo-admin@192.168.24.8
 
 The node can be also accessed by a static hostname of
 `overcloud-novacompute-0.ctlplane` in newer versions of OpenStack.
