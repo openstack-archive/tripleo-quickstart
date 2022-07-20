@@ -182,6 +182,8 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
+    exclude:
+      - python3-sqlalchemy-1.4.37-3.el9.x86_64
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
