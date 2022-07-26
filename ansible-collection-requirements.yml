@@ -28,7 +28,7 @@ collections:
   - name: openstack.cloud
     source: git+https://opendev.org/openstack/ansible-collections-openstack
     type: git
-    version: stable/1.0.0
+    version: 1.8.0
   - name: tripleo.operator
     source: git+https://opendev.org/openstack/tripleo-operator-ansible/
     type: git
