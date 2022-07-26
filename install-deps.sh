@@ -297,11 +297,11 @@ install_ansible_collections(){
         # the collection at user level in ~/.ansible/collections, so that ansible can discover
         # it and will avoid usage of custom path.
         # https://docs.ansible.com/ansible/latest/reference_appendices/config.html#collections-paths
-        ansible-galaxy collection install -f ./tripleo-repos-*.tar.gz -p ~/.ansible/collections
+        ansible-galaxy collection install -vvv -f ./tripleo-repos-*.tar.gz -p ~/.ansible/collections
         rm ./tripleo-repos-*.tar.gz
     else
-        ansible-galaxy collection install -v "tripleo.repos:>=0.0.4"
-        ansible-galaxy collection install -v "tripleo.repos:>=0.0.4" -p ~/.ansible/collections
+        ansible-galaxy collection install -vvv "tripleo.repos:>=0.0.4"
+        ansible-galaxy collection install -vvv "tripleo.repos:>=0.0.4" -p ~/.ansible/collections
     fi
 }
 
