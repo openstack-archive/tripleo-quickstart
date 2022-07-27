@@ -4,6 +4,12 @@ collections:
   #   https://opendev.org/openstack/tripleo-ci/src/branch/master/zuul.d/base.yaml
   #
   # FIXME(jmeng): Keep these in sync with RDO RPMs which are installed by TripleO.
+  #
+  # The optional attribute 'version:' must be a valid semantic version [1] because
+  # ansible-galaxy will use 'version:' to compare with existing collection installs
+  # and otherwise will fail with "Non integer values in LooseVersion" [2].
+  # [1] https://semver.org/
+  # [2] https://bugzilla.redhat.com/show_bug.cgi?id=2109807
   - name: ansible.utils
     source: https://galaxy.ansible.com
     version: 2.4.2
