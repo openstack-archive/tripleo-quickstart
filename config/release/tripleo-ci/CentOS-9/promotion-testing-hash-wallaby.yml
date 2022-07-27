@@ -80,7 +80,7 @@ repo_cmd_before: |
 repos:
   - type: file
     filename: delorean.repo
-    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG}/delorean.repo"
+    down_url: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG}/delorean.repo"
 
   # ATM current is not used in promotion jobs, this is a bug.
   # However for consistency w/ what is merged. removing
@@ -122,7 +122,7 @@ repos:
 
   - type: file
     filename: delorean-wallaby-deps.repo
-    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/delorean-deps.repo"
+    down_url: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/delorean-deps.repo"
 
   # CentOS related repos
   - type: generic
