@@ -34,6 +34,8 @@
       command: tuned-adm active
       register: tuned
       changed_when: false
+      # Remove failed_when once https://bugzilla.redhat.com/show_bug.cgi?id=2030580 fixed
+      failed_when: false
 
     - name: Set tuned profile if not already set
       command: tuned-adm profile "{{ tuned_profile }}"
