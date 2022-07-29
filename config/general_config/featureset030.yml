@@ -83,9 +83,6 @@ ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 tempest_config: true
 test_ping: false
 test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-  - 'tempest.scenario.test_minimum_basic.TestMinimumBasicScenario.test_minimum_basic_scenario'
 overcloud_container_cli: >-
   {%- if ansible_distribution in ["RedHat", "CentOS"] and ansible_distribution_major_version|int >= 8 %}podman
   {%- else %}docker{% endif -%}
@@ -133,4 +130,4 @@ tempest_tempestconf_profile:
   network-id: "{{ tempest_neutron_public_network_id }}"
   overrides: "{{ tempest_tempest_conf_overrides | default({}) | combine(tempest_tempestconf_profile_overrides | default({}), recursive=True) }}"
 
-tempest_test_whitelist: "{{ tempest_whitelist }}"
+tempest_allowed_group: "featureset030"
