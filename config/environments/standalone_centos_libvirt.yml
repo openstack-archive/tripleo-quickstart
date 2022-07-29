@@ -2,7 +2,7 @@
 # instead of the default pre-built undercloud qcow2
 
 # baseos undercloud settings
-undercloud_image_url: https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20220531.0.x86_64.qcow2
+undercloud_image_url: https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20220726.1.x86_64.qcow2
 
 # Libvirt environments do not yet support whole-disk images, for example
 # https://bugs.launchpad.net/tripleo/+bug/1950383
@@ -14,7 +14,7 @@ images:
     - name: undercloud
       url: "{{ undercloud_image_url }}"
       type: qcow2
-      md5sum: "720feb900863b4eb9ae12f29608508e0  CentOS-Stream-GenericCloud-9-20220531.0.x86_64.qcow2"
+      md5sum: "165133b99f9c5b69f449e88f94323c8e  CentOS-Stream-GenericCloud-9-20220726.1.x86_64.qcow2"
 
 inject_images: []
 
