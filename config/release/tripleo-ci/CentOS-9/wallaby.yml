@@ -131,7 +131,7 @@ repos:
   # RDO repos
   - type: file
     filename: delorean.repo
-    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG}/delorean.repo"
+    down_url: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG}/delorean.repo"
 
   # name of delorean-tripleo-component-current? naming is hard
   - type: generic
@@ -170,7 +170,7 @@ repos:
 
   - type: file
     filename: delorean-wallaby-deps.repo
-    down_url: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/delorean-deps.repo"
+    down_url: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/delorean-deps.repo"
 
   # CentOS related repos
   - type: generic
