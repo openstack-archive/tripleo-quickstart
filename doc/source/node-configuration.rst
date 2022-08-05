@@ -18,20 +18,28 @@ Setting number and type of overcloud nodes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``overcloud_nodes`` variable can be used to change the number and
-type of nodes deployed in your overcloud. The default
-(``config/general_config/minimal.yml``) looks like this::
+type of nodes deployed in your overcloud. Begining of the default
+`(config/nodes/1ctlr_1comp.yml) <https://opendev.org/openstack/tripleo-quickstart/src/branch/master/config/nodes/1ctlr_1comp.yml>`_ looks like this.
+
+.. code-block:: yaml
 
     overcloud_nodes:
       - name: control_0
         flavor: control
         virtualbmc_port: 6230
-
+        default_name: overcloud-controller-0
+        hostnamemap_override: overcloud-controller-foo-0
       - name: compute_0
         flavor: compute
         virtualbmc_port: 6231
+        default_name: overcloud-novacompute-0
+        hostnamemap_override: overcloud-novacompute-bar-0
+
 
 You can use your own config if you want to test a different setup. For
-example::
+example:
+
+.. code-block:: yaml
 
     overcloud_nodes:
       - name: control_0
@@ -103,7 +111,9 @@ An example
 
 To create a minimal environment that would be unsuitable for deploying
 anything real nova instances, you could place something like the
-following in ``myconfigfile.yml``::
+following in ``myconfigfile.yml``:
+
+.. code-block:: yaml
 
     undercloud_memory: 8192
     control_memory: 6000
@@ -131,7 +141,9 @@ are unique and must be stored separately.
 
 What the baremetal node configuration ``baremetal.yml`` does is  essentially
 ensuring that no libvirt guests are provisioned setting overcloud_nodes to
-null::
+null:
+
+.. code-block:: yaml
 
     overcloud_nodes:
 
@@ -148,7 +160,9 @@ Using OpenStack Virtual Baremetal is a simple node configuration where the
 user needs only to define how many cloud instances to run.
 
 For example, you will find the following config in the node configuration
-files::
+files:
+
+.. code-block:: yaml
 
     # Define the controller node and compute nodes.
     # Create three controller nodes and one compute node.
