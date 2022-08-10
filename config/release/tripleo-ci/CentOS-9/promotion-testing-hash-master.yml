@@ -152,6 +152,13 @@ repos:
     filename: quickstart-centos-highavailability.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/HighAvailability/x86_64/os/
 
+  - type: generic
+    reponame: quickstart-centos-ceph-quincy
+    filename: quickstart-centos-ceph-quincy.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/SIGs/9-stream/storage/x86_64/ceph-quincy/
+    exclude:
+      - ansible*
+
   # Extras will be available once c9 get's released as this contains release rpms for SIG.
 #  - type: generic
 #    reponame: quickstart-centos-extras
