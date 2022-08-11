@@ -177,6 +177,8 @@ repos:
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/BaseOS/x86_64/os
+    exclude:
+      - gnutls-3.7.6*
 
   - type: generic
     reponame: quickstart-centos-appstreams
@@ -223,6 +225,8 @@ repo_cmd_after: |
       dnf config-manager --disable delorean-component-{{ job.component }};
   fi
   {% endif %}
+  # Downgrade gnutls due to https://bugs.launchpad.net/tripleo/+bug/1984237
+  sudo dnf -y downgrade gnutls-3.7.3-10.el9
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   # Save Compose-ID info
   sudo curl -s -o /etc/yum.repos.d/COMPOSE_ID ${NODEPOOL_CENTOS_MIRROR}/9-stream/COMPOSE_ID

@@ -129,6 +129,8 @@ repos:
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/BaseOS/x86_64/os/
+    exclude:
+      - gnutls-3.7.6*
 
   - type: generic
     reponame: quickstart-centos-appstreams
@@ -167,6 +169,8 @@ repo_cmd_after: |
   sudo dnf remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
   sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo;
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  # Downgrade gnutls due to https://bugs.launchpad.net/tripleo/+bug/1984237
+  sudo dnf -y downgrade gnutls-3.7.3-10.el9
   # Save Compose-ID info
   sudo curl -s -o /etc/yum.repos.d/COMPOSE_ID ${NODEPOOL_CENTOS_MIRROR}/9-stream/COMPOSE_ID
   sudo dnf repolist;
