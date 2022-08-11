@@ -56,12 +56,7 @@ tempest_ping_router: false
 
 use_os_tempest: true
 
-tempest_test_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
-  - 'tempest.api.compute.admin.test_flavors'
-  - 'tempest.api.compute.flavors'
-  - 'tempest.api.compute.keypairs'
-  - 'tempest.api.compute.security_groups'
+tempest_allowed_group: "featureset066"
 
 # https://launchpad.net/bugs/1844446
 undercloud_enable_validations: false
