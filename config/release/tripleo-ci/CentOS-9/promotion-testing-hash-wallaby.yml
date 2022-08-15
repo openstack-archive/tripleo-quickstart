@@ -169,6 +169,9 @@ repo_cmd_after: |
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   # Save Compose-ID info
   sudo curl -s -o /etc/yum.repos.d/COMPOSE_ID ${NODEPOOL_CENTOS_MIRROR}/9-stream/COMPOSE_ID
+  # Note(ChandanKumar): Install catatonit on the host due to
+  # https://bugs.launchpad.net/tripleo/+bug/1985981
+  sudo dnf -y install catatonit;
   sudo dnf repolist;
   sudo dnf module list;
   sudo dnf clean metadata
