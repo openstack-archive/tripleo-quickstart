@@ -99,6 +99,7 @@ repos:
     priority: 10
     includepkgs:
       - ansible-role-container-registry
+      - ansible-role-chrony
       - ansible-role-tripleo*
       - ansible-tripleo-ipsec
       - instack

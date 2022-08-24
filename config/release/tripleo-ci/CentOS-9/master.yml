@@ -130,6 +130,7 @@ repos:
     includepkgs:
       - ansible-role-container-registry
       - ansible-role-tripleo*
+      - ansible-role-chrony
       - ansible-tripleo-ipsec
       - instack
       - instack-undercloud
