@@ -65,6 +65,9 @@ ephemeral_heat: "{{ (release not in ['queens', 'stein','train','ussuri','victori
 ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
 
 extra_args: >-
+   {%- if release not in ['train','wallaby'] -%}
+   -e /usr/share/openstack-tripleo-heat-templates/environments/auditd.yaml
+   {% endif %}
    {%- if release not in ['train','ussuri','victoria'] -%}
    --disable-protected-resource-types
    --baremetal-deployment
