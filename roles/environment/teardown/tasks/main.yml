@@ -53,7 +53,13 @@
       become: true
 
 - name: Delete any existing dstat log file
-  file: dest=/var/log/extra/dstat-csv.log state=absent
+  file:
+    dest: "/var/log/extra/{{ item }}"
+    state: absent
+  with_items:
+    - dstat-csv.log
+    - dstat.html
+    - dstat.txt
   become: true
 
 - name: Delete OVS Bridges
