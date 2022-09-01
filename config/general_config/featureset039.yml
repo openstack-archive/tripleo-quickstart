@@ -180,11 +180,7 @@ tempest_tempestconf_profile:
   network-id: "{{ tempest_neutron_public_network_id }}"
   overrides: "{{ tempest_tempest_conf_overrides | default({}) | combine(tempest_tempestconf_profile_overrides | default({}), recursive=True) }}"
 
-test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
-
-tempest_test_whitelist: "{{ tempest_whitelist }}"
+tempest_allowed_group: "featureset039"
 
 # Run an undercloud without glance or nova
 undercloud_enable_nova: >-
