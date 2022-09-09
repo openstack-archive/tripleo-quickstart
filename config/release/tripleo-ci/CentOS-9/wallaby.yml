@@ -238,7 +238,9 @@ repo_cmd_after: |
   sudo dnf module list;
   sudo dnf clean metadata
   {% if repo_setup_run_update|default(true)|bool %}
-  sudo dnf update -y
+  # FIXME(chandan): Exclude kernel updates due to
+  # https://bugs.launchpad.net/tripleo/+bug/1987632
+  sudo dnf update --exclude=kernel* -y
   {% endif %}
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
