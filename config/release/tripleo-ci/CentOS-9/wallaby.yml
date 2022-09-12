@@ -6,7 +6,8 @@ distro_ver: centos9
 distro_deps_repo_name: deps
 dlrn_hash_tag: >-
   {% if registry_distro is defined and
-  registry_distro | default('') | length > 0 -%}
+  registry_distro | default('') | length > 0 and
+  job.provider_dlrn_hash_distro is defined -%}
   {{ job.provider_dlrn_hash_distro[registry_distro] }}
   {%- else -%}
   {{ job.provider_dlrn_hash_tag_branch[release]|default('current-tripleo') }}
