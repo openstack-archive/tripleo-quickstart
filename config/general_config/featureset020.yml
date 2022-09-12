@@ -104,6 +104,9 @@ extra_args: >-
    enable_secure_rbac|default(false)|bool -%}
    -e {{ overcloud_templates_path }}/environments/enable-secure-rbac.yaml
    {% endif %}
+   {% if release not in ['train','wallaby'] %}
+   -e {{ working_dir }}/ci_custom_firewall_rules.yaml
+   {% endif %}
    {%- if release not in ['train','ussuri','victoria'] -%}
    --disable-protected-resource-types
    {%- endif -%}
