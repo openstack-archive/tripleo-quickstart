@@ -17,7 +17,14 @@ undercloud_clean_nodes: true
 
 undercloud_inspection_extras: false
 
-undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+# Deploy ml2/ovn on Undercloud with zed+ release
+undercloud_custom_env_files: >-
+  {% if release not in ['train', 'wallaby'] -%}
+  {{ working_dir }}/undercloud-parameter-defaults.yaml {{ undercloud_templates_path }}/environments/services/undercloud-neutron-ovn-dhcp.yaml
+  {%- else -%}
+  {{ working_dir }}/undercloud-parameter-defaults.yaml
+  {%- endif %}
+
 undercloud_cloud_domain: "localdomain"
 undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
 
