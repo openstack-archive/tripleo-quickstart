@@ -55,7 +55,7 @@ oslo.i18n==5.1.0
 oslo.serialization==4.2.0
 oslo.utils==4.12.0
 packaging==21.3
-paramiko==2.9.2
+paramiko==2.9.3
 pathspec==0.9.0
 pbr==5.8.0
 pexpect==4.8.0
