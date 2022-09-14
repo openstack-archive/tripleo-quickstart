@@ -155,15 +155,8 @@ tempest_tempestconf_profile:
   network-id: "{{ tempest_neutron_public_network_id }}"
   overrides: "{{ tempest_tempest_conf_overrides | default({}) | combine(tempest_tempestconf_profile_overrides | default({}), recursive=True) }}"
 
-tempest_check_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
-
-tempest_test_whitelist: "{{ tempest_whitelist }}"
+tempest_allowed_group: "featureset002"
 
 tempest_run_concurrency: 4
 
 tempest_extra_config: {'compute_feature_enabled.config_drive': 'True'}
-
-test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
