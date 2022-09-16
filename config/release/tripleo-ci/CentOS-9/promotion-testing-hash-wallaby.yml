@@ -145,6 +145,7 @@ repos:
     # Note(chandankumar): Exclude containers-common-1-44.* due to
     # https://bugs.launchpad.net/tripleo/+bug/1988500
     exclude:
+      - python3-sqlalchemy-1.4.37-3.el9.x86_64
       - containers-common-1-44.*
 
   # centos9 the equivalent to powertools is CRB
