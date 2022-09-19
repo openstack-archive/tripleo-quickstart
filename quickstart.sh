@@ -37,6 +37,19 @@ clean_virtualenv() {
     fi
 }
 
+retry() {
+    local -r -i max_attempts="$1"; shift
+    local -i attempt_num=1
+    until "$@"; do
+        if ((attempt_num==max_attempts)); then
+            echo "Max attempt ${max_attempts} reached, '$@' still failing, abandonning."
+            exit 1
+        fi
+        echo "Attemp ${attempt_num} failed. Retrying..."
+        sleep $((attempt_num++))
+    done
+}
+
 : ${OOOQ_BASE_REQUIREMENTS:=requirements.txt}
 : ${OOOQ_EXTRA_REQUIREMENTS:=quickstart-extras-requirements.txt}
 
@@ -105,7 +118,7 @@ install_ansible_collections_deps(){
     # Install ansible-collection collections cloned by CI if available
     if [[ -e ~/src/github.com/ansible-collections/ansible.utils ]]; then
         echo "Installing collections from local directories"
-        ansible-galaxy collection install -vvv --force \
+        retry 10 ansible-galaxy collection install -vvv --force \
             ~/src/github.com/ansible-collections/ansible.posix \
             ~/src/github.com/ansible-collections/ansible.utils \
             ~/src/github.com/ansible-collections/ansible.netcommon \
@@ -116,7 +129,7 @@ install_ansible_collections_deps(){
     fi
 
     # Install collections from requirements file
-    ansible-galaxy collection install -vvv \
+    retry 10 ansible-galaxy collection install -vvv \
         -r ansible-collection-requirements.yml \
         -p $VIRTUAL_ENV/share/ansible/collections
 
@@ -125,7 +138,7 @@ install_ansible_collections_deps(){
         tripleo-operator-ansible"
     for COLLECTION_REPO in $OS_COLLECTIONS; do
         if [[ -d ~/src/opendev.org/openstack/$COLLECTION_REPO ]]; then
-            ansible-galaxy collection install -vvv --force \
+            retry 10 ansible-galaxy collection install -vvv --force \
                 ~/src/opendev.org/openstack/$COLLECTION_REPO \
                 -p $VIRTUAL_ENV/share/ansible/collections
         fi
@@ -137,12 +150,12 @@ install_ansible_roles(){
     OS_ROLES="openstack-ansible-os_tempest ansible-role-python_venv_build"
     for ROLE_REPO in $OS_ROLES; do
         if [[ -d ~/src/opendev.org/openstack/$ROLE_REPO ]]; then
-            ansible-galaxy role install -vvv --force \
+            retry 10 ansible-galaxy role install -vvv --force \
                 git+file://$HOME/src/opendev.org/openstack/$ROLE_REPO \
                 -p $VIRTUAL_ENV/share/ansible/roles
         fi
     done
-    ansible-galaxy role install -vvv \
+    retry 10 ansible-galaxy role install -vvv \
         -r ansible-role-requirements.yml \
         -p $VIRTUAL_ENV/share/ansible/roles
 }
