@@ -68,6 +68,9 @@ extra_args: >-
    {%- if release not in ['train','wallaby'] -%}
    -e /usr/share/openstack-tripleo-heat-templates/environments/auditd.yaml
    {% endif %}
+   {% if release not in ['train','wallaby'] %}
+   -e {{ working_dir }}/ci_custom_firewall_rules.yaml
+   {% endif %}
    {%- if release not in ['train','ussuri','victoria'] -%}
    --disable-protected-resource-types
    --baremetal-deployment

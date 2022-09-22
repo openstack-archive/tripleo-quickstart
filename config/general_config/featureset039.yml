@@ -75,6 +75,9 @@ extra_args: >-
    {% if release not in ['newton', 'ocata', 'pike'] %}
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {% endif %}
+   {% if release not in ['train','wallaby'] %}
+   -e {{ working_dir }}/ci_custom_firewall_rules.yaml
+   {% endif %}
    {% if release in ['ussuri', 'victoria'] -%}
    --disable-validations
    {% endif %}

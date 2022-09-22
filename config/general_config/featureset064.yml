@@ -39,6 +39,9 @@ network_isolation_args: >-
 
 extra_args: >-
    -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
+   {% if release not in ['train','wallaby'] %}
+   -e {{ working_dir }}/ci_custom_firewall_rules.yaml
+   {% endif %}
 
 undercloud_ntp_servers: pool.ntp.org
 # keep the doc gen settings at the bottom of the config file.
