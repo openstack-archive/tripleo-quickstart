@@ -107,6 +107,10 @@ extra_args: >-
    {% if release not in ['train','wallaby'] %}
    -e {{ working_dir }}/ci_custom_firewall_rules.yaml
    {% endif %}
+   {% if ansible_distribution in ["RedHat"] and osp_release|default('') in ['rhos-17.1'] and ansible_distribution_major_version|int == 8 -%}
+   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha-parameter-for-rhel8.yaml
+   {% endif %}
+   -e {{ overcloud_templates_path }}/ci/environments/ovb-ha.yaml
    {%- if release not in ['train','ussuri','victoria'] -%}
    --disable-protected-resource-types
    {%- endif -%}
