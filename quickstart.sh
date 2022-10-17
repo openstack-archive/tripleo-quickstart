@@ -133,6 +133,30 @@ install_ansible_collections_deps(){
         -r ansible-collection-requirements.yml \
         -p $VIRTUAL_ENV/share/ansible/collections
 
+    # Install openstack.cloud release depending on the RDO release if is not installed
+    #
+    # Some jobs run quickstart.sh several times, so ansible-galaxy might get called twice or more.
+    # On such subsequent runs, ansible-galaxy will find the collections to be installed already and
+    # will use the optional version part of the SCM pointer to compare it against existing
+    # collections. This comparison will fail with "Non integer values in LooseVersion" [2] if the
+    # version in the SCM pointer is not a valid semantic version [1].
+    # Both a branch name and a commit hash are not valid semantic versions and thus we can only run
+    # ansible-galaxy on the first run aka if openstack.cloud has not been installed yet.
+    # [1] https://semver.org/
+    # [2] https://bugzilla.redhat.com/show_bug.cgi?id=2109807
+    if [[ ! -d $VIRTUAL_ENV/share/ansible/collections/ansible_collections/openstack/cloud ]]; then
+        if [[ $QUICKSTART_RELEASE =~ .*(train|victoria|wallaby).* ]]; then
+            retry 10 ansible-galaxy collection install -vvv --force \
+                git+https://opendev.org/openstack/ansible-collections-openstack,stable/1.0.0 \
+                -p $VIRTUAL_ENV/share/ansible/collections
+        else
+            # FIXME(jmeng): Replace commit hash with 'master' once Ansible OpenStack collection 2.0.0 has been released
+            retry 10 ansible-galaxy collection install -vvv --force \
+                git+https://opendev.org/openstack/ansible-collections-openstack,ed36d82a0c60a841d2f30c61a50d60531481b2cc \
+                -p $VIRTUAL_ENV/share/ansible/collections
+        fi
+    fi
+
     # Use collections already cloned by CI if they're available
     OS_COLLECTIONS="ansible-config_template ansible-collections-openstack \
         tripleo-operator-ansible"
