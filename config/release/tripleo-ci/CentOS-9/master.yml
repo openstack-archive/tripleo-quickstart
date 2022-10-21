@@ -159,7 +159,9 @@ repos:
 
   - type: file
     filename: delorean-master-deps.repo
-    down_url: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/delorean-deps.repo"
+    # FIXME(jmeng): Remove aoc-temp repository once prerelease of ansible-collections-openstack 2.0.0 has been promoted
+    #down_url: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/delorean-deps.repo"
+    down_url: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/aoc-temp/delorean-deps.repo"
 
   # CentOS related repos
   - type: generic

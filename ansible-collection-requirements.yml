@@ -10,6 +10,10 @@ collections:
   # and otherwise will fail with "Non integer values in LooseVersion" [2].
   # [1] https://semver.org/
   # [2] https://bugzilla.redhat.com/show_bug.cgi?id=2109807
+  #
+  # FIXME(jmeng): Collection openstack.cloud aka git+https://opendev.org/openstack/
+  #   ansible-collections-openstack is installed with quickstart.sh because the
+  #   version to be installed depends on the RDO release.
   - name: ansible.utils
     source: https://galaxy.ansible.com
     version: 2.4.2
@@ -34,10 +38,6 @@ collections:
   - name: openstack.config_template
     source: git+https://opendev.org/openstack/ansible-config_template.git
     type: git
-  - name: openstack.cloud
-    source: git+https://opendev.org/openstack/ansible-collections-openstack
-    type: git
-    version: 1.8.0
   - name: tripleo.operator
     source: git+https://opendev.org/openstack/tripleo-operator-ansible/
     type: git
