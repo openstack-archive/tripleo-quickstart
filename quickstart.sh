@@ -145,7 +145,7 @@ install_ansible_collections_deps(){
     # [1] https://semver.org/
     # [2] https://bugzilla.redhat.com/show_bug.cgi?id=2109807
     if [[ ! -d $VIRTUAL_ENV/share/ansible/collections/ansible_collections/openstack/cloud ]]; then
-        if [[ $QUICKSTART_RELEASE =~ .*(train|victoria|wallaby).* ]]; then
+        if [[ $QUICKSTART_RELEASE =~ .*(train|victoria|wallaby|rhos-16|rhos-17).* ]]; then
             retry 10 ansible-galaxy collection install -vvv --force \
                 git+https://opendev.org/openstack/ansible-collections-openstack,stable/1.0.0 \
                 -p $VIRTUAL_ENV/share/ansible/collections
