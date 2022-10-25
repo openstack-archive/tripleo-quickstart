@@ -129,24 +129,5 @@ overcloud_cloud_name_ctlplane: "overcloud.ctlplane.{{ tripleo_domain }}"
 additional_cell: true
 
 # Tempest configuration, keep always at the end of the file
-test_ping: false
-test_regex: ''
 
-tempest_whitelist:
-  - 'tempest.api.identity'
-  - 'tempest.api.image.v2.test_images.BasicOperationsImagesTest'
-  - 'tempest.api.image.v2.test_images_tags_negative.ImagesTagsNegativeTest'
-  - 'tempest.api.image.v2.test_images_member_negative.ImagesMemberNegativeTest'
-  - 'tempest.api.compute.admin.test_flavors'
-  - 'tempest.api.compute.flavors'
-  - 'tempest.api.compute.keypairs'
-  - 'tempest.api.compute.admin.test_quotas'
-  - 'tempest.api.compute.admin.test_aggregates_negative'
-  - 'tempest.api.compute.security_groups'
-  - 'tempest.api.network.test_networks'
-  - 'tempest.api.network.test_networks_negative'
-  - 'tempest.api.network.test_security_groups_negative'
-  - 'tempest.api.network.test_ports'
-  - 'tempest.api.network.test_routers_negative'
-
-test_black_regex: []
+tempest_allowed_group: 'featureset063'
