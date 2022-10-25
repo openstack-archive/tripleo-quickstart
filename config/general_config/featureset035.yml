@@ -194,28 +194,15 @@ tempest_tempestconf_profile:
 tempest_tempest_conf_overrides:
   auth.use_dynamic_credentials: 'True'
 
-test_white_regex: ''
-tempest_whitelist:
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+tempest_allowed_group_check: "featureset035"
 
-# For periodic pipeline run tempest *.api tests in fs035
-# And regex for IPv6 tempest tests
-tempest_periodic_whitelist:
-  - 'test_network_v6'
-  - 'ipv6'
-  - 'tempest.api'
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
+tempest_allowed_group_periodic: "featureset035_periodic"
 
-tempest_check_whitelist:
-  - 'test_network_v6'
-  - 'ipv6'
-  - 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps'
-
-tempest_test_whitelist: >-
+tempest_allowed_group: >-
   {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
-  {{ tempest_periodic_whitelist }}
+  {{ tempest_allowed_group_periodic }}
   {%- else -%}
-  {{ tempest_check_whitelist }}
+  {{ tempest_allowed_group_check }}
   {%- endif -%}
 
 tempest_run_concurrency: 4
