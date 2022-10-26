@@ -240,26 +240,16 @@ tempest_tempestconf_profile:
   network-id: "{{ tempest_neutron_public_network_id }}"
   overrides: "{{ tempest_tempest_conf_overrides | default({}) | combine(tempest_tempestconf_profile_overrides | default({}), recursive=True) }}"
 
-check_test_whitelist:
-  - 'tempest.scenario'
-  - 'tempest.api'
-  - 'keystone_tempest_plugin'
-  - 'neutron_tempest_plugin'
-  - 'cinder_tempest_plugin'
-
-periodic_test_whitelist:
-  - 'tempest.scenario'
-  - 'keystone_tempest_plugin.scenario'
-  - 'neutron_tempest_plugin.scenario'
-  - 'cinder_tempest_plugin.scenario'
+tempest_allowed_group_check: 'featureset020'
+tempest_allowed_group_periodic: 'featureset020_periodic'
 
 # featureset 20 **periodic** runs scenario but no api tempest tests
 # See https://tree.taiga.io/project/tripleo-ci-board/task/1383
-tempest_test_whitelist: >-
+tempest_allowed_group: >-
   {% if ('periodic' in zuul.pipeline and not job.force_non_periodic|default(false)|bool) or (job.force_periodic|default(false)|bool) -%}
-  {{ periodic_test_whitelist }}
+  {{ tempest_allowed_group_periodic }}
   {%- else -%}
-  {{ check_test_whitelist }}
+  {{ tempest_allowed_group_check }}
   {%- endif -%}
 
 # Set tempest concurrency
