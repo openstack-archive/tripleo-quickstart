@@ -7,6 +7,7 @@
       - tripleo-multinode-branchful
       - publish-openstack-docs-pti
       - release-notes-jobs-python3
+      - tripleo-external-compute-deployment-pipeline
       - tripleo-standalone-scenarios-pipeline
       - tripleo-upgrades-master-pipeline
     check:
