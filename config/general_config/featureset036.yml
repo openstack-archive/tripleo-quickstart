@@ -55,19 +55,6 @@ container_registry_file: containers-default-parameters.yaml
 # Adjust user to CI
 overcloud_ssh_user: "zuul"
 
-# Workaround for deploying newton from queen.
-overcloud_prep_post_hook_script: |
-  cat > {{ overcloud_templates_path }}/plan-environment.yaml<<EOF
-  version: 1.0
-
-  name: overcloud
-  description: >
-    Default Deployment plan
-  template: overcloud.yaml
-  environments:
-    - path: overcloud-resource-registry-puppet.yaml
-  EOF
-
 # options below direct automatic doc generation by tripleo-collect-logs
 artcl_gen_docs: true
 artcl_create_docs_payload:
