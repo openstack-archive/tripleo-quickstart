@@ -1,0 +1,142 @@
+# rdoinfo configs
+artg_skipped_projects:
+  - rdoinfo
+update_containers: false
+standalone_container_prep_updates: false
+
+docker_registry_host: >-
+  {% if job is defined and
+  job.build_container_images is defined and
+  job.build_container_images|default(false)|bool or
+  build_container_images|default(false)|bool -%}
+  127.0.0.1:5001
+  {%- elif job.consumer_job | default(false) | bool -%}
+  {{ job.registry_ip_address_branch[release] }}:5001
+  {%- else -%}
+  {{ job.alt_container_registry|default('quay.io') }}
+  {%- endif -%}
+
+# name and tags
+devmode: true
+overcloud_as_undercloud: true
+release: zed
+distro_ver: centos9
+distro_deps_repo_name: deps
+dlrn_hash_tag: current-tripleo
+dlrn_hash_tag_newest: current
+docker_registry_namespace: "tripleo{{ release }}"
+docker_image_tag: "cloudsig-{{ release }}"
+docker_openshift_tag: v3.11.0
+promote_source: current-tripleo
+validate_on: rdo
+
+# images
+overcloud_image: >-
+  {% if whole_disk_images|bool -%}
+  overcloud-hardened-uefi-full
+  {%- else -%}
+  overcloud-full
+  {%- endif -%}
+overcloud_image_type: >-
+  {% if whole_disk_images|bool -%}
+  qcow2
+  {%- else -%}
+  tar
+  {%- endif -%}
+images:
+  - name: "{{ overcloud_image }}"
+    url: "{{ overcloud_image_url }}"
+    type: "{{ overcloud_image_type }}"
+  - name: ipa_images
+    url: "{{ ipa_image_url }}"
+    type: tar
+
+dlrn_baseurl: "https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}"
+overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/overcloud-full.tar"
+ipa_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/ironic-python-agent.tar"
+
+# NOTE(dviroel): centos-opstools repo is needed for building
+#  collectd containers, otherwise keep the current value.
+enable_cs9_opstools_repo: >-
+  {% if job is defined and
+  job.build_container_images is defined and
+  job.build_container_images|default(false)|bool or
+  build_container_images|default(false)|bool -%}
+  {{ true|bool }}
+  {%- else -%}
+  {{ enable_opstools_repo|default(false)|bool }}
+  {%- endif -%}
+
+# repo setup
+repo_cmd_before: |
+  sudo rm -rf /etc/yum.repos.d/delorean*;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo rm -rf /etc/yum.repos.d/epel*;
+  sudo dnf remove -y rdo-release centos-release-ceph-* centos-release-openstack-* centos-release-qemu-ev || true;
+  sudo rm -rf /etc/yum.repos.d/CentOS-OpenStack-*.repo /etc/yum.repos.d/CentOS-Ceph-*.repo /etc/yum.repos.d/CentOS-QEMU-EV.repo;
+
+  sudo dnf clean all;
+  sudo dnf config-manager --disable "*" || true;
+  if [ -e /etc/ci/mirror_info.sh ]; then
+    source /etc/ci/mirror_info.sh
+  else
+    # Otherwise, fallback to official mirrors provided by CentOS.
+    export NODEPOOL_CENTOS_MIRROR={{ lookup('env','NODEPOOL_CENTOS_MIRROR')|default('http://mirror.centos.org/centos', true) }}
+    export NODEPOOL_RDO_PROXY=https://trunk.rdoproject.org
+  fi
+  # TODO: hack until we get https://review.opendev.org/c/zuul/zuul-jobs/+/838450
+  dnf config-manager --save --setopt extras-common.gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512
+
+repos:
+  - type: package
+    pkg_name: "centos-release-openstack-{{ release }}"
+    custom_cmd: 'sudo dnf install -y --enablerepo=extras-common'
+
+  - type: package
+    pkg_name: "centos-release-opstools"
+    custom_cmd: 'sudo dnf install -y --enablerepo=extras-common'
+
+  # Needed for mock installation
+  - type: generic
+    reponame: "delorean-{{ release }}-build-deps"
+    filename: "delorean-{{ release }}-build-deps.repo"
+    baseurl: "${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/build-deps/latest/"
+
+  # CentOS related repos
+  - type: generic
+    reponame: quickstart-centos-base
+    filename: quickstart-centos-base.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/BaseOS/x86_64/os
+
+  - type: generic
+    reponame: quickstart-centos-appstreams
+    filename: quickstart-centos-appstreams.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
+
+  # centos9 the equivalent to powertools is CRB
+  - type: generic
+    reponame: quickstart-centos-crb
+    filename: quickstart-centos-crb.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/CRB/x86_64/os/
+
+  - type: generic
+    reponame: quickstart-centos-highavailability
+    filename: quickstart-centos-highavailability.repo
+    baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/HighAvailability/x86_64/os/
+
+
+repo_cmd_after: |
+  {% if not enable_cs9_opstools_repo|default(false)|bool %}sudo dnf config-manager --save --setopt centos-opstools.enabled=0;
+  {%endif %}
+  sudo rpm -e epel-release || true;
+  sudo rm -rf /etc/yum.repos.d/*.rpmsave;
+  sudo dnf repolist;
+  sudo dnf module list;
+  sudo dnf clean metadata
+  {% if repo_setup_run_update|default(true)|bool %}
+  sudo dnf update -y
+  {% endif %}
+
+undercloud_rpm_dependencies: >-
+  python3-tripleoclient
+  tripleo-operator-ansible
