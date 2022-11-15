@@ -144,6 +144,7 @@ repos:
     # https://bugs.launchpad.net/tripleo/+bug/1988500
     exclude:
       - containers-common-1-44.*
+      - ansible-core-2.14.*  # TODO(marios) unpin https://bugs.launchpad.net/tripleo    /+bug/1996482
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
