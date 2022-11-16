@@ -1,0 +1,47 @@
+##################################################
+# FEATURESET067 - TRIPLEO STANDALONE FFU
+##################################################
+
+non_root_user_setup: true
+ovb_setup_connectivity: false
+package_installs: true
+vxlan_networking: false
+toci_vxlan_networking: false
+enable_vbmc: false
+deploy_supplemental_node: false
+undercloud_setup: true
+
+# role / scenario definition
+# deployment role
+standalone_role: Standalone.yaml
+
+# NOTE(mwhahaha): we only care about ha -> ha upgrades. We switched to
+# pacemaker enabled in Ussuri, so the upgrade from Train -> Ussuri is non-HA
+# to HA. We should just test HA always in the upgrade
+standalone_control_virtual_ip: 192.168.24.3
+standalone_custom_env_files:
+  - /usr/share/openstack-tripleo-heat-templates/environments/docker-ha.yaml
+
+ffu_standalone_upgrade: true
+tripleo_ci: true
+use_oooq: true
+
+# validation
+test_ping: false
+
+use_os_tempest: true
+
+test_regex: ''
+# NOTE(aschultz): containers assume RC at the moment
+tempest_undercloud: true
+tempest_overcloud: false
+tempest_os_cloud: standalone
+
+tempest_allowed_group: "featureset067"
+
+tempest_run_concurrency: 2
+
+# docker / podman configuration
+standalone_container_cli: podman
+
+ephemeral_heat: "{{ (release not in ['train']) | bool }}"
