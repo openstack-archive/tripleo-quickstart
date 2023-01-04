@@ -8,10 +8,6 @@ dlrn_hash_tag: "{{ job.provider_dlrn_hash_tag_branch[release]|default('current-t
 dlrn_hash_tag_newest: current
 validate_on: rdo
 
-# NOTE (akahat) Remove this after
-# https://bugs.launchpad.net/tripleo/+bug/2000897/ fixed
-dlrn_pre_installed: true
-
 # job.build_container_images is defined in zuul as a
 # direct var.  adding build_container_images as tqe
 # var so that we can turn this on/off per release w/o
