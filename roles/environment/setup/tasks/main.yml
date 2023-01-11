@@ -2,19 +2,19 @@
 - when: networks|selectattr('virtualport_type', 'defined')|map(attribute='name')|list|length > 0
   block:
 
-  # Install OVS dependencies
-  - name: Install OVS dependencies
-    include_role:
-      name: 'parts/ovs'
+    # Install OVS dependencies
+    - name: Install OVS dependencies
+      include_role:
+        name: 'parts/ovs'
 
-  # Create any OVS Bridges that have been defined
-  - name: Create OVS Bridges
-    openvswitch_bridge:
-      bridge: "{{ item.bridge }}"
-      state: present
-    when: item.virtualport_type is defined and item.virtualport_type == "openvswitch"
-    with_items: "{{ networks }}"
-    become: true
+    # Create any OVS Bridges that have been defined
+    - name: Create OVS Bridges
+      openvswitch_bridge:
+        bridge: "{{ item.bridge }}"
+        state: present
+      when: item.virtualport_type is defined and item.virtualport_type == "openvswitch"
+      with_items: "{{ networks }}"
+      become: true
 
 # Create the global, root-managed libvirt networks to which we will
 # attach the undercoud and overcloud virtual machines.
