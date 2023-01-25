@@ -49,6 +49,8 @@ repo_cmd_before: |
   sudo dnf clean all;
   sudo dnf config-manager --disable "*" || true;
   sudo dnf config-manager --enable gating-repo || true;
+  # Enable distro specific gating repo, it exists in mixed-os jobs
+  sudo dnf config-manager --enable gating-repo-{{ ansible_distribution_major_version }} || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else

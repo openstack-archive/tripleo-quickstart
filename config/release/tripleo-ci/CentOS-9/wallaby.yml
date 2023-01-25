@@ -94,6 +94,8 @@ repo_cmd_before: |
   sudo sed -i -e "s/gating-repo-{{ release }}/gating-repo/" /etc/yum.repos.d/gating.repo || true;
   sudo mv /etc/yum.repos.d/gating-repo-{{ release }}.repo /etc/yum.repos.d/gating-repo-{{ release }}.repo_previous || true;
   sudo dnf config-manager --enable gating-repo || true;
+  # Enable distro specific gating repo, it exists in mixed-os jobs
+  sudo dnf config-manager --enable gating-repo-{{ ansible_distribution_major_version }} || true;
   if [ -e /etc/ci/mirror_info.sh ]; then
     source /etc/ci/mirror_info.sh
   else
