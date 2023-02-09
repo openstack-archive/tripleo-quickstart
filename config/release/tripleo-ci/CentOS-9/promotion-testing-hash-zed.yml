@@ -149,6 +149,8 @@ repos:
     exclude:
       - containers-common-1-44.*
       - systemd*-252-*
+      - libvirt*-9.*  # TODO(ysandeep) unpin  once https://bugs.launchpad.net/tripleo/+bug/2006649 fixed
+      - python3-libvirt-9.*  # TODO(ysandeep) unpin  once https://bugs.launchpad.net/tripleo/+bug/2006649 fixed
 
   # centos9 the equivalent to powertools is CRB
   - type: generic

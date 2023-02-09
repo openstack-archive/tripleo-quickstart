@@ -17,6 +17,8 @@
         - tripleo-ci-centos-9-content-provider:
             dependencies:
               - openstack-tox-linters
+        - tripleo-ci-centos-9-undercloud-upgrade:
+            voting: false
         - tripleo-ci-centos-9-scenario007-multinode-oooq-container:
             vars:
               consumer_job: true
@@ -31,3 +33,5 @@
       jobs:
         - tripleo-tox-molecule
         - openstack-tox-linters
+        - tripleo-ci-centos-9-undercloud-upgrade:
+            voting: false
