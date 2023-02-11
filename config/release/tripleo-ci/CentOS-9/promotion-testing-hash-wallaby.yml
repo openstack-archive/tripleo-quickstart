@@ -38,6 +38,11 @@ dlrn_hash_tag: tripleo-ci-testing
 overcloud_image_url: "https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/{{ overcloud_image }}.{{ overcloud_image_type }}"
 ipa_image_url: https://images.rdoproject.org/{{ distro_ver }}/{{ release }}/rdo_trunk/{{ promote_source }}/ironic-python-agent.tar
 
+# Mixed OS _lower vars needed for single deploy mixed OS job
+mixed_os_registry_host_8: "{{ docker_registry_host }}"
+
+mixed_os_docker_registry_namespace_8: tripleowallabycentos8
+
 # repo setup
 # optimize with mirros after we have
 # something working..  IMHO may be replaced w/ tripleo-repos setup

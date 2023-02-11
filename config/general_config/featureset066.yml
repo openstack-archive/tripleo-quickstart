@@ -24,6 +24,18 @@ mixed_os: true
 
 composable_roles: true
 
+overcloud_roles_mixed:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+  - name: Compute
+    CountDefault: 1
+    HostnameFormatDefault: '%stackname%-compute-%index%'
+    tags:
+      - compute
+
 overcloud_roles_control:
   - name: Controller
     CountDefault: 1

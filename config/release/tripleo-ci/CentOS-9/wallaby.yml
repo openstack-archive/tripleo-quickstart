@@ -15,6 +15,25 @@ dlrn_hash_tag: >-
 dlrn_hash_tag_newest: current
 validate_on: rdo
 
+# This file is used by both check and component jobs
+# Use content provider for check, use quay.rdo for component
+mixed_os_registry_host_8: >-
+  {% if registry_distro_lower is defined and
+  registry_distro_lower | default('') | length > 0 and
+  job.registry_ip_address_distro is defined -%}
+  {{ job.registry_ip_address_distro[registry_distro_lower] }}
+  {%- else -%}
+  quay.rdoproject.org
+  {%- endif -%}
+
+# tripleowallaby for check and tripleowallabycentos8 for component
+mixed_os_docker_registry_namespace_8: >-
+  {% if job.consumer_job | default(false) | bool -%}
+  tripleowallaby
+  {%- else -%}
+  tripleowallabycentos8
+  {%- endif -%}
+
 # job.build_container_images is defined in zuul as a
 # direct var.  adding build_container_images as tqe
 # var so that we can turn this on/off per release w/o
