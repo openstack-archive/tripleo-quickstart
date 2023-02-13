@@ -136,10 +136,6 @@ repos:
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/BaseOS/x86_64/os/
-    # Note(Chandan Kumar): Pin systemd*-252-* due to
-    # https://bugs.launchpad.net/tripleo/+bug/2000226
-    exclude:
-      - systemd*-252-*
 
   - type: generic
     reponame: quickstart-centos-appstreams
@@ -149,7 +145,6 @@ repos:
     # https://bugs.launchpad.net/tripleo/+bug/1988500
     exclude:
       - containers-common-1-44.*
-      - systemd*-252-*
       - libvirt*-9.*  # TODO(ysandeep) unpin  once https://bugs.launchpad.net/tripleo/+bug/2006649 fixed
       - python3-libvirt-9.*  # TODO(ysandeep) unpin  once https://bugs.launchpad.net/tripleo/+bug/2006649 fixed
 
