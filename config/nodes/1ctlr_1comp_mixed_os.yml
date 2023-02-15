@@ -14,23 +14,6 @@ overcloud_nodes:
 
 node_count: 2
 
-topology_map_control:
-  Controller:
-    scale: 1
-    # grow /srv to 50% of remaining disk space to store swift object content
-    growvols_args: >
-        /=8GB
-        /tmp=1GB
-        /var/log=10GB
-        /var/log/audit=2GB
-        /home=1GB
-        /var=50%
-        /srv=50%
-
-topology_map_compute:
-  Compute:
-    scale: 1
-
 topology_map_mixed:
   Controller:
     scale: 1

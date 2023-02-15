@@ -36,20 +36,6 @@ overcloud_roles_mixed:
     tags:
       - compute
 
-overcloud_roles_control:
-  - name: Controller
-    CountDefault: 1
-    tags:
-      - primary
-      - controller
-
-overcloud_roles_compute:
-  - name: Compute
-    CountDefault: 1
-    HostnameFormatDefault: '%stackname%-compute-%index%'
-    tags:
-      - compute
-
 deployed_server: true
 deploy_steps_ansible_workflow: true
 
