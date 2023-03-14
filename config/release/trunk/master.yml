@@ -56,10 +56,6 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: http://mirror.stream.centos.org/9-stream/AppStream/x86_64/os/
-    # Note(chandankumar): Exclude containers-common-1-44.* due to
-    # https://bugs.launchpad.net/tripleo/+bug/1988500
-    exclude:
-      - containers-common-1-44.*
 
   # centos9 the equivalent to powertools is CRB
   - type: generic

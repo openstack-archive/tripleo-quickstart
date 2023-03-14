@@ -171,10 +171,7 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
-    # Note(chandankumar): Exclude containers-common-1-44.* due to
-    # https://bugs.launchpad.net/tripleo/+bug/1988500
     exclude:
-      - containers-common-1-44.*
       - ansible-core-2.14.2-4* # TODO(marios) https://bugs.launchpad.net/tripleo/+bug/2007659
 
   # centos9 the equivalent to powertools is CRB
@@ -222,8 +219,6 @@ repo_cmd_after: |
       dnf config-manager --disable delorean-component-{{ job.component }};
   fi
   {% endif %}
-  # Downgrade containers-common due to https://bugs.launchpad.net/tripleo/+bug/1988500
-  if [ -n "$(rpm -qa containers-common)" ];then sudo dnf -y downgrade containers-common-1-40.el9; fi
   sudo rm -rf /etc/yum.repos.d/*.rpmsave;
   # Save Compose-ID info
   sudo curl -s -o /etc/yum.repos.d/COMPOSE_ID ${NODEPOOL_CENTOS_MIRROR}/9-stream/COMPOSE_ID
