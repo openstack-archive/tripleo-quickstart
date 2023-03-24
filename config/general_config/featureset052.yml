@@ -35,10 +35,10 @@ tempest_allowed_group_periodic: "featureset052_periodic"
 
 # Settings for os_tempest
 use_os_tempest: >-
-  {% if release not in ['pike', 'queens', 'stein'] -%}
-  true
-  {%- else -%}
+  {% if job.skip_os_tempest is defined and job.skip_os_tempest | default(false) | bool -%}
   false
+  {%- else -%}
+  true
   {%- endif -%}
 
 tempest_allowed_group: >-
