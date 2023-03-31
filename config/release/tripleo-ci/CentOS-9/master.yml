@@ -173,8 +173,6 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
-    exclude:
-      - ansible-core-2.14.2-4* # TODO(marios) https://bugs.launchpad.net/tripleo/+bug/2007659
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
