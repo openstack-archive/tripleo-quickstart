@@ -243,8 +243,6 @@ repo_cmd_after: |
   sudo curl -s -o /etc/yum.repos.d/COMPOSE_ID ${NODEPOOL_CENTOS_MIRROR}/8-stream/COMPOSE_ID
   sudo dnf repolist;
   sudo dnf module list;
-  sudo dnf module disable container-tools:rhel8 -y;
-  sudo dnf module enable container-tools:3.0 -y;
   # Downgrade container-selinux due to
   # https://bugs.launchpad.net/tripleo/+bug/1990810
   if [ -n "$(rpm -qa container-selinux)" ];then sudo dnf -y downgrade container-selinux-2.167.0-1.module_el8.6.0+1107+d59a301b.noarch; fi
