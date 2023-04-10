@@ -2,31 +2,15 @@
 - project:
     queue: tripleo
     templates:
-      - tripleo-undercloud-jobs-pipeline
-      - tripleo-multinode-container-minimal-pipeline
       - tripleo-multinode-branchful
       - publish-openstack-docs-pti
-      - release-notes-jobs-python3
-      - tripleo-external-compute-deployment-pipeline
-      - tripleo-standalone-scenarios-pipeline
-      - tripleo-upgrades-master-pipeline
     check:
       jobs:
         - openstack-tox-linters
         - tripleo-tox-molecule
-        - tripleo-ci-centos-9-content-provider:
+        - tripleo-ci-centos-9-content-provider-wallaby:
             dependencies:
               - openstack-tox-linters
-        - tripleo-ci-centos-9-scenario007-multinode-oooq-container:
-            vars:
-              consumer_job: true
-              build_container_images: false
-              remove_tags:
-                - build
-            dependencies:
-              - tripleo-ci-centos-9-content-provider
-            files:
-              - config/general_config/featureset030.yml
     gate:
       jobs:
         - tripleo-tox-molecule
