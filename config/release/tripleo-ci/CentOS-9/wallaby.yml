@@ -208,7 +208,6 @@ repos:
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
     exclude:
       - python3-sqlalchemy-1.4.37-3.el9.x86_64
-      - ansible-core-2.14.*  # TODO(marios) unpin https://bugs.launchpad.net/tripleo    /+bug/1996482
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
