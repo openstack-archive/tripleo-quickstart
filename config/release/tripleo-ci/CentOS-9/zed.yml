@@ -165,8 +165,6 @@ repos:
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/BaseOS/x86_64/os
-    exclude:
-      - gnupg2-2.3.3-3.el9.x86_64  # TODO(marios) https://bugs.launchpad.net/tripleo/+bug/2015309
 
   - type: generic
     reponame: quickstart-centos-appstreams
@@ -219,9 +217,6 @@ repo_cmd_after: |
   sudo curl -s -o /etc/yum.repos.d/COMPOSE_ID ${NODEPOOL_CENTOS_MIRROR}/9-stream/COMPOSE_ID
   sudo dnf repolist;
   sudo dnf module list;
-  # Note(Marios): Downgrade gnupg2 version
-  # due to https://bugs.launchpad.net/tripleo/+bug/2015309
-  if [ -n "$(rpm -qa gnupg2)" ];then sudo dnf -y downgrade gnupg2.x86_64 2.3.3-2.el9; fi
   sudo dnf clean metadata
   {% if repo_setup_run_update|default(true)|bool %}
   # FIXME(chandan): Exclude kernel updates due to
