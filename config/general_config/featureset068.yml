@@ -1,0 +1,74 @@
+# Deploy minimal overcloud (keystone and supporting services) and run
+# a minor version update (update both on undercloud and overcloud).
+# End-to-end minor update is being tested, not only update workflow itself.
+
+composable_scenario: scenario000-multinode-containers.yaml
+
+container_registry_file: containers-default-parameters.yaml
+
+# Tripleo-upgrade specific parameters
+undercloud_update: true
+overcloud_update: true
+tripleo_upgrade_validations_non_fatal: true
+tripleo_upgrade_debug: false
+tripleo_ci: true
+use_oooq: true
+
+# Tripleo-quickstart-extras and tripleo-ci specific parameters
+# By setting these two variables to true, both rpm and containers are
+# updated on undercloud and overcloud.
+containerized_undercloud_upgrade: true
+minor_update: true
+
+overcloud_ssh_user: "zuul"
+
+network_isolation: false
+enable_pacemaker: false
+overcloud_ipv6: false
+containerized_overcloud: true
+
+undercloud_generate_service_certificate: false
+ssl_overcloud: false
+
+# extra testing disabled for now, may be enabled later depending on
+# job run time
+test_ping: false
+use_os_tempest: false
+# test_white_regex: 'tempest.scenario.test_network_basic_ops.TestNetworkBasicOps.test_network_basic_ops'
+
+composable_roles: true
+overcloud_roles:
+  - name: Controller
+    CountDefault: 1
+    tags:
+      - primary
+      - controller
+    networks:
+      - External
+      - InternalApi
+      - Storage
+      - StorageMgmt
+      - Tenant
+
+deploy_steps_ansible_workflow: true
+config_download_args: >-
+  -e {{ working_dir }}/config-download.yaml
+  --disable-validations
+  --verbose
+
+containerized_undercloud: true
+
+undercloud_templates_path: /usr/share/openstack-tripleo-heat-templates
+undercloud_custom_env_files: "{{ working_dir }}/undercloud-parameter-defaults.yaml"
+undercloud_cloud_domain: "localdomain"
+undercloud_undercloud_hostname: "undercloud.{{ undercloud_cloud_domain }}"
+ctlplane_masquerade: true
+
+ephemeral_heat: true
+ephemeral_heat_args: "{{ '--heat-type pod' if ephemeral_heat|bool else '' }}"
+
+extra_args: >-
+   {%- if release not in ['train'] -%}
+   --disable-protected-resource-types
+   --baremetal-deployment
+   {%- endif -%}

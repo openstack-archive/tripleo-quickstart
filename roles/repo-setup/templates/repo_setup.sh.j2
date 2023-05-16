@@ -39,6 +39,9 @@ sudo rm -rf /tmp/repo_role_tmp && mkdir -p /tmp/repo_role_tmp
 
 ## * Download and use file from {{ repo.down_url }}
 ## ::
+{% if promote_source == 'current' and minor_update|default(false)|bool %}
+export DLRN_PATH_TAG=${DLRN_PATH_TAG_NEWEST}
+{% endif %}
 
 curl -Lvo /tmp/repo_role_tmp/{{ repo.filename }} {{ repo.down_url }}
 {% if repo.priority is defined and repo.priority %}
