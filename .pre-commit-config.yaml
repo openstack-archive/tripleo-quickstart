@@ -38,7 +38,7 @@ repos:
         verbose: true
         entry: env ANSIBLE_LIBRARY=library ansible-lint --force-color -p -v
         additional_dependencies:
-          - ansible-core
+          - 'ansible-core>=2.11,<2.12'
           - yamllint
   - repo: https://github.com/openstack-dev/bashate.git
     rev: 2.0.0
