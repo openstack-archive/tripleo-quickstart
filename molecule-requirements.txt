@@ -20,7 +20,7 @@ cmd2==2.3.3
 colorama==0.4.4
 cookiecutter==1.7.3
 coverage==6.2
-cryptography==36.0.1
+cryptography==41.0.0
 debtcollector==2.3.0
 decorator==5.1.1
 distro==1.6.0
