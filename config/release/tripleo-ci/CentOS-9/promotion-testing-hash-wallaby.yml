@@ -77,7 +77,7 @@ repo_cmd_before: |
   {% else %}
     export DLRN_PATH_TAG="{{ dlrn_hash_tag }}"
   {% endif %}
-  rdo_dlrn=`curl --silent https://trunk.rdoproject.org/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG_NEWEST}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | grep "component/tripleo" | cut -d= -f2`
+  rdo_dlrn=`curl --silent ${NODEPOOL_RDO_PROXY}/{{ distro_ver }}-{{ release }}/${DLRN_PATH_TAG_NEWEST}/delorean.repo -S 2>>~/dlrn_repo_curl_errors.log | grep baseurl | grep "component/tripleo" | cut -d= -f2`
   if [[ -z "$rdo_dlrn" ]]; then
     echo "Failed to parse dlrn hash"
     exit 1
