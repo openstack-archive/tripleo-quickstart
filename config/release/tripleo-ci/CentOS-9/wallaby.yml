@@ -239,6 +239,8 @@ repo_cmd_after: |
   sudo sed -i -e "s|priority=1|priority=20|g" /etc/yum.repos.d/delorean.repo
   {% if not enable_cs9_opstools_repo|default(false)|bool %}sudo dnf config-manager --save --setopt centos9-opstools.enabled=0;
   {%endif %}
+  # Downgrade podman, todo(ysandeep): remove once podman bug: https://bugzilla.redhat.com/show_bug.cgi?id=2230212 resolves.
+  if [ -n "$(rpm -qa podman)" ];then sudo dnf -y downgrade podman-4.6.0-1.el9.x86_64; fi
   # sudo dnf config-manager --disable rdo-qemu-ev;
   sudo rpm -e epel-release || true;
   sudo dnf remove -y rdo-release centos-release-ceph-* centos-release-openstack-* || true;
