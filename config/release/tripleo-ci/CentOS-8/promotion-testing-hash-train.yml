@@ -130,6 +130,11 @@ repos:
     reponame: quickstart-centos-base
     filename: quickstart-centos-base.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/8-stream/BaseOS/x86_64/os/
+    # NOTE: https://bugs.launchpad.net/tripleo/+bug/2033644
+    exclude:
+      - iptables-1.8.5*
+      - iptables-libs-1.8.5*
+      - iptables-services-1.8.5*
 
   - type: generic
     reponame: quickstart-centos-appstreams
@@ -191,6 +196,9 @@ repo_cmd_after: |
   # Downgrade container-selinux due to
   # https://bugs.launchpad.net/tripleo/+bug/1990810
   if [ -n "$(rpm -qa container-selinux)" ];then sudo dnf -y downgrade container-selinux-2.167.0-1.module_el8.6.0+1107+d59a301b.noarch; fi
+  # NOTE(dviroel): Downgrade iptables. More info on:
+  #  https://bugs.launchpad.net/tripleo/+bug/2015309
+  if [ -n "$(rpm -qa iptables)" ];then sudo dnf -y downgrade iptables-1.8.4-24.el8; fi
   sudo dnf clean metadata
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y
