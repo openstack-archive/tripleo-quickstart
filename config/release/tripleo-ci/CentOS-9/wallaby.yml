@@ -208,8 +208,6 @@ repos:
     reponame: quickstart-centos-appstreams
     filename: quickstart-centos-appstreams.repo
     baseurl: ${NODEPOOL_CENTOS_MIRROR}/9-stream/AppStream/x86_64/os/
-    exclude:
-      - podman-4.6.0-3* #todo(ysandeep): remove once podman bug: https://bugzilla.redhat.com/show_bug.cgi?id=2230212 resolves.
 
   # centos9 the equivalent to powertools is CRB
   - type: generic
