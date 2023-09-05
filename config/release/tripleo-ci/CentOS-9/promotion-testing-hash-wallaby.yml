@@ -182,8 +182,6 @@ repo_cmd_after: |
   {% if repo_setup_run_update|default(true)|bool %}
   sudo dnf update -y
   {% endif %}
-  # TODO(bshewale): Remove the below line once we have build updated. Bug: #2033357
-  sudo dnf -y install https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-admin-webapps-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-docs-webapp-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-el-3.0-api-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-java-jdk11-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-java-jdk17-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-java-jdk8-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-lib-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-servlet-4.0-api-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-webapps-9.0.62-16.el9.noarch.rpm https://kojihub.stream.centos.org/kojifiles/packages/tomcat/9.0.62/16.el9/noarch/tomcat-jsp-2.3-api-9.0.62-16.el9.noarch.rpm
 undercloud_rpm_dependencies: >-
   python3-tripleoclient
   tripleo-operator-ansible
