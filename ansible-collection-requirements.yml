@@ -21,16 +21,16 @@ collections:
     source: https://galaxy.ansible.com
     version: 1.3.0
   - name: ansible.netcommon
-    source: https://galaxy.ansible.com
+    source: https://old-galaxy.ansible.com/
     version: 2.4.0
   - name: community.general
-    source: https://galaxy.ansible.com
+    source: https://old-galaxy.ansible.com/
     version: 4.7.0
   - name: community.libvirt
-    source: https://galaxy.ansible.com
+    source: https://old-galaxy.ansible.com/
     version: 1.0.2
   - name: community.docker
-    source: https://galaxy.ansible.com
+    source: https://old-galaxy.ansible.com/
     version: 2.7.0
   - name: openvswitch.openvswitch
     source: https://galaxy.ansible.com
