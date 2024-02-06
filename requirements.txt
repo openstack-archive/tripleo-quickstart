@@ -1,5 +1,5 @@
 cmd2>=0.8.5
-ansible-core>=2.11,<2.12
+ansible-core>=2.11,<2.16
 jmespath
 netaddr>=0.7.18
 os-client-config

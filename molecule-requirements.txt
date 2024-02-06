@@ -1,6 +1,6 @@
 ansi2html==1.6.0
 ansible==4.10.0
-ansible-core==2.11.7
+ansible-core==2.15.9
 appdirs==1.4.4
 arrow==1.2.1
 attrs==21.4.0
