@@ -1,9 +1,0 @@
----
-# variable only used during gating (when compressed_gating_repo is defined)
-gating_repo_enabled: true
-
-undercloud_use_custom_boot_images: false
-undercloud_custom_vmlinuz: "{{ working_dir }}/overcloud-full.vmlinuz"
-undercloud_custom_initrd: "{{ working_dir }}/overcloud-full.initrd"
-
-ssh_tunnel_service_file: ssh-tunnel.service.j2

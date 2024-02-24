@@ -1,6 +1,0 @@
----
-- name: indirect role include (workaround to https://github.com/ansible/ansible/issues/19472)
-  include_role:
-    name: convert-image
-  vars:
-    convert_image_base: "{{ undercloud_base_image | default(overcloud_image) }}"

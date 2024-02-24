@@ -1,6 +1,0 @@
-# Include the roles for installing KVM and libvirt (as well as
-# anything required by our parent `environment` module).
-dependencies:
-  - parts/kvm
-  - parts/libvirt
-  - environment

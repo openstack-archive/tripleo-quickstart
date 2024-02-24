@@ -1,7 +1,0 @@
----
-- src: git+https://opendev.org/openstack/openstack-ansible-os_tempest.git
-  version: 0a8459bec03b433b1487b89368e69fad8d92cfd7
-  name: os_tempest
-- src: git+https://opendev.org/openstack/ansible-role-python_venv_build.git
-  version: master
-  name: python_venv_build

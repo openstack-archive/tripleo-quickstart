@@ -1,7 +1,0 @@
----
-
-supplemental_node_key: "{{ local_working_dir }}/id_rsa_supplemental"
-supplemental_base_image_url: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
-supplemental_user: stack
-supplemental_tls_everywhere_dns_server: 192.168.23.1
-supplemental_tls_everywhere_gateway: 192.168.23.1

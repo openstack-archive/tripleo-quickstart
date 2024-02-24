@@ -1,6 +1,0 @@
----
-# The package name for openvswitch
-ovs_package: openvswitch
-
-# The name of the openvswitch service.
-ovs_service: openvswitch

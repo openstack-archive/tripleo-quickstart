@@ -1,6 +1,0 @@
-python-cicoclient
-# As there is no sudo access on ci.centos slave node
-# So tripleo-operator-ansible needs to be installed on
-# ci.centos slave node so that quickstart will discover
-# the tripleo operator collections.
-git+https://opendev.org/openstack/tripleo-operator-ansible/#egg=tripleo-operator-ansible

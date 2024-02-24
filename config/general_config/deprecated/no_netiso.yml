@@ -1,9 +1,0 @@
-# TO DO, REMOVE THIS CONFIG IN FAVOR OF OVERRIDING THE ONE VARIABLE
-# We set introspection to true and use only the minimal amount of nodes
-# for this job, but test all defaults otherwise
-step_introspect: true
-network_isolation: false
-
-# This enables TLS for the undercloud which will also make haproxy bind to the
-# configured public-vip and admin-vip.
-undercloud_generate_service_certificate: true

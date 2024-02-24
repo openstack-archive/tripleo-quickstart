@@ -1,5 +1,0 @@
----
-# After fetching images remove cache directory
-image_cache_dir_cleanup: false
-# After fetching images remove files older than image_cache_expire_days
-image_cache_expire_days: 14

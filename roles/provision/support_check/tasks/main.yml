@@ -1,9 +1,0 @@
----
-# Check the virthost distribution for either RHEL or CentOS
-- name: Check the linux distro
-  debug: msg="Unfortunately your linux distribution is not supported at the moment. We welcome community support,
-              please see https://github.com/openstack/tripleo-quickstart .
-
-              To run quickstart with out this check set 'quickstart.sh -e supported_distro_check=false'"
-  failed_when: supported_distro_check
-  when: not (ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat')

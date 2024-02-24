@@ -1,5 +1,0 @@
----
-prelude: >
-   This will be the final release that supports Mitaka. Consumers of
-   tripleo-quickstart that need Mitaka support will need to maintain their own
-   branch starting from this commit.
